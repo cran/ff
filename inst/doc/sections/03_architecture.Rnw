@@ -1,0 +1,142 @@
+\section{Architecture}
+
+The \rc{ff} architecture is designed around a C++ toolkit for implementing the flat file database system.
+A small \R{} Application Programming Interface (API) provides transparent access to the underlying flat files using
+generic interface implementations for the index-based access and mutation operators, ``\rc{[\,]}'' and ``\rc{[\,]<-}''.
+Two new object classes are defined, namely \rc{ff} for vectors and \rc{ffm} for multi-dimensional arrays.   
+The methods for \rc{length} and \rc{dim} operate on these two classes in the usual way.
+
+
+\subsection{The C++ library}
+
+The C++ Toolkit consists of the following parts.
+
+\begin{itemize}
+  \item Abstractions to platform-specific system services, such as memory mapped files, system pagesize queries and file system disk space usage.
+
+  \begin{itemize}
+    \item \CPP{FileMapping} class
+
+This is a platform-specific implementation of memory mapped file facilities and exposes a factory method to create \CPP{FileSection} objects.
+
+    \item \CPP{FileSection} class
+
+This is a platform-specific implementation of memory mapped file regions that exposes the pointer to the virtual memory address of the file region that is mapped to main memory. 
+The region can be dynamically reset to a different location of the file using a 64-bit offset, which leads to a page flush and swap.
+The region size is variable in multiples of the system page size.
+
+  \end{itemize}
+
+\item A collection of template container classes, namely \CPP{Array<T>} and \CPP{MultiArray<T>}, which implement a caching strategy on top of memory mapped pages of large files, where \CPP{T} is the value type, e.g. \CPP{double}. 
+
+  \begin{itemize}
+    \item \CPP{Array<T>} template class
+
+This container carries a FileMapping object and manages one \CPP{FileSection} object at a time. 
+It provides a get/set method to individual cells using 64-bit indexes. 
+If the requested cell is currently not served by the region provided in the \CPP{FileSection}, it is reset to the region in the file in which the cell resides. 
+
+    \item \CPP{MultiArray<T>} template class
+
+This container implements a multi-dimensional array using a multiple integer index.
+The multi-dimensional index is translated into a one-dimensional 64-bit index that is delegated to \CPP{Array<T>}.
+
+
+    \item The utility class \CPP{MultiIndex}. 
+
+This utility class translates between multiple integer indices and a 64-bit index.
+This is used to overcome the limitations of 32-bit \R{} platforms.
+
+\end{itemize}
+\end{itemize}
+
+Figure \ref{cppt} gives an overview of the C++ toolkit and, in particular, the relationship between its components. 
+
+\begin{figure}[h]
+  \begin{center}\fbox{
+    \includegraphics{figures/cpp_toolkit}
+    }
+    \caption{\textsl{An overview of the C++ toolkit}}
+    \label{cppt}
+  \end{center}
+\end{figure}
+
+
+The \R{} functions \rc{ff} and \rc{ffm} are essentially constructors of the C++ objects \CPP{Array<double>} and \CPP{MultiArray<double>}. 
+Pointers to these objects are stored in \R{} as external pointers. 
+On construction of these objects the \CPP{FileMappers} and \CPP{FileSections} are automatically created and initialized to map the first page of the file space into the virtual memory. 
+On a read/write request for a particular cell the \CPP{FileSection} performs a bounding check to determine whether the requested cell is already in virtual memory. 
+If it is not, the current page is flushed and the \CPP{FileSection} is mapped onto the relevant page of the file space.
+
+In the case of \rc{ffm} the multi-dimensional index is first translated to a one-dimensional 64-bit offset; the operation then proceeds in the same way as for \rc{ff}.
+
+The above construction is needed to overcome a limitation of \R{} integer-based indexing on 32-bit machines. 
+Only 31 bits are available for an index, and consequently it is only possible to access a maximum of 16 gigabytes for an array of double-precision floating point numbers.
+By using a multi-dimensional array that combines several integer indices of 31 bits, it is possible to overcome the above limitation.
+The translation between multi- and one-dimensional indices is carried out in C++ because \R{} does not support 64-bit integer arithmetic.
+
+%\underline{read/write blocks}
+
+
+\subsection{The \R{} layer}
+
+The \R{} layer contains wrapper functions and generic operators for interacting with the \CPP{Array<double>} and \CPP{MultiArray<double>} classes. 
+The API comprises the following sections:
+\begin{itemize}
+  \item Opening / Creating  flat files
+  \item I/O operations
+  \item Generic functions and methods for \rc{ff} and \rc{ffm} objects
+\end{itemize}
+
+Opening and creation of flat files is controlled by the two core functions \rc{ff} and \rc{ffm}. 
+When a \ro{length} (for \rc{ff}) or a \ro{dim} (for \rc{ffm}) argument is specified, a new flat file (with the corresponding size resulting from \ro{length} or \ro{dim}) is created. 
+Omitting the \ro{length} or \ro{dim} argument results in loading an existing file. 
+Access to flat files can be limited to read-only access in order to prevent accidental overwriting of data.
+
+The I/O operations are controlled by the ``\rc{[\,]}'' operator (for reading) and the ``\rc{[\,]<-}'' operator (for writing). 
+Methods for \rc{dim} and \rc{length} are provided for \rc{ff} and \rc{ffm} objects. 
+Additionally, the function \rc{sample} is converted to a generic function and the corresponding methods for \rc{ff} and \rc{ffm} are included.
+
+Frequent \R{} to C calls involve a calling overhead that can decrease performance when
+performing I/O.
+To overcome this the \rc{ff} package makes several computations on the \R{} language itself.
+In the implementation of the index operator for \rc{ff} objects, the index expression gets analysed first to extract a set of sequences.
+This computation is performed by the function \rc{seqpack}.
+ 
+<<r19>>=
+library(ff)
+ind <- c(1:5, 4, 1, seq(2,20,4))
+seqpack(ind)
+@
+
+Thus, a single \R{} to C call performs I/O on a group of sequences. 
+This feature is currently only available for \rc{ff}.
+
+When creating flat files one needs to take account of the file size limitations of the operating system's file system. 
+Table \ref{fsl} gives an overview of the file size limits for selected file systems (for further details on this issue see \textit{http://en.wikipedia.org/wiki/Comparison\_of\_file\_systems}).
+
+\begin{table}[htb]
+\begin{center}
+\caption{\textsl{File size limits on selected file systems}}
+\label{fsl}
+\begin{tabular}{ll}
+  \hline\hline \textsl{File system}\hspace{3ex} & \textsl{Maximum file size} \\
+  \hline
+  FAT16    & 2GB \\
+  FAT32    & 4GB \\
+  NTFS     & 16GB \\ \hline
+  ext2/3/4 & 16GB to 2TB \\
+  ReiserFS & 4GB (up to version 3.4) / 8TB (from version 3.5) \\
+  XFS      & 8EB (or 9EB) \\
+  JFS      & 4PB \\ \hline
+  HFS      & 2GB \\
+  HFS Plus & 16GB \\ \hline
+  USF1     & 4GB to 256TB \\
+  USF2     & 512GB to 32PB \\ \hline
+  UDF      & 16EB \\
+\hline\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+

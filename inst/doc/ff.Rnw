@@ -1,0 +1,50 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{epsfig}
+\usepackage{natbib}
+\usepackage{Sweave}
+
+%\textwidth 5in
+\textheight 8in
+\parskip 3mm
+%\setlength{\parindent}{0mm}
+\setlength{\headheight}{2 pt}
+
+\begin{document} 
+
+% \VignetteIndexEntry{The \texttt{ff} package: Handling Large Data Sets in R with Memory-Mapped Pages of Binary Flat Files}
+
+\newcommand{\CPP}[1]{\emph{#1}}
+\newcommand{\R}{\textbf{R}}
+\newcommand{\rc}[1]{\texttt{#1}}
+\newcommand{\ro}[1]{\texttt{\textsl{#1}}}
+
+\SweaveOpts{prefix.string=figures/fig}
+
+%%%%% HEADER
+\begin{center}
+\vspace{1.5 cm}
+{\Large \textbf{The \texttt{ff} package: Handling Large Data Sets in R with Memory Mapped Pages of Binary Flat Files\\}} 
+\vspace{1.0 cm} 
+\textbf{\textsc{D. Adler\footnote{Corresponding author: D. Adler, email: dadler@uni-goettingen.de}, O. Nenadi{\'c}, W. Zucchini, C. Gl{\"a}ser\\}}
+\vspace{0.5 cm}
+\textsl{Georg-August-Universit{\"a}t G{\"o}ttingen\\ Institut f{\"u}r Statistik und {\"O}konometrie\\ Platz der G{\"o}ttinger Sieben 5\\ 37073 G{\"o}ttingen, Germany}
+\end{center} 
+\vspace{0.1cm} 
+%%%%% END HEADER
+
+\SweaveInput{sections/01_intro.Rnw}
+
+\SweaveInput{sections/02_usage.Rnw}
+
+\SweaveInput{sections/03_architecture.Rnw}
+
+\SweaveInput{sections/04_conclusions.Rnw}
+
+
+%%%%% REFERENCES
+%\section{References}
+\bibliographystyle{agsm}
+\bibliography{_lit}
+
+
+\end{document}

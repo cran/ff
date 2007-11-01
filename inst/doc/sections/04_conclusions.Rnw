@@ -1,0 +1,45 @@
+\section{Conclusions}
+
+The \rc{ff} package offers the \R{} user a tool for transparently processing large data sets that don't fit into main memory using the familiar ``\rc{[\,]}'' and ``\rc{[\,]<-}'' operators. 
+
+\R{} to C calls constitute a potential bottle-neck when performing many I/O operations from \R{}. 
+The functions \rc{getrange} and \rc{seqpack} speed up these operations substantially. 
+The function \rc{getrange} tests for the colon operator (``\rc{:}'') and prevents \R{} from evaluating the colon expression. 
+Instead it determines the starting and ending indices and passes this information to C, thereby avoiding multiple \R{} to C calls.
+
+A further limitation of \R{} on 32-bit platforms was also addressed, namely the 32-bit indexing limitation. 
+The biggest unsigned integer, and hence the biggest index, that is directly communicable from \R{} to C is $2^{31} - 1$ which is inadequate for addressing very large data sets. 
+This problem is overcome by using multi-dimensional indexing. 
+
+The example of how the \rc{ff} package can be used in combination with \rc{biglm} illustrates the importance of chunk-based processing when dealing with very large data sets.
+It is surely worthwhile to make \R{} programmers aware of this fact if they wish their functions to be applicable to very large data sets. 
+
+\textbf{Possible extensions}
+
+The proposed framework can be understood as a particular combination of storage policy and caching policy. 
+The current implementation does not explicitly separate these components but one should regard them as separate for the purpose of future development.
+The implementation in the \rc{ff} package uses memory mapped pages of files as storage policy. 
+Depending on the OS-specific implementation of the memory mapping facility it might be advantageous to use I/O streaming as an alternative. 
+Another alternative storage policy is to replace memory mapped pages by a connection to a database.
+The latter is of interest in that it provides a natural link to databases such as MySQL.
+The caching policy is single-threaded and comprises one page per unit. 
+A possible alternative caching policy is to implement multiple threads for particular pre-caching strategies. 
+
+The following features are planned in future releases: 
+
+\begin{itemize}
+  \item Currently \rc{ff} only supports the double data type. 
+An obvious extension is to include other data types, such as integer, logical, float, complex, etc.  
+
+  \item The object \rc{ffm} has not been optimized to the same extent as \rc{ff}. (This is a relatively straight-forward task.)
+
+  \item The current implementation does not keep track of whether or not the current page has changed and therefore needs to be flushed; it always flushes. 
+Ideally the OS should take care of appropriate flushing behaviour. 
+Nevertheless it is worth checking whether or not this is the case, to avoid unnecessary flushing. 
+
+  \item Currently the size of the flat files is fixed. It might be useful to have \rc{append} and \rc{truncate} functions. 
+
+\end{itemize}
+
+Of course future extensions will also depend on feedback and requests from users.
+

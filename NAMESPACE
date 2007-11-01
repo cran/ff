@@ -1,0 +1,25 @@
+useDynLib(ff)
+export(
+ getpagesize,getdefaultpagesize
+,ff,ffm,ffm.data.frame
+,seqpack
+,runique
+,sample
+)
+S3method("[",ff)
+S3method("[<-",ff)
+S3method(length, ff)
+S3method(dim,ff)
+S3method(print,ff)
+S3method("[",ffm)
+S3method("[<-",ffm)
+S3method(length, ffm)
+S3method(dim,ffm)
+S3method(print,ffm)
+S3method("[",ffm.data.frame)
+S3method(dim, ffm.data.frame)
+S3method(names, ffm.data.frame)
+S3method("names<-", ffm.data.frame)
+S3method(sample, default)
+S3method(sample, ff)
+
