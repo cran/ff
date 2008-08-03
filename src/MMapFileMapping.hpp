@@ -25,7 +25,7 @@
 /** unix implementation of memory-mapped files */
 
 namespace ff {
-  
+
   // forward declarations
   class MMapFileMapping;
   class MMapFileSection;
@@ -34,10 +34,10 @@ namespace ff {
   class MMapFileMapping
   {
   public:
-    
+
     /** open file mapping on file given by native platform path */
     MMapFileMapping(const char* path, fsize_t size, bool readonly,bool autoflush);
-    
+
     /** destructor */
     ~MMapFileMapping();
 
@@ -55,7 +55,7 @@ namespace ff {
 
     /** get system page size */
     static msize_t getPageSize();
-    
+
   private:
     int     _fd;
     fsize_t _size;
@@ -87,7 +87,7 @@ namespace ff {
       return ( (_offset <= offs) && ( offs < _end ) );
 
     }
-    
+
     /** obtain address pointer of offset offs */
     inline void*  getPointer(foff_t offset)
     {
@@ -102,7 +102,7 @@ namespace ff {
     int        _fd;
     bool       _readonly;
     bool       _autoflush;
-    foff_t     _offset; 
+    foff_t     _offset;
     foff_t     _end;
     msize_t    _size;
     void*      _addr;

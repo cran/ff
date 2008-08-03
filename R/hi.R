@@ -208,7 +208,7 @@ unique.rlepack <- function(x
 #!   Class \code{hi} will represent index data either as a plain positive or negative index vector or as an rle-packed version thereof.
 #!   The current implementation switches from plain index positions \code{i} to rle-packed storage of \code{diff(i)} as soon as the compression ratio is 3 or higher.
 #!   Note that sequences shorter than 2 must never be packed (could cause C-side crash).
-#!   Furthermore hybrid indices are guaranteed to be sorted ascending, which helps \code{\link{ff}'s} access method avoiding to swap repeatedly over the same memory pages (or file positions).
+#!   Furthermore hybrid indices are guaranteed to be sorted ascending, which helps \code{\link{ff}s} access method avoiding to swap repeatedly over the same memory pages (or file positions).
 #! }
 #! \value{
 #!   A list of class 'hi' with components

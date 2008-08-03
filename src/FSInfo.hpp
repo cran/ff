@@ -30,7 +30,7 @@ namespace ff {
     msize_t block_size;
     msize_t optimal_size;
   };
-  
+
   /** retrieve File System Information for a given filepath */
   void getFSInfo(const char* path, FSInfo& info);
 

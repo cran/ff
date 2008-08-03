@@ -12,8 +12,8 @@
 #! \alias{ymismatch}
 #! \title{ Test for recycle mismatch }
 #! \description{
-#!   \command(mismatch) will return TRUE if the larger of nx,ny is not a multiple of the other and the other is >0 (see arithmetic.c).
-#!   \command(ymismatch) will return TRUE if nx is not a multiple of ny and ny>0
+#!   \command{mismatch} will return TRUE if the larger of nx,ny is not a multiple of the other and the other is >0 (see arithmetic.c).
+#!   \command{ymismatch} will return TRUE if nx is not a multiple of ny and ny>0
 #! }
 #! \usage{
 #! mismatch(nx, ny)
