@@ -1,3 +1,21 @@
+/*/////////////////////////////////////////////////////////////////////////////
+
+ Copyright (c) 2007,2008 Daniel Adler <dadler@uni-goettingen.de>
+
+ Permission to use, copy, modify, and distribute this software for any
+ purpose with or without fee is hereby granted, provided that the above
+ copyright notice and this permission notice appear in all copies.
+
+ THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+/////////////////////////////////////////////////////////////////////////////*/
+
 #ifndef FF_MMAP_FILE_MAPPING_HPP
 #define FF_MMAP_FILE_MAPPING_HPP
 
@@ -18,7 +36,7 @@ namespace ff {
   public:
     
     /** open file mapping on file given by native platform path */
-    MMapFileMapping(const char* path, fsize_t size=0, bool readonly=false);
+    MMapFileMapping(const char* path, fsize_t size, bool readonly,bool autoflush);
     
     /** destructor */
     ~MMapFileMapping();
@@ -43,6 +61,7 @@ namespace ff {
     fsize_t _size;
     Error   _error;
     bool    _readonly;
+    bool    _autoflush;
   };
 
   /** file that supports mapping of sections */
@@ -50,7 +69,7 @@ namespace ff {
   {
   public:
 
-    MMapFileSection(int fd, foff_t offset, msize_t size, void* addr, bool readonly=false);
+    MMapFileSection(int fd, foff_t offset, msize_t size, void* addr, bool readonly, bool autoflush);
     ~MMapFileSection();
 
     /** reset file section to offset offs and size s */
@@ -76,9 +95,13 @@ namespace ff {
       return (void*) ( ( (unsigned char*)_addr ) + disp );
     }
 
+    /** flush (possibly syncronized) back data to persistent storage and unmap */
+    void flush();
+
   private:
     int        _fd;
     bool       _readonly;
+    bool       _autoflush;
     foff_t     _offset; 
     foff_t     _end;
     msize_t    _size;

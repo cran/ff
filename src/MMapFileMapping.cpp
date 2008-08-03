@@ -1,3 +1,21 @@
+/*/////////////////////////////////////////////////////////////////////////////
+
+ Copyright (c) 2007,2008 Daniel Adler <dadler@uni-goettingen.de>
+
+ Permission to use, copy, modify, and distribute this software for any
+ purpose with or without fee is hereby granted, provided that the above
+ copyright notice and this permission notice appear in all copies.
+
+ THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+/////////////////////////////////////////////////////////////////////////////*/
+
 #include "config.h"
 #ifdef FF_USE_MMAP
 #include "MMapFileMapping.hpp"
@@ -22,6 +40,7 @@
 #endif
 #include <cstdlib>
 #include <cstring>
+#include "utk_file_allocate_fseek.hpp"
 namespace ff {
 
 static msize_t getZeroPageSize()
@@ -39,11 +58,12 @@ static void* getZeroPage()
   return ptr;
 }
 
-MMapFileMapping::MMapFileMapping(const char* path, fsize_t size, bool readonly)
+MMapFileMapping::MMapFileMapping(const char* path, fsize_t size, bool readonly, bool autoflush)
  : _fd(-1)
  , _size(0)
  , _error(E_NO_ERROR)
  , _readonly(readonly)
+ , _autoflush(autoflush)
 {
   // check path
   struct stat sb;
@@ -57,13 +77,25 @@ MMapFileMapping::MMapFileMapping(const char* path, fsize_t size, bool readonly)
     }
   }
   int flags = (_readonly) ? O_RDONLY : O_RDWR;
+/*
   flags |= O_CREAT;
   if (size) flags |= O_TRUNC;
+ */
+  if (size) {
+    int error = utk::file_allocate_fseek(path,size);
+    if (error)
+    {
+      _error = E_WRITE_ERROR;;
+      return;
+    }
+    _size = size;
+  }
   _fd = open(path, flags, 0777);
   if (_fd == -1) {
     _error = E_UNABLE_TO_OPEN;
     return; 
   }
+/*
   err = ::flock(_fd, LOCK_EX|LOCK_NB);
   if (err) { 
     close(_fd); 
@@ -71,8 +103,9 @@ MMapFileMapping::MMapFileMapping(const char* path, fsize_t size, bool readonly)
     _error = E_UNABLE_TO_OPEN;
     return; 
   }
+*/
   if (size) { // create new file
-      
+#if 0      
     // clamp size to page-size
 
     // size += getPageSize()-1;
@@ -100,6 +133,7 @@ MMapFileMapping::MMapFileMapping(const char* path, fsize_t size, bool readonly)
       total -= written;
     }
     _size = size;
+#endif
   } else { // open existing file
     // get filesize
     struct stat sb;
@@ -118,7 +152,7 @@ MMapFileMapping::~MMapFileMapping()
 
 MMapFileSection* MMapFileMapping::mapSection(foff_t offset, msize_t size, void* baseaddr)
 {
-  return new MMapFileSection(_fd,offset,size,baseaddr,_readonly);
+  return new MMapFileSection(_fd,offset,size,baseaddr,_readonly,_autoflush);
 }
 
 void MMapFileMapping::remapSection(MMapFileSection& section, foff_t offset, msize_t size, void* addr)
@@ -134,29 +168,38 @@ msize_t MMapFileMapping::getPageSize()
   return _pagesize;
 }
 
-MMapFileSection::MMapFileSection(int fd, foff_t offset, msize_t size, void* addr, bool readonly)
+MMapFileSection::MMapFileSection(int fd, foff_t offset, msize_t size, void* addr, bool readonly, bool autoflush)
  : _fd(fd)
  , _addr(0)
  , _offset(0)
  , _end(0)
  , _size(0)
  , _readonly(readonly)
+ , _autoflush(autoflush)
 {
   reset(offset,size,addr);
 }
 
 MMapFileSection::~MMapFileSection()
 {
-  reset(0,0,0);
+  flush();
 }
 
-void MMapFileSection::reset(foff_t offset, msize_t size, void* addr)
+void MMapFileSection::flush()
 {
   if (_addr) {
+    if (_autoflush) {
+      msync(_addr, _size, MS_SYNC);
+    }
     munmap(_addr, _size);
     _addr = 0;
     _size = 0;
   }
+}
+
+void MMapFileSection::reset(foff_t offset, msize_t size, void* addr)
+{
+  flush();
 
   if ( (size) && (_fd != -1) ) {
     int prot = PROT_READ | (( _readonly) ? 0 : PROT_WRITE );

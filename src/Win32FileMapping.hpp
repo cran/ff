@@ -1,3 +1,24 @@
+/*/////////////////////////////////////////////////////////////////////////////
+
+ Copyright (c) 2007,2008 Daniel Adler <dadler@uni-goettingen.de>
+
+ Permission to use, copy, modify, and distribute this software for any
+ purpose with or without fee is hereby granted, provided that the above
+ copyright notice and this permission notice appear in all copies.
+
+ THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+/////////////////////////////////////////////////////////////////////////////*/
+
+#ifndef FF_WIN32_FILE_MAPPING_HPP
+#define FF_WIN32_FILE_MAPPING_HPP
+
 #include "types.hpp"
 #include "Error.hpp"
 
@@ -34,7 +55,7 @@ namespace ff {
   public:
   
     /** constructor, open file mapping on file given by native platform path */
-    Win32FileMapping(const char* path, fsize_t size=0, bool readonly=false);
+    Win32FileMapping(const char* path, fsize_t size, bool readonly, bool autoflush);
     
     /** destructor */
     ~Win32FileMapping();
@@ -54,12 +75,14 @@ namespace ff {
     /** get system page size */
     static msize_t getPageSize();
     
+    
   private:
     HANDLE _fileHandle;
     HANDLE _viewHandle;
     fsize_t _size;
     Error   _error;
     bool    _readonly;
+    bool    _autoflush;
   };
 
   
@@ -69,7 +92,7 @@ namespace ff {
   public:
   
     /** constructor */
-    Win32FileSection(HANDLE viewHandle, foff_t offs, msize_t size, void* addr, bool readonly=false);
+    Win32FileSection(HANDLE viewHandle, foff_t offs, msize_t size, void* addr, bool readonly, bool autoflush);
     
     /** destructor */
     ~Win32FileSection();
@@ -96,9 +119,13 @@ namespace ff {
       return (void*) ( ( (unsigned char*)_addr  ) + disp );
     }
     
+    /** flush */
+    void flush();
+        
   private:
     HANDLE  _viewHandle;
     bool    _readonly;
+    bool    _autoflush;
     foff_t  _offset;
     foff_t  _end;
     msize_t _size;
@@ -107,3 +134,5 @@ namespace ff {
 
 
 }
+
+#endif // FF_WIN32_FILE_MAPPING_HPP

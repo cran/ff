@@ -1,3 +1,21 @@
+/*/////////////////////////////////////////////////////////////////////////////
+
+ Copyright (c) 2007,2008 Daniel Adler <dadler@uni-goettingen.de>
+
+ Permission to use, copy, modify, and distribute this software for any
+ purpose with or without fee is hereby granted, provided that the above
+ copyright notice and this permission notice appear in all copies.
+
+ THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+/////////////////////////////////////////////////////////////////////////////*/
+
 #include "config.h"
 
 #ifdef FF_USE_WIN32
@@ -7,6 +25,7 @@
 #include <cassert>
 #include <iostream>
 #include <float.h>
+#include "utk_file_allocate_fseek.hpp"
 
 
 namespace ff {
@@ -36,13 +55,17 @@ bool isFileReadOnly(const char* path)
   return ( data.dwFileAttributes & FILE_ATTRIBUTE_READONLY ) ? true : false;
 }
 
-Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly)
+Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly, bool autoflush)
 : _fileHandle(INVALID_HANDLE_VALUE)
 , _viewHandle(INVALID_HANDLE_VALUE)
 , _size(0)
 , _error(E_INVALID)
 , _readonly(readonly)
+, _autoflush(autoflush)
 {
+/*
+ FIXME: temporarly disable test for Jens 
+  
   if ( (!readonly) && (size) )
   {
     if ( isFileReadOnly(path) ) {
@@ -50,12 +73,26 @@ Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly
       return;
     }
   }
+ */
+ 
+  if (size)
+  {
+    int err = utk::file_allocate_fseek(path, size);
+    if (err)
+    {
+      _error = E_WRITE_ERROR;
+      goto on_error;
+    }
+    _size = size;
+  }
+ 
   _fileHandle = CreateFileA(
     path
-  , GENERIC_READ | ( (readonly) ? 0 : GENERIC_WRITE )
-  , 0
+  , GENERIC_READ | ( (readonly) ? 0 : GENERIC_WRITE )  
+  , FILE_SHARE_READ|FILE_SHARE_WRITE  
+  // , 0
   , NULL
-  , (size==0) ? OPEN_EXISTING : CREATE_ALWAYS
+  , /*(size==0) ?*/ OPEN_EXISTING /*: CREATE_ALWAYS*/
 #ifdef FF_USE_BUFFERING
   , 0
 #else
@@ -65,7 +102,8 @@ Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly
   );
 
   if (_fileHandle == INVALID_HANDLE_VALUE) {
-    _error = (size) ? E_UNABLE_TO_OPEN : E_NOT_EXISTING;
+    // _error = (size) ? E_UNABLE_TO_OPEN : E_NOT_EXISTING;
+    _error = E_UNABLE_TO_OPEN;
     return; 
   }
   if (size) {    
@@ -80,7 +118,7 @@ Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly
   if (size) {
 
     // allocate file blocks that match array size and zero fill
-
+/*
     fsize_t total = size;
     while (total > 0) {
       DWORD dwsize;
@@ -97,7 +135,18 @@ Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly
       }
       total -= written;
     }
+*/
+
+/*
+    int err = utk::file_allocate_fseek(path, size);
+    if (err)
+    {
+      _error = E_WRITE_ERROR;
+      goto on_error;
+    }
+    
     _size = size;
+*/    
   } else {
     // open already existing file
     LARGE_INTEGER li;
@@ -155,7 +204,7 @@ Win32FileMapping::~Win32FileMapping()
 
 Win32FileSection* Win32FileMapping::mapSection(foff_t offset, msize_t size, void* baseaddr)
 {
-  return new Win32FileSection(_viewHandle, offset, size,baseaddr,_readonly);
+  return new Win32FileSection(_viewHandle, offset, size,baseaddr,_readonly,_autoflush);
 }
 
 void Win32FileMapping::remapSection(Win32FileSection& section, foff_t offset, msize_t size, void* baseaddr)
@@ -163,9 +212,10 @@ void Win32FileMapping::remapSection(Win32FileSection& section, foff_t offset, ms
   section.reset(offset, size, baseaddr);
 }
 
-Win32FileSection::Win32FileSection(HANDLE handle, foff_t offset, msize_t size, void* baseaddr, bool readonly)
+Win32FileSection::Win32FileSection(HANDLE handle, foff_t offset, msize_t size, void* baseaddr, bool readonly, bool autoflush)
 : _viewHandle(handle)
 , _readonly(readonly)
+, _autoflush(autoflush)
 , _offset(0)
 , _size(0)
 , _addr(0)
@@ -173,20 +223,24 @@ Win32FileSection::Win32FileSection(HANDLE handle, foff_t offset, msize_t size, v
   reset(offset,size,baseaddr);
 }
 
-Win32FileSection::~Win32FileSection()
+void Win32FileSection::flush()
 {
-  if(_addr) {
+  if(_addr) {  
+    if (_autoflush)
+      FlushViewOfFile(_addr,_size);
     UnmapViewOfFile(_addr);
     _addr = 0;
   }
 }
 
+Win32FileSection::~Win32FileSection()
+{
+  flush();
+}
+
 void Win32FileSection::reset(foff_t offset, msize_t size, void* baseaddr)
 {  
-  if (_addr) {
-    UnmapViewOfFile(_addr);
-    _addr = 0;
-  }
+  flush();
 
   _addr = (double*) MapViewOfFileEx(
     _viewHandle
