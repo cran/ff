@@ -32,7 +32,7 @@ ramattribs(x, \dots)
   The vectors \code{ramclass_excludes} and \code{ramattribs_excludes} name those attributes, which are not exported from ff to ram objects when using \code{\link{as.ram}}.
 }
 \author{ Jens Oehlschlägel }
-\seealso{ \code{\link{ff}}, \code{\link{virtual}}, \code{\link{as.ram}}, \code{\link{levels.ff}}, \code{\link{attributes}}, \code{\link[base]{DateTimeClasses}} }
+\seealso{ \code{\link{ff}}, \code{\link[=physical.ff]{virtual}}, \code{\link{as.ram}}, \code{\link{levels.ff}}, \code{\link{attributes}}, \code{\link[base]{DateTimeClasses}} }
 \examples{
   x <- ff(as.POSIXct(as.POSIXlt(Sys.time(), "GMT")), length=12)
   x
@@ -42,8 +42,7 @@ ramattribs(x, \dots)
   attributes(x[])
   virtual(x)$ramattribs$tzone = NULL
   attributes(x[])
-  delete(x)
-  rm(x)
+  rm(x); gc()
 }
 \keyword{ IO }
 \keyword{ data }

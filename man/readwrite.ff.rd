@@ -39,8 +39,7 @@ readwrite.ff(x, i, value, add = FALSE)
   readwrite.ff(x, 3, rep(1, 6), add=TRUE)
   readwrite.ff(x, 3, rep(1, 6))
   x
-  delete(x)
-  rm(x)
+  rm(x); gc()
 }
 \keyword{ IO }
 \keyword{ data }

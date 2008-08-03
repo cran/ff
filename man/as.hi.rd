@@ -1,10 +1,14 @@
 \name{as.hi}
 \alias{as.hi}
 \alias{as.hi.hi}
+\alias{as.hi.ri}
+\alias{as.hi.bit}
+\alias{as.hi.bitwhich}
 \alias{as.hi.call}
 \alias{as.hi.name}
 \alias{as.hi.(}
 \alias{as.hi.integer}
+\alias{as.hi.which}
 \alias{as.hi.double}
 \alias{as.hi.logical}
 \alias{as.hi.character}
@@ -18,18 +22,21 @@
 \usage{
 as.hi(x, \dots)
 \method{as.hi}{hi}(x, \dots)
-\method{as.hi}{call}(x, maxindex = NA, dim = NULL, dimorder = NULL, vw = NULL, vw.convert = TRUE, pack = TRUE, parents = 1, \dots)
-\method{as.hi}{name}(x, parents=1, \dots)
-%\method{as.hi}{(}(x, parents=1, \dots)
+\method{as.hi}{ri}(x, maxindex = length(x), \dots)
+\method{as.hi}{bit}(x, range = NULL, maxindex = length(x), vw = NULL, dim = NULL, dimorder = NULL, \dots)
+\method{as.hi}{bitwhich}(x, maxindex = length(x), \dots)
+\method{as.hi}{call}(x, maxindex = NA, dim = NULL, dimorder = NULL, vw = NULL, vw.convert = TRUE, pack = TRUE, envir = parent.frame(), \dots)
+\method{as.hi}{name}(x, envir = parent.frame(), \dots)
+%\method{as.hi}{(}(x, envir = parent.frame(), \dots)
 \method{as.hi}{integer}(x, maxindex = NA, dim = NULL, dimorder = NULL, symmetric = FALSE, fixdiag = NULL, vw = NULL, vw.convert = TRUE, dimorder.convert  = TRUE, pack = TRUE, NAs = NULL, \dots)
 \method{as.hi}{double}(x, \dots)
 \method{as.hi}{logical}(x, maxindex = NA, dim = NULL, vw = NULL, pack = TRUE, \dots)
 \method{as.hi}{character}(x, names, vw = NULL, vw.convert = TRUE, \dots)
-\method{as.hi}{matrix}(x, dim, maxindex = NA, dimorder = NULL, symmetric = FALSE, fixdiag = NULL, vw = NULL, pack = TRUE, \dots)
+\method{as.hi}{matrix}(x, dim, dimorder = NULL, symmetric = FALSE, fixdiag = NULL, vw = NULL, pack = TRUE, \dots)
 }
 \arguments{
   \item{x}{ an appropriate object of the class for which we dispatched }
-  \item{parents}{ the number of frames to look up when evaluating components of the index expression }
+  \item{envir}{ the environment in which to evaluate components of the index expression }
   \item{maxindex}{ maximum positive indexposition \code{maxindex}, is needed with negative indices, if vw or dim is given, maxindex is calculated automatically }
   \item{names}{ the \code{\link[ff:names.ff]{names}} of the indexed vector for character indexing }
   \item{dim}{ the \code{\link[ff:dim.ff]{dim}} of the indexed matrix to be stored within the \code{\link{hi}} object }
@@ -39,8 +46,9 @@ as.hi(x, \dots)
   \item{vw}{ the virtual window \code{\link{vw}} of the indexed vector or matrix to be stored within the \code{\link{hi}} object, see details }
   \item{vw.convert}{ FALSE to prevent doubly virtual window conversion, this is needed for some internal calls that have done the virtual window conversion already, see details }
   \item{dimorder.convert}{ FALSE to prevent doubly dimorder conversion, this is needed for some internal calls that have done the dimorder conversion already, see details }
-  \item{NAs}{ a vector of NA positions to be stored \code{\link{rlepack}ed}, not fully supported yet }
-  \item{pack}{ FALSE to prevent \code{\link{rlepack}ing} }
+  \item{NAs}{ a vector of NA positions to be stored \code{\link[bit]{rlepack}ed}, not fully supported yet }
+  \item{pack}{ FALSE to prevent \code{\link[bit]{rlepack}ing} }
+  \item{range}{ NULL or a vector with two elements indicating first and last position to be converted from 'bit' to 'hi' }
   \item{\dots}{ further argument passed from generic to method or from wrapper method to \code{as.hi.integer} }
 }
 \details{
@@ -48,7 +56,7 @@ as.hi(x, \dots)
   \code{as.hi.call} tries to \code{\link{hiparse}} instead of evaluate its input in order to save RAM.
   If parsing fails it evaluates the index expression and dispatches again to one of the other methods.
   \code{as.hi.name} and \code{as.hi.(} are wrappers to \code{as.hi.call}.
-  \code{as.hi.integer} is the workhorse for coercing evaluated expressions,
+  \code{as.hi.integer == as.hi.which} is the workhorse for coercing evaluated expressions,
   \code{as.hi.double}, \code{as.hi.logical} and \code{as.hi.character} are simply wrappers to \code{as.hi.integer},
   but note that \code{as.hi.logical} is not memory efficient because it expands \emph{all} positions and then applies logical subscripting.
   \cr
@@ -60,7 +68,7 @@ as.hi(x, \dots)
   Back-coercion via \code{\link{as.integer.hi}} and friends will again return the index information relative to the virtual window, thus retaining symmetry and transparency of the viurtual window to the user.
   \cr
   You can use \code{\link[ff:length.hi]{length}} to query the index length (possibly length of negative subscripts),
-  \code{\link[ff:poslength.hi]{length}} to query the number of selected elements (even with negative subscripts),
+  \code{\link[ff:poslength.hi]{poslength}} to query the number of selected elements (even with negative subscripts),
   and \code{\link[ff:maxindex.hi]{maxindex}} to query the largest possible index position (within virtual window, if present)
   \cr
   Duplicated negative indices are removed and will not be recovered by \code{\link{as.integer.hi}}.

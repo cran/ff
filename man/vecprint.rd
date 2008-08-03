@@ -10,7 +10,7 @@ vecprint(x, maxlength = 16, digits = getOption("digits"))
  \method{print}{vecprint}(x, quote = FALSE, \dots)
 }
 \arguments{
-  \item{x}{ a \code{\link{matrix}} }
+  \item{x}{ a vector }
   \item{maxlength}{ max number of elements for printing }
   \item{digits}{ see \code{\link{format}} }
   \item{quote}{ see \code{\link{print}} }

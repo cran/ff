@@ -25,7 +25,7 @@
 #include "utk_config.hpp"
 #include <cstdio>
 
-namespace utk
+namespace utk 
 {
   typedef unsigned long long fsize_t;
   int file_allocate_fseek(const char* path, fsize_t size);

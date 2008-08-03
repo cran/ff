@@ -18,25 +18,22 @@
 
 
 
-if (FALSE){
-  x <- factor(c("aa",letters[-1]))
-  dim(x) <- c(13,2)
-  format(x, justify="right")
-
-  format.factor <-
-  function (x, ...){
+# not exported, only used for display in vecprint, matprint
+legalizeFactor <- function(x){
+  if (is.factor(x)){
     a <- attributes(x)
-    a$class <- NULL
-    a$levels <- NULL
-    x <- as.character(x)
+    attributes(x) <- NULL
+    if (any(!is.na(x) & x==0L)){
+      x <- x + 1L
+      a$levels <- c("<0>", a$levels)
+    }
     attributes(x) <- a
-    format(x, ...)
   }
-
-  format(x, justify="right")
-
-
+  x
 }
+
+
+
 
 
 #! \name{vector2array}
@@ -476,24 +473,37 @@ matcomb <- function(r,c){
 matprint <- function(x, maxdim=c(16,16), digits=getOption("digits")){
 
   d <- dim(x)
+  if (any(d==0)){
+    return("[empty matrix]")
+  }
+
   maxdim <- pmin(d,maxdim)
   d2 <- maxdim %/% 2
   d1 <- maxdim - d2
   d2 <- ifelse(d1<maxdim, d - d2 + 1, 0)
-  rsep <- maxdim[1]<d[1]
-  csep <- maxdim[2]<d[2]
+  rsep <- maxdim[1] < d[1]
+  csep <- maxdim[2] < d[2]
+
   i <- matrix(list(1:d1[1], 1:d1[2], if (d2[1]) d2[1]:d[1], if (d2[2]) d2[2]:d[2]), 2, 2)
-  m <- x[ c(i[[1,1]],i[[1,2]]) , c(i[[2,1]],i[[2,2]]), drop=FALSE ]
-  # xx circumvent a bug in format.factor
-  if (is.factor(m)){
-    a <- attributes(m)
-    a$class <- NULL
-    a$levels[is.na(a$levels)] <- "<NA>"
-    m <- as.character(a$levels[m])
-    a$levels <- NULL
-    attributes(m) <- a
+  i1 <- c(i[[1,1]],i[[1,2]])
+  i2 <- c(i[[2,1]],i[[2,2]])
+  m <- x[ i1 , i2, drop=FALSE ]
+  if (is.data.frame(m)){
+    for (j in seq(along=m))
+      m[[j]] <- legalizeFactor(m[[j]])
+    m <- as.matrix(m)
+  }else{
+    m <- legalizeFactor(m)
   }
-  m <- format(m, digits=digits)
+
+  # xx circumvent a bug in format of raw
+  if (is.raw(m)){
+    a <- attributes(m)
+    m <- as.character(m)
+    attributes(m) <- a
+  }else{
+    m <- format(m, digits=digits)
+  }
   if (is.null(rownames(m)))
     rownames(m) <- paste("[", c(i[[1,1]],i[[1,2]]),",]", sep="")
   if (is.null(colnames(m)))
@@ -530,7 +540,7 @@ print.matprint <- function(x, quote=FALSE, right=TRUE, ...){
 #!  \method{print}{vecprint}(x, quote = FALSE, \dots)
 #! }
 #! \arguments{
-#!   \item{x}{ a \code{\link{matrix}} }
+#!   \item{x}{ a vector }
 #!   \item{maxlength}{ max number of elements for printing }
 #!   \item{digits}{ see \code{\link{format}} }
 #!   \item{quote}{ see \code{\link{print}} }
@@ -561,17 +571,7 @@ vecprint <- function(x, maxlength=16, digits=getOption("digits")){
   sep <- maxlength[1]<d[1]
 
   i <- list(1:d1, if (d2) d2:d)
-  m <- x[ unlist(i) ]
-  # xx circumvent a bug in format.factor
-  if (is.factor(m)){
-    a <- attributes(m)
-    a$class <- NULL
-    a$levels[is.na(a$levels)] <- "<NA>"
-    m <- as.character(a$levels[m])
-    a$levels <- NULL
-    attributes(m) <- a
-  }
-  m <- format(m, digits=digits)
+  m <- format(legalizeFactor(x[ unlist(i) ]), digits=digits)
   if (is.null(names(m)))
     names(m) <- paste("[", unlist(i),"]", sep="")
 

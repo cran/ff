@@ -6,11 +6,11 @@
   \emph{Not to be called directly}
 }
 \usage{
-hiparse(x, parents, first = as.integer(NA), last = as.integer(NA))
+hiparse(x, envir, first = as.integer(NA), last = as.integer(NA))
 }
 \arguments{
   \item{x}{ an index expression, precisely: \code{\link{call}} }
-  \item{parents}{ the number of frames to look up when evaluating components of the index expression }
+  \item{envir}{ the environemtn in which to evaluate components of the index expression }
   \item{first}{ first index position found so far }
   \item{last}{ last index position found so far }
 }
@@ -19,7 +19,7 @@ hiparse(x, parents, first = as.integer(NA), last = as.integer(NA))
   \code{hiparse} will \code{\link{Recall}} until the index expression is parsed or an unknown token is found.
   If an unknown token is found, \code{hiparse} evluates it, inspects it and either accepts it or throws an error, catched by \code{\link{as.hi.call}},
   which falls back to evaluating the index expression and dispatching (again) an appropriate \code{\link{as.hi}} method.
-  Reasons for suspending the parsing: if the inspected token is of class 'hi', 'is.logical', 'is.character', 'is.matrix' or has length>16.
+  Reasons for suspending the parsing: if the inspected token is of class 'hi', 'ri', 'bit', 'bitwhich', 'is.logical', 'is.character', 'is.matrix' or has length>16.
 }
 \value{
   undefined (and redefined as needed by \code{\link{as.hi.call}})

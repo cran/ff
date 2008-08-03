@@ -58,6 +58,7 @@ Rboolean next_positive_neg(
 /* utility functions */
 
 SEXP r_ff_xtensions_available();
+SEXP r_ff_symmxtensions_available();
 SEXP r_ff_getpagesize();
 SEXP r_ff_int_check_ascending(SEXP x);
 SEXP r_ff_int_check_descending(SEXP x);
@@ -80,7 +81,7 @@ SEXP r_ff_delete(SEXP ff_);
 SEXP r_ff_maxlength(SEXP ff_); /* not used because maxlength stored in physical attributes */
 
 #include "r_ff_methoddeclaration.h"
-#if FF_XTENSIONS_AVAILABLE
+#if FF_SYMMXTENSIONS_AVAILABLE
   #include "x_r_ff_methoddeclaration.h"
 #endif
 

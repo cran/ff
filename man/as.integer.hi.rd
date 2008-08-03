@@ -1,4 +1,7 @@
 \name{as.integer.hi}
+\alias{as.which.hi}
+\alias{as.bitwhich.hi}
+\alias{as.bit.hi}
 \alias{as.integer.hi}
 \alias{as.logical.hi}
 \alias{as.character.hi}
@@ -8,6 +11,9 @@
   Functions that (back-)convert an \code{\link{hi}} object to the respective subscripting information.
 }
 \usage{
+\method{as.which}{hi}(x, \dots)
+\method{as.bitwhich}{hi}(x, \dots)
+\method{as.bit}{hi}(x, \dots)
 \method{as.integer}{hi}(x, vw.convert = TRUE, \dots)
 \method{as.logical}{hi}(x, maxindex = NULL, \dots)
 \method{as.character}{hi}(x, names, vw.convert = TRUE, \dots)

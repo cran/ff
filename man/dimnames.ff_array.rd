@@ -22,7 +22,7 @@
   \command{dimnames} returns a list, see \code{\link[base]{dimnames}}
 }
 \author{ Jens Oehlschlägel }
-\seealso{ \code{\link[base]{dimnames}}, \code{\link{dim.ff}} , \code{\link{names.ff}} , \code{\link{vw}}, \code{\link{virtual}} }
+\seealso{ \code{\link[base]{dimnames}}, \code{\link{dim.ff}} , \code{\link{names.ff}} , \code{\link{vw}}, \code{\link[=physical.ff]{virtual}} }
 \examples{
   x <- ff(1:12, dim=c(3,4), dimnames=list(letters[1:3], LETTERS[1:4]))
   dimnames(x)
@@ -30,8 +30,7 @@
   dimnames(x)
   dimnames(x) <- NULL
   dimnames(x)
-  delete(x)
-  rm(x)
+  rm(x); gc()
 }
 \keyword{ IO }
 \keyword{ data }

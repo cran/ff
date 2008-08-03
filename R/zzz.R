@@ -9,15 +9,14 @@
 
 .onLoad <- function(lib, pkg) {
   ##library.dynam("ff", pkg, lib) use useDynLib(ff) in NAMESPACE instead
-  cat("Loading package ff\n")
+  cat("Loading package ff", installed.packages()["ff","Version"], "\n")
   # allow fftempdir to be set before package is loaded
   if (is.null(getOption("fftempdir"))){
-    # create tempdir
-    tmpdir <- tempdir()
-    # make tempdir name independent of platform (otherwise dirname(tempfile)!=getOption("fftempdir"))
-    tmpdir <- file.path(dirname(tmpdir), basename(tmpdir))
-    options(fftempdir=tmpdir)
+    # create tempdir and make tempdir name independent of platform (otherwise dirname(tempfile)!=getOption("fftempdir"))
+    options(fftempdir=standardPathFile(tempdir()))
   }
+  if (is.null(getOption("ffextension")))
+    options(ffextension="ff")
   if (is.null(getOption("fffinonexit")))
     options(fffinonexit=TRUE)
   if (is.null(getOption("ffpagesize")))
@@ -40,6 +39,7 @@
     }
   }
   cat('- getOption("fftempdir")=="',getOption("fftempdir"),'"\n',sep='')
+  cat('- getOption("ffextension")=="',getOption("ffextension"),'"\n',sep='')
   cat('- getOption("fffinonexit")==',getOption("fffinonexit"),'\n',sep='')
   cat('- getOption("ffpagesize")==',getOption("ffpagesize"),'\n',sep='')
   cat('- getOption("ffcaching")=="',getOption("ffcaching"),'"\n',sep='')
@@ -94,10 +94,30 @@
 
 .onAttach <- function(libname, pkgname){
   cat("Attaching package ff\n")
+  cat('fixing [.AsIs in base namespace because if the NextMethod("[") returns a different class, [.AsIs was reverting this\n')
+  assignInNamespace(
+    "[.AsIs"
+  , function (x, i, ...){
+      ret <- NextMethod("[")
+      oldClass(ret) <- c("AsIs", oldClass(ret))
+      ret
+    }
+  , "base"
+  )
 }
 
 .Last.lib <- function(libpath) {
    cat("Detaching package ff\n")
+  cat('restoring [.AsIs\n')
+  assignInNamespace(
+    "[.AsIs"
+  , function (x, i, ...){
+      ret <- NextMethod("[")
+      oldClass(ret) <- c("AsIs", oldClass(x))
+      ret
+    }
+  , "base"
+  )
 }
 
 .onUnload <- function(libpath){
@@ -108,5 +128,5 @@
    if (unlink(getOption("fftempdir"), recursive = TRUE))
      cat("Error in unlinking fftempdir\n")
    else
-     options(fftempdir=NULL, fffinonexit=NULL, ffpagesize=NULL, ffcaching=NULL, ffdrop=NULL, ffbatchbytes=NULL)
+     options(fftempdir=NULL, ffextension=NULL, fffinonexit=NULL, ffpagesize=NULL, ffcaching=NULL, ffdrop=NULL, ffbatchbytes=NULL)
 }

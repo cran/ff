@@ -12,13 +12,31 @@ as.hi <- function(x, ...){
   UseMethod("as.hi")
 }
 
+# physical and virtual features of an object
+if (!exists("physical"))
+  physical <- function(x)UseMethod("physical")
+if (!exists("physical<-"))
+  "physical<-" <- function(x, value)UseMethod("physical<-")
+if (!exists("virtual"))
+  virtual <- function(x)UseMethod("virtual")
+if (!exists("virtual<-"))
+  "virtual<-" <- function(x, value)UseMethod("virtual<-")
+
 # complementing 'length' generic
-maxindex  <- function(x, ...)UseMethod("maxindex")  # max possible index length (required for negative indices)
-poslength <- function(x, ...)UseMethod("poslength") # length of selected elements (even for negative indices)
+if (!exists("maxindex"))
+  maxindex  <- function(x, ...)UseMethod("maxindex")  # max possible index length (required for negative indices)
+if (!exists("poslength"))
+  poslength <- function(x, ...)UseMethod("poslength") # length of selected elements (even for negative indices)
 maxlength <- function(x, ...)UseMethod("maxlength") # max physical length
+#maxwidth <- function (x, ...)UseMethod("maxwidth")  # max width of fixed char (fffc)
+
+
 
 # further physical and readonly attributes
 filename    <- function(x, ...)UseMethod("filename")    # (physical attribute, part of the HCS concept)
+"filename<-" <- function(x, ..., value)UseMethod("filename<-")    # (physical attribute, part of the HCS concept)
+pattern    <- function(x, ...)UseMethod("pattern")    # (physical attribute, part of the HCS concept)
+"pattern<-" <- function(x, ..., value)UseMethod("pattern<-")    # (physical attribute, part of the HCS concept)
 is.readonly <- function(x, ...)UseMethod("is.readonly") # (physical attribute, part of the HCS concept)
 is.open     <- function(x, ...)UseMethod("is.open")     # readonly
 
@@ -26,6 +44,12 @@ is.open     <- function(x, ...)UseMethod("is.open")     # readonly
     vmode <- function(x, ...)UseMethod("vmode")
  as.vmode <- function(x, ...)UseMethod("as.vmode")
 "vmode<-" <- function(x, value)UseMethod("vmode<-")
+
+# finalization
+finalizer   <- function(x, ...)UseMethod("finalizer")               # get name of active finalizer
+"finalizer<-" <- function(x, ..., value)UseMethod("finalizer<-")    # change and activate finalizer (but not: de-activate)
+finalize  <- function(x, ...)UseMethod("finalize")                  # call active finalizer (if any)
+
 
 # generics complementing 'open' and 'close' in ff file handling
 delete     <- function(x, ...)UseMethod("delete")
@@ -35,6 +59,11 @@ deleteIfOpen <- function(x, ...)UseMethod("deleteIfOpen")
 clone  <- function(x, ...)UseMethod("clone")
 as.ff  <- function(x, ...)UseMethod("as.ff")
 as.ram <- function(x, ...)UseMethod("as.ram")
+
+# super-classes
+#as.fffc <- function(x, ...)UseMethod("as.fffc")
+as.ffdf <- function(x, ...)UseMethod("as.ffdf")
+
 
 # querying and setting dimorder (virtual attribute, part of the HCS concept)
  dimorder    <- function(x, ...)UseMethod("dimorder")
@@ -67,6 +96,13 @@ ramattribs <- function (x, ...)
  na.count    <- function(x, ...)UseMethod("na.count")
 "na.count<-" <- function(x, ..., value)UseMethod("na.count<-")
 
+# fffactor
+recodeLevels <- function(x, lev)
+  UseMethod("recodeLevels")
+
+sortLevels <- function(x)
+  UseMethod("sortLevels")
+
 
 
 # -- special access methods --
@@ -95,4 +131,76 @@ bigsample <- function(x, ...)UseMethod("bigsample")
 
 # virtual matrix transpose
 vt <- function(x, ...)UseMethod("vt")
+
+
+# -- not yet generics ----------------------------------------------------------------
+
+#! \name{nrowAssign}
+#! \Rdversion{1.1}
+#! \alias{nrow<-}
+#! \alias{ncol<-}
+#! \title{
+#!   Assigning the number of rows or columns
+#! }
+#! \description{
+#!   Function \code{nrow<-} assigns \code{\link[base]{dim}} with a new number of rows. \cr
+#!   Function \code{ncol<-} assigns \code{\link[base]{dim}} with a new number of columns.
+#! }
+#! \usage{
+#! nrow(x) <- value
+#! ncol(x) <- value
+#! }
+#! \arguments{
+#!   \item{x}{ a object that has \code{\link[base]{dim}} AND can be assigned ONE new dimension }
+#!   \item{value}{ the new size of the assigned dimension }
+#! }
+#! \details{
+#!   Currently only asssigning new rows to \code{\link{ffdf}} is supported.
+#!   The new ffdf rows are not initialized (usually become zero).
+#!   NOTE that
+#! }
+#! \value{
+#!   The object with a modified dimension
+#! }
+#! \author{
+#!   Jens Oehlschlägel
+#! }
+#! \seealso{
+#!   \code{\link{ffdf}}, \code{\link{dim.ffdf}}
+#! }
+#! \examples{
+#!   a <- as.ff(1:26)
+#!   b <- as.ff(factor(letters)) # vmode="integer"
+#!   c <- as.ff(factor(letters), vmode="ubyte")
+#!   df <- ffdf(a,b,c)
+#!   nrow(df) <- 2*26
+#!   df
+#!   cat("NOTE that the new rows have silently the first level 'a' for UNSIGNED vmodes\n")
+#!   cat("NOTE that the new rows have an illegal factor level <0> for SIGNED vmodes\n")
+#!   cat("It is your responsibility to put meaningful content here\n")
+#!   cat("As an example we replace the illegal zeros by NA\n")
+#!   df$b[27:52] <- NA
+#!   df
+#!
+#!   rm(a,b,c,df); gc()
+#! }
+#! \keyword{ array }
+
+
+"nrow<-" <- function(x, value){
+  d <- dim(x)
+  if (is.null(d) || length(d)!=2)
+    stop("not a two-dimensional array")
+  dim(x) <- c(as.integer(value), d[[2]])
+  x
+}
+
+"ncol<-" <- function(x, value){
+  d <- dim(x)
+  if (is.null(d) || length(d)!=2)
+    stop("not a two-dimensional array")
+  dim(x) <- c(d[[1]], as.integer(value))
+  x
+}
+
 

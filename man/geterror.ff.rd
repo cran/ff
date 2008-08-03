@@ -21,8 +21,7 @@ geterrstr.ff(x)
   x <- ff(1:12)
   geterror.ff(x)
   geterrstr.ff(x)
-  delete(x)
-  rm(x)
+  rm(x); gc()
 }
 \keyword{ IO }
 \keyword{ data }

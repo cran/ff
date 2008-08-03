@@ -93,34 +93,34 @@ MMapFileMapping::MMapFileMapping(const char* path, fsize_t size, bool readonly, 
   _fd = open(path, flags, 0777);
   if (_fd == -1) {
     _error = E_UNABLE_TO_OPEN;
-    return;
+    return; 
   }
 /*
   err = ::flock(_fd, LOCK_EX|LOCK_NB);
-  if (err) {
-    close(_fd);
-    _fd = -1;
+  if (err) { 
+    close(_fd); 
+    _fd = -1; 
     _error = E_UNABLE_TO_OPEN;
-    return;
+    return; 
   }
 */
   if (size) { // create new file
-#if 0
+#if 0      
     // clamp size to page-size
 
     // size += getPageSize()-1;
     // size = size / getPageSize() * getPageSize();
-
+ 
     // check space on device
 
     FSInfo fsinfo;
     getFSInfo(path,fsinfo);
-    if (fsinfo.free_space < size) {
-      close(_fd);
-      _fd = -1;
+    if (fsinfo.free_space < size) { 
+      close(_fd); 
+      _fd = -1; 
       _error = E_NO_DISKSPACE;
-      return;
-    }
+      return; 
+    } 
 
     // write zero pages to file with given size
 
@@ -137,7 +137,7 @@ MMapFileMapping::MMapFileMapping(const char* path, fsize_t size, bool readonly, 
   } else { // open existing file
     // get filesize
     struct stat sb;
-    fstat(_fd, &sb);
+    fstat(_fd, &sb); 
     _size = sb.st_size;
   }
 }
@@ -163,7 +163,7 @@ void MMapFileMapping::remapSection(MMapFileSection& section, foff_t offset, msiz
 msize_t MMapFileMapping::getPageSize()
 {
   static int _pagesize = -1;
-  if (_pagesize == -1)
+  if (_pagesize == -1) 
     _pagesize = getpagesize();
   return _pagesize;
 }

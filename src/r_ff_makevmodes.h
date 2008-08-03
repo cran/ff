@@ -19,7 +19,7 @@
   #define VMODE_COERCE  asLogical
   #define VMODE_INIT    FALSE
   #include "r_ff_addgetset.h"
-  #if FF_XTENSIONS_AVAILABLE
+  #if FF_SYMMXTENSIONS_AVAILABLE
     #include "x_r_ff_addgetset.h"
   #endif
   #undef VMODE_NAME
@@ -45,7 +45,7 @@
   #define VMODE_COERCE  asLogical
   #define VMODE_INIT    FALSE
   #include "r_ff_addgetset.h"
-  #if FF_XTENSIONS_AVAILABLE
+  #if FF_SYMMXTENSIONS_AVAILABLE
     #include "x_r_ff_addgetset.h"
   #endif
   #undef VMODE_NAME
@@ -72,7 +72,7 @@
   #define VMODE_COERCE  asInteger
   #define VMODE_INIT    0
   #include "r_ff_addgetset.h"
-  #if FF_XTENSIONS_AVAILABLE
+  #if FF_SYMMXTENSIONS_AVAILABLE
     #include "x_r_ff_addgetset.h"
   #endif
   #undef VMODE_NAME
@@ -99,7 +99,7 @@
   #define VMODE_COERCE  asInteger
   #define VMODE_INIT    0
   #include "r_ff_addgetset.h"
-  #if FF_XTENSIONS_AVAILABLE
+  #if FF_SYMMXTENSIONS_AVAILABLE
     #include "x_r_ff_addgetset.h"
   #endif
   #undef VMODE_NAME
@@ -126,7 +126,7 @@
   #define VMODE_COERCE  asInteger
   #define VMODE_INIT    0
   #include "r_ff_addgetset.h"
-  #if FF_XTENSIONS_AVAILABLE
+  #if FF_SYMMXTENSIONS_AVAILABLE
     #include "x_r_ff_addgetset.h"
   #endif
   #undef VMODE_NAME
@@ -153,7 +153,7 @@
   #define VMODE_COERCE  asInteger
   #define VMODE_INIT    0
   #include "r_ff_addgetset.h"
-  #if FF_XTENSIONS_AVAILABLE
+  #if FF_SYMMXTENSIONS_AVAILABLE
     #include "x_r_ff_addgetset.h"
   #endif
   #undef VMODE_NAME
@@ -180,7 +180,7 @@
   #define VMODE_COERCE  asInteger
   #define VMODE_INIT    0
   #include "r_ff_addgetset.h"
-  #if FF_XTENSIONS_AVAILABLE
+  #if FF_SYMMXTENSIONS_AVAILABLE
     #include "x_r_ff_addgetset.h"
   #endif
   #undef VMODE_NAME
@@ -207,7 +207,7 @@
   #define VMODE_COERCE  asInteger
   #define VMODE_INIT    0
   #include "r_ff_addgetset.h"
-  #if FF_XTENSIONS_AVAILABLE
+  #if FF_SYMMXTENSIONS_AVAILABLE
     #include "x_r_ff_addgetset.h"
   #endif
   #undef VMODE_NAME
@@ -235,7 +235,7 @@
   #define VMODE_COERCE  asInteger
   #define VMODE_INIT    0
   #include "r_ff_addgetset.h"
-  #if FF_XTENSIONS_AVAILABLE
+  #if FF_SYMMXTENSIONS_AVAILABLE
     #include "x_r_ff_addgetset.h"
   #endif
   #undef VMODE_NAME
@@ -261,7 +261,7 @@
   #define VMODE_COERCE  asReal
   #define VMODE_INIT    0.0
   #include "r_ff_addgetset.h"
-  #if FF_XTENSIONS_AVAILABLE
+  #if FF_SYMMXTENSIONS_AVAILABLE
     #include "x_r_ff_addgetset.h"
   #endif
   #undef VMODE_NAME
@@ -287,7 +287,7 @@
   #define VMODE_COERCE  asReal
   #define VMODE_INIT    0.0       /* might help calling ff_<VMODE>_new from r_ff_open when initial value is not available */
   #include "r_ff_addgetset.h"
-  #if FF_XTENSIONS_AVAILABLE
+  #if FF_SYMMXTENSIONS_AVAILABLE
     #include "x_r_ff_addgetset.h"
   #endif
   #undef VMODE_NAME
@@ -313,7 +313,7 @@
   #define VMODE_COERCE  asComplex
   #define VMODE_INIT    0
   #include "r_ff_addgetset.h"
-  #if FF_XTENSIONS_AVAILABLE
+  #if FF_SYMMXTENSIONS_AVAILABLE
     #include "x_r_ff_addgetset.h"
   #endif
   #undef VMODE_NAME
@@ -339,7 +339,7 @@
   #define VMODE_COERCE  asRaw
   #define VMODE_INIT    0
   #include "r_ff_addgetset.h"
-  #if FF_XTENSIONS_AVAILABLE
+  #if FF_SYMMXTENSIONS_AVAILABLE
     #include "x_r_ff_addgetset.h"
   #endif
   #undef VMODE_NAME

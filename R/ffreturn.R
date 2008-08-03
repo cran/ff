@@ -223,6 +223,8 @@ vectorCompatible <- function(
 #!   ffconform(d2,c)
 #!   try(ffconform(d1,d2))
 #!   ffconform(d1,d1)
+#!
+#!   rm(a,b,c,d1,d2); gc()
 #! }
 #! \keyword{ IO }
 #! \keyword{ data }
@@ -481,6 +483,6 @@ ffreturn <- function(FF_RETURN=NULL, FF_PROTO=NULL, FF_ATTR=NULL){
     if (is.null(FF_PROTO))
       do.call("ff", c(FF_ATTR, list(FF_RETURN=FF_RETURN)))  # ff will create whatever is needed
     else
-      do.call("clone.ff", c(list(FF_PROTO), FF_ATTR, list(FF_RETURN=FF_RETURN)))  # ff will create whatever is needed
+      do.call("clone.ff", c(list(FF_PROTO), FF_ATTR, list(FF_RETURN=FF_RETURN)))  # clone.ff will create whatever is needed
   }
 }

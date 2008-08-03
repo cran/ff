@@ -44,6 +44,8 @@ ffconform(\dots, vmode = NULL, fail = "stop")
   ffconform(d2,c)
   try(ffconform(d1,d2))
   ffconform(d1,d1)
+
+  rm(a,b,c,d1,d2); gc()
 }
 \keyword{ IO }
 \keyword{ data }

@@ -26,8 +26,7 @@ maxlength(x, \dots)
   length(x)
   maxlength(x)
   x
-  delete(x)
-  rm(x)
+  rm(x); gc()
 }
 \keyword{ IO }
 \keyword{ data }

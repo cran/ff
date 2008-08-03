@@ -38,8 +38,7 @@ getset.ff(x, i, value, add = FALSE)
  getset.ff(x, 3L, 1, add=TRUE)
  getset.ff(x, 3L, 1)
  x
- delete(x)
- rm(x)
+ rm(x); gc()
 }
 \keyword{ IO }
 \keyword{ data }

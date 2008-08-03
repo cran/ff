@@ -1,0 +1,161 @@
+		CHANGES IN ff VERSION 2.1.0
+
+
+NEW LICENCING
+
+    o	Dual licencing has been removed, all ff functionality is now 
+	available under GPL-2 (and some under the ISC license version 
+	of free BSD)
+
+
+NEW FEATURES
+
+    o	New packed vmodes 'boolean', 'quad', 'nibble', 'byte', 'ubyte', 
+	'short', 'ushort' and 'single' allow efficient storage of integer or 
+	factor data.
+
+    o	New class 'ffdf' supports data.frame structure with several 
+	options for physical storage of virtual columns.
+
+    o	New functions 'read.table.ffdf' and 'write.table.ffdf' for reading/ 
+	writing csv files into/from ffdf objects.
+
+    o	Improved handling of files and finalizers (see user visible changes).
+
+    o	New generic function 'chunk' from package 'bit' with a first method 
+	'chunk.ffdf' that supports automated chunking suitable for parallel 
+	processing.
+
+    o	New subscript types from package 'bit' are supported: 'bit', 
+	'bitwhich' and 'ri' for chunked processing.
+	
+    o	New coercing functions between 'ff' and 'bit': as.ff.bit, as.bit.ff
+	as.hi.bit, as.bit.hi, as.hi.bitwhich, as.bitwhich.hi, as.hi.ri.
+
+    o	The generics 'maxindex' and 'poslength' now also have methods 
+	for classes 'bit', 'bitwhich' and 'ri' from package 'bit', 
+   	implemented via bit's corresponding generics 'length' and 'sum'
+	
+    o	Function 'ff' has a new parameter 'update'=TRUE that can be used 
+	to create ff objects like 'initdata' without actually filling 
+	it with initdata (used by ffdf)
+	
+    o	In function 'update' parameter 'delete' now accepts a tri-bool: 
+	update(delete=NA) will do fast update by file exchange without 
+	deleting the source file.
+
+
+USER VISIBLE CHANGES
+
+    o	Package 'ff' now depends on package 'bit' (1.1.1 or higher), 
+        which offers many functions useful for subsetting 'ff' (see there).
+
+    o	Functions 'bbatch', 'repfromto' and 'repfromto<-' have been 
+	moved to file 'chunkutil.R' in package 'bit' where they 
+	support the  new generic function 'chunk'. See also utility function 
+	'vecseq' which allows to generate concatenated  multiple sequences and 
+	return them as a call.
+
+    o	ff files created via "pattern" (without giving an explicit filename) 
+	now have by default extension 'ff' which can be changed via 
+	options("ffextension"). The old behaviour without extension can be
+	restored by setting options(ffextension=NULL) AFTER loading package ff.
+
+    o	If an option("fffinalizer") is defined, ff(finalizer=NULL) now takes 
+	it from there. If not defined, ff() behaves as before: if the file 
+	location equals option("fftempdir") it chooses 'delete', otherwise 
+	it chooses 'close'.
+
+    o	ff args 'pattern' and 'filename' allow more detailed control 
+	where to create ff files. 'pattern' now also accepts a rootname
+	with a path. 'filename' now can be given in three forms: with an 
+	explicit path to create there, with a preceding "./" to create in 
+	getwd() and without path to create in getOption("fftempdir"). 
+
+    o	New assignment generic 'filename<-' renames/moves the underlying file 
+	AND changes the finalizer if the location is changed in or out of 
+	fftempdir. New assignment generic 'pattern<-' does similar renaming by 
+	giving a pattern and also has a method that renames/moves all files of 
+	a ffdf dataframe.
+
+    o	The finalizer logic has been changed. The finalizer function (which 
+	name is stored in the ff object) is now attached at finalize-time
+	(not at create-time) by attaching a single 'finalize' function at 
+	create-time (for details see ?finalize). As a benefit we can access and
+	change the finalizer through new functions 'finalizer' and 
+	'finalizer<-'. Finalizers are now expected to set the finalizer name to
+	NULL and the 'open' method makes use of this information: 'open' will 
+	activate a 'close' finalizer, but only if there was no finalizer 
+	activated. Finalized ff objects will have no memory about which 
+	finalizer they had, and 'clone' of a finalized ff will no longer copy 
+	the finalizer. 
+
+    o	'length<-.ff' will now change the length of the existing ff
+	file. For increased ff size it no longer needs to copy contents
+	and will no longer guarantee to fill the new elements with NA, 
+	see the help page. For decreased ff size it will physically reduce 
+	the filesize. These operations carried out by file.resize are extremely
+	fast and save disk space. 
+
+    o	'dim<-.ff' will now allow changing the fastest rotating dimension
+	and automatically adjust the length (dimorder retained, 
+	dimnames removed).
+
+    o	The default in all ff access functions has been changed from 
+	pack=TRUE to pack=FALSE. Packing an evaluated index is only 
+	efficient if the index is re-used.
+	('hi' and 'as.hi' still have default pack=TRUE)
+
+    o	'[.ff_array' used with one subscript like in ff[i] will now return the 
+	elements of the array taken from their virtual positions (more 
+	compatible with R standard behaviour. If you want to access elements in 
+	their physical order, you can remove the 'dim' attribute by 
+	'dim(ff) <- NULL' and then use ff[i].
+
+    o	'as.hi' and 'hiparse' now take an argument 'envir' rather than 
+	'parents' to specify in which frame to evaluate
+
+    o	Assigning NA of length 1 to a signed ff factor no longer gives 
+	a warning (ram2ffcode no longer warns here)
+
+    o	"levels<-.ff" now warns if the number of levels was reduced, but no 
+	longer if it was increased
+
+
+BUG FIXES
+
+    o	'bbatch' now balances better
+
+    o	'vw<-.ff_array' no longer complains about a wrong value 
+	when vw had been set before
+
+    o	'maxffmode' now also returns only one .ffmode if a single vmode was 
+	passed in
+
+    o	'[.ff' and friends now also find their (unevaluated) index arguments 
+	if the call was inherited via 'NextMethod'
+
+    o	'[.AsIs' now returns a class based on the class AFTER subscripting
+	not the the class of the un-subscripted object (BUG in R Base)
+
+    o	'update.ff' now handles factors correctly
+
+    o	Closing and re-opening ff files will no longer trigger attempts to 
+	delete ff files with a 'delete' finalizer multiple times
+
+
+KNOWN PROBLEMS / TODOs
+
+    o	bootstrapping rows from matrix with dimorder=c(2,1) is (under Win32) 
+	not faster than bootstrapping rows from a ffdf build physically on 
+	top of vectors: the fs-cache has problems handling larger matrix
+	compared to smaller vectors. Therefore we consider partitioning of 
+	ff objects in a future release.
+
+    o	ff objects can be nicely used in multi-core processing, however be 
+	aware that there is yet no locking mechanism against concurrent writes
+	(often locking is not needed).
+
+    o	NAs are mapped to TRUE in 'bit' and to FALSE in 'ff' booleans. Might be aligned 
+	in a future release. Don't use bit or ff booleans if you have NAs 
+	- or map NAs explicitely.

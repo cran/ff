@@ -14,7 +14,7 @@ is.ff(x)
   logical scalar
 }
 \author{ Jens Oehlschlägel }
-\seealso{  \code{\link{inherits}}, \code{\link{as.ff}} }
+\seealso{  \code{\link{inherits}}, \code{\link{as.ff}}, \code{\link{is.ffdf}} }
 \examples{
   is.ff(integer())
 }

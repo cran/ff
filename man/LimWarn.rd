@@ -22,8 +22,8 @@
   This is also true for ram compatibility functions \code{\link{swap.default}}, and \code{\link{add.default}}.
 }
 \section{Hybrid copying semantics}{
-  If you modify a copy of an ff object, changes of data (\code{\link[ff:[<-.ff]{[<-}}) and of \code{\link{physical}} attributes
-  will be shared, but changes in \code{\link{virtual}} and class attributes will not.
+  If you modify a copy of an ff object, changes of data (\code{\link[ff:[<-.ff]{[<-}}) and of \code{\link[=physical.ff]{physical}} attributes
+  will be shared, but changes in \code{\link[=physical.ff]{virtual}} and class attributes will not.
 }
 \section{Limits of compatibility between ff and ram objects}{
   If it's not too big, you can move an ff object completely into R's RAM through \code{\link{as.ram}}.

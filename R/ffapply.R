@@ -8,128 +8,6 @@
 # source("d:/mwp/eanalysis/ff/R/ffapply.R")
 
 
-#! \name{bbatch}
-#! \alias{bbatch}
-#! \title{ Balanced Batch sizes }
-#! \description{
-#!   \command{bbatch} calculates batch sizes so that they have rather balanced sizes than very different sizes
-#! }
-#! \usage{
-#! bbatch(N, B)
-#! }
-#! \arguments{
-#!   \item{N}{ total size }
-#!   \item{B}{ desired batch size }
-#! }
-#! \value{
-#!   a list with components
-#!   \item{ b }{ the batch size }
-#!   \item{ nb }{ the number of batches }
-#!   \item{ rb }{ the size of the rest }
-#! }
-#! \author{ Jens Oehlschlägel }
-#! \seealso{ \code{\link{repfromto}}, \code{\link{ffvecapply}} }
-#! \examples{
-#!   bbatch(100, 24)
-#! }
-#! \keyword{ IO }
-#! \keyword{ data }
-
-# balanced batchsizes
-bbatch <- function(N,B){
-  NB <- N%/%B + ((N%%B)>0)
-  b <- N %/% NB + N %% NB
-  nb <- N %/% b
-  rb <- N %% b
-  list(b=b, nb=nb, rb=rb)
-}
-
-#! \name{repfromto}
-#! \alias{repfromto}
-#! \alias{repfromto<-}
-#! \title{ Virtual recycling }
-#! \description{
-#!   \command{repfromto} virtually recylcles object \code{x} and cuts out positions \code{from .. to}
-#! }
-#! \usage{
-#! repfromto(x, from, to)
-#! repfromto(x, from, to) <- value
-#! }
-#! \arguments{
-#!   \item{x}{ an object from which to recycle }
-#!   \item{from}{ first position to return }
-#!   \item{to}{ last position to return }
-#!   \item{value}{ value to assign }
-#! }
-#! \details{
-#!   \code{repfromto} is a generalization of \code{\link{rep}}, where \code{rep(x, n) == repfromto(x, 1, n)}.
-#!   You can see this as an R-side (vector) solution of the \code{mod_iterate} macro in arithmetic.c
-#! }
-#! \value{
-#!   a vector of length \code{from - to + 1}
-#! }
-#! \author{ Jens Oehlschlägel }
-#! \seealso{ \code{\link{rep}}, \code{\link{ffvecapply}} }
-#! \examples{
-#!   cat("a simple example")
-#!   repfromto(0:9, 11, 20)
-#!
-#!   cat("and an example how to use it")
-#!   x <- ff(1:1000)
-#!   y <- -(1:3)
-#!   ffvecapply(x[i1:i2] <- repfromto(y, i1, i2), X=x)
-#!   x
-#! }
-#! \keyword{ IO }
-#! \keyword{ data }
-
-repfromto <- function(x, from, to){
-  nx <- length(x)
-  if (nx){
-    from <- as.integer(from)
-    to <- as.integer(to)
-    if (to>nx){
-      N <- to - from + 1L
-      from <- (from-1L)%%nx + 1L
-      to <- to%%nx
-      # NOTE: fetch in sequence pre-main-post in case is.ff(x)
-      if (from<=to && N<nx){
-        ret <- x[from:to]
-      }else{
-        pre <- x[from:nx]
-        nrep <- (N - length(pre) - to) %/%nx
-        main <- if (nrep) rep(x[1:nx], nrep) else NULL
-        post <- if (to) x[1:to] else NULL
-        ret <- c(pre, main, post)
-      }
-    }else{
-      ret <- x[from:to]
-    }
-    a <- attributes(x[1])
-    a$names <- NULL
-    attributes(ret) <- a
-    return(ret)
-  }else{
-    return(NA[from:to])
-  }
-}
-
-"repfromto<-" <- function(x, from, to, value){
-  x[from:to] <- value
-  x
-}
-
-
-if (FALSE){
-  x <- 1:10
-  for (n in 1:20)
-  for (i1 in 1:30){
-    i2 <- i1+n-1
-    cat(i1,i2,"|",repfromto(x,i1,i2), "\n")
-  }
-}
-
-
 
 #! \name{ffapply}
 #! \alias{ffapply}
@@ -140,7 +18,7 @@ if (FALSE){
 #! \description{
 #!   The \code{ffapply} functions support convenient batched processing of ff objects
 #!   such that each single batch or chunk will not exhaust RAM
-#!   and such that batchs have sizes as similar as possible, see \code{\link{bbatch}}.
+#!   and such that batchs have sizes as similar as possible, see \code{\link[bit]{bbatch}}.
 #!   Differing from R's standard \code{\link{apply}} which applies a \code{FUNction},
 #!   the \code{ffapply} functions do apply an \code{EXPRession} and provide two indices \code{FROM="i1"} and \code{TO="i2"},
 #!   which mark beginning and end of the batch and can be used in the applied expression.
@@ -213,7 +91,7 @@ if (FALSE){
 #! }
 #! \author{ Jens Oehlschlägel }
 #! \note{ xx The complete generation of the return value is preliminary and the arguments related to defining the return value might still change, especially ffapply is work in progress }
-#! \seealso{ \code{\link{apply}}, \code{\link{expression}}, \code{\link{bbatch}}, \code{\link{repfromto}}, \code{\link{ffsuitable}} }
+#! \seealso{ \code{\link{apply}}, \code{\link{expression}}, \code{\link[bit]{bbatch}}, \code{\link[bit]{repfromto}}, \code{\link{ffsuitable}} }
 #! \examples{
 #!    cat("ffvecapply examples\n")
 #!    x <- ff(vmode="integer", length=1000)
@@ -234,7 +112,13 @@ if (FALSE){
 #!    ffvecapply(summary(x[i1:i2]), X=x, RETURN=TRUE, CFUN="crbind", BATCHSIZE=200)
 #!    ffvecapply(summary(x[i1:i2]), X=x, RETURN=TRUE, CFUN="cmean", BATCHSIZE=200)
 #!
-#!    cat("ffrowapply examples\n")
+#!    cat("how to do colSums with ffrowapply\n")
+#!    x <- ff(1:10000, vmode="integer", dim=c(1000, 10))
+#!    ffrowapply(colSums(x[i1:i2,,drop=FALSE]), X=x, RETURN=TRUE, CFUN="list", BATCHSIZE=200)
+#!    ffrowapply(colSums(x[i1:i2,,drop=FALSE]), X=x, RETURN=TRUE, CFUN="crbind", BATCHSIZE=200)
+#!    ffrowapply(colSums(x[i1:i2,,drop=FALSE]), X=x, RETURN=TRUE, CFUN="csum", BATCHSIZE=200)
+#!
+#!    cat("further ffrowapply examples\n")
 #!    x <- ff(1:10000, vmode="integer", dim=c(1000, 10))
 #!    cat("loop evaluate expression without returning anything\n")
 #!    ffrowapply(x[i1:i2, ] <- i1:i2, X=x, BATCHSIZE=200)
@@ -265,8 +149,10 @@ if (FALSE){
 #!    y <- ffapply(X=x, MARGIN=3:2, AFUN="summary", RETURN=TRUE, CFUN="list", BATCHSIZE=8)
 #!    y
 #!    y[[1]]
+#!
+#!    rm(x); gc()
 #! }
-#! \keyword{ IO }
+#! \keyword{ array }
 #! \keyword{ data }
 
 
@@ -988,11 +874,6 @@ ffapply <- function(
   }
 
 }
-
-
-
-
-
 
 
 if (FALSE){

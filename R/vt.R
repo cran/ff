@@ -15,7 +15,7 @@
 #! \alias{t.ff}
 #! \title{ Virtual transpose }
 #! \description{
-#!   The \command{vt} generic does a matrix  or array transpose by modifying \code{\link{virtual}} attributes
+#!   The \command{vt} generic does a matrix  or array transpose by modifying \code{\link[=virtual.ff]{virtual}} attributes
 #!   rather than by physically copying matrix elements.
 #! }
 #! \usage{
@@ -39,7 +39,7 @@
 #!   an object that behaves like a transposed matrix
 #! }
 #! \author{ Jens Oehlschlägel }
-#! \seealso{ \code{\link{dim.ff}}, \code{\link{vw}}, \code{\link{virtual}} }
+#! \seealso{ \code{\link{dim.ff}}, \code{\link{vw}}, \code{\link[=virtual.ff]{virtual}} }
 #! \examples{
 #!   x <- ff(1:20, dim=c(4,5))
 #!   x
@@ -51,9 +51,7 @@
 #!   vt(x)
 #!   y <- t(x)
 #!   y
-#!   delete(x)
-#!   delete(y)
-#!   rm(x,y)
+#!   rm(x,y); gc()
 #! }
 #! \keyword{ IO }
 #! \keyword{ data }

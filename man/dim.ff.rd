@@ -1,11 +1,15 @@
 \name{dim.ff}
 \alias{dim.ff}
+\alias{dim.ffdf}
 \alias{dim<-.ff}
+\alias{dim<-.ffdf}
 \alias{dimorder}
-\alias{dimorder.ff_array}
 \alias{dimorder.default}
+\alias{dimorder.ff_array}
+\alias{dimorder.ffdf}
 \alias{dimorder<-}
 \alias{dimorder<-.ff_array}
+\alias{dimorder<-.ffdf}
 \title{ Getting and setting dim and dimorder }
 \description{
   Assigning \code{dim} to an \code{ff_vector} changes it to an \code{ff_array}.
@@ -13,22 +17,28 @@
 }
 \usage{
   \method{dim}{ff}(x)
+  \method{dim}{ffdf}(x)
   \method{dim}{ff}(x) <- value
+  \method{dim}{ffdf}(x) <- value
    dimorder(x, \dots)
    dimorder(x, \dots) <- value
   \method{dimorder}{default}(x, \dots)
   \method{dimorder}{ff_array}(x, \dots)
+  \method{dimorder}{ffdf}(x, \dots)           # reports 2:1 if any of the embedded ff objects have nonStandard dimorder
   \method{dimorder}{ff_array}(x, \dots) <- value
+  \method{dimorder}{ffdf}(x, \dots) <- value  # just here to catch forbidden assignments
 }
 \arguments{
-  \item{x}{ a ff vector }
-  \item{value}{ a character vector }
+  \item{x}{ a ff object }
+  \item{value}{ an appropriate integer vector }
   \item{\dots}{ further arguments (not used) }
 }
 \details{
-   \command{dim} and \command{dimorder} are \code{\link{virtual}} attributes. Thus two copies of an R ff object can point to the same file but interpret it differently.
+   \command{dim} and \command{dimorder} are \code{\link[=physical.ff]{virtual}} attributes. Thus two copies of an R ff object can point to the same file but interpret it differently.
    \command{dim} has the usual meaning, \command{dimorder} defines the dimension order of storage, i.e. \code{c(1,2)} corresponds to R's standard column-major order,
-   \code{c(1,2)} corresponds to row-major order, and for higher dimensional arrays dimorder can also be used. Standard dimorder is \code{1:length(dim(x))}.
+   \code{c(1,2)} corresponds to row-major order, and for higher dimensional arrays dimorder can also be used. Standard dimorder is \code{1:length(dim(x))}. \cr
+   For \code{\link{ffdf}} \code{dim} returns the number of rows and virtual columns. With \code{dim<-.ffdf} only the number of rows can be changed. For convenience you can assign \code{NA} to the number of columns. \cr
+   For \code{\link{ffdf}} the dimorder returns non-standard dimorder if any of its columns contains a ff object with non-standard dimorder (see \code{\link{dimorderStandard}})
    An even higher level of virtualization is available using virtual windows, see \code{\link{vw}}.
 }
 \note{
@@ -39,7 +49,7 @@
   \command{names} returns a character vector (or NULL)
 }
 \author{ Jens Oehlschlägel }
-\seealso{ \code{\link[base]{dim}}, \code{\link{dimnames.ff_array}}, \code{\link{vw}}, \code{\link{virtual}} }
+\seealso{ \code{\link[base]{dim}}, \code{\link{dimnames.ff_array}}, \code{\link{dimorderStandard}}, \code{\link{vw}}, \code{\link[=physical.ff]{virtual}} }
 \examples{
   x <- ff(1:12, dim=c(3,4), dimorder=c(2:1))
   y <- x
@@ -59,10 +69,23 @@
   x[]
   as.vector(x[])
   x[1:12]
-  delete(x)
-  delete(y)
-  rm(x,y)
+  rm(x,y); gc()
 
+  \dontshow{
+    cat("some regression test with regard to different dimorders\n")
+    k <- 24
+    d <- 3:5
+    n <- prod(d)
+    for (i in 1:k){
+      a <- array(sample(n), dim=sample(d))
+      x <- as.ff(a, dimorder=sample(seq.int(along=d)))
+      if (!identical(a[1:n], x[1:n]))
+        stop("error in caclulating access positions")
+      if (!identical(a[1:dim(a)[1],,], x[1:dim(a)[1],,]))
+        stop("error in caclulating access positions")
+    }
+    rm(x); gc()
+  }
   \dontrun{
     cat("some performance comparison between different dimorders\n")
     n <- 100
@@ -73,6 +96,7 @@
     system.time(lapply(1:n, function(i)sum(b[i,])))
     system.time(lapply(1:n, function(i){i<-(i-1)*(m/n)+1; sum(a[,i:(i+m/n-1)])}))
     system.time(lapply(1:n, function(i){i<-(i-1)*(m/n)+1; sum(b[,i:(i+m/n-1)])}))
+    rm(a,b); gc()
   }
 }
 \keyword{ IO }

@@ -44,7 +44,7 @@
 #!   A ram or ff object.
 #! }
 #! \author{ Jens Oehlschlägel }
-#! \seealso{  \code{\link{ff}}, \code{\link{clone}} %, \code{\link{as.symm}}
+#! \seealso{  \code{\link{as.ff.bit}}, \code{\link{ff}}, \code{\link{clone}} %, \code{\link{as.symm}}
 #!          , \code{\link{as.vmode}}, \code{\link{vmode}}, \code{\link{as.hi}} }
 #! \examples{
 #!    cat("create ff\n")
@@ -63,9 +63,7 @@
 #!    myintram <- as.ram(myintram, vmode="double")
 #!    cat("more classic: coerce (inplace) double ram to integer ram\n")
 #!    vmode(myintram) <- "integer"
-#!    delete(myintff)
-#!    delete(mydoubleff)
-#!    rm(myintff, myintram, mydoubleff, mydoubleram)
+#!    rm(myintff, myintram, mydoubleff, mydoubleram); gc()
 #! }
 #! \keyword{ IO }
 #! \keyword{ data }

@@ -9,8 +9,8 @@
 }
 \usage{
 swap(x, value, \dots)
-\method{swap}{ff}(x, value, i, add = FALSE, pack = TRUE, \dots)
-\method{swap}{ff_array}(x, value, \dots, bydim = NULL, drop = getOption("ffdrop"), add = FALSE, pack = TRUE)
+\method{swap}{ff}(x, value, i, add = FALSE, pack = FALSE, \dots)
+\method{swap}{ff_array}(x, value, \dots, bydim = NULL, drop = getOption("ffdrop"), add = FALSE, pack = FALSE)
 \method{swap}{default}(x, value, \dots, add = FALSE)
 }
 \arguments{
@@ -64,6 +64,7 @@ swap(x, value, \dots)
   y <- swap(x, "b", sample(length(x), 26))
   x
   y
+  rm(x,y); gc()
 }
 \keyword{ IO }
 \keyword{ data }

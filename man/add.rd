@@ -54,6 +54,8 @@ add(x, \dots)
    add(y, 1, c(3,3))
    x
    y
+
+   rm(x); gc()
 }
 \keyword{ IO }
 \keyword{ data }

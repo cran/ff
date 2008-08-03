@@ -9,7 +9,7 @@
 \alias{is.ordered.ff}
 \title{ Getting and setting factor levels }
 \description{
-  \command{levels.ff<-} sets factor levels, \command{levels.ff} gets factor levels
+  \code{levels.ff<-} sets factor levels, \code{levels.ff} gets factor levels
 }
 \usage{
 \method{levels}{ff}(x)
@@ -37,8 +37,8 @@
   \command{levels} returns a character vector of levels (possibly including \code{as.cha racter(NA)}).
 }
 \author{ Jens Oehlschlägel }
-\note{ When levels as assigned to an ff object that formerly had not levels, we assign automatically \code{\link{ramclass}} == "factor". If you want to change to an ordered factor, use \code{\link{virtual}$ramclass <- c("ordered", "factor")} }
-\seealso{ \code{\link{ramclass}}, \code{\link{factor}}, \code{\link{virtual}} }
+\note{ When levels as assigned to an ff object that formerly had not levels, we assign automatically \code{\link{ramclass}} == "factor". If you want to change to an ordered factor, use \code{\link[=virtual.ff]{virtual}$ramclass <- c("ordered", "factor")} }
+\seealso{ \code{\link{ramclass}}, \code{\link{factor}}, \code{\link[=physical.ff]{virtual}} }
 \examples{
   cat("--- create an ff factor including NA as last level\n")
   x <- ff("a", levels=c(letters, NA), length=99)
@@ -55,6 +55,7 @@
   cat("    make it a non-ordered factor\n")
   virtual(x)$ramclass <- "factor"
   x
+  rm(x); gc()
 
  \dontrun{
   cat("--- create an unsigned quad factor\n")
@@ -66,10 +67,9 @@
   cat("    we expect a warning here\n")
   levels(x) <- NULL
   x[1:4]
+  rm(x); gc()
  }
 
-  delete(x)
-  rm(x)
 }
 \keyword{ IO }
 \keyword{ data }

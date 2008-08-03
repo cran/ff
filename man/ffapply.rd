@@ -7,7 +7,7 @@
 \description{
   The \code{ffapply} functions support convenient batched processing of ff objects
   such that each single batch or chunk will not exhaust RAM
-  and such that batchs have sizes as similar as possible, see \code{\link{bbatch}}.
+  and such that batchs have sizes as similar as possible, see \code{\link[bit]{bbatch}}.
   Differing from R's standard \code{\link{apply}} which applies a \code{FUNction},
   the \code{ffapply} functions do apply an \code{EXPRession} and provide two indices \code{FROM="i1"} and \code{TO="i2"},
   which mark beginning and end of the batch and can be used in the applied expression.
@@ -80,7 +80,7 @@ ffapply(EXPR = NULL, AFUN = NULL, MARGIN = NULL, X = NULL, N = NULL, DIM = NULL,
 }
 \author{ Jens Oehlschlägel }
 \note{ xx The complete generation of the return value is preliminary and the arguments related to defining the return value might still change, especially ffapply is work in progress }
-\seealso{ \code{\link{apply}}, \code{\link{expression}}, \code{\link{bbatch}}, \code{\link{repfromto}}, \code{\link{ffsuitable}} }
+\seealso{ \code{\link{apply}}, \code{\link{expression}}, \code{\link[bit]{bbatch}}, \code{\link[bit]{repfromto}}, \code{\link{ffsuitable}} }
 \examples{
    cat("ffvecapply examples\n")
    x <- ff(vmode="integer", length=1000)
@@ -101,7 +101,13 @@ ffapply(EXPR = NULL, AFUN = NULL, MARGIN = NULL, X = NULL, N = NULL, DIM = NULL,
    ffvecapply(summary(x[i1:i2]), X=x, RETURN=TRUE, CFUN="crbind", BATCHSIZE=200)
    ffvecapply(summary(x[i1:i2]), X=x, RETURN=TRUE, CFUN="cmean", BATCHSIZE=200)
 
-   cat("ffrowapply examples\n")
+   cat("how to do colSums with ffrowapply\n")
+   x <- ff(1:10000, vmode="integer", dim=c(1000, 10))
+   ffrowapply(colSums(x[i1:i2,,drop=FALSE]), X=x, RETURN=TRUE, CFUN="list", BATCHSIZE=200)
+   ffrowapply(colSums(x[i1:i2,,drop=FALSE]), X=x, RETURN=TRUE, CFUN="crbind", BATCHSIZE=200)
+   ffrowapply(colSums(x[i1:i2,,drop=FALSE]), X=x, RETURN=TRUE, CFUN="csum", BATCHSIZE=200)
+
+   cat("further ffrowapply examples\n")
    x <- ff(1:10000, vmode="integer", dim=c(1000, 10))
    cat("loop evaluate expression without returning anything\n")
    ffrowapply(x[i1:i2, ] <- i1:i2, X=x, BATCHSIZE=200)
@@ -132,6 +138,8 @@ ffapply(EXPR = NULL, AFUN = NULL, MARGIN = NULL, X = NULL, N = NULL, DIM = NULL,
    y <- ffapply(X=x, MARGIN=3:2, AFUN="summary", RETURN=TRUE, CFUN="list", BATCHSIZE=8)
    y
    y[[1]]
+
+   rm(x); gc()
 }
-\keyword{ IO }
+\keyword{ array }
 \keyword{ data }

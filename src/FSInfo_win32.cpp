@@ -32,8 +32,8 @@ void getFSInfo(const char* path, FSInfo& info)
     ULARGE_INTEGER totalNumberOfBytes;
     ULARGE_INTEGER totalNumberOfFreeBytes;
   } data;
-
-  GetDiskFreeSpaceExA(path, &data.freeBytesAvailable,0,0);
+ 
+  GetDiskFreeSpaceExA(path, &data.freeBytesAvailable,0,0);  
   info.free_space = (fsize_t) data.freeBytesAvailable.QuadPart;
   SYSTEM_INFO systemInfo;
   GetSystemInfo(&systemInfo);

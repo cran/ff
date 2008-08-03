@@ -33,7 +33,7 @@ na.count(x, \dots) <- value
   NA (if set to NULL or NA) or an integer value otherwise
 }
 \author{ Jens Oehlschlägel, Daniel Adler (C++ back-end) }
-\seealso{ \code{\link{getset.ff}}, \code{\link{readwrite.ff}} and \code{\link{swap}} for methods that support maintenance of 'na.count', \code{\link[base]{NA}}, \code{\link{is.sorted}} for yet another \code{\link{physical}} attribute }
+\seealso{ \code{\link{getset.ff}}, \code{\link{readwrite.ff}} and \code{\link{swap}} for methods that support maintenance of 'na.count', \code{\link[base]{NA}}, \code{\link{is.sorted}} for yet another \code{\link[=physical.ff]{physical}} attribute }
 \examples{
   cat("--- ff examples ---\n")
   x <- ff(1:12)
@@ -58,8 +58,7 @@ na.count(x, \dots) <- value
   cat("remove the 'na.count' physical attribute (and stop automatic maintenance)\n")
   na.count(x) <- NULL
   na.count(x)
-  delete(x)
-  rm(x)
+  rm(x); gc()
 }
 \keyword{ IO }
 \keyword{ data }

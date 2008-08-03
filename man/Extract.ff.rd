@@ -11,10 +11,10 @@
   These are the main methods for reading and writing data from ff files.
 }
 \usage{
-\method{[}{ff}(x, i, pack = TRUE)
-\method{[}{ff}(x, i, add = FALSE, pack = TRUE) <- value
-\method{[}{ff_array}(x, \dots, bydim = NULL, drop = getOption("ffdrop"), pack = TRUE)
-\method{[}{ff_array}(x, \dots, bydim = NULL, add = FALSE, pack = TRUE) <- value
+\method{[}{ff}(x, i, pack = FALSE)
+\method{[}{ff}(x, i, add = FALSE, pack = FALSE) <- value
+\method{[}{ff_array}(x, \dots, bydim = NULL, drop = getOption("ffdrop"), pack = FALSE)
+\method{[}{ff_array}(x, \dots, bydim = NULL, add = FALSE, pack = FALSE) <- value
 \method{[[}{ff}(x, i)
 \method{[[}{ff}(x, i, add = FALSE) <- value
 }
@@ -123,6 +123,7 @@
    x
    x[,, bydim=c(2,1)] <- x[,, bydim=c(2,1)]
    x
+   rm(x); gc()
 
   \dontrun{
    cat("some performance implications of different dimorders\n")
@@ -155,6 +156,8 @@
    system.time(ffcolapply(sum(a[,i1:i2]), a, RETURN=TRUE, CFUN="csum", BATCHBYTES=16104816%/%20))
    system.time(ffrowapply(sum(b[i1:i2,]), b, RETURN=TRUE, CFUN="csum", BATCHBYTES=16104816%/%20))
    system.time(ffcolapply(sum(b[,i1:i2]), b, RETURN=TRUE, CFUN="csum", BATCHBYTES=16104816%/%20))
+
+   rm(a,b); gc()
   }
 }
 \keyword{ IO }

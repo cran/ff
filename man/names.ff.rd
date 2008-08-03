@@ -28,7 +28,7 @@
   \command{names} returns a character vector (or NULL)
 }
 \author{ Jens Oehlschlägel }
-\seealso{ \code{\link[base]{names}}, \code{\link{dimnames.ff_array}}, \code{\link{vw}}, \code{\link{virtual}} }
+\seealso{ \code{\link[base]{names}}, \code{\link{dimnames.ff_array}}, \code{\link{vw}}, \code{\link[=physical.ff]{virtual}} }
 \examples{
   x <- ff(1:26, names=letters)
   names(x)
@@ -36,8 +36,7 @@
   names(x)
   names(x) <- NULL
   names(x)
-  delete(x)
-  rm(x)
+  rm(x); gc()
 }
 \keyword{ IO }
 \keyword{ data }

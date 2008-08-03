@@ -80,7 +80,8 @@ vmode(x) <- value
  }
 }
 \value{
-  \code{vmode} returns a character scalar from \code{.vmode} or "NULL" for NULL
+  \code{vmode} returns a character scalar from \code{.vmode} or "NULL" for NULL \cr
+  \code{rambytes} returns a vector of byte counts required by each of the vmodes
 }
 \note{ \command{regtest.vmode} checks correctness of some vmode features
 }

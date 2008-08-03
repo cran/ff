@@ -1,21 +1,25 @@
 \name{print.ff}
 \alias{print.ff}
+\alias{print.ffdf}
 \alias{print.ff_vector}
 \alias{print.ff_matrix}
 \alias{str.ff}
+\alias{str.ffdf}
 \title{ Print and str methods }
 \description{
   printing ff objects and compactly showing their structure
 }
 \usage{
-print.ff(x, \dots)
-print.ff_vector(x, maxlength = 16, \dots)
-print.ff_matrix(x, maxdim = c(16, 16), \dots)
-str.ff(object, \dots)
+\method{print}{ff}(x, \dots)
+\method{print}{ff_vector}(x, maxlength = 16, \dots)
+\method{print}{ff_matrix}(x, maxdim = c(16, 16), \dots)
+\method{str}{ff}(object, nest.lev=0, \dots)
+\method{str}{ffdf}(object, nest.lev=0, \dots)
 }
 \arguments{
   \item{x}{ a ff object }
   \item{object}{ a ff object }
+  \item{nest.lev}{ current nesting level in the recursive calls to str }
   \item{maxlength}{ max number of elements to print from an \code{ff_vector} }
   \item{maxdim}{ max number of elements to print from each dimension from an \code{ff_array} }
   \item{\dots}{ further arguments to print }
@@ -34,8 +38,7 @@ str.ff(object, \dots)
   print(x, maxlength=30)
   dim(x) <- c(100,100)
   x
-  delete(x)
-  rm(x)
+  rm(x); gc()
 }
 \keyword{ IO }
 \keyword{ data }

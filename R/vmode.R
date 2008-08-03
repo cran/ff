@@ -89,7 +89,8 @@
 #!  }
 #! }
 #! \value{
-#!   \code{vmode} returns a character scalar from \code{.vmode} or "NULL" for NULL
+#!   \code{vmode} returns a character scalar from \code{.vmode} or "NULL" for NULL \cr
+#!   \code{rambytes} returns a vector of byte counts required by each of the vmodes
 #! }
 #! \note{ \command{regtest.vmode} checks correctness of some vmode features
 #! }
@@ -413,20 +414,20 @@
 
 # R bytes in RAM
 .rambytes <- c(
-  boolean   = 4
-, logical   = 4
-, quad      = 4
-, nibble    = 4
-, byte      = 4
-, ubyte     = 4
-, short     = 4
-, ushort    = 4
-, integer   = 4
-, single    = 4
-, double    = 8
-, complex   = 16
-, raw       = 1
-, character = 4          # from R 2.6.0 upwards: a string is a vector of pointers to a global string hash
+  boolean   = 4L
+, logical   = 4L
+, quad      = 4L
+, nibble    = 4L
+, byte      = 4L
+, ubyte     = 4L
+, short     = 4L
+, ushort    = 4L
+, integer   = 4L
+, single    = 8L
+, double    = 8L
+, complex   = 16L
+, raw       = 1L
+, character = 4L          # from R 2.6.0 upwards: a string is a vector of pointers to a global string hash
 )
 
 # ff bytes on disk
@@ -446,6 +447,18 @@
 , raw       = 1
 , character = NA
 )
+
+#xx
+#rambytes <- function(vmode){
+#  ret <- .rambytes[vmode]
+#  isFixedWidth <- grepl("char[0123456789]",vmode)
+#  if (any(isFixedWidth)){
+#    names(ret) <- vmode
+#    vmode <- vmode[isFixedWidth]
+#    ret[isFixedWidth] <- as.integer(substr(vmode, 5, nchar(vmode)))
+#  }
+#  ret
+#}
 
 
 vector.vmode <- function(vmode="logical", length=0){
@@ -764,7 +777,7 @@ ram2ffcode <- function(value, levels, vmode){
     }else{
       ret <- match(value, levels)
     }
-    if (any(is.na(ret)))
+    if (any(is.na(ret) & !is.na(value)))
       warning("unknown factor values mapped to NA")
   }
   ret
@@ -779,7 +792,7 @@ ram2ramcode <- function(value, levels){
   }else{
     ret <- match(value, levels)
   }
-  if (any(is.na(ret)))
+  if (any(is.na(ret)) & !is.na(value))
     warning("unknown factor values mapped to NA")
   ret
 }
@@ -811,11 +824,13 @@ ram2ramcode <- function(value, levels){
 #! \keyword{ IO }
 #! \keyword{ data }
 
-# returns lowest ffmode to which all arguments can vcoerced without information loss or zero if not coerceable
+# returns lowest ffmode to which all arguments can be coerced without information loss or zero if not coerceable
 # NOTE: vmode is in names of return value
 maxffmode <- function(...){
   l <- unlist(lapply(list(...), function(x).ffmode[x]))
   n <- length(l)
+  if (n==1)
+    return(.ffmode[l[[1]]])
   if (n){
     m <- .vcoerceable[[l[[1]]]]
     if (n>1){
