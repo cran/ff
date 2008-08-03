@@ -251,6 +251,17 @@ filename.default <- function(x
   }else if(splitted$path=="" && splitted$fsep==""){
     splitted$path <- tmpdirnam
     value <- unsplitPathFile(splitted)
+  }else{
+    # convert to absolute path
+    cwd <- getwd()
+    on.exit(setwd(cwd))
+    dfile <- dirname(value)
+    bfile <- basename(value)
+    setwd(dfile)
+    dfile <- getwd()
+    value <- file.path(dfile, bfile)
+    # fix problem in file.path
+    value <- gsub("/+","/",value)
   }
 
   if (olddirnam==tmpdirnam){
@@ -267,17 +278,13 @@ filename.default <- function(x
 
   if (isopen){
     close(x)
-    if(file.rename(oldnam, value))
-      physical(x)$filename <- value
-    else
-      stop("ff file rename from '", oldnam, "' to '", value, "' failed")
-    open(x)
-  }else{
-    if(file.rename(oldnam, value))
-      physical(x)$filename <- value
-    else
-      stop("ff file rename from '", oldnam, "' to '", value, "' failed")
+    on.exit(open(x), add=TRUE)
   }
+
+  if(file.rename(oldnam, value)){
+    physical(x)$filename <- value
+  }else
+    stop("ff file rename from '", oldnam, "' to '", value, "' failed")
 
   x
 }
@@ -288,43 +295,8 @@ pattern.ff <- function(x, ...){
 }
 
 "pattern<-.ff" <- function(x, ...,value){
-  oldnam <- filename(x)
-  olddirnam <- dirname(oldnam)
-
   filename <- fftempfile(value)
-  newdirnam <- dirname(filename)
-
-  tmpdirnam <- getOption("fftempdir")
-  isopen <- is.open(x)
-
-  if (olddirnam==tmpdirnam){
-    if (newdirnam!=tmpdirnam){
-      if (isopen)
-        attr(attr(x,"physical"),"finalizer") <- "close"
-      else
-        attr(attr(x,"physical"),"finalizer") <- NULL
-    }
-  }else{
-    if (newdirnam==tmpdirnam)
-      finalizer(x) <- "delete"
-  }
-
-  if (isopen){
-    close(x)
-    if(file.rename(oldnam, filename)){
-      physical(x)$pattern <- value
-      physical(x)$filename <- filename
-    }else
-      stop("ff file rename from '", oldnam, "' to '", filename, "' failed")
-    open(x)
-  }else{
-    if(file.rename(oldnam, filename)){
-      physical(x)$pattern <- value
-      physical(x)$filename <- filename
-    }else
-      stop("ff file rename from '", oldnam, "' to '", filename, "' failed")
-  }
-
+  filename(x) <- filename
   x
 }
 
@@ -1819,7 +1791,7 @@ str.ff <- function(object, nest.lev=0, ...){
 #! ff( initdata  = NULL
 #! , length      = NULL
 #! , levels      = NULL
-#! , ordered     = FALSE
+#! , ordered     = NULL
 #! , dim         = NULL
 #! , dimorder    = NULL
 #! , bydim       = NULL
@@ -2136,7 +2108,7 @@ ff <- function(
   initdata    = NULL
 , length      = NULL
 , levels      = NULL
-, ordered     = FALSE
+, ordered     = NULL
 , dim         = NULL
 , dimorder    = NULL    # this is the (transparent) storage layout
 , bydim       = NULL    # this is the dimorder used to read in the initdata (e.g. use 2:1 to mimic matrix(,byrow=TRUE)) (passed to update)
@@ -2201,10 +2173,21 @@ ff <- function(
   # determine filename and finalizer
   if (is.null(filename))
     filename <- fftempfile(pattern)
+  # gurantee absolute path
+  dfile <- dirname(filename)
+  bfile <- basename(filename)
+  cwd <- getwd()
+  on.exit(setwd(cwd))
+  setwd(dfile)
+  dfile <- getwd()
+  filename <- file.path(dfile, bfile)
+  # fix problem in file.path
+  filename <- gsub("/+","/",filename)
+
   if (is.null(finalizer)){
     finalizer <- getOption("fffinalizer")
     if (is.null(finalizer)){
-      if (dirname(filename)==getOption("fftempdir"))
+      if (dfile==getOption("fftempdir"))
         finalizer <- "delete"   # temporary ff object
       else
         finalizer <- "close"    # persistent ff object
@@ -2256,6 +2239,8 @@ ff <- function(
     if (length(levels)>.vmax[vmode]+.vunsigned[vmode])
       stop("vmode '", vmode, "' can carry max ", .vmax[vmode]+.vunsigned[vmode], " levels")
     if (is.null(ramclass)){
+      if (is.null(ordered))
+        ordered <- is.ordered(initdata)
       if (ordered)
         ramclass <- c("ordered","factor")
       else
@@ -2335,7 +2320,7 @@ ff <- function(
         ffclass <- c("ff_array","ff")
     }
   }
-  if (length<1 || length>.Machine$integer.max)
+  if (length<0 || length>.Machine$integer.max)
     stop("length must be between 1 and .Machine$integer.max")
 
   if (is.null(pagesize))
@@ -3478,9 +3463,9 @@ if (FALSE){
 #! \alias{getset.ff}
 #! \alias{get.ff}
 #! \alias{set.ff}
-#! \title{ Reading and writing single values (low-level) }
+#! \title{ Reading and writing vectors of values (low-level) }
 #! \description{
-#!   The three functions \command{get.ff}, \command{set.ff} and \command{getset.ff} provide the simplest interface to access an ff file: getting and setting single values
+#!   The three functions \command{get.ff}, \command{set.ff} and \command{getset.ff} provide the simplest interface to access an ff file: getting and setting vector of values identified by positive subscripts
 #! }
 #! \usage{
 #! get.ff(x, i)
@@ -3498,12 +3483,12 @@ if (FALSE){
 #!   \command{getset.ff} will maintain \code{\link{na.count}}.
 #! }
 #! \value{
-#!   \command{get.ff} returns a single value, \command{set.ff} returns the 'changed' ff object (like all assignment functions do) and \command{getset.ff} returns the value at the position.
-#!   More precisely \code{getset.ff(x, i, value, add=FALSE)} returns the old value at the position \code{i} while \code{getset.ff(x, i, value, add=TRUE)} returns the incremented value of \code{x}.
+#!   \command{get.ff} returns a vector, \command{set.ff} returns the 'changed' ff object (like all assignment functions do) and \command{getset.ff} returns the value at the subscript positions.
+#!   More precisely \code{getset.ff(x, i, value, add=FALSE)} returns the old values at the subscript positions \code{i} while \code{getset.ff(x, i, value, add=TRUE)} returns the incremented values at the subscript positions.
 #! }
 #! \author{ Jens Oehlschlägel }
 #! \note{ \command{get.ff}, \command{set.ff} and \command{getset.ff} are low level functions that do not support \code{ramclass} and \code{ramattribs} and thus will not give the expected result with \code{factor} and \code{POSIXct} }
-#! \seealso{ \code{\link{readwrite.ff}} for low-level vector access and \code{\link{[.ff}} for high-level access }
+#! \seealso{ \code{\link{readwrite.ff}} for low-level access to contiguous chunks and \code{\link{[.ff}} for high-level access }
 #! \examples{
 #!  x <- ff(0, length=12)
 #!  get.ff(x, 3L)
@@ -3539,9 +3524,9 @@ getset.ff <- function(x, i, value, add=FALSE)
     new.nc <- is.na(value)
   vmode <- vmode(x)
   if (add)
-    ret <- .Call("addgetset", .ffmode[vmode], attr(x, "physical"), i, as.vmode(value, vmode), PACKAGE="ff")
+    ret <- .Call("addgetset_vec", .ffmode[vmode], attr(x, "physical"), i, length(i), as.vmode(value, vmode), PACKAGE="ff")
   else
-    ret <- .Call("getset", .ffmode[vmode], attr(x, "physical"), i, as.vmode(value, vmode), PACKAGE="ff")
+    ret <- .Call("getset_vec", .ffmode[vmode], attr(x, "physical"), i, length(i), as.vmode(value, vmode), PACKAGE="ff")
   if (!is.na(nc)){
     old.nc <- is.na(ret)
     na.count(x) <- nc - old.nc + new.nc
@@ -3562,7 +3547,7 @@ get.ff   <- function(x, i)
   if (!is.integer(i) || i<1 || i>length(x)) stop("illegal index")
   if(!is.null(vw(x))) stop("please use '[' to access ff with vw")
 
-  .Call("get", .ffmode[vmode(x)], attr(x, "physical"), i, PACKAGE="ff")
+  .Call("get_vec", .ffmode[vmode(x)], attr(x, "physical"), i, length(i), PACKAGE="ff")
 }
 
 set.ff   <- function(x, i, value, add=FALSE)
@@ -3582,15 +3567,25 @@ set.ff   <- function(x, i, value, add=FALSE)
   if(!is.null(physical(x)$na.count)) stop("use readwrite.ff instead to maintain na.count (or deactivate na.count(x)<-NULL)")
   vmode <- vmode(x)
   if (add)
-    attr(x, "physical") <- .Call("addset", .ffmode[vmode], attr(x, "physical"), i, as.vmode(value, vmode), PACKAGE="ff")
+    attr(x, "physical") <- .Call("addset_vec", .ffmode[vmode], attr(x, "physical"), i, length(i), as.vmode(value, vmode), PACKAGE="ff")
   else
-    attr(x, "physical") <- .Call("set", .ffmode[vmode], attr(x, "physical"), i, as.vmode(value, vmode), PACKAGE="ff")
+    attr(x, "physical") <- .Call("set_vec", .ffmode[vmode], attr(x, "physical"), i, length(i), as.vmode(value, vmode), PACKAGE="ff")
   x
 }
 
-"[[.ff" <- get.ff
-"[[<-.ff" <- function(x, i, add=FALSE, value)
+"[[.ff" <- function(x, i){
+  if (length(i)!=1L)
+    stop("i must have length 1")
+  set.ff(x=x, i=i)
+}
+
+"[[<-.ff" <- function(x, i, add=FALSE, value){
+  if (length(i)!=1L)
+    stop("i must have length 1")
+  if (length(value)!=1L)
+    stop("value must have length 1")
   set.ff(x=x, i=i, value=value, add=add)
+}
 
 
 #! \name{readwrite.ff}
@@ -4782,7 +4777,7 @@ swap.default <- function(
 #!   \bold{Otherwise you might experience 'unexpected' losses of files and data.}
 #! }
 #! \section{Size of objects}{
-#!   Currently ff objects are limited to \code{.Machine$integer.max} elements and we have not yet ported the R code to support 64bit double indices (in essence 52 bits integer) although the C++ back-end has been prepared for this.
+#!   Currently ff objects cannot have length zero and are limited to \code{.Machine$integer.max} elements. We have not yet ported the R code to support 64bit double indices (in essence 52 bits integer) although the C++ back-end has been prepared for this.
 #!   Furthermore filesize limitations of the OS apply, see \code{\link{ff}}.
 #! }
 #! \section{Side effects}{

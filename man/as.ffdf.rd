@@ -15,14 +15,15 @@ Coercing to ffdf and data.frame
 as.ffdf(x, ...)
 \method{as.ffdf}{ff_vector}(x, ...)
 \method{as.ffdf}{ff_matrix}(x, ...)
-\method{as.ffdf}{data.frame}(x, vmode=NULL, ...)
+\method{as.ffdf}{data.frame}(x, vmode=NULL, col_args = list(), ...)
 \method{as.data.frame}{ffdf}(x, ...)
 }
 \arguments{
   \item{x}{ the object to be coerced }
   \item{vmode}{ optional specification of the \code{\link{vmode}s} of columns of the \code{\link{data.frame}}. Either a character vector of vmodes (named with column names of the data.frame or recycled if not named)
                 or a list named with vmodes where each element identifies those columns of the data.frame that should get the vmode encoded in the name of the element }
-  \item{\dots}{ further arguments; passed to \code{\link{ffdf}} for .ff_vector and .ff_matrix methods, passed to \code{\link{ff}} for .data.frame method, ignored for .ffdf identity method }
+  \item{col_args}{ further arguments; passed to \code{\link{ff}}  }
+  \item{\dots}{ further arguments; passed to \code{\link{ffdf}} for .ff_vector, .ff_matrix and .data.frame methods, ignored for .ffdf identity method }
 }
 \value{
   'as.ffdf' returns an object of class \code{\link{ffdf}}, 'as.data.frame' returns an object of class \code{\link{data.frame}}

@@ -31,9 +31,7 @@ as.hi.ri <- function(x
 )
 {
   # NOTE that we cannot call hi() here because it would not handle ...-paramters dim= dimorder=
-  l <- list(...)
-  l$envir <- NULL
-  do.call("as.hi", c(list(quote(x[[1]]:x[[2]]), maxindex=maxindex), l))
+  as.hi(substitute(a:b, list(a=x[[1]], b=x[[2]])), maxindex=maxindex, ...)
 }
 
 
@@ -60,14 +58,14 @@ as.bitwhich.hi <- function(x, ...){
   }
 }
 
-as.hi.bitwhich <- function(x, maxindex=length(x), ...){
+as.hi.bitwhich <- function(x, maxindex=length(x), pack=FALSE, ...){
   poslength <- sum(x)
   if (poslength==0){
-    as.hi(integer(), maxindex=maxindex, ...)
+    as.hi(integer(), maxindex=maxindex, pack=pack, ...)
   }else if (poslength==maxindex){
-    as.hi(quote(1L:poslength), maxindex=maxindex, ...)
+    as.hi(quote(1L:poslength), maxindex=maxindex, pack=pack, ...)
   }else{
-    as.hi(unclass(x), maxindex=maxindex, ...)
+    as.hi(unclass(x), maxindex=maxindex, pack=pack, ...)
   }
 }
 
@@ -81,6 +79,7 @@ as.hi.bit <- function(x
 , vw = NULL
 , dim = NULL
 , dimorder = NULL
+, pack = TRUE
 , ...
 ){
   if (is.null(dim) && is.null(dimorder) && is.null(dim(vw))){
@@ -94,9 +93,10 @@ as.hi.bit <- function(x
         stop("illegal range")
     }
 
+    ret <- as.hi(1L, pack=FALSE, ...)
+
     if (is.null(vw)){
       dat <- .Call("R_bit_as_hi", x, range, 0L, PACKAGE="bit")
-      ret <- as.hi(1L, ...)
       ret$length <- sum(x, range=range)
       dat$len <- NULL
       ret$maxindex <- maxindex
@@ -106,7 +106,6 @@ as.hi.bit <- function(x
         stop("length(vw) != 3")
 
       dat <- .Call("R_bit_as_hi", x, range, vw[1], PACKAGE="bit")
-      ret <- as.hi(1L, ...)
       ret$length <- sum(x, range=range)
       dat$len <- NULL
       ret$minindex <- vw[[1]]
@@ -116,7 +115,7 @@ as.hi.bit <- function(x
     ret$x <- dat
     ret
   }else{
-    as.hi(as.bitwhich(x, range=range), maxindex=maxindex, vw=vw, dim=dim, dimorder=dimorder, ...)
+    as.hi(as.bitwhich(x, range=range), maxindex=maxindex, vw=vw, dim=dim, dimorder=dimorder, pack=pack, ...)
   }
 }
 
@@ -301,4 +300,72 @@ as.bit.ff <- function(x, ...){
   }else{
     stop("not implemented")
   }
+}
+
+
+
+
+#! \name{chunk.bit}
+#! \Rdversion{1.1}
+#! \alias{chunk.bit}
+#! \title{
+#!    Chunk bit vectors
+#! }
+#! \description{
+#!    chunking method for ffdf objects automatically considering RAM requirements from recordsize as calculated from \code{\link{sum}(\link{.rambytes}[\link[=vmode.ffdf]{vmode}])}
+#! }
+#! \usage{
+#! \method{chunk}{bit}(x, RECORDBYTES = .rambytes["logical"], BATCHBYTES = getOption("ffbatchbytes"), \dots)
+#! }
+#! \arguments{
+#!   \item{x}{\code{\link{bit}}}
+#!   \item{RECORDBYTES}{ optional integer scalar representing the bytes needed to process a single element of the bit vector }
+#!   \item{BATCHBYTES}{ integer scalar limiting the number of bytes to be processed in one chunk, default from \code{getOption("ffbatchbytes")}, see also \code{\link{.rambytes}} }
+#!   \item{\dots}{further arguments passed to \code{\link[bit]{chunk}}}
+#! }
+#! \value{
+#!   A list with \code{\link[bit]{ri}} indexes each representing one chunk
+#! }
+#! \author{
+#!   Jens Oehlschlägel
+#! }
+#! \seealso{ \code{\link[bit]{chunk}}, \code{\link{bit}} }
+#! \examples{
+#!   n <- 1000
+#!   x <- bit(n)
+#!   ceiling(n / (300 \%/\% sum(.rambytes["logical"])))
+#!   chunk(x, BATCHBYTES=300)
+#!   ceiling((n/2) / (100 \%/\% sum(.rambytes["logical"])))
+#!   chunk(x, from=1, to = n/2, BATCHBYTES=100)
+#!   rm(x, n)
+#!
+#! }
+#! \keyword{ IO }
+#! \keyword{ data }
+
+
+chunk.bit <- function(x, RECORDBYTES = .rambytes["logical"], BATCHBYTES = getOption("ffbatchbytes"), ...){
+  n <- length(x)
+  if (n){
+    l <- list(...)
+    if (is.null(l$from))
+      l$from <- 1L
+    if (is.null(l$to))
+      l$to <- n
+    if (is.null(l$by) && is.null(l$len)){
+      recordsize <- sum(RECORDBYTES)
+      b <- BATCHBYTES %/% recordsize
+      if (b==0L){
+        b <- 1L
+        warning("single record does not fit into BATCHBYTES")
+      }
+      l$by <- b
+    }
+    l$maxindex <- n
+    ret <- do.call("chunk.default", l)
+
+  }else{
+    ret <- list()
+  }
+  ret
 }

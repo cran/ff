@@ -40,6 +40,8 @@
 #endif
 #include <cstdlib>
 #include <cstring>
+#include <strings.h>
+#include <sys/file.h>
 #include "utk_file_allocate_fseek.hpp"
 namespace ff {
 
@@ -146,7 +148,7 @@ MMapFileMapping::~MMapFileMapping()
 {
   if (_fd != -1) {
     close(_fd);
-    flock(_fd, LOCK_UN);
+    // flock(_fd, LOCK_UN);
   }
 }
 
@@ -203,7 +205,12 @@ void MMapFileSection::reset(foff_t offset, msize_t size, void* addr)
 
   if ( (size) && (_fd != -1) ) {
     int prot = PROT_READ | (( _readonly) ? 0 : PROT_WRITE );
-    _addr = mmap(addr, size, prot,MAP_FILE|MAP_SHARED, _fd, offset);
+    int flags = MAP_SHARED 
+#if !defined(__sun__)
+     | MAP_FILE
+#endif
+    ;
+    _addr = mmap(addr, size, prot,flags, _fd, offset);
     if (_addr) {
       _offset = offset;
       _size   = size;

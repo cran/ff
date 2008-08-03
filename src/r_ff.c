@@ -28,17 +28,25 @@ R_CallMethodDef callMethods[] =
  {"delete",(DL_FUNC) &r_ff_delete, 1},
  {"maxlength",  (DL_FUNC) &r_ff_maxlength,   1},
 
+/*
  {"getset",    (DL_FUNC) &r_ff__getset,    4},
  {"get",       (DL_FUNC) &r_ff__get,       3},
  {"set",       (DL_FUNC) &r_ff__set,       4},
  {"addgetset", (DL_FUNC) &r_ff__addgetset, 4},
  {"addset",    (DL_FUNC) &r_ff__addset,    4},
+*/
 
  {"getset_contiguous",   (DL_FUNC) &r_ff__getset_contiguous,     5},
  {"get_contiguous",      (DL_FUNC) &r_ff__get_contiguous,        4},
  {"set_contiguous",      (DL_FUNC) &r_ff__set_contiguous,        5},
  {"addgetset_contiguous",(DL_FUNC) &r_ff__addgetset_contiguous,  5},
  {"addset_contiguous",   (DL_FUNC) &r_ff__addset_contiguous,     5},
+
+ {"getset_vec",   (DL_FUNC) &r_ff__getset_vec, 5},
+ {"get_vec",      (DL_FUNC) &r_ff__get_vec,    4},
+ {"set_vec",      (DL_FUNC) &r_ff__set_vec,    5},
+ {"addgetset_vec",(DL_FUNC) &r_ff__addset_vec, 5},
+ {"addset_vec",   (DL_FUNC) &r_ff__addset_vec, 5},
 
  {"getset_vector",   (DL_FUNC) &r_ff__getset_vector, 5},
  {"get_vector",      (DL_FUNC) &r_ff__get_vector,    4},

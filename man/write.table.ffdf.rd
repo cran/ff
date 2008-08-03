@@ -17,6 +17,7 @@ write.table.ffdf(x = NULL
 , file, append = FALSE
 , nrows = -1, first.rows = NULL, next.rows = NULL
 , FUN = "write.table", ...
+, transFUN = NULL
 , BATCHBYTES = getOption("ffbatchbytes")
 , VERBOSE = FALSE
 )
@@ -54,6 +55,9 @@ write.csv2(...)
 }
   \item{\dots}{
   further arguments, passed to \code{FUN} in \code{write.table.ffdf}, or passed to \code{write.table.ffdf} in the convenience wrappers
+}
+  \item{transFUN}{
+  NULL or a function that is called on each data.frame chunk before writing with \code{FUN} (for filtering, transformations etc.)
 }
   \item{BATCHBYTES}{
   integer: bytes allowed for the size of the \code{\link{data.frame}} storing the result of reading one chunk. Default \code{getOption("ffbatchbytes")}.
@@ -123,7 +127,7 @@ write.csv2(...)
   csvfile <- tempPathFile(path=getOption("fftempdir"), extension="csv")
 
   write.csv.ffdf(ffx, file=csvfile, VERBOSE=TRUE)
-  ffy <- read.csv.ffdf(file=csvfile, header=TRUE, colClasses=c(ord="ordered", dct="POSIXct", dat="Date"), ff_args=list(vmode = vmodes), VERBOSE=TRUE)
+  ffy <- read.csv.ffdf(file=csvfile, header=TRUE, colClasses=c(ord="ordered", dct="POSIXct", dat="Date"), asffdf_args=list(vmode = vmodes), VERBOSE=TRUE)
 
   rm(ffx, ffy); gc()
   unlink(csvfile)

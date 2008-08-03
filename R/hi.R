@@ -119,17 +119,22 @@ hi <- function (from, to, by = 1L, maxindex = NA, vw=NULL, pack = TRUE, NAs = NU
             x <- as.integer(cumsum(c(from, rep(r$values, r$lengths))))
             x <- sort.int(x, index.return = TRUE, method = "quick")
             ix <- x$ix
+            re <- FALSE
             x <- rlepack(x$x, pack = pack)
         }
 
         x <- unique.rlepack(x)
 
-        # this ifelse section copied 1L to hi.default
+        # this ifelse section copied 1L to as.hi.call
         if (x$last < 0) {
           if (is.na(maxindex))
               stop("maxindex is required with negative subscripts")
           if ( -x$first > maxindex )
               stop("negative subscripts out of range")
+
+          re <- FALSE
+          ix <- NULL
+
           if (vw.convert){
             x$first <- x$first - vw[1]
             x$last <- x$last - vw[1]
@@ -170,6 +175,7 @@ hi <- function (from, to, by = 1L, maxindex = NA, vw=NULL, pack = TRUE, NAs = NU
         }
     }else{
         x <- list(first = as.integer(NA), dat = integer(), last = as.integer(NA))
+        re <- FALSE
         ix <- NULL
         n <- 0L
         minindex <- 1L
@@ -185,7 +191,7 @@ hi <- function (from, to, by = 1L, maxindex = NA, vw=NULL, pack = TRUE, NAs = NU
     ret <- list(
       x = x                # directly accessed by the C-code: hybrid index, i.e. either raw or rle
     , ix = ix              # NULL or positions for re-ordering
-    , re = FALSE           # logical indicating whether sequence was reversed from descending to ascending
+    , re = re              # logical indicating whether sequence was reversed from descending to ascending
     , minindex = minindex  # directly accessed by the C-code: represents the lowest positive subscript to be enumerated in case of negative subscripts
     , maxindex = maxindex  # directly accessed by the C-code: represents the highest positive subscript to be enumerated in case of negative subscripts
     , length = n           # number of subscripts, whether negative or positive
@@ -362,12 +368,13 @@ hiparse <- function(x, envir, first=as.integer(NA), last=as.integer(NA)){
 #! as.hi(x, \dots)
 #! \method{as.hi}{hi}(x, \dots)
 #! \method{as.hi}{ri}(x, maxindex = length(x), \dots)
-#! \method{as.hi}{bit}(x, range = NULL, maxindex = length(x), vw = NULL, dim = NULL, dimorder = NULL, \dots)
-#! \method{as.hi}{bitwhich}(x, maxindex = length(x), \dots)
+#! \method{as.hi}{bit}(x, range = NULL, maxindex = length(x), vw = NULL, dim = NULL, dimorder = NULL, pack = TRUE, \dots)
+#! \method{as.hi}{bitwhich}(x, maxindex = length(x), pack = FALSE, \dots)
 #! \method{as.hi}{call}(x, maxindex = NA, dim = NULL, dimorder = NULL, vw = NULL, vw.convert = TRUE, pack = TRUE, envir = parent.frame(), \dots)
 #! \method{as.hi}{name}(x, envir = parent.frame(), \dots)
 #! %\method{as.hi}{(}(x, envir = parent.frame(), \dots)
 #! \method{as.hi}{integer}(x, maxindex = NA, dim = NULL, dimorder = NULL, symmetric = FALSE, fixdiag = NULL, vw = NULL, vw.convert = TRUE, dimorder.convert  = TRUE, pack = TRUE, NAs = NULL, \dots)
+#! \method{as.hi}{which}(x, \dots)
 #! \method{as.hi}{double}(x, \dots)
 #! \method{as.hi}{logical}(x, maxindex = NA, dim = NULL, vw = NULL, pack = TRUE, \dots)
 #! \method{as.hi}{character}(x, names, vw = NULL, vw.convert = TRUE, \dots)
@@ -386,17 +393,19 @@ hiparse <- function(x, envir, first=as.integer(NA), last=as.integer(NA)){
 #!   \item{vw.convert}{ FALSE to prevent doubly virtual window conversion, this is needed for some internal calls that have done the virtual window conversion already, see details }
 #!   \item{dimorder.convert}{ FALSE to prevent doubly dimorder conversion, this is needed for some internal calls that have done the dimorder conversion already, see details }
 #!   \item{NAs}{ a vector of NA positions to be stored \code{\link[bit]{rlepack}ed}, not fully supported yet }
-#!   \item{pack}{ FALSE to prevent \code{\link[bit]{rlepack}ing} }
+#!   \item{pack}{ FALSE to prevent \code{\link[bit]{rlepack}ing}, note that this is a hint rather than a guarantee, \code{as.hi.bit} might ignore this }
 #!   \item{range}{ NULL or a vector with two elements indicating first and last position to be converted from 'bit' to 'hi' }
 #!   \item{\dots}{ further argument passed from generic to method or from wrapper method to \code{as.hi.integer} }
 #! }
 #! \details{
 #!   The generic dispatches appropriately, \code{as.hi.hi} returns an \code{\link{hi}} object unchanged,
 #!   \code{as.hi.call} tries to \code{\link{hiparse}} instead of evaluate its input in order to save RAM.
+#!   If parsing is successfull \code{as.hi.call} will ignore its argument \code{pack} and always pack unless the subscript is too small to do so.
 #!   If parsing fails it evaluates the index expression and dispatches again to one of the other methods.
 #!   \code{as.hi.name} and \code{as.hi.(} are wrappers to \code{as.hi.call}.
-#!   \code{as.hi.integer == as.hi.which} is the workhorse for coercing evaluated expressions,
-#!   \code{as.hi.double}, \code{as.hi.logical} and \code{as.hi.character} are simply wrappers to \code{as.hi.integer},
+#!   \code{as.hi.integer} is the workhorse for coercing evaluated expressions
+#!   and \code{as.hi.which} is a wrapper removing the \code{which} class attribute.
+#!   \code{as.hi.double}, \code{as.hi.logical} and \code{as.hi.character} are also wrappers to \code{as.hi.integer},
 #!   but note that \code{as.hi.logical} is not memory efficient because it expands \emph{all} positions and then applies logical subscripting.
 #!   \cr
 #!   \code{as.hi.matrix} calls \code{\link{arrayIndex2vectorIndex}} and then \code{as.hi.integer} to interpret and preprocess matrix indices.
@@ -416,7 +425,7 @@ hiparse <- function(x, envir, first=as.integer(NA), last=as.integer(NA)){
 #!   an object of class \code{\link{hi}}
 #! }
 #! \author{ Jens Oehlschlägel }
-#! \note{ Avoid changing the Hybrid Index representation, this might crash the \code{\link{[.ff}} subscripting }
+#! \note{ Avoid changing the Hybrid Index representation, this might crash the \code{\link{[.ff}} subscripting. }
 #! \seealso{ \code{\link{hi}} for the Hybrid Index class, \code{\link{hiparse}} for parsing details, \code{\link{as.integer.hi}} for back-coercion, \code{\link{[.ff}} for ff subscripting }
 #! \examples{
 #!   cat("integer indexing with and without rel-packing\n")
@@ -537,8 +546,7 @@ as.hi.call <- function(
       x <- rlepack(x$x, pack=pack)
     }else{
       if (nl){
-        if (pack)
-          pack <- 2*length(r$lengths)<n
+        pack <- 2*length(r$lengths)<n
       }else
         pack <- FALSE
       if (pack){
@@ -562,6 +570,10 @@ as.hi.call <- function(
           stop("maxindex is required with negative subscripts")
       if ( -x$first > maxindex )
           stop("negative subscripts out of range")
+
+      re <- FALSE
+      ix <- NULL
+
       if (vw.convert){
         x$first <- x$first - vw[1]
         x$last <- x$last - vw[1]
@@ -632,7 +644,7 @@ as.hi.call <- function(
 }
 
 
-as.hi.which <-  as.hi.integer <- function(
+as.hi.integer <- function(
   x
 , maxindex    = NA
 , dim         = NULL
@@ -723,10 +735,12 @@ as.hi.which <-  as.hi.integer <- function(
       }
       if ( -x[1] > maxindex )
         stop("negative subscripts out of range")
-      x <- unique(x)
-      n <- length(x)
+
       ix <- NULL
       re <- FALSE
+
+      x <- unique(x)
+      n <- length(x)
       if (vw.convert){
         # convert window positions to absolute positions
         if (is.null(dim)){
@@ -794,6 +808,9 @@ as.hi.which <-  as.hi.integer <- function(
   r
 }
 
+
+as.hi.which <-  function(x, ...)
+  as.hi.integer(unclass(x), ...)
 
 
 if (FALSE){
@@ -1304,9 +1321,9 @@ unsort.ahi <- function(
 , ix = lapply(index, function(i){
       if (is.null(i$ix)){
         if (i$re)
-          orig <- rev(1:length(i))
+          orig <- rev(1:poslength(i))
         else
-          orig <- 1:length(i)
+          orig <- 1:poslength(i)
       }else{
         orig <- i$ix
       }

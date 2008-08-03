@@ -19,7 +19,9 @@ read.table.ffdf(
 , nrows = -1, first.rows = NULL, next.rows = NULL
 , levels = NULL, appendLevels = TRUE
 , FUN = "read.table", ...
-, ff_args = list(), BATCHBYTES = getOption("ffbatchbytes")
+, transFUN = NULL
+, asffdf_args = list()
+, BATCHBYTES = getOption("ffbatchbytes")
 , VERBOSE = FALSE
 )
 read.csv.ffdf(...)
@@ -32,6 +34,8 @@ read.delim2.ffdf(...)
 NULL or an optional \code{\link{ffdf}} object to which the read records are appended.
 If this is provided, it defines crucial features that are otherwise determnined during the 'first' chunk of reading:
 \code{\link[=vmode.ffdf]{vmode}s}, \code{\link[=dimnames.ffdf]{colnames}}, \code{colClasses}, sequence of predefined \code{\link[=levels.ff]{levels}}.
+In order to also read the first chunk into such predefined ffdf, an \code{x} with 1 row is treated special: instead of appending the first row will be overwritten.
+This is necessary because we cannot provide \code{x} with zero rows (we cannot create ff vectors with zero elements).
 }
   \item{file}{
     the name of the file which the data are to be read from.
@@ -78,7 +82,10 @@ If this is provided, it defines crucial features that are otherwise determnined 
   \item{\dots}{
   further arguments, passed to \code{FUN} in \code{read.table.ffdf}, or passed to \code{read.table.ffdf} in the convenience wrappers
 }
-  \item{ff_args}{
+  \item{transFUN}{
+  NULL or a function that is called on each data.frame chunk after reading with \code{FUN} and before further processing (for filtering, transformations etc.)
+}
+  \item{asffdf_args}{
   further arguments passed to \code{\link{as.ffdf}} when converting the \code{\link{data.frame}} of the first chunk to \code{\link{ffdf}}.
   Ignored if \code{x} is given.
 }
@@ -101,7 +108,7 @@ If this is provided, it defines crucial features that are otherwise determnined 
     \item set \code{first.rows} to a larger number if you expect better factor level ordering (factor levels are sorted in the first chunk, but not at subsequent chunks, however, factor level ordering can be fixed later, see below).
   }
   By default the \code{\link{ffdf}} object is created on the fly at the end of reading the 'first' chunk, see argument \code{first.rows}.
-  The creation of the \code{\link{ffdf}} object is done via \code{\link{as.ffdf}} and can be finetuned by passing argument \code{ff_args}.
+  The creation of the \code{\link{ffdf}} object is done via \code{\link{as.ffdf}} and can be finetuned by passing argument \code{asffdf_args}.
   Even more control is possible by passing in a \code{\link{ffdf}} object as argument \code{x} to which the read records are appended.
   \cr
   \code{read.table.ffdf} has been designed to behave as much like \code{\link{read.table}} as possible. Hoever, note the following differences:
@@ -192,9 +199,9 @@ If this is provided, it defines crucial features that are otherwise determnined 
     sum(.ffbytes[vmode(ffx)])
 
     ffy <- read.csv.ffdf(file=csvfile, header=TRUE, colClasses=c(ord="ordered", dct="POSIXct", dat="Date")
-    , ff_args=list(
+    , asffdf_args=list(
         vmode = c(log="boolean", int="byte", dbl="single", fac="nibble", ord="nibble", dct="single", dat="single")
-      , pattern = "./csv"  # create in getwd() with prefix csv
+      , col_args=list(pattern = "./csv")  # create in getwd() with prefix csv
       )
     )
     vmode(ffy)
@@ -205,6 +212,29 @@ If this is provided, it defines crucial features that are otherwise determnined 
     delete(ffy); rm(ffy)
     cat("It's a good habit to also wrap-up temporary stuff (or at least know how this is done)\n")
     rm(ffx); gc()
+
+    fwffile <- tempfile()
+
+    cat(file=fwffile, "123456", "987654", sep="\n")
+    x <- read.fwf(fwffile, widths=c(1,2,3))    #> 1 23 456 \ 9 87 654
+    y <- read.table.ffdf(file=fwffile, FUN="read.fwf", widths=c(1,2,3))
+    stopifnot(identical(x, y[,]))
+    x <- read.fwf(fwffile, widths=c(1,-2,3))   #> 1 456 \ 9 654
+    y <- read.table.ffdf(file=fwffile, FUN="read.fwf", widths=c(1,-2,3))
+    stopifnot(identical(x, y[,]))
+    unlink(fwffile)
+
+    cat(file=fwffile, "123", "987654", sep="\n")
+    x <- read.fwf(fwffile, widths=c(1,0, 2,3))    #> 1 NA 23 NA \ 9 NA 87 654
+    y <- read.table.ffdf(file=fwffile, FUN="read.fwf", widths=c(1,0, 2,3))
+    stopifnot(identical(x, y[,]))
+    unlink(fwffile)
+
+    cat(file=fwffile, "123456", "987654", sep="\n")
+    x <- read.fwf(fwffile, widths=list(c(1,0, 2,3), c(2,2,2))) #> 1 NA 23 456 98 76 54
+    y <- read.table.ffdf(file=fwffile, FUN="read.fwf", widths=list(c(1,0, 2,3), c(2,2,2)))
+    stopifnot(identical(x, y[,]))
+    unlink(fwffile)
 
     \dontshow{
        x <- read.csv(file=csvfile, header=TRUE)

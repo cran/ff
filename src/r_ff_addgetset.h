@@ -1,86 +1,16 @@
 /*
-# ff macros for looping over vmodes: ff, ff_vector, ff_array
+# ff macros for looping over vmodes: addgetset, addgetset_vec, addgetset_vector, addgetset_array
 # (c) 2007 Jens Oehlschägel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-10-25
-# Last changed: 2007-11-29
+# Last changed: 2009-12-12
 */
 
 /* { -- FF addgetset / readwrite / swap ------------------------------------------------------- */
 
-/* --- r_ff_double_getset r_ff_double_get r_ff_double_set r_ff_double_addgetset r_ff_double_addset --- */
 
-/* this is the preprocessed mother code realized by the macro expansions below */
-#if 0
-  SEXP r_ff_double_getset(SEXP ff_, SEXP index_, SEXP value_)
-  {
-    SEXP ret_;
-    PROTECT( ret_ = allocVector(REALSXP, 1) );
-    REAL(ret_)[0] = ff_double_getset( R_ExternalPtrAddr(ff_), asInteger(index_) - 1, asReal(value_) );
-    UNPROTECT(1);
-    return ret_;
-  }
-#endif
-
-/* define code fragments */
-#define FF_CODE_GET_PROTECT \
-  PROTECT( ret_ = allocVector(VMODE_RTYPE, 1) );
-#define FF_CODE_GET_ASSIGN \
-  VMODE_ACCESS(ret_)[0] =
-#define FF_CODE_GET_UNPROTECT \
-  UNPROTECT(1);
-#define FF_CODE_SET_VALUEPAR_SEXP , SEXP value_
-#define FF_CODE_SET_VALUEPAR_CEXP , VMODE_COERCE(value_)
-
-/* define macro renaming fragment to fragment_ argument */
-#define R_FF_VMODE_GETSET( \
-  FF_NAME_VMODE, FF_FFNAME_VMODE, FF_NAME_ADD, FF_NAME_GET, FF_NAME_SET, FF_NAME_POSTFIX \
-, FF_CODE_GET_PROTECT_, FF_CODE_GET_ASSIGN_, FF_CODE_GET_UNPROTECT_ \
-, FF_CODE_SET_VALUEPAR_SEXP_, FF_CODE_SET_VALUEPAR_CEXP_ \
-) \
-SEXP FF_GLUE_NAME(r_ff_, FF_NAME_VMODE, FF_NAME_ADD, FF_NAME_GET, FF_NAME_SET, FF_NAME_POSTFIX)(SEXP ff_, SEXP index_ FF_CODE_SET_VALUEPAR_SEXP_) \
-{ \
-  SEXP ret_ = ff_; \
-  FF_CODE_GET_PROTECT_ \
-  FF_CODE_GET_ASSIGN_ FF_GLUE_NAME(ff_, FF_FFNAME_VMODE, FF_NAME_ADD, FF_NAME_GET, FF_NAME_SET, FF_NAME_POSTFIX)( R_ExternalPtrAddr(ff_), asInteger(index_) - 1 FF_CODE_SET_VALUEPAR_CEXP_); \
-  FF_CODE_GET_UNPROTECT_ \
-  return ret_; \
-} \
-
-/* call macro for each clone */
-R_FF_VMODE_GETSET( VMODE_NAME, VMODE_FFNAME, /*add*/, get, set,/*_postfix*/
-, FF_CODE_GET_PROTECT, FF_CODE_GET_ASSIGN, FF_CODE_GET_UNPROTECT
-, FF_CODE_SET_VALUEPAR_SEXP, FF_CODE_SET_VALUEPAR_CEXP
-)
-R_FF_VMODE_GETSET( VMODE_NAME, VMODE_FFNAME, /*add*/, get, /*set*/,/*_postfix*/
-, FF_CODE_GET_PROTECT, FF_CODE_GET_ASSIGN, FF_CODE_GET_UNPROTECT
-,,
-)
-R_FF_VMODE_GETSET( VMODE_NAME, VMODE_FFNAME, /*add*/, /*get*/, set,/*_postfix*/
-,,,
-,FF_CODE_SET_VALUEPAR_SEXP,FF_CODE_SET_VALUEPAR_CEXP
-)
-//#if VMODE_FFMODE!=2
-R_FF_VMODE_GETSET( VMODE_NAME, VMODE_FFNAME, add, get, set,/*_postfix*/
-, FF_CODE_GET_PROTECT, FF_CODE_GET_ASSIGN, FF_CODE_GET_UNPROTECT
-, FF_CODE_SET_VALUEPAR_SEXP, FF_CODE_SET_VALUEPAR_CEXP
-)
-R_FF_VMODE_GETSET( VMODE_NAME, VMODE_FFNAME, add, /*get*/, set,/*_postfix*/
-,,,
-,FF_CODE_SET_VALUEPAR_SEXP,FF_CODE_SET_VALUEPAR_CEXP
-)
-//#endif
-
-#undef FF_CODE_GET_PROTECT
-#undef FF_CODE_GET_ASSIGN
-#undef FF_CODE_GET_UNPROTECT
-#undef FF_CODE_SET_VALUEPAR_SEXP
-#undef FF_CODE_SET_VALUEPAR_CEXP
-#undef R_FF_VMODE_GETSET
-
-
-/* --- r_ff_double_getset_contiguous r_ff_double_get_contiguous r_ff_double_set_contiguous r_ff_double_addgetset_contiguous r_ff_double_addset_contiguous --- */
+/* { --- r_ff_double_getset_contiguous r_ff_double_get_contiguous r_ff_double_set_contiguous r_ff_double_addgetset_contiguous r_ff_double_addset_contiguous --- */
 
 /* this is the preprocessed mother code realized by the macro expansions below */
 #if 0
@@ -153,9 +83,93 @@ R_FF_VMODE_GETSET( VMODE_NAME, VMODE_FFNAME, add, /*get*/, set, _contiguous
 #undef FF_CODE_SET_VALUEPAR_SEXP
 #undef FF_CODE_SET_VALUEPAR_CEXP
 #undef R_FF_VMODE_GETSET
+/* } --- r_ff_double_getset_contiguous r_ff_double_get_contiguous r_ff_double_set_contiguous r_ff_double_addgetset_contiguous r_ff_double_addset_contiguous --- */
 
 
-/* --- r_ff_double_getset_vector r_ff_double_get_vector r_ff_double_set_vector r_ff_double_addreadwrite_vector r_ff_double_addset_vector --- */
+
+/* { --- r_ff_double_getset_vec r_ff_double_get_vec r_ff_double_set_vec r_ff_double_addreadwrite_vec r_ff_double_addset_vec --- */
+
+
+/* define code fragments */
+#define FF_CODE_GET_PROTECT \
+  PROTECT( ret_ = allocVector(VMODE_RTYPE, nreturn) ); \
+  VMODE_CTYPE *ret = VMODE_ACCESS(ret_);
+#define FF_CODE_GET_ASSIGN \
+  ret[i] =
+#define FF_CODE_GET_UNPROTECT \
+  UNPROTECT(1);
+#define FF_CODE_SET_VALUEPAR_SEXP , SEXP value_
+#define FF_CODE_SET_DECLARATION \
+  int l=0, nvalue = LENGTH(value_); \
+  VMODE_CTYPE *value = VMODE_ACCESS(value_);
+#define FF_CODE_SET_VALUEPAR_CEXP , value[l]
+#define FF_CODE_SET_VALUEINC_CEXP if (++l==nvalue) l=0; /* recycle values */
+
+/* define macro renaming fragment to fragment_ argument */
+#define R_FF_VMODE_GETSET( \
+  FF_NAME_VMODE, FF_FFNAME_VMODE, FF_NAME_ADD, FF_NAME_GET, FF_NAME_SET, FF_NAME_POSTFIX \
+, FF_CODE_GET_PROTECT_, FF_CODE_GET_ASSIGN_, FF_CODE_GET_UNPROTECT_ \
+, FF_CODE_SET_VALUEPAR_SEXP_, FF_CODE_SET_DECLARATION_, FF_CODE_SET_VALUEPAR_CEXP_, FF_CODE_SET_VALUEINC_CEXP_ \
+) \
+SEXP FF_GLUE_NAME(r_ff_, FF_NAME_VMODE, FF_NAME_ADD, FF_NAME_GET, FF_NAME_SET, FF_NAME_POSTFIX)(SEXP ff_, SEXP index_, SEXP nreturn_ FF_CODE_SET_VALUEPAR_SEXP_) \
+{ \
+  void *ff = R_ExternalPtrAddr(ff_); \
+  int *index = INTEGER(index_); \
+  int i, nreturn = asInteger(nreturn_); \
+  \
+  SEXP ret_ = ff_; \
+  FF_CODE_GET_PROTECT_ \
+  FF_CODE_SET_DECLARATION_ \
+  \
+  if (nreturn){ \
+    /* simply loop */ \
+    for (i=0;i<nreturn;i++){ \
+      FF_CODE_GET_ASSIGN_ FF_GLUE_NAME(ff_, FF_FFNAME_VMODE, FF_NAME_ADD, FF_NAME_GET, FF_NAME_SET, )( ff, index[i] - 1 FF_CODE_SET_VALUEPAR_CEXP_ ); FF_CODE_SET_VALUEINC_CEXP_ \
+    } \
+  } \
+  \
+  FF_CODE_GET_UNPROTECT_ \
+  return ret_; \
+} \
+
+
+/* call macro for each clone */
+R_FF_VMODE_GETSET( VMODE_NAME, VMODE_FFNAME, /*add*/, get, set, _vec
+, FF_CODE_GET_PROTECT, FF_CODE_GET_ASSIGN, FF_CODE_GET_UNPROTECT
+, FF_CODE_SET_VALUEPAR_SEXP, FF_CODE_SET_DECLARATION, FF_CODE_SET_VALUEPAR_CEXP, FF_CODE_SET_VALUEINC_CEXP
+)
+R_FF_VMODE_GETSET( VMODE_NAME, VMODE_FFNAME, /*add*/, get, /*set*/, _vec
+, FF_CODE_GET_PROTECT, FF_CODE_GET_ASSIGN, FF_CODE_GET_UNPROTECT
+,,,,
+)
+R_FF_VMODE_GETSET( VMODE_NAME, VMODE_FFNAME, /*add*/, /*get*/, set, _vec
+,,,
+,FF_CODE_SET_VALUEPAR_SEXP, FF_CODE_SET_DECLARATION, FF_CODE_SET_VALUEPAR_CEXP, FF_CODE_SET_VALUEINC_CEXP
+)
+//#if VMODE_FFMODE!=2
+R_FF_VMODE_GETSET( VMODE_NAME, VMODE_FFNAME, add, get, set, _vec
+, FF_CODE_GET_PROTECT, FF_CODE_GET_ASSIGN, FF_CODE_GET_UNPROTECT
+, FF_CODE_SET_VALUEPAR_SEXP, FF_CODE_SET_DECLARATION, FF_CODE_SET_VALUEPAR_CEXP, FF_CODE_SET_VALUEINC_CEXP
+)
+R_FF_VMODE_GETSET( VMODE_NAME, VMODE_FFNAME, add, /*get*/, set, _vec
+,,,
+,FF_CODE_SET_VALUEPAR_SEXP, FF_CODE_SET_DECLARATION, FF_CODE_SET_VALUEPAR_CEXP, FF_CODE_SET_VALUEINC_CEXP
+)
+//#endif
+
+#undef FF_CODE_GET_PROTECT
+#undef FF_CODE_GET_ASSIGN
+#undef FF_CODE_GET_UNPROTECT
+#undef FF_CODE_SET_VALUEPAR_SEXP
+#undef FF_CODE_SET_DECLARATION
+#undef FF_CODE_SET_VALUEPAR_CEXP
+#undef FF_CODE_SET_VALUEINC_CEXP
+#undef R_FF_VMODE_GETSET
+/* } --- r_ff_double_getset_vec r_ff_double_get_vec r_ff_double_set_vec r_ff_double_addreadwrite_vec r_ff_double_addset_vec --- */
+
+
+
+/* { --- r_ff_double_getset_vector r_ff_double_get_vector r_ff_double_set_vector r_ff_double_addreadwrite_vector r_ff_double_addset_vector --- */
 
 /* this is the preprocessed mother code realized by the macro expansions below */
 #if 0
@@ -541,9 +555,11 @@ R_FF_VMODE_GETSET( VMODE_NAME, VMODE_FFNAME, add, /*get*/, set, _vector
 #undef FF_CODE_SET_VALUEPAR_CEXP
 #undef FF_CODE_SET_VALUEINC_CEXP
 #undef R_FF_VMODE_GETSET
+/* } --- r_ff_double_getset_vector r_ff_double_get_vector r_ff_double_set_vector r_ff_double_addreadwrite_vector r_ff_double_addset_vector --- */
 
 
-/* --- r_ff_double_getset_array r_ff_double_get_array r_ff_double_set_array r_ff_double_addreadwrite_array r_ff_double_addset_array --- */
+
+/* { --- r_ff_double_getset_array r_ff_double_get_array r_ff_double_set_array r_ff_double_addreadwrite_array r_ff_double_addset_array --- */
 
 /* this is the preprocessed mother code realized by the macro expansions below */
 #if 0
@@ -625,9 +641,9 @@ SEXP r_ff_double_getset_array(SEXP ff_, SEXP index_, SEXP indexdim_, SEXP ffdim_
           negfirst[d] = -pseqval[d][j0[d]] - 1;
           while(seqfirst[d]==negfirst[d]){
             seqfirst[d]++;
-            if (j0[d] >= 0){
-              negfirst[d] = -pseqval[d][j0[d]] - 1;
+            if (j0[d] > 0){
               j0[d]--;
+              negfirst[d] = -pseqval[d][j0[d]] - 1;
             }else{
               negfirst[d] = ffdim[d]; /* one behind the last possible index position */
             }
@@ -935,9 +951,9 @@ SEXP FF_GLUE_NAME(r_ff_, FF_NAME_VMODE, FF_NAME_ADD, FF_NAME_GET, FF_NAME_SET, F
           negfirst[d] = -pseqval[d][j0[d]] - 1; \
           while(seqfirst[d]==negfirst[d]){ \
             seqfirst[d]++; \
-            if (j0[d] >= 0){ \
-              negfirst[d] = -pseqval[d][j0[d]] - 1; \
+            if (j0[d] > 0){ \
               j0[d]--; \
+              negfirst[d] = -pseqval[d][j0[d]] - 1; \
             }else{ \
               negfirst[d] = ffdim[d]; /* one behind the last possible index position */ \
             } \
@@ -1184,7 +1200,7 @@ R_FF_VMODE_GETSET( VMODE_NAME, VMODE_FFNAME, add, /*get*/, set, _array
 #undef FF_CODE_SET_DECLARATION
 #undef FF_CODE_SET_VALUEPAR_CEXP
 #undef R_FF_VMODE_GETSET
+/* } --- r_ff_double_getset_array r_ff_double_get_array r_ff_double_set_array r_ff_double_addreadwrite_array r_ff_double_addset_array --- */
 
 
 /* } -- FF addgetset / readwrite / swap ------------------------------------------------------- */
-

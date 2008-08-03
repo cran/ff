@@ -9,6 +9,7 @@ AC_CHECK_HEADERS([fcntl.h])
 AC_CHECK_HEADERS([sys/param.h])
 AC_CHECK_HEADERS([sys/mount.h], AC_CHECK_MEMBERS([struct statfs.f_iosize],,,[#include <sys/mount.h>]) )
 AC_CHECK_HEADERS([sys/statfs.h], AC_CHECK_MEMBERS([struct statfs.f_iosize],,,[#include <sys/statfs.h>]) )
+AC_CHECK_HEADERS([sys/statvfs.h])
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
 AC_SYS_LARGEFILE

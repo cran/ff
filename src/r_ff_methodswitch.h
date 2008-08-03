@@ -4,17 +4,17 @@
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-08-24
-# Last changed: 2007-11-29
+# Last changed: 2009-12-12
 */
 
 /* All combinations of
    - getset, get set addgetset addset
-   - (single), contiguous, vector, array
+   - (single), contiguous, vec, vector, array
    - boolean, logical, quad, nibble, byte, ubyte, short, ushort, integer, single, double, complex
 */
 
 
-/* --- r_ff__getset --- */
+/* { --- r_ff__getset --- replaced by r_ff__getset_vec
 
 SEXP r_ff__getset(SEXP ffmode_, SEXP ff_, SEXP index_, SEXP value_)
 {
@@ -252,10 +252,10 @@ SEXP r_ff__addset(SEXP ffmode_, SEXP ff_, SEXP index_, SEXP value_)
   return ret_;
 }
 
+   } --- r_ff__getset --- */
 
 
-
-/* --- r_ff__getset_contiguous --- */
+/* { --- r_ff__getset_contiguous --- */
 
 SEXP r_ff__getset_contiguous(SEXP ffmode_, SEXP ff_, SEXP index_, SEXP nreturn_, SEXP value_)
 {
@@ -497,11 +497,257 @@ SEXP r_ff__addset_contiguous(SEXP ffmode_, SEXP ff_, SEXP index_, SEXP nreturn_,
   return ret_;
 }
 
+/* } --- r_ff__getset_contiguous --- */
 
 
 
 
-/* --- r_ff__getset_vector --- */
+/* { --- r_ff__getset_vec --- */
+
+SEXP r_ff__getset_vec(SEXP ffmode_, SEXP ff_, SEXP index_, SEXP nreturn_, SEXP value_)
+{
+  SEXP ret_ = R_NilValue;
+  switch (asInteger(ffmode_)) {
+#if VMODE_COMPILE_BOOLEAN
+  case 1: ret_ = r_ff_boolean_getset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_LOGICAL
+  case 2: ret_ = r_ff_logical_getset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_QUAD
+  case 3: ret_ = r_ff_quad_getset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_NIBBLE
+  case 4: ret_ = r_ff_nibble_getset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_BYTE
+  case 5: ret_ = r_ff_byte_getset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_UBYTE
+  case 6: ret_ = r_ff_ubyte_getset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_SHORT
+  case 7: ret_ = r_ff_short_getset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_USHORT
+  case 8: ret_ = r_ff_ushort_getset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_INTEGER
+  case 9: ret_ = r_ff_integer_getset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_SINGLE
+  case 10: ret_ =  r_ff_single_getset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_DOUBLE
+  case 11: ret_ =  r_ff_double_getset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_COMPLEX
+  case 12: ret_ =  r_ff_double_getset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_RAW
+  case 13: ret_ = r_ff_raw_getset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+  default: error("unknown .ffmode[vmode(ffobj)]");
+  }
+  return ret_;
+}
+
+SEXP r_ff__get_vec(SEXP ffmode_, SEXP ff_, SEXP index_, SEXP nreturn_)
+{
+  SEXP ret_ = R_NilValue;
+  switch (asInteger(ffmode_)) {
+#if VMODE_COMPILE_BOOLEAN
+  case 1: ret_ = r_ff_boolean_get_vec( ff_, index_, nreturn_); break;
+#endif
+#if VMODE_COMPILE_LOGICAL
+  case 2: ret_ = r_ff_logical_get_vec( ff_, index_, nreturn_); break;
+#endif
+#if VMODE_COMPILE_QUAD
+  case 3: ret_ = r_ff_quad_get_vec( ff_, index_, nreturn_); break;
+#endif
+#if VMODE_COMPILE_NIBBLE
+  case 4: ret_ = r_ff_nibble_get_vec( ff_, index_, nreturn_); break;
+#endif
+#if VMODE_COMPILE_BYTE
+  case 5: ret_ = r_ff_byte_get_vec( ff_, index_, nreturn_); break;
+#endif
+#if VMODE_COMPILE_UBYTE
+  case 6: ret_ = r_ff_ubyte_get_vec( ff_, index_, nreturn_); break;
+#endif
+#if VMODE_COMPILE_SHORT
+  case 7: ret_ = r_ff_short_get_vec( ff_, index_, nreturn_); break;
+#endif
+#if VMODE_COMPILE_USHORT
+  case 8: ret_ = r_ff_ushort_get_vec( ff_, index_, nreturn_); break;
+#endif
+#if VMODE_COMPILE_INTEGER
+  case 9: ret_ = r_ff_integer_get_vec( ff_, index_, nreturn_); break;
+#endif
+#if VMODE_COMPILE_SINGLE
+  case 10: ret_ =  r_ff_single_get_vec( ff_, index_, nreturn_); break;
+#endif
+#if VMODE_COMPILE_DOUBLE
+  case 11: ret_ =  r_ff_double_get_vec( ff_, index_, nreturn_); break;
+#endif
+#if VMODE_COMPILE_COMPLEX
+  case 12: ret_ =  r_ff_double_get_vec( ff_, index_, nreturn_); break;
+#endif
+#if VMODE_COMPILE_RAW
+  case 13: ret_ = r_ff_raw_get_vec( ff_, index_, nreturn_); break;
+#endif
+  default: error("unknown .ffmode[vmode(ffobj)]");
+  }
+  return ret_;
+}
+
+SEXP r_ff__set_vec(SEXP ffmode_, SEXP ff_, SEXP index_, SEXP nreturn_, SEXP value_)
+{
+  SEXP ret_ = R_NilValue;
+  switch (asInteger(ffmode_)) {
+#if VMODE_COMPILE_BOOLEAN
+  case 1: ret_ = r_ff_boolean_set_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_LOGICAL
+  case 2: ret_ = r_ff_logical_set_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_QUAD
+  case 3: ret_ = r_ff_quad_set_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_NIBBLE
+  case 4: ret_ = r_ff_nibble_set_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_BYTE
+  case 5: ret_ = r_ff_byte_set_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_UBYTE
+  case 6: ret_ = r_ff_ubyte_set_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_SHORT
+  case 7: ret_ = r_ff_short_set_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_USHORT
+  case 8: ret_ = r_ff_ushort_set_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_INTEGER
+  case 9: ret_ = r_ff_integer_set_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_SINGLE
+  case 10: ret_ =  r_ff_single_set_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_DOUBLE
+  case 11: ret_ =  r_ff_double_set_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_COMPLEX
+  case 12: ret_ =  r_ff_double_set_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_RAW
+  case 13: ret_ = r_ff_raw_set_vec( ff_, index_, nreturn_, value_); break;
+#endif
+  default: error("unknown .ffmode[vmode(ffobj)]");
+  }
+  return ret_;
+}
+
+SEXP r_ff__addgetset_vec(SEXP ffmode_, SEXP ff_, SEXP index_, SEXP nreturn_, SEXP value_)
+{
+  SEXP ret_ = R_NilValue;
+  switch (asInteger(ffmode_)) {
+#if VMODE_COMPILE_BOOLEAN
+  case 1: ret_ = r_ff_boolean_addgetset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_LOGICAL
+  case 2: ret_ = r_ff_logical_addgetset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_QUAD
+  case 3: ret_ = r_ff_quad_addgetset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_NIBBLE
+  case 4: ret_ = r_ff_nibble_addgetset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_BYTE
+  case 5: ret_ = r_ff_byte_addgetset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_UBYTE
+  case 6: ret_ = r_ff_ubyte_addgetset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_SHORT
+  case 7: ret_ = r_ff_short_addgetset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_USHORT
+  case 8: ret_ = r_ff_ushort_addgetset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_INTEGER
+  case 9: ret_ = r_ff_integer_addgetset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_SINGLE
+  case 10: ret_ =  r_ff_single_addgetset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_DOUBLE
+  case 11: ret_ =  r_ff_double_addgetset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_COMPLEX
+  case 12: ret_ =  r_ff_double_addgetset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_RAW
+  case 13: ret_ = r_ff_raw_addgetset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+  default: error("unknown .ffmode[vmode(ffobj)]");
+  }
+  return ret_;
+}
+
+SEXP r_ff__addset_vec(SEXP ffmode_, SEXP ff_, SEXP index_, SEXP nreturn_, SEXP value_)
+{
+  SEXP ret_ = R_NilValue;
+  switch (asInteger(ffmode_)) {
+#if VMODE_COMPILE_BOOLEAN
+  case 1: ret_ = r_ff_boolean_addset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_LOGICAL
+  case 2: ret_ = r_ff_logical_addset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_QUAD
+  case 3: ret_ = r_ff_quad_addset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_NIBBLE
+  case 4: ret_ = r_ff_nibble_addset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_BYTE
+  case 5: ret_ = r_ff_byte_addset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_UBYTE
+  case 6: ret_ = r_ff_ubyte_addset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_SHORT
+  case 7: ret_ = r_ff_short_addset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_USHORT
+  case 8: ret_ = r_ff_ushort_addset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_INTEGER
+  case 9: ret_ = r_ff_integer_addset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_SINGLE
+  case 10: ret_ =  r_ff_single_addset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_DOUBLE
+  case 11: ret_ =  r_ff_double_addset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_COMPLEX
+  case 12: ret_ =  r_ff_double_addset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+#if VMODE_COMPILE_RAW
+  case 13: ret_ = r_ff_raw_addset_vec( ff_, index_, nreturn_, value_); break;
+#endif
+  default: error("unknown .ffmode[vmode(ffobj)]");
+  }
+  return ret_;
+}
+
+/* } --- r_ff__getset_vec --- */
+
+
+/* { --- r_ff__getset_vector --- */
 
 SEXP r_ff__getset_vector(SEXP ffmode_, SEXP ff_, SEXP index_, SEXP nreturn_, SEXP value_)
 {
@@ -743,9 +989,11 @@ SEXP r_ff__addset_vector(SEXP ffmode_, SEXP ff_, SEXP index_, SEXP nreturn_, SEX
   return ret_;
 }
 
+/* } --- r_ff__getset_vector --- */
 
 
-/* --- r_ff__getset_array --- */
+
+/* { --- r_ff__getset_array --- */
 
 SEXP r_ff__getset_array(SEXP ffmode_, SEXP ff_, SEXP index_, SEXP indexdim_, SEXP ffdim_, SEXP ndim_, SEXP nreturn_, SEXP cumindexdim_, SEXP cumffdim_, SEXP value_)
 {
@@ -987,4 +1235,5 @@ SEXP r_ff__addset_array(SEXP ffmode_, SEXP ff_, SEXP index_, SEXP indexdim_, SEX
   return ret_;
 }
 
+/* } --- r_ff__getset_array --- */
 

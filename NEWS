@@ -1,3 +1,75 @@
+		CHANGES IN ff VERSION 2.1.2
+
+
+NEW FEATURES
+
+    o	New functions ffsave, ffsave.image, ffinfo and ffload allow to save 
+	and load ff and ffdf objects together with all associated ff files 
+	in a ff archive. Incremental save and selective load are supported.
+
+    o	read.table.ffdf now supports reading fixed-width format by specifying
+	FUN="read.fwf". But beware, read.fwf reads fwf, writes csv, then calls 
+	read.table to read csv (Anyone feels challenged to provide faster 
+	csv and fwf reader?)
+
+    o	read.table.ffdf will now treat an argument 'x' with 1 row special: 
+	instead of appending it will overwrite the first row. This is working 
+	around the fact that it is currently not possible to create ff vectors 
+	having length zero and ffdf data.frames with zero rows.
+
+    o	read.table.ffdf and write.table.ffdf have a new argument 'transFUN' 
+	which allows filtering and other modifications on-the-fly of the 
+	data.frames processed in each chunk.
+
+    o	argument 'ff_args' in read.table.ffdf has been renamed to 'asffdf_args'
+
+    o	New 'chunk' methods for classes 'bit' and 'ff_vector'
+
+
+
+
+USER VISIBLE CHANGES
+
+    o	The filename of each ff object is now always stored with absolute path
+	and assignments to pattern<- "./foo" will now expand "." to getwd()
+
+    o	as.ffdf.data.frame now passes '...' to ffdf like the other as.ffdf 
+	methods do. From now on use 'col_args' for passing arguments to ff
+	(first ff columns are created, then ffdf is called to bind them).
+
+    o	New argument 'RECORDBYTES' for chunk methods. Position of dots argument
+	moved to last position.
+
+    o	The low-level access-functions 'get.ff', 'set.ff' and 'getset.ff' now 
+	accept vectors (not only scalars) of positive subscript positions. This
+	allows to evaluate the benefit of the hybrid index preprocessing done in
+	'[.ff', '[<-.ff' and 'swap.ff'.
+
+
+BUG FIXES
+
+    o	Fixed problems with negative subscripts (discovered by Trishank 
+	Kuppusamy):  [.ff_array and [<-.ff_array no longer skip over -1 in a 
+	non-packed negative index, and hybrid indexing no longer reverts the 
+	order of assigned or returned values (for negative subscripts we now 
+	always set hi$ix=NULL and hi$re=FALSE).
+
+    o	as.hi.ri no longer blows RAM by expanding the sequence ri[[1]]:ri[[2]]
+
+    o	[.ffdf now requires less RAM because it avoids as.data.frame
+
+    o	as.hi.which now call as.hi.integer and works
+
+    o	chunk.default no longer uses seq.int or seq because these were buggy
+
+    o	now also compiles under latest max os snow leopard
+
+    o	default for options("ffbatchbytes") is now 1% of RAM under windows and 
+	16MB on other OSes (was much too small on other)
+
+
+
+
 		CHANGES IN ff VERSION 2.1.0
 
 
@@ -34,7 +106,7 @@ NEW FEATURES
 
     o	The generics 'maxindex' and 'poslength' now also have methods 
 	for classes 'bit', 'bitwhich' and 'ri' from package 'bit', 
-   	implemented via bit's corresponding generics 'length' and 'sum'
+	implemented via bit's corresponding generics 'length' and 'sum'
 	
     o	Function 'ff' has a new parameter 'update'=TRUE that can be used 
 	to create ff objects like 'initdata' without actually filling 
@@ -48,7 +120,7 @@ NEW FEATURES
 USER VISIBLE CHANGES
 
     o	Package 'ff' now depends on package 'bit' (1.1.1 or higher), 
-        which offers many functions useful for subsetting 'ff' (see there).
+	which offers many functions useful for subsetting 'ff' (see there).
 
     o	Functions 'bbatch', 'repfromto' and 'repfromto<-' have been 
 	moved to file 'chunkutil.R' in package 'bit' where they 

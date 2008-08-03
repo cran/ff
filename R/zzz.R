@@ -35,16 +35,16 @@
         options(ffbatchbytes=as.integer(memory.limit()/100))
     } else {
       # some magic constant
-      options(ffbatchbytes=65536)
+      options(ffbatchbytes=16*1024^2)
     }
   }
   cat('- getOption("fftempdir")=="',getOption("fftempdir"),'"\n',sep='')
   cat('- getOption("ffextension")=="',getOption("ffextension"),'"\n',sep='')
+  cat('- getOption("ffdrop")==',getOption("ffdrop"),'\n',sep='')
   cat('- getOption("fffinonexit")==',getOption("fffinonexit"),'\n',sep='')
   cat('- getOption("ffpagesize")==',getOption("ffpagesize"),'\n',sep='')
-  cat('- getOption("ffcaching")=="',getOption("ffcaching"),'"\n',sep='')
-  cat('- getOption("ffdrop")==',getOption("ffdrop"),'\n',sep='')
-  cat('- getOption("ffbatchbytes")==',getOption("ffbatchbytes"),'\n',sep='')
+  cat('- getOption("ffcaching")=="',getOption("ffcaching"),'"  -- consider "ffeachflush" if your system stalls on large writes\n',sep='')
+  cat('- getOption("ffbatchbytes")==',getOption("ffbatchbytes"),' -- consider a different value for tuning your system\n',sep='')
   # if we want an explicit list of ff objects, we should store them in an environment with hash=TRUE (much faster than a list)
   #assign(".fftemp", new.env(hash=TRUE), envir=globalenv())
 
@@ -94,30 +94,39 @@
 
 .onAttach <- function(libname, pkgname){
   cat("Attaching package ff\n")
-  cat('fixing [.AsIs in base namespace because if the NextMethod("[") returns a different class, [.AsIs was reverting this\n')
-  assignInNamespace(
-    "[.AsIs"
-  , function (x, i, ...){
-      ret <- NextMethod("[")
-      oldClass(ret) <- c("AsIs", oldClass(ret))
-      ret
-    }
-  , "base"
-  )
+  if (getRversion()<="2.10.0"){
+    cat('fixing [.AsIs in base namespace because if the NextMethod("[") returns a different class, [.AsIs was reverting this\n')
+    #assignInNamespace(
+    #  "[.AsIs"
+    #, function (x, i, ...){
+    #    ret <- NextMethod("[")
+    #    oldClass(ret) <- c("AsIs", oldClass(ret))
+    #    ret
+    #  }
+    #, "base"
+    #)
+    assignInNamespace(
+      "[.AsIs"
+    , function (x, i, ...)I(NextMethod("["))
+    , "base"
+    )
+  }
 }
 
 .Last.lib <- function(libpath) {
    cat("Detaching package ff\n")
-  cat('restoring [.AsIs\n')
-  assignInNamespace(
-    "[.AsIs"
-  , function (x, i, ...){
-      ret <- NextMethod("[")
-      oldClass(ret) <- c("AsIs", oldClass(x))
-      ret
-    }
-  , "base"
-  )
+  if (getRversion()<="2.10.0"){
+    cat('restoring [.AsIs\n')
+    assignInNamespace(
+      "[.AsIs"
+    , function (x, i, ...){
+        ret <- NextMethod("[")
+        oldClass(ret) <- c("AsIs", oldClass(x))
+        ret
+      }
+    , "base"
+    )
+  }
 }
 
 .onUnload <- function(libpath){

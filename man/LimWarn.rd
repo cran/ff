@@ -14,7 +14,7 @@
   \bold{Otherwise you might experience 'unexpected' losses of files and data.}
 }
 \section{Size of objects}{
-  Currently ff objects are limited to \code{.Machine$integer.max} elements and we have not yet ported the R code to support 64bit double indices (in essence 52 bits integer) although the C++ back-end has been prepared for this.
+  Currently ff objects cannot have length zero and are limited to \code{.Machine$integer.max} elements. We have not yet ported the R code to support 64bit double indices (in essence 52 bits integer) although the C++ back-end has been prepared for this.
   Furthermore filesize limitations of the OS apply, see \code{\link{ff}}.
 }
 \section{Side effects}{

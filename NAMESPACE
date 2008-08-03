@@ -215,6 +215,8 @@ export(
 ,add.ff
 ,add.default
 ,swap.default
+,chunk.ff_vector
+
 
 # -- ffapply.R - applying expressions (not functions) to large ff (or ram) objects (R.ff foundation) --
 ,ffvecapply
@@ -285,6 +287,7 @@ export(
 ,as.hi.bitwhich
 ,as.ff.bit
 ,as.bit.ff
+,chunk.bit
 
 # -- fileutil.R - filename utitlities --
 ,standardPathFile
@@ -416,6 +419,13 @@ export(
 ,write.csv.ffdf
 ,write.csv2.ffdf
 
+
+# -- ffsave.R - saving / loading many ff objects WITH ff files --
+,ffsave
+,ffsave.image
+,ffinfo
+,ffload
+,ffdrop
 
 
 # -- x_ff_symm.R - ff extension (dual licensing, no GPL): symmetric  ff matrices with free and fixed diagonal --
@@ -577,10 +587,13 @@ S3method("[<-",ff)
 S3method("[<-",ff_array)
 S3method("add",ff)
 S3method("add",default)
+S3method(chunk, ff_vector)
 # -- ffapply.R - applying expressions (not functions) to large ff (or ram) objects (R.ff foundation) --
 # -- ffreturn.R - basic infrastructure for checking/creating FF_RETURN values (R.ff foundation) --
 # -- getpagesize.R - utility for getting default pagesize --
 # -- regtest.R --  # xx TODO just draft fragments yet
+
+
 # -- hi.R - class for Hybrid Index Preprocessing (HIP) --
 S3method(print, hi)
 S3method(str, hi)
@@ -616,6 +629,7 @@ S3method(as.bitwhich,hi)
 S3method(as.hi,bitwhich)
 S3method(as.ff,bit)
 S3method(as.bit,ff)
+S3method(chunk, bit)
 
 # -- util.R - some utitlities --
 # -- vmode.R - metadata and functions for virtual storage modes --
