@@ -7,6 +7,7 @@
 
 # source("d:/mwp/eanalysis/ff/R/util.R")
 
+
 #! \name{unclass_-}
 #! \alias{unclass<-}
 #! \title{ Unclassed assignement }
@@ -32,6 +33,7 @@
 #! }
 #! \keyword{ IO }
 #! \keyword{ data }
+
 
 "unclass<-" <- function(x, value){
   cl <- class(x)

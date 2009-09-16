@@ -38,7 +38,7 @@ ff( initdata  = NULL
 , ramattribs  = NULL
 , vmode       = NULL
 , update      = NULL
-, pattern     = "ff"
+, pattern     = NULL
 , filename    = NULL
 , overwrite   = FALSE
 , readonly    = FALSE
@@ -69,7 +69,7 @@ ff( initdata  = NULL
   \item{ramattribs}{ additional attributes attached when moving all or parts of this ff into ram, see \code{\link{ramattribs}} }
   \item{vmode}{ virtual storage mode (default: derive from 'initdata'), see \code{\link{vmode}} and \code{\link{as.vmode}} }
   \item{update}{ set to FALSE to avoid updating with 'initdata' (default TRUE) (used by \code{\link{ffdf}}) }
-  \item{pattern}{ root pattern with or without path for automatic ff filename creation (default "ff"), see also argument 'filename' }
+  \item{pattern}{ root pattern with or without path for automatic ff filename creation (default NULL translates to "ff"), see also argument 'filename' }
   \item{filename}{ ff \code{\link{filename}} with or without path (default tmpfile with 'pattern' prefix); without path the file is created in \code{getOption("fftempdir")}, with path '.' the file is created in \code{\link{getwd}}. Note that files created in \code{getOption("fftempdir")} have default finalizer "delete" while other files have default finalizer "close". See also arguments 'pattern' and 'finalizer' and \code{\link[=physical.ff]{physical}} }
   \item{overwrite}{ set to TRUE to allow overwriting existing files (default FALSE) }
   \item{readonly}{ set to TRUE to forbid writing to existing files }

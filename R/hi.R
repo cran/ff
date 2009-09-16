@@ -116,11 +116,14 @@ hi <- function (from, to, by = 1L, maxindex = NA, vw=NULL, pack = TRUE, NAs = NU
             if (re)
                 x <- rev.rlepack(x)
         }else{
+            re <- FALSE
             x <- as.integer(cumsum(c(from, rep(r$values, r$lengths))))
             x <- sort.int(x, index.return = TRUE, method = "quick")
             ix <- x$ix
-            re <- FALSE
             x <- rlepack(x$x, pack = pack)
+            #ix <- 1:n
+            #radixorder(x, ix)
+            #x <- rlepack(x[ix], pack = pack)
         }
 
         x <- unique.rlepack(x)
@@ -539,11 +542,15 @@ as.hi.call <- function(
     # test for sorted
     tab <- tabulate(sign(r$values)+2, 3)
     if (tab[1] && tab[3]){ # unsorted in both directions
+      re <- FALSE
       x <- as.integer(cumsum(c(r$first, rep(r$values, r$lengths))))
       x <- sort.int(x, index.return=TRUE, method="quick")
       ix <- x$ix
-      re <- FALSE
       x <- rlepack(x$x, pack=pack)
+      #ix <- 1:n
+      #radixorder(x, ix)
+      #x <- rlepack(x[ix], pack = pack)
+
     }else{
       if (nl){
         pack <- 2*length(r$lengths)<n
@@ -721,6 +728,9 @@ as.hi.integer <- function(
         x <- sort.int(x, index.return=TRUE, method="quick")
         ix <- x$ix
         x <- x$x
+        #ix <- 1:n
+        #radixorder(x, ix)
+        #x <- x[ix]
         re <- FALSE
       }
     }

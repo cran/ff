@@ -39,15 +39,15 @@ namespace utk
 
     // return value
     int err;
-  
+
     // seek to one-byte before end of file
-    
+
     err = fseeko(f, size-1, SEEK_SET);
-    
+
     // write last byte
     if (!err)
     {
-      unsigned char value = 0;      
+      unsigned char value = 0;
       unsigned int nwritten = fwrite(&value,1,1,f);
       if (nwritten != 1) err = 1;
     }

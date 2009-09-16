@@ -26,7 +26,7 @@
 #include "ff.h"
 #include "Array.hpp"
 #include <climits>
-
+#include <stdint.h>
 // --- common interface --------------------------------------------------------
 
 // TODO: ff driver properties get/set ffGet/SetProperty  e.g. ffGetProperty("pagesize")
@@ -160,6 +160,8 @@ void addgetsetV(ImplT* impl, IndexT i, SizeT s, T* ret, T* value)
   }
 }
 
+
+
 // ----------------------------------------------------------------------------
 // filters
 
@@ -245,13 +247,13 @@ typedef FFType< Array   <uchar >                > RawImpl      ;
 
 template<typename T> inline int clamp_na(int x)
 {
-  if ( ( x >= (1<<((sizeof(T)*8)-1)) ) || ( x < -((1<<(sizeof(T)*8)-1) ) ) ) return INT_MIN;
+  if ( ( x >= (1<<((sizeof(T)*8)-1)) ) || ( x < -((1<<((sizeof(T)*8)-1)) ) ) ) return INT_MIN;
     return x;
 }
 
-template<typename T> inline int clamp_na(long long x)
+template<typename T> inline int clamp_na(int64_t x)
 {
-  if ( ( x >= (1LL<<((sizeof(T)*8)-1)) ) || ( x < -((1LL<<(sizeof(T)*8)-1) ) ) ) return INT_MIN;
+  if ( ( x >= (1LL<<((sizeof(T)*8)-1)) ) || ( x < -((1LL<<((sizeof(T)*8)-1)) ) ) ) return INT_MIN;
     return x;
 }
 
@@ -266,7 +268,7 @@ template<> inline int add<ShortImpl,int>(int a, int b)
 { return ( (a==INT_MIN) || (b==INT_MIN) ) ? INT_MIN : clamp_na<short>(a+b); }
 template<> inline int add<IntegerImpl,int>(int a, int b)
 {
-  return ( (a==INT_MIN) || (b==INT_MIN) ) ? INT_MIN : (int) clamp_na<int>( ((long long)a) + ((long long)b ) );
+  return ( (a==INT_MIN) || (b==INT_MIN) ) ? INT_MIN : (int) clamp_na<int>( ((int64_t)a) + ((int64_t)b ) );
 }
 
 }
@@ -316,11 +318,13 @@ void ff_##NAME##_addgetset_contiguous(FF handle, INDEX index, int size, TYPE* re
 void ff_##NAME##_addset_contiguous(   FF handle, INDEX index, int size, TYPE* value) \
 { addsetV<TYPE,IMPL,INDEX,SIZE>( reinterpret_cast<IMPL*>(handle), index, size, value); }
 
+
 // front-end generator triggers int and double-index versions
 
 #define FF_DEF_TYPE(NAME,TYPE,IMPL) \
   FF_DEF_TYPE2(NAME,TYPE,IMPL,int,int) \
   FF_DEF_TYPE2(NAME##_d,TYPE,IMPL,double,int)
+
 
 using namespace ff;
 
@@ -338,3 +342,4 @@ FF_DEF_TYPE(integer,int,IntegerImpl)
 FF_DEF_TYPE(single,double,SingleImpl)
 FF_DEF_TYPE(double,double,DoubleImpl)
 FF_DEF_TYPE(raw,unsigned char,RawImpl)
+

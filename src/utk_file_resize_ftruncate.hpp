@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 // universal tool kit (utk)
-// file resize using open and ftruncate 
+// file resize using open and ftruncate
 //
 // Copyright (C) 2009 Daniel Adler <dadler@uni-goettingen.de>
 //

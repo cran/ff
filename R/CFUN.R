@@ -171,6 +171,11 @@ cquantile <- function(..., probs = seq(0, 1, 0.25), na.rm = FALSE, names = TRUE,
   cfun(..., FUN=quantile, FUNARGS=list(probs = probs, na.rm = na.rm, names = names, type = type))
 }
 
+crange <- function(..., na.rm="ignored"){
+  cfun(..., FUN=range)
+}
+
+
 
 # faster implementations of clength, csum, cmean
 clength <- function(..., na.rm=FALSE){

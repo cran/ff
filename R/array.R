@@ -27,7 +27,7 @@ legalizeFactor <- function(x){
       x <- x + 1L
       a$levels <- c("<0>", a$levels)
     }
-    attributes(x) <- a
+    setattributes(x, a) #attributes(x) <- a
   }
   x
 }
@@ -293,7 +293,7 @@ vectorIndex2arrayIndex <- function(x, dim=NULL, dimorder=NULL, vw=NULL){
     x <- x%%cdim[i]
   }
   ret <- rbind(x, ret)
-  dimnames(ret) <- NULL
+  setattr(ret, "dimnames", NULL) #dimnames(ret) <- NULL
   t(ret[match(1:n, dimorder),,drop=FALSE] - vw[1,] + 1L)
 }
 

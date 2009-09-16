@@ -1,3 +1,72 @@
+		CHANGES IN ff VERSION 2.2.0
+
+
+NEW FEATURES
+
+    o	ff now supports the 64 bit Windows version of R (thanks to Brian Ripley)
+    o	ff now supports sorting and ordering of ff vectors and dataframes
+    	(see ramsort, ffsort, ffdfsort, ramorder, fforder, ffdforder)
+    o	ff now supports ff vectors as subscripts of ff objects
+    	(currently positive integers only, booleans are planned)
+    o	New option 'ffmaxbytes' which allows certain ff procedures like sorting
+    	using larger limit of RAM than 'ffbatchbytes' in chunked processing.
+    	Such higher limit is useful for (single-R-process) sorting compared to
+    	some multi-R-process chunked processing. It is a good idea to reduce 
+    	'ffmaxbytes' on slaves or avoid ff sorting there completely.
+    o	New generic 'pagesize' with method 'pagesize.ff' which returns the 
+    	current pagesize as defined on opening the ff object.
+
+
+USER VISIBLE CHANGES
+
+    o	[.ff now returns with the same vmode as the ff-object
+    o	Certain operations are faster now because we worked around 
+    	unnecessary copying triggered by many of R's assignment functions.
+    	For example reading a factor from a (well-cached) file is now 20%
+    	faster and thus as fast as just creating this factor in-RAM using 
+    	levels()<- and class()<- assignments. 
+    	(consider this tuning temporary, hoping for a generic fix in base R)
+    o	ff() can now open files larger than .Machine$integer.max elements
+    	(but gives access only to the first .Machine$integer.max elements)
+    o	ff now has default pattern NULL which translates to the pattern in 'filename'
+        (and only to the previous default 'ff' if no filename is given)
+    o	ff now sets the pattern in synch with a requested 'filename'
+    o	clone.ff now always creates a file consistent with the pattern of the original
+    o	clone.ff now always creates a finalizer consistent with the file location
+    o	clone.ffdf has a new argument 'nrow' which allows to create an empty copy with a different 
+    	number of rows (currently requires 'initdata=NULL')
+    o	clone.default now deep-copies lists and atomic vectors
+    	
+    
+DEPRECATED
+
+    o	virtual window support is deprecated. Let us know if you urgently need this and why.
+   
+
+BUG FIXES
+
+    o	read.table.ffdf now also works if transFUN filters and returns less rows
+
+
+BUG FIXES at 2.1.4
+
+    o	[<-.ffdf no longer does calculate the number of elements in an ffdf
+    	which could led to an integer overflow
+
+
+BUG FIXES at 2.1.3
+
+
+    o	ffsafe now always closes ffdf objects - also partially closed ones
+
+    o	ffsafe no longer passes arguments 'add' and 'move' to 'save'
+
+    o	ffsafe and friends now work around the fact that under windows getwd()
+    	can report the same path in upper and lower case versions. 
+
+
+
+
 		CHANGES IN ff VERSION 2.1.2
 
 
@@ -24,7 +93,6 @@ NEW FEATURES
     o	argument 'ff_args' in read.table.ffdf has been renamed to 'asffdf_args'
 
     o	New 'chunk' methods for classes 'bit' and 'ff_vector'
-
 
 
 

@@ -49,7 +49,7 @@ static void* getZeroPage()
   return ptr;
 }
 */
-  
+
 bool isFileReadOnly(const char* path)
 {
   WIN32_FILE_ATTRIBUTE_DATA data;
@@ -66,8 +66,8 @@ Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly
 , _autoflush(autoflush)
 {
 /*
- FIXME: temporarly disable test for Jens 
-  
+ FIXME: temporarly disable test for Jens
+
   if ( (!readonly) && (size) )
   {
     if ( isFileReadOnly(path) ) {
@@ -76,7 +76,7 @@ Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly
     }
   }
  */
- 
+
   if (size)
   {
     int err = utk::file_allocate_fseek(path, size);
@@ -87,11 +87,11 @@ Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly
     }
     _size = size;
   }
- 
+
   _fileHandle = CreateFileA(
     path
-  , GENERIC_READ | ( (readonly) ? 0 : GENERIC_WRITE )  
-  , FILE_SHARE_READ|FILE_SHARE_WRITE  
+  , GENERIC_READ | ( (readonly) ? 0 : GENERIC_WRITE )
+  , FILE_SHARE_READ|FILE_SHARE_WRITE
   // , 0
   , NULL
   , /*(size==0) ?*/ OPEN_EXISTING /*: CREATE_ALWAYS*/
@@ -106,9 +106,9 @@ Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly
   if (_fileHandle == INVALID_HANDLE_VALUE) {
     // _error = (size) ? E_UNABLE_TO_OPEN : E_NOT_EXISTING;
     _error = E_UNABLE_TO_OPEN;
-    return; 
+    return;
   }
-  if (size) {    
+  if (size) {
     // check free disk space
     FSInfo info;
     getFSInfo(path,info);
@@ -116,7 +116,7 @@ Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly
       _error = E_NO_DISKSPACE;
       return;
     }
-  }    
+  }
   if (size) {
 
     // allocate file blocks that match array size and zero fill
@@ -146,9 +146,9 @@ Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly
       _error = E_WRITE_ERROR;
       goto on_error;
     }
-    
+
     _size = size;
-*/    
+*/
   } else {
     // open already existing file
     LARGE_INTEGER li;
@@ -161,7 +161,7 @@ Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly
       goto on_error;
     }
     _size = (fsize_t) li.QuadPart;
-#if 0        
+#if 0
     DWORD high;
     li.LowPart = GetFileSize(_fileHandle, &high);
     _size = (fsize_t) li.QuadPart;
@@ -169,11 +169,11 @@ Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly
       if ( GetLastError() != NO_ERROR )
       {
         _error = E_UNABLE_TO_OPEN;
-        goto on_error;        
+        goto on_error;
       }
     }
     li.HighPart = high;
-#endif    
+#endif
   }
 
   _viewHandle = CreateFileMapping(
@@ -189,7 +189,7 @@ Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly
   }
   _error = E_NO_ERROR;
   return;
-on_error:  
+on_error:
   if (_fileHandle != INVALID_HANDLE_VALUE) {
     CloseHandle(_fileHandle);
     _fileHandle = INVALID_HANDLE_VALUE;
@@ -198,7 +198,7 @@ on_error:
 
 Win32FileMapping::~Win32FileMapping()
 {
-  if (_viewHandle != INVALID_HANDLE_VALUE) 
+  if (_viewHandle != INVALID_HANDLE_VALUE)
     CloseHandle(_viewHandle);
   if (_fileHandle != INVALID_HANDLE_VALUE)
     CloseHandle(_fileHandle);
@@ -227,7 +227,7 @@ Win32FileSection::Win32FileSection(HANDLE handle, foff_t offset, msize_t size, v
 
 void Win32FileSection::flush()
 {
-  if(_addr) {  
+  if(_addr) {
     if (_autoflush)
       FlushViewOfFile(_addr,_size);
     UnmapViewOfFile(_addr);
@@ -241,12 +241,12 @@ Win32FileSection::~Win32FileSection()
 }
 
 void Win32FileSection::reset(foff_t offset, msize_t size, void* baseaddr)
-{  
+{
   flush();
 
   _addr = (double*) MapViewOfFileEx(
     _viewHandle
-  , FILE_MAP_READ | ( (_readonly) ? 0 : FILE_MAP_WRITE ) 
+  , FILE_MAP_READ | ( (_readonly) ? 0 : FILE_MAP_WRITE )
   , offset_hi(offset)
   , offset_lo(offset)
   , size
@@ -254,7 +254,7 @@ void Win32FileSection::reset(foff_t offset, msize_t size, void* baseaddr)
   );
   _offset = offset;
   _size   = size;
-  _end    = _offset + _size; 
+  _end    = _offset + _size;
 }
 
 /* static */ msize_t Win32FileMapping::getPageSize()
@@ -264,7 +264,7 @@ void Win32FileSection::reset(foff_t offset, msize_t size, void* baseaddr)
     SYSTEM_INFO systemInfo;
     GetSystemInfo(&systemInfo);
     _pagesize = (msize_t) systemInfo.dwAllocationGranularity;
-  }  
+  }
   return _pagesize;
 }
 

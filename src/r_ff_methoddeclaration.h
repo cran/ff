@@ -4,13 +4,17 @@
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-08-24
-# Last changed: 2009-12-12
+# Last changed: 2010-03-28
 */
 
 /* All combinations of
    - getset, get set addgetset addset
    - (single), contiguous, vec, vector, array
    - boolean, logical, quad, nibble, byte, ubyte, short, ushort, integer, single, double, complex
+
+   All compbinations of
+   - index_get, index_set
+   - integer, single, double
 */
 
 
@@ -528,3 +532,276 @@ SEXP r_ff_raw_addset_array(    SEXP ff_, SEXP index_, SEXP indexdim_, SEXP ffdim
 #endif
 
 /* } -- getset_array ---------------------------------------------------------- */
+
+
+/* { -- order functions ---------------------------------------------------------- */
+
+
+SEXP r_ram_mergeorder(
+  SEXP x_            /* data vector */
+, SEXP index_        /* index vector, must be provided initialized with valid positions in R counting */
+, SEXP has_na_       /* logical scalar */
+, SEXP na_last_      /* logical scalar */
+, SEXP decreasing_   /* logical scalar */
+);
+
+SEXP r_ram_mergesort(
+  SEXP x_            /* data vector */
+, SEXP has_na_       /* logical scalar */
+, SEXP na_last_      /* logical scalar */
+, SEXP decreasing_   /* logical scalar */
+);
+
+SEXP r_ram_shellorder(
+  SEXP x_            /* data vector */
+, SEXP index_        /* index vector, must be provided initialized with valid positions in R counting */
+, SEXP has_na_       /* logical scalar */
+, SEXP na_last_      /* logical scalar */
+, SEXP decreasing_   /* logical scalar */
+, SEXP stabilize_    /* logical scalar */
+);
+
+SEXP r_ram_shellsort(
+  SEXP x_            /* data vector */
+, SEXP has_na_       /* logical scalar */
+, SEXP na_last_      /* logical scalar */
+, SEXP decreasing_   /* logical scalar */
+);
+
+
+SEXP r_ram_radixorder(
+  SEXP x_            /* data vector */
+, SEXP index_        /* data vector */
+, SEXP has_na_       /* logical scalar */
+, SEXP na_last_      /* logical scalar */
+, SEXP decreasing_   /* logical scalar */
+);
+
+SEXP r_ram_radixsort(
+  SEXP x_            /* data vector */
+, SEXP has_na_       /* logical scalar */
+, SEXP na_last_      /* logical scalar */
+, SEXP decreasing_   /* logical scalar */
+);
+
+
+SEXP r_ram_keyorder(
+  SEXP x_            /* data vector */
+, SEXP index_        /* index vector, must be provided initialized with valid positions in R counting */
+, SEXP keyrange_       /* logical scalar */
+, SEXP has_na_       /* logical scalar */
+, SEXP na_last_      /* logical scalar */
+, SEXP decreasing_   /* logical scalar */
+);
+
+SEXP r_ram_keysort(
+  SEXP x_            /* data vector */
+, SEXP keyrange_       /* logical scalar */
+, SEXP has_na_       /* logical scalar */
+, SEXP na_last_      /* logical scalar */
+, SEXP decreasing_   /* logical scalar */
+);
+
+
+SEXP r_ff__sortmerge(
+  SEXP ffmode_
+, SEXP ff_            /* ff data vector */
+, SEXP auxff_         /* auxilliary data vector */
+, SEXP left_         /* first R position to be ordered */
+, SEXP right_        /* last R position to be ordered */
+, SEXP method_       /* 0=mergesort 1=shellsort 2=keysort (the latter not for doubles) */
+, SEXP keyrange_      /* NULL, or - for method==2 - vector with 2 elements, 1st is keystart, 2nd is keylength */
+, SEXP ordersize_    /* int no of elements to be ordered in RAM (as large as possible) */
+, SEXP mergesize_    /* int no of elements to be merged in RAM (xx let's try if one block is sufficient) */
+, SEXP has_na_       /* logical scalar */
+, SEXP na_last_      /* logical scalar */
+, SEXP decreasing_   /* logical scalar */
+);
+
+SEXP r_ff_double_sortmerge(
+  SEXP ffmode_        /* ff data vector */
+, SEXP ff_            /* ff data vector */
+, SEXP auxff_         /* auxilliary data vector */
+, SEXP left_         /* first R position to be ordered */
+, SEXP right_        /* last R position to be ordered */
+, SEXP method_       /* 0=mergesort 1=shellsort 2=keysort (the latter not for doubles) */
+, SEXP ordersize_    /* int no of elements to be ordered in RAM (as large as possible) */
+, SEXP mergesize_    /* int no of elements to be merged in RAM (xx let's try if one block is sufficient) */
+, SEXP has_na_       /* logical scalar */
+, SEXP na_last_      /* logical scalar */
+, SEXP decreasing_   /* logical scalar */
+);
+SEXP r_ff_integer_sortmerge(
+  SEXP ffmode_        /* ff data vector */
+, SEXP ff_            /* ff data vector */
+, SEXP auxff_         /* auxilliary data vector */
+, SEXP left_         /* first R position to be ordered */
+, SEXP right_        /* last R position to be ordered */
+, SEXP method_       /* 0=mergesort 1=shellsort 2=keysort (the latter not for doubles) */
+, SEXP keyrange_      /* NULL, or - for method==2 - vector with 2 elements, 1st is keystart, 2nd is keylength */
+, SEXP ordersize_    /* int no of elements to be ordered in RAM (as large as possible) */
+, SEXP mergesize_    /* int no of elements to be merged in RAM (xx let's try if one block is sufficient) */
+, SEXP has_na_       /* logical scalar */
+, SEXP na_last_      /* logical scalar */
+, SEXP decreasing_   /* logical scalar */
+);
+
+
+
+SEXP r_ff__ordermerge(
+  SEXP ffmode_
+, SEXP ff_           /* ff data vector */
+, SEXP index_        /* NULL or ff index vector, xx TODO we can speed up by implementing true internal sorting, internally we currently do always ordering */
+, SEXP auxff_        /* auxilliary data vector */
+, SEXP auxindex_     /* NULL or auxilliary index vector (needed if index_ given) */
+, SEXP left_         /* first R position to be ordered */
+, SEXP right_        /* last R position to be ordered */
+, SEXP method_       /* 0=mergeorder 1=shellorder 2=keyorder (the latter not for doubles) */
+, SEXP keyrange_      /* NULL, or - for method==2 - vector with 2 elements, 1st is keystart, 2nd is keylength */
+, SEXP ordersize_    /* int no of elements to be ordered in RAM (as large as possible) */
+, SEXP mergesize_    /* int no of elements to be merged in RAM (xx let's try if one block is sufficient) */
+, SEXP orderindex_   /* logical scalar: shall we reorder index_? (otherwise we simpy write it) */
+, SEXP has_na_       /* logical scalar */
+, SEXP na_last_      /* logical scalar */
+, SEXP decreasing_   /* logical scalar */
+);
+
+SEXP r_ff_double_ordermerge(
+  SEXP ffmode_        /* ff data vector */
+, SEXP ff_            /* ff data vector */
+, SEXP index_        /* NULL or ff index vector, xx TODO we can speed up by implementing true internal sorting, internally we currently do always ordering */
+, SEXP auxff_         /* auxilliary data vector */
+, SEXP auxindex_     /* NULL or auxilliary index vector (needed if index_ given) */
+, SEXP left_         /* first R position to be ordered */
+, SEXP right_        /* last R position to be ordered */
+, SEXP method_       /* 0=mergeorder 1=shellorder 2=keyorder (the latter not for doubles) */
+, SEXP ordersize_    /* int no of elements to be ordered in RAM (as large as possible) */
+, SEXP mergesize_    /* int no of elements to be merged in RAM (xx let's try if one block is sufficient) */
+, SEXP orderindex_   /* logical scalar: shall we reorder index_? (otherwise we simpy write it) */
+, SEXP has_na_       /* logical scalar */
+, SEXP na_last_      /* logical scalar */
+, SEXP decreasing_   /* logical scalar */
+);
+SEXP r_ff_integer_ordermerge(
+  SEXP ffmode_        /* ff data vector */
+, SEXP ff_            /* ff data vector */
+, SEXP index_        /* NULL or ff index vector, xx TODO we can speed up by implementing true internal sorting, internally we currently do always ordering */
+, SEXP auxff_         /* auxilliary data vector */
+, SEXP auxindex_     /* NULL or auxilliary index vector (needed if index_ given) */
+, SEXP left_         /* first R position to be ordered */
+, SEXP right_        /* last R position to be ordered */
+, SEXP method_       /* 0=mergeorder 1=shellorder 2=keyorder (the latter not for doubles) */
+, SEXP keyrange_      /* NULL, or - for method==2 - vector with 2 elements, 1st is keystart, 2nd is keylength */
+, SEXP ordersize_    /* int no of elements to be ordered in RAM (as large as possible) */
+, SEXP mergesize_    /* int no of elements to be merged in RAM (xx let's try if one block is sufficient) */
+, SEXP orderindex_   /* logical scalar: shall we reorder index_? (otherwise we simpy write it) */
+, SEXP has_na_       /* logical scalar */
+, SEXP na_last_      /* logical scalar */
+, SEXP decreasing_   /* logical scalar */
+);
+
+
+SEXP r_ff_integer_keysort(
+  SEXP ffmode_
+, SEXP ff_            /* ff data vector */
+, SEXP left_         /* first R position to be ordered */
+, SEXP right_        /* last R position to be ordered */
+, SEXP keyrange_       /* NULL, or - for method==2 - vector with 2 elements firstkey+lastkey */
+, SEXP ordersize_    /* int no of elements to be ordered in RAM (as large as possible) */
+, SEXP has_na_       /* logical scalar */
+, SEXP na_last_      /* logical scalar */
+, SEXP decreasing_   /* logical scalar */
+);
+
+
+
+SEXP r_ff_index_chunkorder(
+  SEXP inindex_      /* ff input index vector */
+, SEXP outindex_     /* ff output order of index */
+, SEXP indexsize_    /* number of elements in both, x_ and index_ */
+, SEXP method_       /* 0=mergeorder 1=shellorder */
+, SEXP ordersize_    /* int no of elements to be ordered in RAM (same size as in index_get) */
+);
+
+
+SEXP r_ff__index_get(
+  SEXP ffmode_
+, SEXP baseff_         /* ff input data vector */
+, SEXP returnff_        /* ff output data vector */
+, SEXP index_        /* ff index data vector */
+, SEXP auxindex_     /* NULL or ff chunkwise order of index positions as returned by r_ff_index_chunkorder, if NULL _index positions are ordered on-the-fly */
+, SEXP offset_       /* e.g. 1 for R2C */
+, SEXP left_         /* left position from where index to e applied */
+, SEXP right_        /* right position from where index to e applied */
+, SEXP method_       /* 0=mergeorder 1=shellorder */
+, SEXP ordersize_    /* int no of elements to be ordered in RAM (must be same as in r_ff_index_chunkorder) */
+);
+SEXP r_ff_integer_index_get(
+  SEXP ffmode_        /* ff data vector */
+, SEXP baseff_         /* ff input data vector */
+, SEXP returnff_        /* ff output data vector */
+, SEXP index_        /* ff index data vector */
+, SEXP auxindex_     /* NULL or ff chunkwise order of index positions as returned by r_ff_index_chunkorder, if NULL _index positions are ordered on-the-fly */
+, SEXP offset_       /* e.g. 1 for R2C */
+, SEXP left_         /* left position from where index to e applied */
+, SEXP right_        /* right position from where index to e applied */
+, SEXP method_       /* 0=mergeorder 1=shellorder */
+, SEXP ordersize_    /* int no of elements to be ordered in RAM (must be same as in r_ff_index_chunkorder) */
+);
+
+SEXP r_ff_double_index_get(
+  SEXP ffmode_        /* ff data vector */
+, SEXP baseff_         /* ff input data vector */
+, SEXP returnff_        /* ff output data vector */
+, SEXP index_        /* ff index data vector */
+, SEXP auxindex_     /* NULL or ff chunkwise order of index positions as returned by r_ff_index_chunkorder, if NULL _index positions are ordered on-the-fly */
+, SEXP offset_       /* e.g. 1 for R2C */
+, SEXP left_         /* left position from where index to e applied */
+, SEXP right_        /* right position from where index to e applied */
+, SEXP method_       /* 0=mergeorder 1=shellorder */
+, SEXP ordersize_    /* int no of elements to be ordered in RAM (must be same as in r_ff_index_chunkorder) */
+);
+
+
+SEXP r_ff__index_set(
+  SEXP ffmode_
+, SEXP baseff_         /* ff input data vector */
+, SEXP valueff_        /* ff output data vector */
+, SEXP index_        /* ff index data vector */
+, SEXP auxindex_     /* NULL or ff chunkwise order of index positions as returned by r_ff_index_chunkorder, if NULL _index positions are ordered on-the-fly */
+, SEXP offset_       /* e.g. 1 for R2C */
+, SEXP left_         /* left position from where index to e applied */
+, SEXP right_        /* right position from where index to e applied */
+, SEXP method_       /* 0=mergeorder 1=shellorder */
+, SEXP ordersize_    /* int no of elements to be ordered in RAM (must be same as in r_ff_index_chunkorder) */
+);
+SEXP r_ff_integer_index_set(
+  SEXP ffmode_        /* ff data vector */
+, SEXP baseff_         /* ff input data vector */
+, SEXP valueff_        /* ff output data vector */
+, SEXP index_        /* ff index data vector */
+, SEXP auxindex_     /* NULL or ff chunkwise order of index positions as returned by r_ff_index_chunkorder, if NULL _index positions are ordered on-the-fly */
+, SEXP offset_       /* e.g. 1 for R2C */
+, SEXP left_         /* left position from where index to e applied */
+, SEXP right_        /* right position from where index to e applied */
+, SEXP method_       /* 0=mergeorder 1=shellorder */
+, SEXP ordersize_    /* int no of elements to be ordered in RAM (must be same as in r_ff_index_chunkorder) */
+);
+
+SEXP r_ff_double_index_set(
+  SEXP ffmode_        /* ff data vector */
+, SEXP baseff_         /* ff input data vector */
+, SEXP valueff_        /* ff output data vector */
+, SEXP index_        /* ff index data vector */
+, SEXP auxindex_     /* NULL or ff chunkwise order of index positions as returned by r_ff_index_chunkorder, if NULL _index positions are ordered on-the-fly */
+, SEXP offset_       /* e.g. 1 for R2C */
+, SEXP left_         /* left position from where index to e applied */
+, SEXP right_        /* right position from where index to e applied */
+, SEXP method_       /* 0=mergeorder 1=shellorder */
+, SEXP ordersize_    /* int no of elements to be ordered in RAM (must be same as in r_ff_index_chunkorder) */
+);
+
+
+/* } -- order functions ---------------------------------------------------------- */
+
+

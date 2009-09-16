@@ -77,5 +77,42 @@ sortLevels(x)
   data.frame(factor=x[], codes=y[])
 
   rm(x);gc()
+
+\dontrun{
+ n <- 5e7
+
+ cat("reading a factor from a file ist as fast ...\n")
+ system.time(
+ fx <- ff(factor(letters[1:25]), length=n)
+ )
+ system.time(x <- fx[])
+ str(x)
+ rm(x); gc()
+
+
+ cat("... as creating it in-RAM (R-2.11.1) which is theoretically impossible ...\n")
+ system.time({
+ x <- integer(n)
+ x[] <- 1:25
+ levels(x) <- letters[1:25]
+ class(x) <- "factor"
+ })
+ str(x)
+ rm(x); gc()
+
+
+ cat("... but is possible if we avoid some  unnecessary copying that is triggered by assignment functions\n")
+ system.time({
+ x <- integer(n)
+ x[] <- 1:25
+ setattr(x, "levels", letters[1:25])
+ setattr(x, "class", "factor")
+ })
+ str(x)
+ rm(x); gc()
+
+ rm(n)
+}
+
 }
 \keyword{ attribute }

@@ -23,12 +23,13 @@
 #define UTK_FILE_RESIZE_HPP
 
 #include "utk_config.hpp"
+#include <stdint.h>
 
 namespace utk
 {
-  typedef unsigned long long fsize_t;
+  typedef uint64_t fsize_t;
   int file_resize(const char* path, fsize_t newfsize);
-};
+}
 
 #endif // UTK_FILE_RESIZE_HPP
 

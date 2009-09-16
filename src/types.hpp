@@ -21,13 +21,14 @@
 
 #include "config.h"
 
+#include <stdint.h>
 #include <sys/types.h>
 
 namespace ff {
 
-typedef unsigned long long foff_t;
-typedef unsigned long long fsize_t;
-typedef size_t             msize_t;
+typedef uint64_t foff_t;
+typedef uint64_t fsize_t;
+typedef size_t   msize_t;
 
 }
 

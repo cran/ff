@@ -26,54 +26,54 @@
 
 /* MS Windows XP x64/Vista64 or later. */
 #if defined(WIN64) || defined(_WIN64) || defined(__WIN64__)
-	#define UTK__OS_Win64
+  #define UTK__OS_Win64
 
 /* MS Windows NT/95/98/ME/2000/XP/Vista32. */
 #elif defined(WIN32)|| defined(_WIN32) || defined(__WIN32__) || defined(__NT__) || defined(__WINDOWS__) || defined(_WINDOWS)
-	#define UTK__OS_Win32
+  #define UTK__OS_Win32
 
 /* All the OS' based on Darwin OS (MacOS X, OpenDarwin). Note that '__APPLE__' may be defined for classic MacOS, too. */
 #elif defined(__MACOSX__) || defined(__APPLE__)
-	#define UTK__OS_Darwin
+  #define UTK__OS_Darwin
 
 /* The most popular open source Unix-like OS - Linux. */
 #elif defined(__linux__) || defined(__linux) || defined(__gnu_linux__)
-	#define UTK__OS_Linux
+  #define UTK__OS_Linux
 
 /* The most powerful open source Unix-like OS - FreeBSD. */
 #elif defined(__FreeBSD__)
-	#define UTK__OS_FreeBSD
+  #define UTK__OS_FreeBSD
 
 /* The most secure open source Unix-like OS - OpenBSD. */
 #elif defined(__OpenBSD__)
-	#define UTK__OS_OpenBSD
+  #define UTK__OS_OpenBSD
 
 /* The most portable open source Unix-like OS - NetBSD. */
 #elif defined(__NetBSD__)
-	#define UTK__OS_NetBSD
+  #define UTK__OS_NetBSD
 
 /* The FreeBSD fork having heavy clusterization in mind - DragonFlyBSD. */
 #elif defined(__DragonFly__)
-	#define UTK__OS_DragonFlyBSD
+  #define UTK__OS_DragonFlyBSD
 
 /* Sun's Unix-like OS - SunOS / Solaris. */
 #elif defined(__sun__) || defined(__sun) || defined(sun)
-	#define UTK__OS_SunOS
+  #define UTK__OS_SunOS
 
 /* The "Linux-like environment for Windows" - Cygwin. */
 #elif defined(__CYGWIN__)
-	#define UTK__OS_Cygwin
+  #define UTK__OS_Cygwin
 
 /* The "Minimalist GNU for Windows" - MinGW. */
 #elif defined(__MINGW__)//@@@
-	#define UTK__OS_MinGW
+  #define UTK__OS_MinGW
 
 /* The Playstation Portable (homebrew) SDK. */
 #elif defined(__psp__) || defined(PSP)
         #define UTK__OS_PSP
 
 #else
-	#error Unsupported OS.
+  #error Unsupported OS.
 #endif
 
 
@@ -83,15 +83,15 @@
 
 /* Intel's C/C++ compiler. */
 #if defined(__INTEL_COMPILER)
-	#define UTK__C_Intel
+  #define UTK__C_Intel
 
 /* MS C/C++ compiler. */
 #elif defined(_MSC_VER)
-	#define UTK__C_MSVC
+  #define UTK__C_MSVC
 
 /* The GNU Compiler Collection - GCC. */
 #elif defined(__GNUC__)
-	#define UTK__C_GNU
+  #define UTK__C_GNU
 
 /* Watcom compiler. */
 #elif defined(__WATCOMC__)
@@ -105,40 +105,40 @@
 
 /* Check architecture. */
 #if defined(UTK__C_Intel) || defined(UTK__C_MSVC)
-	#if defined(_M_IX86)
-		#define UTK__Arch_Intel_x86
-	#elif defined(_M_X64) || defined(_M_AMD64)
-		#define UTK__Arch_AMD64
-	#elif defined(_M_PPC)
-		#define UTK__Arch_PowerPC
-	#elif defined(_M_IA64)
-		#define UTK__Arch_Itanium
-	#elif defined(_M_MRX000)
-		#define UTK__Arch_MIPS
-	#else
-		#error Architecture not supported.
-	#endif
+  #if defined(_M_IX86)
+    #define UTK__Arch_Intel_x86
+  #elif defined(_M_X64) || defined(_M_AMD64)
+    #define UTK__Arch_AMD64
+  #elif defined(_M_PPC)
+    #define UTK__Arch_PowerPC
+  #elif defined(_M_IA64)
+    #define UTK__Arch_Itanium
+  #elif defined(_M_MRX000)
+    #define UTK__Arch_MIPS
+  #else
+    #error Architecture not supported.
+  #endif
 
 #elif defined(UTK__C_GNU)
-	#if defined(__i386__) || defined(__i486__) || defined(__i586__) || defined(__i686__)
-		#define UTK__Arch_Intel_x86
-	#elif defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__x86_64)
-		#define UTK__Arch_AMD64
-	#elif defined(__powerpc__) || defined(__powerpc) || defined(__POWERPC__) || defined(__ppc__)
-		#define UTK__Arch_PowerPC
-	#elif defined(__ia64__)
-		#define UTK__Arch_Itanium
-	#elif defined(__mips__)
-		#define UTK__Arch_MIPS
-	#elif defined(__arm__) && !defined(__thumb__)
-		#define UTK__Arch_ARM_ARM
-	#elif defined(__arm__) && defined(__thumb__)
-		#define UTK__Arch_ARM_THUMB
-	#elif defined(__sh__)
-		#define UTK__Arch_SuperH
-	#else
-		#error Architecture not supported.
-	#endif
+  #if defined(__i386__) || defined(__i486__) || defined(__i586__) || defined(__i686__)
+    #define UTK__Arch_Intel_x86
+  #elif defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__x86_64)
+    #define UTK__Arch_AMD64
+  #elif defined(__powerpc__) || defined(__powerpc) || defined(__POWERPC__) || defined(__ppc__)
+    #define UTK__Arch_PowerPC
+  #elif defined(__ia64__)
+    #define UTK__Arch_Itanium
+  #elif defined(__mips__)
+    #define UTK__Arch_MIPS
+  #elif defined(__arm__) && !defined(__thumb__)
+    #define UTK__Arch_ARM_ARM
+  #elif defined(__arm__) && defined(__thumb__)
+    #define UTK__Arch_ARM_THUMB
+  #elif defined(__sh__)
+    #define UTK__Arch_SuperH
+  #else
+    #error Architecture not supported.
+  #endif
 
 #endif
 
@@ -146,9 +146,9 @@
 
 /* Rough OS classification. */
 #if defined(UTK__OS_Win32) || defined(UTK__OS_Win64) || defined(UTK__OS_Cygwin)
-	#define UTK__Flavour_Windows
+  #define UTK__Flavour_Windows
 #else
-	#define UTK__Flavour_Unix
+  #define UTK__Flavour_Unix
 #endif
 
 #endif // UTK_PLATFORM_MACROS_HPP

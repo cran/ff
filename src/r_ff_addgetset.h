@@ -1204,3 +1204,7 @@ R_FF_VMODE_GETSET( VMODE_NAME, VMODE_FFNAME, add, /*get*/, set, _array
 
 
 /* } -- FF addgetset / readwrite / swap ------------------------------------------------------- */
+
+
+
+

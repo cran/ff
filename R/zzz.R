@@ -9,7 +9,7 @@
 
 .onLoad <- function(lib, pkg) {
   ##library.dynam("ff", pkg, lib) use useDynLib(ff) in NAMESPACE instead
-  cat("Loading package ff", installed.packages()["ff","Version"], "\n")
+  packageStartupMessage("Loading package ff", packageDescription("ff", lib, fields="Version"), "\n")
   # allow fftempdir to be set before package is loaded
   if (is.null(getOption("fftempdir"))){
     # create tempdir and make tempdir name independent of platform (otherwise dirname(tempfile)!=getOption("fftempdir"))
@@ -30,21 +30,35 @@
     if (.Platform$OS.type=="windows")
     {
       if (getRversion()>="2.6.0")  # memory.limit was silently changed from 2.6.0 to return in MB instead of bytes
-        options(ffbatchbytes=as.integer(memory.limit()*(1024^2/100)))
+        options(ffbatchbytes=memory.limit()*(1024^2/100))
       else
-        options(ffbatchbytes=as.integer(memory.limit()/100))
+        options(ffbatchbytes=memory.limit()/100)
     } else {
       # some magic constant
       options(ffbatchbytes=16*1024^2)
     }
   }
-  cat('- getOption("fftempdir")=="',getOption("fftempdir"),'"\n',sep='')
-  cat('- getOption("ffextension")=="',getOption("ffextension"),'"\n',sep='')
-  cat('- getOption("ffdrop")==',getOption("ffdrop"),'\n',sep='')
-  cat('- getOption("fffinonexit")==',getOption("fffinonexit"),'\n',sep='')
-  cat('- getOption("ffpagesize")==',getOption("ffpagesize"),'\n',sep='')
-  cat('- getOption("ffcaching")=="',getOption("ffcaching"),'"  -- consider "ffeachflush" if your system stalls on large writes\n',sep='')
-  cat('- getOption("ffbatchbytes")==',getOption("ffbatchbytes"),' -- consider a different value for tuning your system\n',sep='')
+  if (is.null(getOption("ffmaxbytes"))){
+    # memory.limit is windows specific
+    if (.Platform$OS.type=="windows")
+    {
+      if (getRversion()>="2.6.0")  # memory.limit was silently changed from 2.6.0 to return in MB instead of bytes
+        options(ffmaxbytes=0.5*memory.limit()*(1024^2))
+      else
+        options(ffmaxbytes=0.5*memory.limit())
+    } else {
+      # some magic constant
+      options(ffmaxbytes=0.5*1024^3)
+    }
+  }
+  packageStartupMessage('- getOption("fftempdir")=="',getOption("fftempdir"),'"\n',sep='')
+  packageStartupMessage('- getOption("ffextension")=="',getOption("ffextension"),'"\n',sep='')
+  packageStartupMessage('- getOption("ffdrop")==',getOption("ffdrop"),'\n',sep='')
+  packageStartupMessage('- getOption("fffinonexit")==',getOption("fffinonexit"),'\n',sep='')
+  packageStartupMessage('- getOption("ffpagesize")==',getOption("ffpagesize"),'\n',sep='')
+  packageStartupMessage('- getOption("ffcaching")=="',getOption("ffcaching"),'"  -- consider "ffeachflush" if your system stalls on large writes\n',sep='')
+  packageStartupMessage('- getOption("ffbatchbytes")==',getOption("ffbatchbytes"),' -- consider a different value for tuning your system\n',sep='')
+  packageStartupMessage('- getOption("ffmaxbytes")==',getOption("ffmaxbytes"),' -- consider a different value for tuning your system\n',sep='')
   # if we want an explicit list of ff objects, we should store them in an environment with hash=TRUE (much faster than a list)
   #assign(".fftemp", new.env(hash=TRUE), envir=globalenv())
 
@@ -93,9 +107,9 @@
 }
 
 .onAttach <- function(libname, pkgname){
-  cat("Attaching package ff\n")
+  packageStartupMessage("Attaching package ff\n")
   if (getRversion()<="2.10.0"){
-    cat('fixing [.AsIs in base namespace because if the NextMethod("[") returns a different class, [.AsIs was reverting this\n')
+    packageStartupMessage('fixing [.AsIs in base namespace because if the NextMethod("[") returns a different class, [.AsIs was reverting this\n')
     #assignInNamespace(
     #  "[.AsIs"
     #, function (x, i, ...){
@@ -114,9 +128,9 @@
 }
 
 .Last.lib <- function(libpath) {
-   cat("Detaching package ff\n")
+   packageStartupMessage("Detaching package ff\n")
   if (getRversion()<="2.10.0"){
-    cat('restoring [.AsIs\n')
+    packageStartupMessage('restoring [.AsIs\n')
     assignInNamespace(
       "[.AsIs"
     , function (x, i, ...){
@@ -130,12 +144,12 @@
 }
 
 .onUnload <- function(libpath){
-   cat("Unloading package ff\n")
+   packageStartupMessage("Unloading package ff\n")
    #remove(list=".fftemp", envir=globalenv())
    #gc()
    library.dynam.unload("ff", libpath)
    if (unlink(getOption("fftempdir"), recursive = TRUE))
-     cat("Error in unlinking fftempdir\n")
+     packageStartupMessage("Error in unlinking fftempdir\n")
    else
-     options(fftempdir=NULL, ffextension=NULL, fffinonexit=NULL, ffpagesize=NULL, ffcaching=NULL, ffdrop=NULL, ffbatchbytes=NULL)
+     options(fftempdir=NULL, ffextension=NULL, fffinonexit=NULL, ffpagesize=NULL, ffcaching=NULL, ffdrop=NULL, ffbatchbytes=NULL, ffmaxbytes=NULL)
 }

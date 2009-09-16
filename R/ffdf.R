@@ -1090,9 +1090,24 @@ ffdf <- function(
       return(x)
 
     }else{
+
+      ncols <- length(x)
+
+      # first handle i=ff subscript
+      if (!missing(i) && is.ff(i)){
+        #first reduce number of columns if possible
+        if (!missing(j)){
+          x <- x[j]
+        }
+        if (drop && ncol(x)==1){
+          return(ffindexget(x[[1]], i))
+        }else{
+          return(ffdfindexget(x, i))
+        }
+      }
+
       rownam <- .subset2(x,"row.names")
       physical <- .subset2(x,"physical")
-      ncols <- length(x)
       if (ncols){
 
         if (missing(j))
@@ -1274,10 +1289,28 @@ ffdf <- function(
 
     }else{
 
+      ncols <- length(x)
+
+      # first handle i=ff subscript
+      if (!missing(i) && is.ff(i)){
+        #first reduce number of columns if possible
+        if (missing(j))
+          y <- x
+        else
+          y <- x[j]
+        if (ncol(y)==1 && is.ff(value)){
+          ffindexset(y[[1]], i, value)
+          return(x)
+        }else if(is.ffdf(value)){
+          ffdfindexset(y, i, value)
+          return(x)
+        }else{
+          stop("ff/ffdf-iness of value and selected columns don't match")
+        }
+      }
+
       rownam <- .subset2(x,"row.names")
       physical <- .subset2(x,"physical")
-      ncols <- length(x)
-      n <- d[[1]] * d[[2]]
       if (ncols){
 
         valuedim <- dim(value)
@@ -1371,10 +1404,11 @@ ffdf <- function(
 #! clone physically duplicates ffdf objects
 #! }
 #! \usage{
-#! clone.ffdf(x, ...)
+#! clone.ffdf(x, nrow=NULL, ...)
 #! }
 #! \arguments{
 #!   \item{x}{an \code{\link{ffdf}} }
+#!   \item{nrow}{ optionally the desired number of rows in the new object. Currently this works only together with \code{initdata=NULL} }
 #!   \item{\dots}{ further arguments passed to \code{\link{clone}} (usually not usefull) }
 #! }
 #! \details{
@@ -1406,11 +1440,37 @@ ffdf <- function(
 #! \keyword{ IO }
 #! \keyword{ data }
 
-clone.ffdf <- function(x, ...){
+clone.ffdf <- function(x, nrow=NULL, ...){
   cl <- oldClass(x)
   oldClass(x) <- NULL
-  x$physical <- lapply(x$physical, clone, ...)
-  x$row.names <- clone(x$row.names, ...)
+
+  if (is.null(nrow)){
+
+    x$physical <- lapply(x$physical, clone, ...)
+    if (is.ff(x))
+        x$row.names <- clone(x$row.names, ...)
+
+  }else{
+
+    nrow <- as.integer(nrow)
+    x$physical <- lapply(x$physical, function(o, ...){
+        d <- dim(o)
+        if (is.null(d))
+          clone(o, length=nrow, ...)
+        else
+          clone(o, dim=c(nrow, d[[2]]), ...)
+    }, ...)
+    if (is.ff(x)){
+      if (is.null(nrow))
+        x$row.names <- clone(x$row.names, ...)
+      else
+        x$row.names <- clone(x$row.names, length=nrow, ...)
+    }
+
+    attr(x$virtual, "Dim") <- c(nrow, attr(x$virtual, "Dim")[[2]])
+  }
+
+
   oldClass(x) <- cl
   x
 }

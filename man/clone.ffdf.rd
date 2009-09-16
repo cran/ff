@@ -8,10 +8,11 @@ Cloning ffdf objects
 clone physically duplicates ffdf objects
 }
 \usage{
-clone.ffdf(x, ...)
+clone.ffdf(x, nrow=NULL, ...)
 }
 \arguments{
   \item{x}{an \code{\link{ffdf}} }
+  \item{nrow}{ optionally the desired number of rows in the new object. Currently this works only together with \code{initdata=NULL} }
   \item{\dots}{ further arguments passed to \code{\link{clone}} (usually not usefull) }
 }
 \details{

@@ -7,8 +7,6 @@
 
 # source("d:/mwp/eanalysis/ff/R/ffsave.R")
 
-# xx TODO treat 1 line in csv different
-
 if (FALSE){
   library(ff)
   file.remove("d:/tmp/a.ff")
@@ -246,6 +244,7 @@ function (
       dir.create(dfile, recursive=TRUE)
     setwd(dfile)
     dfile <- getwd()
+    setwd(cwd)  # looks silly but prevents problems with upper/lower case
     file <- file.path(dfile, bfile)
     # file problem with file.path
     file <- gsub("/+","/",file)
@@ -302,6 +301,8 @@ function (
       savecall$move <- NULL
       savecall$rootpath <- NULL
       savecall$precheck <- FALSE
+      savecall$add <- NULL
+      savecall$move <- NULL
       eval(savecall)
     }
 
@@ -309,7 +310,8 @@ function (
     list <- unlist(lapply(list, function(i){
       x <- get(i, envir = envir)
       if (is.ffdf(x)){
-        if (is.open(x))
+        io <- is.open(x)
+        if (is.na(io) || io)
           close(x)
         unlist(lapply(physical(x), filename))
       }else if(is.ff(x)){
@@ -363,7 +365,7 @@ function (
     file <- file.path(dfile, bfile)
     # file problem with file.path
     file <- gsub("/+","/",file)
-    setwd(cwd)
+    setwd(cwd)  # looks silly but prevents problems with upper/lower case
     on.exit()
 
     if (safe) {
@@ -542,6 +544,7 @@ function (
       dir.create(dfile, recursive=TRUE)
     setwd(dfile)
     dfile <- getwd()
+    setwd(cwd)  # looks silly but prevents problems with upper/lower case
     file <- file.path(dfile, bfile)
     # file problem with file.path
     file <- gsub("/+","/",file)
@@ -592,6 +595,7 @@ function (
           dir.create(temprootpath, recursive=TRUE)
         setwd(temprootpath)
         temprootpath <- getwd()
+        setwd(cwd) # looks silly but prevents problems with upper/lower case
         setwd(rootpath)
         rootpath <- getwd()
 

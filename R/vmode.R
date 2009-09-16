@@ -290,6 +290,23 @@
 , character = "character" # not used but coded
 )
 
+.vset <- list(
+  boolean   = function(x)setattr(x, "vmode", "boolean")
+, logical   = function(x)setattr(x, "vmode", NULL)
+, quad      = function(x)setattr(x, "vmode", "quad")
+, nibble    = function(x)setattr(x, "vmode", "nibble")
+, byte      = function(x)setattr(x, "vmode", "byte")
+, ubyte     = function(x)setattr(x, "vmode", "ubyte")
+, short     = function(x)setattr(x, "vmode", "short")
+, ushort    = function(x)setattr(x, "vmode", "ushort")
+, integer   = function(x)setattr(x, "vmode", NULL)
+, single    = function(x){setattr(x, "vmode", NULL); setattr(x, "Csingle", TRUE)}
+, double    = function(x)setattr(x, "vmode", NULL)
+, complex   = function(x)setattr(x, "vmode", NULL)
+, raw       = function(x)setattr(x, "vmode", NULL)
+, character = function(x)setattr(x, "vmode", NULL)
+)
+
 .vunsigned <- c(
   boolean   = TRUE
 , logical   = FALSE
@@ -448,6 +465,7 @@
 , character = NA
 )
 
+
 #xx
 #rambytes <- function(vmode){
 #  ret <- .rambytes[vmode]
@@ -597,12 +615,16 @@ as.vmode.ff <- function(x
 boolean <-
 function (length = 0){
   x <- vector("logical", length)
-  attr(x, "vmode") <- "boolean"
+  #attr(x, "vmode") <- "boolean"
+  setattr(x, "vmode", "boolean")
   x
 }
 as.boolean <-
-function (x, ...)
-UseMethod("as.boolean")
+function (x, ...){
+  if (vmode(x)=="boolean")
+    return(x)
+  UseMethod("as.boolean")
+}
 as.boolean.default <-
 function (x, ...)
 {
@@ -616,12 +638,16 @@ function (x, ...)
 quad <-
 function (length = 0){
   x <- vector("integer", length)
-  attr(x, "vmode") <- "quad"
+  #attr(x, "vmode") <- "quad"
+  setattr(x, "vmode", "quad")
   x
 }
 as.quad <-
-function (x, ...)
-UseMethod("as.quad")
+function (x, ...){
+  if (vmode(x)=="quad")
+    return(x)
+  UseMethod("as.quad")
+}
 as.quad.default <-
 function (x, ...)
 {
@@ -634,12 +660,16 @@ function (x, ...)
 nibble <-
 function (length = 0){
   x <- vector("integer", length)
-  attr(x, "vmode") <- "nibble"
+  #attr(x, "vmode") <- "nibble"
+  setattr(x, "vmode", "nibble")
   x
 }
 as.nibble <-
-function (x, ...)
-UseMethod("as.nibble")
+function (x, ...){
+  if (vmode(x)=="unibble")
+    return(x)
+  UseMethod("as.nibble")
+}
 as.nibble.default <-
 function (x, ...)
 {
@@ -652,12 +682,16 @@ function (x, ...)
 byte <-
 function (length = 0){
   x <- vector("integer", length)
-  attr(x, "vmode") <- "byte"
+  #attr(x, "vmode") <- "byte"
+  setattr(x, "vmode", "byte")
   x
 }
 as.byte <-
-function (x, ...)
-UseMethod("as.byte")
+function (x, ...){
+  if (vmode(x)=="ubyte")
+    return(x)
+  UseMethod("as.byte")
+}
 as.byte.default <-
 function (x, ...)
 {
@@ -669,12 +703,16 @@ function (x, ...)
 ubyte <-
 function (length = 0){
   x <- vector("integer", length)
-  attr(x, "vmode") <- "ubyte"
+  #attr(x, "vmode") <- "ubyte"
+  setattr(x, "vmode", "ubyte")
   x
 }
 as.ubyte <-
-function (x, ...)
-UseMethod("as.ubyte")
+function (x, ...){
+  if (vmode(x)=="ubyte")
+    return(x)
+  UseMethod("as.ubyte")
+}
 as.ubyte.default <-
 function (x, ...)
 {
@@ -687,12 +725,16 @@ function (x, ...)
 short <-
 function (length = 0){
   x <- vector("integer", length)
-  attr(x, "vmode") <- "short"
+  #attr(x, "vmode") <- "short"
+  setattr(x, "vmode", "short")
   x
 }
 as.short <-
-function (x, ...)
-UseMethod("as.short")
+function (x, ...){
+  if (vmode(x)=="short")
+    return(x)
+  UseMethod("as.short")
+}
 as.short.default <-
 function (x, ...)
 {
@@ -704,12 +746,16 @@ function (x, ...)
 ushort <-
 function (length = 0){
   x <- vector("integer", length)
-  attr(x, "vmode") <- "ushort"
+  #attr(x, "vmode") <- "ushort"
+  setattr(x, "vmode", "ushort")
   x
 }
 as.ushort <-
-function (x, ...)
-UseMethod("as.ushort")
+function (x, ...){
+  if (vmode(x)=="ushort")
+    return(x)
+  UseMethod("as.ushort")
+}
 as.ushort.default <-
 function (x, ...)
 {
@@ -718,6 +764,7 @@ function (x, ...)
   attr(x, "vmode") <- "ushort"
   x
 }
+
 
 
 

@@ -70,6 +70,7 @@ void ff_##NAME##_addset_contiguous(   FF handle, INDEX index, SIZE size         
   FF_DECL_TYPE2(NAME,TYPE,int,int) \
   FF_DECL_TYPE2(NAME##_d,TYPE,double,int)
 
+
 /* --- TYPE-SPECIFIC FUNCTIONS INTERFACE DECLARATIONS ---------------------- */
 
 /** format:
@@ -90,6 +91,7 @@ FF_DECL_TYPE(integer,int)
 FF_DECL_TYPE(single,double)
 FF_DECL_TYPE(double,double)
 FF_DECL_TYPE(raw,unsigned char)
+
 
 #ifdef __cplusplus
 }

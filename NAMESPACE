@@ -6,8 +6,7 @@
 
 useDynLib(ff)
 
-importFrom(utils, installed.packages)
-importFrom(utils, memory.limit)
+importFrom(utils, memory.limit, packageDescription)
 import(bit)
 
 
@@ -31,6 +30,7 @@ export(
 ,"pattern<-"
 ,filename
 ,"filename<-"
+, pagesize
 ,is.open
 ,is.readonly
 ,vmode
@@ -119,6 +119,7 @@ export(
 ,"vmode<-.ff" 	# just catch invalid use
 ,is.open.ff_pointer
 ,is.open.ff
+,pagesize.ff
 #,ffdir
 ,pattern.ff
 ,"pattern<-.ff"
@@ -479,6 +480,34 @@ export(
 # -- fileresize.R (by Daniel Adler, ISC license) --
 ,file.resize
 
+
+# -- ordermerge.R  --
+, mergeorder
+, mergesort
+, shellorder
+, shellsort
+, keyorder
+, keysort
+, radixorder
+, radixsort
+, regtest.fforder
+, ramorder
+, ramsort
+, ffsort
+, fforder
+, ffindexordersize
+, ffindexorder
+, ffindexget
+, ffindexset
+, ffdfindexget
+, ffdfindexset
+, dfsort
+, dforder
+, ramdfsort
+, ramdforder
+, ffdfsort
+, ffdforder
+
 ,.Last.lib
 
 )
@@ -510,6 +539,7 @@ S3method("filename<-",ff)
 S3method(is.readonly, ff)
 S3method(is.open, ff_pointer)
 S3method(is.open, ff)
+S3method(pagesize, ff)
 S3method(maxlength, ff)
 S3method(maxlength, default)
 S3method(symmetric,ff)

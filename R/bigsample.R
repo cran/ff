@@ -77,7 +77,7 @@ function (x, size, replace = FALSE, prob = NULL, negative=FALSE
   if (!is.null(prob) || (size>total/100 && size < 1e5 )){
     if (neg){
       ret <- -sample(total, size, replace, prob)
-      attr(ret, "maxindex") <- total
+      setattr(ret ,"maxindex", total)  # attr(ret, "maxindex") <- total
       return(ret)
     }else{
       return(sample(total, size, replace, prob))
@@ -89,7 +89,7 @@ function (x, size, replace = FALSE, prob = NULL, negative=FALSE
   if (replace){
     if (neg){
       ret <- -as.integer(ceiling(runif(size, max=total)))
-      attr(ret, "maxindex") <- total
+      setattr(ret ,"maxindex", total)  # attr(ret, "maxindex") <- total
       return(ret)
     }else{
       return(as.integer(ceiling(runif(size, max=total))))
@@ -103,7 +103,7 @@ function (x, size, replace = FALSE, prob = NULL, negative=FALSE
       if (length(x) == size){
         if (neg){
           x <- -x
-          attr(x, "maxindex") <- total
+          setattr(ret ,"maxindex", total)  # attr(ret, "maxindex") <- total
           return(x)
         }else{
           return(x)

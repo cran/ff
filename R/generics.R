@@ -39,6 +39,7 @@ pattern    <- function(x, ...)UseMethod("pattern")    # (physical attribute, par
 "pattern<-" <- function(x, ..., value)UseMethod("pattern<-")    # (physical attribute, part of the HCS concept)
 is.readonly <- function(x, ...)UseMethod("is.readonly") # (physical attribute, part of the HCS concept)
 is.open     <- function(x, ...)UseMethod("is.open")     # readonly
+pagesize    <- function(x, ...)UseMethod("pagesize")     # readonly
 
 # querying and coercing vmode (physical attribute, part of the HCS concept)
     vmode <- function(x, ...)UseMethod("vmode")
@@ -75,13 +76,13 @@ as.ffdf <- function(x, ...)UseMethod("as.ffdf")
 
 # querying is.factor and is.ordered
 if (!exists("is.factor.default")){
-  cat("creating generic 'is.factor'\n")
+  packageStartupMessage("creating generic 'is.factor'\n")
   is.factor.default <- get("is.factor", mode = "function") #pos = NULL,
   is.factor <- function (x)
     UseMethod("is.factor")
 }
 if (!exists("is.ordered.default")){
-  cat("creating generic 'is.ordered'\n")
+  packageStartupMessage("creating generic 'is.ordered'\n")
   is.ordered.default <- get("is.ordered", mode = "function") #pos = NULL,
   is.ordered <- function (x)
     UseMethod("is.ordered")

@@ -5,11 +5,16 @@
 # Created: 2007-09-03
 # Last changed: 2007-10-25
 
-# source("d:/mwp/eanalysis/ff/R/ff.R")
+# source("c:/mwp/eanalysis/ff/R/ff.R")
 # package.skeleton("fftest", path="c:/tmp", list=ls("package:ff"))
 
-# --- ff info -----------------------------------------------------------
 
+if(getRversion() < "2.11.0")
+    .POSIXct <- function(xx, tz = NULL)
+    structure(xx, class = c("POSIXt", "POSIXct"), tzone = tz)
+
+
+# --- ff info -----------------------------------------------------------
 
 #! \name{ffxtensions}
 #! \alias{ffxtensions}
@@ -409,6 +414,39 @@ is.open.ff <- function(x
 }
 
 
+#! \name{pagesize}
+#! \alias{pagesize}
+#! \alias{pagesize.ff}
+#! \title{ Pagesize of ff object }
+#! \description{
+#!   Returns current pagesize of ff object
+#! }
+#! \usage{
+#! pagesize(x, \dots)
+#! \method{pagesize}{ff}(x, \dots)
+#! }
+#! \arguments{
+#!   \item{x}{ an \code{\link{ff}} object }
+#!   \item{\dots}{ further arguments (not used) }
+#! }
+#! \value{
+#!   integer number of bytes
+#! }
+#! \author{ Jens Oehlschlägel }
+#! \seealso{ \code{\link{getpagesize}} }
+#! \examples{
+#!   x <- ff(1:12)
+#!   pagesize(x)
+#! }
+#! \keyword{ IO }
+#! \keyword{ data }
+
+
+
+pagesize.ff <- function(x, ...){
+  attr(attr(x, "physical"), "pagesize")
+}
+
 
 #! \name{maxlength}
 #! \alias{maxlength}
@@ -442,6 +480,9 @@ is.open.ff <- function(x
 #! }
 #! \keyword{ IO }
 #! \keyword{ data }
+
+
+
 
 # since we have separated length from maxlength, we might allow length to be reduced (while maxlength remains the same)
 maxlength.ff  <- function(x
@@ -1803,7 +1844,7 @@ str.ff <- function(object, nest.lev=0, ...){
 #! , ramattribs  = NULL
 #! , vmode       = NULL
 #! , update      = NULL
-#! , pattern     = "ff"
+#! , pattern     = NULL
 #! , filename    = NULL
 #! , overwrite   = FALSE
 #! , readonly    = FALSE
@@ -1834,7 +1875,7 @@ str.ff <- function(object, nest.lev=0, ...){
 #!   \item{ramattribs}{ additional attributes attached when moving all or parts of this ff into ram, see \code{\link{ramattribs}} }
 #!   \item{vmode}{ virtual storage mode (default: derive from 'initdata'), see \code{\link{vmode}} and \code{\link{as.vmode}} }
 #!   \item{update}{ set to FALSE to avoid updating with 'initdata' (default TRUE) (used by \code{\link{ffdf}}) }
-#!   \item{pattern}{ root pattern with or without path for automatic ff filename creation (default "ff"), see also argument 'filename' }
+#!   \item{pattern}{ root pattern with or without path for automatic ff filename creation (default NULL translates to "ff"), see also argument 'filename' }
 #!   \item{filename}{ ff \code{\link{filename}} with or without path (default tmpfile with 'pattern' prefix); without path the file is created in \code{getOption("fftempdir")}, with path '.' the file is created in \code{\link{getwd}}. Note that files created in \code{getOption("fftempdir")} have default finalizer "delete" while other files have default finalizer "close". See also arguments 'pattern' and 'finalizer' and \code{\link[=physical.ff]{physical}} }
 #!   \item{overwrite}{ set to TRUE to allow overwriting existing files (default FALSE) }
 #!   \item{readonly}{ set to TRUE to forbid writing to existing files }
@@ -2120,7 +2161,7 @@ ff <- function(
 , ramattribs  = NULL
 , vmode       = NULL    # be default we get the vmode from initdata
 , update      = NULL    # set to FALSE to suppress upating ff object with initdata
-, pattern     = "ff"
+, pattern     = NULL
 , filename    = NULL
 , overwrite   = FALSE
 , readonly    = FALSE
@@ -2169,10 +2210,15 @@ ff <- function(
     }
   }
 
-
   # determine filename and finalizer
-  if (is.null(filename))
+  if (is.null(filename)){
+    if (is.null(pattern))
+      pattern <- "ff"
     filename <- fftempfile(pattern)
+  }else{
+    if (is.null(pattern))
+      pattern <- paste(splitPathFile(filename)$path, "/", sep="")
+  }
   # gurantee absolute path
   dfile <- dirname(filename)
   bfile <- basename(filename)
@@ -2217,7 +2263,12 @@ ff <- function(
         if (!is.null(initdata)) {
           stop("bad argument initdata for existing file; initializing existing file is invalid")
         }
-        maxlength <- as.integer(filesize / .ffbytes[vmode])
+        fillength <- filesize/.ffbytes[vmode]
+        if (fillength>.Machine$integer.max){
+          warning("file contains more than .Machine$integer.max elements of this vmode")
+          maxlength <- as.integer(floor(.Machine$integer.max * .ffbytes[vmode] / .rambytes[vmode]) * .rambytes[vmode])
+        }else
+          maxlength <- as.integer(fillength)
       }
     }else{
       if (readonly)
@@ -2833,6 +2884,8 @@ clone.ff <- function(
 )
 {
   # BTW: we tried fast cloning via file.copy() but that was slower, only system(copy...) would save 33% time (too wacky)
+  if (is.null(vmode) && !is.null(x))
+    vmode <- vmode(x)
 
   if (is.null(levels))
     levels <- levels(x)
@@ -2893,12 +2946,6 @@ clone.ff <- function(
     finonexit <- physical$finonexit
   if (is.null(finonexit))
     finonexit <- physical$finonexit
-
-  # xx mmh, this means that we might have a clone in fftempdir without a 'delete' finalizer if the original object had e.g. 'close' finalizer
-  if (is.null(finalizer)){
-    finalizer <- physical$finalizer # copy finalizer of non-finalized object - for finalized objects we rely on the defaults in ff
-  }
-
 
   # don't use "<-" operator with ff argument in order to avoid recursion (if anyone defines method <-.ff as cloning)
   assign("ret", ff(
@@ -2965,10 +3012,20 @@ clone.default <- function(x
 ){
   if (length(list(...)))
     clone.ff(x, ...)
-  else
+  else if (is.atomic(x)){
+    if (length(x))
+      x[1] <- x[1]  # force a copy around COPY ON MODIFY
     x
+  }else{
+    stop("clone not defined for type")
+  }
 }
 
+clone.list <- function(x
+, ... # passed to clone
+){
+  lapply(x, clone, ...)
+}
 
 
 #! \name{finalizer}
@@ -3088,9 +3145,9 @@ finalizer.ff <- function(x, ...){
 #! }
 #! \usage{
 #! finalize(x, ...)
-#! \method{finalize}{ff_pointer}
-#! \method{finalize}{ff}
-#! \method{finalize}{ffdf}
+#! \method{finalize}{ff_pointer}(x, ...)
+#! \method{finalize}{ff}(x, ...)
+#! \method{finalize}{ffdf}(x, ...)
 #! }
 #! \arguments{
 #!   \item{x}{ either an \code{\link{ff}} or \code{\link{ffdf}} object or an \code{ff_pointer}, see details }
@@ -3933,10 +3990,10 @@ write.ff <- function(x, i, value, add=FALSE)
 #!    m <- 100000
 #!    a <- ff(1L,dim=c(n,m))
 #!    b <- ff(1L,dim=c(n,m), dimorder=2:1)
-#!    system.time(ffrowapply(sum(a[i1:i2,]), a, RETURN=TRUE, CFUN="csum", BATCHBYTES=16104816%/%20))
-#!    system.time(ffcolapply(sum(a[,i1:i2]), a, RETURN=TRUE, CFUN="csum", BATCHBYTES=16104816%/%20))
-#!    system.time(ffrowapply(sum(b[i1:i2,]), b, RETURN=TRUE, CFUN="csum", BATCHBYTES=16104816%/%20))
-#!    system.time(ffcolapply(sum(b[,i1:i2]), b, RETURN=TRUE, CFUN="csum", BATCHBYTES=16104816%/%20))
+#!    system.time(ffrowapply(sum(a[i1:i2,]), a, RETURN=TRUE, CFUN="csum", BATCHBYTES=16104816\%/\%20))
+#!    system.time(ffcolapply(sum(a[,i1:i2]), a, RETURN=TRUE, CFUN="csum", BATCHBYTES=16104816\%/\%20))
+#!    system.time(ffrowapply(sum(b[i1:i2,]), b, RETURN=TRUE, CFUN="csum", BATCHBYTES=16104816\%/\%20))
+#!    system.time(ffcolapply(sum(b[,i1:i2]), b, RETURN=TRUE, CFUN="csum", BATCHBYTES=16104816\%/\%20))
 #!
 #!    rm(a,b); gc()
 #!   }
@@ -3971,6 +4028,8 @@ swap.ff <- function(
     if (missing(i)){
       index <- hi(from=1, to=fflen, maxindex=fflen, vw=vw, pack=pack)
       nreturn <- fflen
+    }else if(is.ff(i)){
+      stop("ff subscripts not implemented for swap.ff")
     }else{
       index <- as.hi(substitute(i), maxindex=fflen, vw=vw, pack=pack, names=ffnam, envir=parent.frame())
       nreturn <- poslength(index)
@@ -4022,22 +4081,24 @@ swap.ff <- function(
       na.count(x) <- nc - old.nc + new.nc
     }
     if (!is.null(ffnam))
-      names(ret) <- ffnam[as.integer(index)]
+      setattr(ret, "names", ffnam[as.integer(index)])  #names(ret) <- ffnam[as.integer(index)]
   }else{
     ret <- vector(mode=.rammode[vmode], length=0)
   }
   if (!is.null(fflev)){
     if (.vunsigned[vmode])
       ret <- ret + 1L
-    levels(ret) <- fflev
+    setattr(ret, "levels", fflev) #levels(ret) <- fflev
   }
   ramattribs <- attr(attr(x, "virtual"), "ramattribs")
   if (!is.null(ramattribs)){
-    attributes(ret) <- c(attributes(ret), ramattribs)
+    setattributes(ret, ramattribs)  #attributes(ret) <- c(attributes(ret), ramattribs)
   }
-  class(ret) <- attr(attr(x, "virtual"), "ramclass")
+  setattr(ret, "class",attr(attr(x, "virtual"), "ramclass"))  #class(ret) <- attr(attr(x, "virtual"), "ramclass")
+  .vset[[vmode]](ret)
   return(ret)
 }
+
 
 "[.ff" <- function(
   x
@@ -4061,6 +4122,8 @@ swap.ff <- function(
     if (missing(i)){
       simple <- TRUE
       nreturn <- fflen
+    }else if(is.ff(i)){
+      return(ffindexget(x, i))
     }else{
       simple <- FALSE
       # note: do not ask inherits(index, "hi") directly, because this would evaluate and could create large objects in RAM
@@ -4076,12 +4139,12 @@ swap.ff <- function(
     if (simple){
       ret <- .Call("get_contiguous", .ffmode[vmode], attr(x, "physical"), if (is.null(vw)) 1L else vw[1]+1L, nreturn, PACKAGE="ff")
       if (!is.null(ffnam))
-        names(ret) <- ffnam
+        setattr(ret, "names", ffnam)  #names(ret) <- ffnam
     }else{
       ret <- .Call("get_vector", .ffmode[vmode], attr(x, "physical"), index, nreturn, PACKAGE="ff")
       ret <- unsort.hi(ret,index)
       if (!is.null(ffnam))
-        names(ret) <- ffnam[as.integer(index)]
+        setattr(ret, "names", ffnam[as.integer(index)])  #names(ret) <- ffnam[as.integer(index)]
     }
   }else{
     ret <- vector(mode=.rammode[vmode], length=0)
@@ -4089,13 +4152,15 @@ swap.ff <- function(
   if (!is.null(fflev)){
     if (.vunsigned[vmode])
       ret <- ret + 1L
-    levels(ret) <- fflev
+    setattr(ret, "levels", fflev)  #levels(ret) <- fflev
   }
   ramattribs <- attr(attr(x, "virtual"), "ramattribs")
   if (!is.null(ramattribs)){
-    attributes(ret) <- c(attributes(ret), ramattribs)
+    setattributes(ret, ramattribs) #attributes(ret) <- c(attributes(ret), ramattribs)
   }
-  class(ret) <- attr(attr(x, "virtual"), "ramclass")
+  setattr(ret, "class",attr(attr(x, "virtual"), "ramclass"))  #class(ret) <- attr(attr(x, "virtual"), "ramclass")
+  .vset[[vmode]](ret)
+
   return(ret)
 }
 
@@ -4116,7 +4181,9 @@ swap.ff <- function(
       stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
   }
   if( is.readonly(x) ) stop("ff is readonly")
-  if(!is.null(physical(x)$na.count)) stop("use swap instead to maintain na.count (or deactivate na.count(x)<-NULL)")
+  physical <- physical(x)
+  if(!is.null(physical$na.count)) stop("use swap instead to maintain na.count (or deactivate na.count(x)<-NULL for assigning)")
+  if(!is.null(physical$is.sorted)) stop("deactivate is.sorted(x)<-NULL for assigning)")
 
   vmode <- vmode(x)
   vw <- vw(x)
@@ -4127,6 +4194,8 @@ swap.ff <- function(
     if (missing(i)){
       index <- hi(from=1, to=fflen, maxindex=fflen, vw=vw, pack=pack)
       nreturn <- fflen
+    }else if(is.ff(i)){
+      return(ffindexset(x, i, value))
     }else{
       index <- as.hi(substitute(i), maxindex=fflen, vw=vw, pack=pack, names=ffnam, envir=parent.frame())
       nreturn <- poslength(index)
@@ -4320,7 +4389,7 @@ swap.ff_array <- function(
       else
         ret <- .Call("getset_array", .ffmode[vmode], attr(x, "physical"), index[ffdimord], as.integer(indexdim[ffdimord]), as.integer(ffdim[ffdimord]), as.integer(ndim), as.integer(nreturn), as.integer(cumindexdim), as.integer(cumffdim), value, PACKAGE="ff")
       #ret <- array(ret, dim=indexdim)
-      dim(ret) <- indexdim
+      setattr(ret, "dim", indexdim)   #dim(ret) <- indexdim
       if (nvalue==1)
         ret <- unsort.ahi(ret, index, ixre)
       else
@@ -4328,16 +4397,16 @@ swap.ff_array <- function(
       do.bydim <- !dimorderStandard(bydim)
       if (do.bydim){
         ret <- array2vector(ret, dim=indexdim, dimorder=bydim)
-        dim(ret) <- indexdim[bydim]
+        setattr(ret, "dim", indexdim[bydim])   #dim(ret) <- indexdim[bydim]
       }
       if (!is.null(ffdimnam)){
         dimnam <- 1:ndim
-        names(dimnam) <- names(ffdimnam)
+        setattr(dimnam, "names", names(ffdimnam))  #names(dimnam) <- names(ffdimnam)
         dimnam <- lapply(dimnam, function(d){ffdimnam[[d]][as.integer(index[[d]])]})
         if (do.bydim)
-          dimnames(ret) <- dimnam[bydim]
+          setattr(ret, "dimnames",  dimnam[bydim]) #dimnames(ret) <- dimnam[bydim]
         else
-          dimnames(ret) <- dimnam
+          setattr(ret, "dimnames",  dimnam) #dimnames(ret) <- dimnam
       }
       if (drop){
         ret <- drop(ret)
@@ -4354,19 +4423,20 @@ swap.ff_array <- function(
       ret <- vector(mode=.rammode[vmode], length=0)
     else{
       ret <- vector(mode=.rammode[vmode], length=0)
-      dim(ret) <- indexdim
+      setattr(ret, "dim", indexdim) #dim(ret) <- indexdim
     }
   }
   if (!is.null(fflev)){
     if (.vunsigned[vmode])
       ret <- ret + 1L
-    levels(ret) <- fflev
+    setattr(ret, "levels", fflev) #levels(ret) <- fflev
   }
   ramattribs <- attr(attr(x, "virtual"), "ramattribs")
   if (!is.null(ramattribs)){
-    attributes(ret) <- c(attributes(ret), ramattribs)
+    setattributes(ret, ramattribs)  #attributes(ret) <- c(attributes(ret), ramattribs)
   }
-  class(ret) <- attr(attr(x, "virtual"), "ramclass")
+  setattr(ret, "class",attr(attr(x, "virtual"), "ramclass"))  #class(ret) <- attr(attr(x, "virtual"), "ramclass")
+  .vset[[vmode]](ret)
   return(ret)
 }
 
@@ -4455,21 +4525,22 @@ swap.ff_array <- function(
 
       ret <- .Call("get_array", .ffmode[vmode], attr(x, "physical"), index[ffdimord], as.integer(indexdim[ffdimord]), as.integer(ffdim[ffdimord]), as.integer(ndim), as.integer(nreturn), as.integer(cumindexdim), as.integer(cumffdim), PACKAGE="ff")
       #ret <- array(ret, dim=indexdim)
-      dim(ret) <- indexdim
+      setattr(ret, "dim", indexdim) #dim(ret) <- indexdim
       ret <- unsort.ahi(ret, index, ixre)
       do.bydim <- !dimorderStandard(bydim)
       if (do.bydim){
         ret <- array2vector(ret, dim=indexdim, dimorder=bydim)
-        dim(ret) <- indexdim[bydim]
+        setattr(ret, "dim", indexdim[bydim]) #dim(ret) <- indexdim[bydim]
       }
       if (!is.null(ffdimnam)){
         dimnam <- 1:ndim
-        names(dimnam) <- names(ffdimnam)
+        #names(dimnam) <- names(ffdimnam)
+        setattr(dimnam, "names", names(ffdimnam))
         dimnam <- lapply(dimnam, function(d){ffdimnam[[d]][as.integer(index[[d]])]})
         if (do.bydim)
-          dimnames(ret) <- dimnam[bydim]
+          setattr(ret, "dimnames", dimnam[bydim]) #dimnames(ret) <- dimnam[bydim]
         else
-          dimnames(ret) <- dimnam
+          setattr(ret, "dimnames", dimnam) #dimnames(ret) <- dimnam
       }
       if (drop){
         ret <- drop(ret)
@@ -4483,19 +4554,20 @@ swap.ff_array <- function(
       ret <- vector(mode=.rammode[vmode], length=0)
     else{
       ret <- vector(mode=.rammode[vmode], length=0)
-      dim(ret) <- indexdim
+      setattr(ret, "dim", indexdim) #dim(ret) <- indexdim
     }
   }
   if (!is.null(fflev)){
     if (.vunsigned[vmode])
       ret <- ret + 1L
-    levels(ret) <- fflev
+    setattr(ret, "levels", fflev) #levels(ret) <- fflev
   }
   ramattribs <- attr(attr(x, "virtual"), "ramattribs")
   if (!is.null(ramattribs)){
-    attributes(ret) <- c(attributes(ret), ramattribs)
+    setattributes(ret, ramattribs)  #attributes(ret) <- c(attributes(ret), ramattribs)
   }
-  class(ret) <- attr(attr(x, "virtual"), "ramclass")
+  setattr(ret, "class",attr(attr(x, "virtual"), "ramclass"))  #class(ret) <- attr(attr(x, "virtual"), "ramclass")
+  .vset[[vmode]](ret)
   return(ret)
 }
 
@@ -4516,7 +4588,9 @@ swap.ff_array <- function(
       stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
   }
   if( is.readonly(x) ) stop("ff is readonly")
-  if(!is.null(physical(x)$na.count)) stop("use swap instead to maintain na.count (or deactivate na.count(x)<-NULL)")
+  physical <- physical(x)
+  if(!is.null(physical$na.count)) stop("use swap instead to maintain na.count (or deactivate na.count(x)<-NULL for assigning)")
+  if(!is.null(physical$is.sorted)) stop("deactivate is.sorted(x)<-NULL for assigning)")
 
   vmode <- vmode(x)
   vw <- vw(x)

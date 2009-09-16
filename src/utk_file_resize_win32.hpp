@@ -31,9 +31,9 @@ namespace utk {
     liDistanceToMove.QuadPart = (LONGLONG) newsize;
     BOOL success;
     success = SetFilePointerEx(hFile, liDistanceToMove, NULL, FILE_BEGIN);
-    if (success) 
-      success = SetEndOfFile(hFile);  
-    CloseHandle(hFile);    
+    if (success)
+      success = SetEndOfFile(hFile);
+    CloseHandle(hFile);
     return (success) ? 0 : -1;
   }
 

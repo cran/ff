@@ -12,9 +12,9 @@
 }
 \usage{
 finalize(x, ...)
-\method{finalize}{ff_pointer}
-\method{finalize}{ff}
-\method{finalize}{ffdf}
+\method{finalize}{ff_pointer}(x, ...)
+\method{finalize}{ff}(x, ...)
+\method{finalize}{ffdf}(x, ...)
 }
 \arguments{
   \item{x}{ either an \code{\link{ff}} or \code{\link{ffdf}} object or an \code{ff_pointer}, see details }

@@ -46,6 +46,7 @@
 
 /* non-exported helper functions */
 
+
 SEXP     getListElement(SEXP list, char *str);
 Rboolean setListElement(SEXP list, char *str, SEXP elmt);
 
@@ -56,6 +57,7 @@ Rboolean next_positive_neg(
           int *I, int N, int *neg, int *ineg, int* index);
 
 /* utility functions */
+
 
 SEXP r_ff_xtensions_available();
 SEXP r_ff_symmxtensions_available();

@@ -36,7 +36,8 @@ as.bit.ff(x, ...)
   \code{\link[bit]{bit}}, \code{\link{ff}}, \code{\link{as.ff}}, \code{\link{as.hi.bit}}
 }
 \examples{
-  l <- sample(c(FALSE,TRUE), 1000, TRUE)
+  l <- as.boolean(sample(c(FALSE,TRUE), 1000, TRUE))
+
   b <- as.bit(l)
   stopifnot(identical(l,b[]))
   b

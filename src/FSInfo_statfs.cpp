@@ -42,7 +42,9 @@ namespace ff {
 void getFSInfo(const char* path, FSInfo& info)
 {
 
-#if defined(__sun__) 
+//D.A. #if defined(__sun__)
+//J.O. 16.9.2010
+#if defined(__sun__) || defined(__sun) || defined(sun)
   struct statvfs sfs;
   statvfs(path, &sfs);
 #else

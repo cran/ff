@@ -11,6 +11,9 @@
 
 #include "r_ff.h"
 #include "r_file_resize.h"
+
+/* defining and making order methods */
+
 /* { --- R FUNCTION REGISTRATION -------------------------------------------- */
 
 R_CallMethodDef callMethods[] =
@@ -71,6 +74,21 @@ R_CallMethodDef callMethods[] =
  {"subset_symm", (DL_FUNC) &r_ram__set_symm, 8},
 #endif
 
+ {"mergeorder", (DL_FUNC) &r_ram_mergeorder, 5},
+ {"mergesort",  (DL_FUNC) &r_ram_mergesort, 4},
+ {"shellorder", (DL_FUNC) &r_ram_shellorder, 6},
+ {"shellsort",  (DL_FUNC) &r_ram_shellsort, 4},
+ {"keyorder", (DL_FUNC) &r_ram_keyorder, 6},
+ {"keysort",  (DL_FUNC) &r_ram_keysort, 5},
+ {"radixorder",  (DL_FUNC) &r_ram_radixorder, 5},
+ {"radixsort",  (DL_FUNC) &r_ram_radixsort, 4},
+ {"ffsortmerge",  (DL_FUNC) &r_ff__sortmerge, 12},
+ {"ffordermerge", (DL_FUNC) &r_ff__ordermerge, 15},
+ {"ffkeysort",  (DL_FUNC) &r_ff_integer_keysort, 9},
+ {"ffchunkorder", (DL_FUNC) &r_ff_index_chunkorder, 5},
+ {"ffindexget", (DL_FUNC) &r_ff__index_get, 10},
+ {"ffindexset", (DL_FUNC) &r_ff__index_set, 10},
+
 /* additions by Daniel Adler (under ISC license) */
  {"r_file_resize", (DL_FUNC) &r_file_resize, 2 },
 
@@ -114,6 +132,8 @@ Rboolean setListElement(SEXP list, char *str, SEXP elmt)
     }
   return FALSE;
 }
+
+
 
 
 /* } --- helper functions for getting and setting list elements by name ---------------- */
@@ -635,6 +655,9 @@ SEXP r_ff_maxlength(SEXP ff_)
   UNPROTECT(1);
   return ret_;
 }
+
+
+
 
 
 
