@@ -88,7 +88,8 @@ as.hi.bit <- function(x
     if (is.null(range))
       range <- c(1L, maxindex)
     else{
-      range <- as.integer(range)
+      if (!is.ri(range))  # xx catch as.integer.ri, better let's deprecate as.integer and only allow as.which
+        range <- as.integer(range)
       if (range[1]<1L || range[2]>maxindex)
         stop("illegal range")
     }

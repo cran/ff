@@ -1,25 +1,27 @@
 Dear R community,
 
-The next release of package ff is available. With kind help of Brian Ripley it now supports the Win64 version of R. It has three major functional enhancements:
+The next release of package ff is available on CRAN. With kind help of Brian Ripley it now supports the Win64 and Sun versions of R. It has three major functional enhancements:
 
-    a	new fast in-memory sorting and ordering functions (single-threaded)
-    b	ff now supports on-disk sorting and ordering of ff vectors and ffdf dataframes
-    c	ff vectors now can be used as subscripts of ff vectors and ffdf dataframes
+a) new fast in-memory sorting and ordering functions (single-threaded)
+b) ff now supports on-disk sorting and ordering of ff vectors and ffdf dataframes
+c) ff integer vectors now can be used as subscripts of ff vectors and ffdf dataframes
 
 a) is achieved by careful implementation of NA-handling and exploiting context information
 b) although permanently stored, sorting and ordering of ff objects can be faster than the standard routines in R
 c) applying an order to ff vectors and ffdf dataframes is substantially slower than in pure R because it involves disk-access AND sorting index positions (to avoid random access). 
-There is still room for improvement, however, the current status should already be useful. I run some comparisons with SAS: 
 
-- both could sort German census size (81e6) on 3GB notebook
+There is still room for improvement, however, the current status should already be useful. I run some comparisons with SAS: 
+- both could sort German census size (81e6 rows) on a 3GB notebook
 - ff sorts and orders faster on single columns
 - sorting big multicolumn-tables is faster in SAS
 
+Win64 binaries and version 2.2.1 supporting Sun should appear during the next days on CRAN. For the impatient: checkout from r-forge with revision 67 or higher.
 Non-Windows users: please note that you need to set appropriate values for options 'ffbatchbytes' and 'ffmaxbytes' yourself.
 
 Feedback, ideas and contributions appreciated. To those who offered code during the last months: please forgive me that integrating and documenting was not possible with this release. 
 
-Jens Oehlschlägel
+
+Jens & Daniel
 
 
 
@@ -31,7 +33,7 @@ Legend for software
   ram:  new in-ram inplace operations receiving enough RAM to optimize for speed, not for memory
    ff:  new on-disk operations limiting RAM for this operation at ~500GB
     R:  timings from standard sort() and order()
-  SAS:  timings from SAS 9.2 allowing for multithreaded sorting ()
+  SAS:  timings from SAS 9.2 allowing for multithreaded sorting
 
 
 Legend for type of random data

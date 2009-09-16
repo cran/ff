@@ -3,7 +3,8 @@
 
 NEW FEATURES
 
-    o	ff now supports the 64 bit Windows version of R (thanks to Brian Ripley)
+    o	ff now supports the 64 bit Windows and Sun versions of R 
+    	(thanks to Brian Ripley)
     o	ff now supports sorting and ordering of ff vectors and dataframes
     	(see ramsort, ffsort, ffdfsort, ramorder, fforder, ffdforder)
     o	ff now supports ff vectors as subscripts of ff objects
@@ -28,13 +29,13 @@ USER VISIBLE CHANGES
     	(consider this tuning temporary, hoping for a generic fix in base R)
     o	ff() can now open files larger than .Machine$integer.max elements
     	(but gives access only to the first .Machine$integer.max elements)
-    o	ff now has default pattern NULL which translates to the pattern in 'filename'
+    o	ff now has default pattern NULL translating to the pattern in 'filename'
         (and only to the previous default 'ff' if no filename is given)
     o	ff now sets the pattern in synch with a requested 'filename'
-    o	clone.ff now always creates a file consistent with the pattern of the original
+    o	clone.ff now always creates a file consistent with the previous pattern
     o	clone.ff now always creates a finalizer consistent with the file location
-    o	clone.ffdf has a new argument 'nrow' which allows to create an empty copy with a different 
-    	number of rows (currently requires 'initdata=NULL')
+    o	clone.ffdf has a new argument 'nrow' which allows to create an empty copy 
+        with a different number of rows (currently requires 'initdata=NULL')
     o	clone.default now deep-copies lists and atomic vectors
     	
     
