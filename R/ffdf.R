@@ -1404,7 +1404,7 @@ ffdf <- function(
 #! clone physically duplicates ffdf objects
 #! }
 #! \usage{
-#! clone.ffdf(x, nrow=NULL, ...)
+#! \method{clone}{ffdf}(x, nrow=NULL, ...)
 #! }
 #! \arguments{
 #!   \item{x}{an \code{\link{ffdf}} }
@@ -1652,7 +1652,7 @@ as.data.frame.ffdf <- function(x, ...)
 #! Getting "length" (number of columns) of a ffdf dataframe
 #! }
 #! \usage{
-#! length.ffdf(x)
+#! \method{length}{ffdf}(x)
 #! }
 #! \arguments{
 #!   \item{x}{an \code{\link{ffdf}} object}

@@ -20,8 +20,8 @@
 #! }
 #! \usage{
 #! hi(from, to, by = 1L, maxindex = NA, vw = NULL, pack = TRUE, NAs = NULL)
-#! print.hi(x, \dots)
-#! str.hi(object, nest.lev=0, \dots)
+#! \method{print}{hi}(x, \dots)
+#! \method{str}{hi}(object, nest.lev=0, \dots)
 #! }
 #! \arguments{
 #!   \item{from}{ integer vector of lower sequence bounds }

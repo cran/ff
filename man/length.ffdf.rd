@@ -8,7 +8,7 @@ Getting length of a ffdf dataframe
 Getting "length" (number of columns) of a ffdf dataframe
 }
 \usage{
-length.ffdf(x)
+\method{length}{ffdf}(x)
 }
 \arguments{
   \item{x}{an \code{\link{ffdf}} object}

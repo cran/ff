@@ -2523,8 +2523,8 @@ ff <- function(
 #!   \command{update} copies updates one ff object with the content of another object.
 #! }
 #! \usage{
-#! update.ff(object, from, delete = FALSE, bydim = NULL, fromdim = NULL, BATCHSIZE = .Machine$integer.max, BATCHBYTES = getOption("ffbatchbytes"), VERBOSE = FALSE, \dots)
-#! update.ffdf(object, from, \dots)
+#! \method{update}{ff}(object, from, delete = FALSE, bydim = NULL, fromdim = NULL, BATCHSIZE = .Machine$integer.max, BATCHBYTES = getOption("ffbatchbytes"), VERBOSE = FALSE, \dots)
+#! \method{update}{ffdf}(object, from, \dots)
 #! }
 #! \arguments{
 #!   \item{object}{ an ff object to which to update }

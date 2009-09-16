@@ -1,4 +1,8 @@
-		CHANGES IN ff VERSION 2.2.3
+		CHANGES IN ff VERSION 2.2.4
+
+BUG FIXES
+
+    o	fixed a bug in insertion sort for integers that could have affected function ramsort
 
 BUG FIXES
 

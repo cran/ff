@@ -193,8 +193,8 @@ regtest.as.hi.bit <- function(){
 #!   Function \code{as.bit.ff} converts a boolean \code{\link{ff}} vector to a \code{\link{ff}} vector.
 #! }
 #! \usage{
-#! as.ff.bit(x, filename = NULL, overwrite = FALSE, ...)
-#! as.bit.ff(x, ...)
+#! \method{as.ff}{bit}(x, filename = NULL, overwrite = FALSE, \dots)
+#! \method{as.bit}{ff}(x, \dots)
 #! }
 #! \arguments{
 #!   \item{x}{ the source of conversion }

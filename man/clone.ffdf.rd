@@ -8,7 +8,7 @@ Cloning ffdf objects
 clone physically duplicates ffdf objects
 }
 \usage{
-clone.ffdf(x, nrow=NULL, ...)
+\method{clone}{ffdf}(x, nrow=NULL, ...)
 }
 \arguments{
   \item{x}{an \code{\link{ffdf}} }

@@ -912,8 +912,8 @@ void ram_integer_insertionsort_asc(IndexT *data, IndexT l, IndexT r)
       IndexT v = data[i];
       while (less(v,data[j-1])){
         data[j]=data[j-1]; j--;
-        data[j]=v;
       }
+	  data[j]=v;
     }
 }
 void ram_integer_insertionsort_desc(IndexT *data, IndexT l, IndexT r)
@@ -927,8 +927,8 @@ void ram_integer_insertionsort_desc(IndexT *data, IndexT l, IndexT r)
       IndexT v = data[i];
       while (less(v,data[j+1])){
         data[j]=data[j+1]; j++;
-        data[j]=v;
       }
+	  data[j]=v;
     }
 }
 
