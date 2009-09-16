@@ -1,5 +1,5 @@
 Package: ff
-Version: 2.2-2
+Version: 2.2-3
 Date: 2009-09-16
 Title: memory-efficient storage of large data on disk and fast access
         functions
@@ -66,6 +66,6 @@ URL: http://ff.r-forge.r-project.org/
 Encoding: latin1
 Repository: CRAN
 Repository/R-Forge/Project: ff
-Repository/R-Forge/Revision: 73
-Date/Publication: 2011-04-24 19:28:39
-Packaged: 2011-04-22 21:50:54 UTC; rforge
+Repository/R-Forge/Revision: 79
+Date/Publication: 2011-07-25 09:06:06
+Packaged: 2011-07-24 20:58:55 UTC; rforge

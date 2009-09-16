@@ -44,7 +44,7 @@ void getFSInfo(const char* path, FSInfo& info)
 
 //D.A. #if defined(__sun__)
 //J.O. 16.9.2010
-#if defined(__sun__) || defined(__sun) || defined(sun)
+#if defined(__sun__) || defined(__sun) || defined(sun) || defined(__NetBSD__)
   struct statvfs sfs;
   statvfs(path, &sfs);
 #else

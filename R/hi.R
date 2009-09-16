@@ -1025,7 +1025,7 @@ as.integer.hi <- function(
       }
     }
   }else{
-    integer()
+    ret <- integer()
   }
   ret
 }
