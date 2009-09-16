@@ -97,7 +97,7 @@
 #!    x
 #!
 #!    \dontrun{
-#!       cat("Note how the datatype influences sorting speed")
+#!       message("Note how the datatype influences sorting speed")
 #!       n <- 5e6
 #!       x <- sample(1:26, n, TRUE)
 #!
@@ -222,7 +222,7 @@
 #!    x[i]
 #!
 #!    \dontrun{
-#!       cat("Note how the datatype influences sorting speed")
+#!       message("Note how the datatype influences sorting speed")
 #!       n <- 1e7
 #!       x <- sample(1:26, n, TRUE)
 #!
@@ -711,7 +711,7 @@ ffsort <- function(
         method <- 1L  # shellsort
         BATCHSIZE <- ceiling(n / 2 ^ ceiling(max(0, log(n*(recbytes/maxbytes), 2))))
       }
-    }	
+    }
     if (BATCHSIZE>=n){
      # tuning: do it in-ram
      y <- read.ff(x, 1L, n)
@@ -720,7 +720,7 @@ ffsort <- function(
       nNA <- ramsort(y, has.na = has.na, na.last = na.last, decreasing = decreasing, optimize = if (method==1L) "memory" else "time", VERBOSE = VERBOSE)
       if (!inplace)
         x <- clone(x, initdata=NULL)
-      write.ff(x, 1L, y)  
+      write.ff(x, 1L, y)
       rm(y)
     }else{
       # fallback: do it on-disk
@@ -967,7 +967,7 @@ fforder <- function(
     pieces <- 2 ^ ceiling(max(0, log(allbytes/maxbytes, 2)))
     if (pieces>1 && !use.index){
       maxbytes <- BATCHBYTES
-      allbytes <- n*(recvalbytes+recindbytes)
+      allbytes <- as.double(n)*(recvalbytes+recindbytes)
       shellpieces <- 2 ^ ceiling(max(0, log(allbytes/maxbytes, 2)))
       if (shellpieces<pieces){
         method <- 1L
@@ -1144,18 +1144,18 @@ fforder <- function(
 #! }
 #! \examples{
 #!      x <- ff(sample(40))
-#!      cat("fforder requires sorting\n")
+#!      message("fforder requires sorting")
 #!      i <- fforder(x)
-#!      cat("applying this order i is done by ffindexget\n")
+#!      message("applying this order i is done by ffindexget")
 #!      x[i]
-#!      cat("applying this order i requires random access, therefore ffindexget does chunkwise sorting\n")
+#!      message("applying this order i requires random access, therefore ffindexget does chunkwise sorting")
 #!      ffindexget(x, i)
-#!      cat("if we want to apply the order i multiple times, we can do the chunkwise sorting once and store it\n")
+#!      message("if we want to apply the order i multiple times, we can do the chunkwise sorting once and store it")
 #!      s <- ffindexordersize(length(i), vmode(i), BATCHBYTES = 100)
 #!      o <- ffindexorder(i, s$b)
-#!      cat("this is how the stored chunkwise sorting is used\n")
+#!      message("this is how the stored chunkwise sorting is used")
 #!      ffindexget(x, i, o)
-#!      cat("\n")
+#!      message("")
 #!      rm(x,i,s,o)
 #!      gc()
 #! }
@@ -1268,7 +1268,7 @@ ffindexorder <- function(
 #!   \code{\link{Extract.ff}}, \code{\link{ffdfindexget}}, \code{\link{ffindexorder}}
 #! }
 #! \examples{
-#! cat("ff integer subscripts with ff return/assign values\n")
+#! message("ff integer subscripts with ff return/assign values")
 #! x <- ff(factor(letters))
 #! i <- ff(2:9)
 #! xi <- x[i]
@@ -1277,7 +1277,7 @@ ffindexorder <- function(
 #! xi
 #! x[i] <- xi
 #! x
-#! cat("ff integer subscripts: more control with ffindexget/ffindexset\n")
+#! message("ff integer subscripts: more control with ffindexget/ffindexset")
 #! xi <- ffindexget(x, i, FF_RETURN=xi)
 #! x <- ffindexset(x, i, xi)
 #! rm(x, i, xi)
@@ -1512,7 +1512,7 @@ ffindexset <- function(
 #!   \code{\link{Extract.ff}}, \code{\link{ffindexget}}, \code{\link{ffindexorder}}
 #! }
 #! \examples{
-#! cat("ff integer subscripts with ffdf return/assign values\n")
+#! message("ff integer subscripts with ffdf return/assign values")
 #! x <- ff(factor(letters))
 #! y <- ff(1:26)
 #! d <- ffdf(x,y)
@@ -1520,7 +1520,7 @@ ffindexset <- function(
 #! di <- d[i,]
 #! di
 #! d[i,] <- di
-#! cat("ff integer subscripts: more control with ffindexget/ffindexset\n")
+#! message("ff integer subscripts: more control with ffindexget/ffindexset")
 #! di <- ffdfindexget(d, i, FF_RETURN=di)
 #! d <- ffdfindexset(d, i, di)
 #! rm(x, y, d, i, di)
@@ -2025,9 +2025,9 @@ ffdfsort <- function(
 #!
 #!  \dontrun{
 #!     n <- 5e6
-#!     cat("performance comparison at n=", n, "\n")
+#!     message("performance comparison at n=", n, "")
 #!
-#!     cat("sorting doubles\n")
+#!     message("sorting doubles")
 #!     x <- y <- as.double(runif(n))
 #!
 #!     x[] <- y
@@ -2121,7 +2121,7 @@ ffdfsort <- function(
 #!     rm(x,y)
 #!
 #!
-#!     cat("ordering doubles\n")
+#!     message("ordering doubles")
 #!
 #!     x <- as.double(runif(n))
 #!     system.time(order(x))[3]
@@ -2212,79 +2212,79 @@ ffdfsort <- function(
 #!         y <- sample(k, n, TRUE)
 #!       }
 #!
-#!       cat("sorting",v,"\n")
+#!       message("sorting ",v)
 #!
 #!       x <- y
-#!       cat("sort(x) ");print(system.time(sort(x))[3])
+#!       message("sort(x) ", system.time(sort(x))[3])
 #!       x <- y
-#!       cat("shellsort(x) ");print(system.time(shellsort(x))[3])
+#!       message("shellsort(x) ", system.time(shellsort(x))[3])
 #!       x <- y
-#!       cat("mergesort(x) ");print(system.time(mergesort(x))[3])
+#!       message("mergesort(x) ", system.time(mergesort(x))[3])
 #!       x <- y
-#!       cat("radixsort(x) ");print(system.time(radixsort(x))[3])
+#!       message("radixsort(x) ", system.time(radixsort(x))[3])
 #!       if (v \%in\% keys){
 #!         x <- y
-#!         cat("keysort(x) ");print(system.time(keysort(x))[3])
+#!         message("keysort(x) ", system.time(keysort(x))[3])
 #!         x <- y
-#!         cat("keysort(x, keyrange=c(.vmin[v],.vmax[v])) ");print(system.time(keysort(x, keyrange=c(.vmin[v],.vmax[v])))[3])
+#!         message("keysort(x, keyrange=c(.vmin[v],.vmax[v])) ", system.time(keysort(x, keyrange=c(.vmin[v],.vmax[v])))[3])
 #!       }
 #!
 #!       if (!is.na(.vNA[v])){
 #!         x <- y
-#!         cat("shellsort(x, has.na=FALSE) ");print(system.time(shellsort(x, has.na=FALSE))[3])
+#!         message("shellsort(x, has.na=FALSE) ", system.time(shellsort(x, has.na=FALSE))[3])
 #!         x <- y
-#!         cat("mergesort(x, has.na=FALSE) ");print(system.time(mergesort(x, has.na=FALSE))[3])
+#!         message("mergesort(x, has.na=FALSE) ", system.time(mergesort(x, has.na=FALSE))[3])
 #!         x <- y
-#!         cat("radixsort(x, has.na=FALSE) ");print(system.time(radixsort(x, has.na=FALSE))[3])
+#!         message("radixsort(x, has.na=FALSE) ", system.time(radixsort(x, has.na=FALSE))[3])
 #!         if (v \%in\% keys){
 #!           x <- y
-#!           cat("keysort(x, has.na=FALSE) ");print(system.time(keysort(x, has.na=FALSE))[3])
+#!           message("keysort(x, has.na=FALSE) ", system.time(keysort(x, has.na=FALSE))[3])
 #!           x <- y
-#!           cat("keysort(x, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])) ");print(system.time(keysort(x, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])))[3])
+#!           message("keysort(x, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])) ", system.time(keysort(x, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])))[3])
 #!         }
 #!       }
 #!
 #!
-#!       cat("ordering",v,"\n")
+#!       message("ordering",v)
 #!
 #!       x[] <- y
 #!       i <- 1:n
-#!       cat("order(x) ");print(system.time(order(x))[3])
+#!       message("order(x) ", system.time(order(x))[3])
 #!       x[] <- y
 #!       i <- 1:n
-#!       cat("shellorder(x, i) ");print(system.time(shellorder(x, i))[3])
+#!       message("shellorder(x, i) ", system.time(shellorder(x, i))[3])
 #!       x[] <- y
 #!       i <- 1:n
-#!       cat("mergeorder(x, i) ");print(system.time(mergeorder(x, i))[3])
+#!       message("mergeorder(x, i) ", system.time(mergeorder(x, i))[3])
 #!       x[] <- y
 #!       i <- 1:n
-#!       cat("radixorder(x, i) ");print(system.time(radixorder(x, i))[3])
+#!       message("radixorder(x, i) ", system.time(radixorder(x, i))[3])
 #!       if (v \%in\% keys){
 #!         x[] <- y
 #!         i <- 1:n
-#!         cat("keyorder(x, i) ");print(system.time(keyorder(x, i))[3])
+#!         message("keyorder(x, i) ", system.time(keyorder(x, i))[3])
 #!         x[] <- y
 #!         i <- 1:n
-#!         cat("keyorder(x, i, keyrange=c(.vmin[v],.vmax[v])) ");print(system.time(keyorder(x, i, keyrange=c(.vmin[v],.vmax[v])))[3])
+#!         message("keyorder(x, i, keyrange=c(.vmin[v],.vmax[v])) ", system.time(keyorder(x, i, keyrange=c(.vmin[v],.vmax[v])))[3])
 #!       }
 #!
 #!       if (!is.na(.vNA[v])){
 #!         x[] <- y
 #!         i <- 1:n
-#!         cat("shellorder(x, i, has.na=FALSE) ");print(system.time(shellorder(x, i, has.na=FALSE))[3])
+#!         message("shellorder(x, i, has.na=FALSE) ", system.time(shellorder(x, i, has.na=FALSE))[3])
 #!         x[] <- y
 #!         i <- 1:n
-#!         cat("mergeorder(x, i, has.na=FALSE) ");print(system.time(mergeorder(x, i, has.na=FALSE))[3])
+#!         message("mergeorder(x, i, has.na=FALSE) ", system.time(mergeorder(x, i, has.na=FALSE))[3])
 #!         x[] <- y
 #!         i <- 1:n
-#!         cat("radixorder(x, i, has.na=FALSE) ");print(system.time(radixorder(x, i, has.na=FALSE))[3])
+#!         message("radixorder(x, i, has.na=FALSE) ", system.time(radixorder(x, i, has.na=FALSE))[3])
 #!         if (v \%in\% keys){
 #!           x[] <- y
 #!           i <- 1:n
-#!           cat("keyorder(x, i, has.na=FALSE) ");print(system.time(keyorder(x, i, has.na=FALSE))[3])
+#!           message("keyorder(x, i, has.na=FALSE) ", system.time(keyorder(x, i, has.na=FALSE))[3])
 #!           x[] <- y
 #!           i <- 1:n
-#!           cat("keyorder(x, i, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])) ");print(system.time(keyorder(x, i, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])))[3])
+#!           message("keyorder(x, i, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])) ", system.time(keyorder(x, i, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])))[3])
 #!         }
 #!       }
 #!

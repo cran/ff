@@ -54,7 +54,7 @@ poslength(x, \dots)
   length(as.hi(-1, maxindex=12))
   poslength(as.hi(-1, maxindex=12))
   maxindex(as.hi(-1, maxindex=12))
-  cat("note that\n")
+  message("note that")
   length(as.hi(c(-1, -1), maxindex=12))
   length(as.hi(c(1,1), maxindex=12))
 }

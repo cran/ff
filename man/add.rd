@@ -33,7 +33,7 @@ add(x, \dots)
 }
 \seealso{ \code{\link{swap}}, \code{\link{[.ff}}, \code{\link{LimWarn}} }
 \examples{
-   cat("incrementing parts of a vector\n")
+   message("incrementing parts of a vector")
    x <- ff(0, length=12)
    y <- rep(0, 12)
    add(x, 1, 1:6)
@@ -41,7 +41,7 @@ add(x, \dots)
    x
    y
 
-   cat("incrementing parts of a matrix\n")
+   message("incrementing parts of a matrix")
    x <- ff(0, dim=3:4)
    y <- array(0, dim=3:4)
    add(x, 1, 1:2, 1:2)
@@ -49,7 +49,7 @@ add(x, \dots)
    x
    y
 
-   cat("BEWARE that ff and ram methods differ in treatment of duplicated index positions\n")
+   message("BEWARE that ff and ram methods differ in treatment of duplicated index positions")
    add(x, 1, c(3,3))
    add(y, 1, c(3,3))
    x

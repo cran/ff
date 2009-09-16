@@ -33,13 +33,13 @@ is.sorted(x) <- value
   is.sorted(x) <- !( is.na(is.unsorted(x)) || is.unsorted(x))  # actually calling is.unsorted twice is stupid
   is.sorted(x)
   x[1] <- 100L
-  cat("don't forget to maintain once it's no longer TRUE")
+  message("don't forget to maintain once it's no longer TRUE")
   is.sorted(x) <- FALSE
-  cat("check whether as 'is.sorted' attribute is maintained\n")
+  message("check whether as 'is.sorted' attribute is maintained")
   !is.null(physical(x)$is.sorted)
-  cat("remove the 'is.sorted' attribute\n")
+  message("remove the 'is.sorted' attribute")
   is.sorted(x) <- NULL
-  cat("NOTE that querying 'is.sorted' still returns FALSE\n")
+  message("NOTE that querying 'is.sorted' still returns FALSE")
   is.sorted(x)
 }
 \keyword{ IO }

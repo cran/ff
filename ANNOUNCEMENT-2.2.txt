@@ -18,7 +18,9 @@ There is still room for improvement, however, the current status should already 
 Win64 binaries and version 2.2.1 supporting Sun should appear during the next days on CRAN. For the impatient: checkout from r-forge with revision 67 or higher.
 Non-Windows users: please note that you need to set appropriate values for options 'ffbatchbytes' and 'ffmaxbytes' yourself.
 
-Feedback, ideas and contributions appreciated. To those who offered code during the last months: please forgive me that integrating and documenting was not possible with this release. 
+Note that  virtual window support is deprecated now because it leads to too complex code. Let us know if you urgently need this and why.
+
+Feedback, ideas and contributions appreciated. To those who offered code during the last months: please forgive us that integrating and documenting was not possible with this release. 
 
 
 Jens & Daniel

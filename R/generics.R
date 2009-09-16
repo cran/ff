@@ -76,13 +76,13 @@ as.ffdf <- function(x, ...)UseMethod("as.ffdf")
 
 # querying is.factor and is.ordered
 if (!exists("is.factor.default")){
-  packageStartupMessage("creating generic 'is.factor'\n")
+  packageStartupMessage("creating generic 'is.factor'")
   is.factor.default <- get("is.factor", mode = "function") #pos = NULL,
   is.factor <- function (x)
     UseMethod("is.factor")
 }
 if (!exists("is.ordered.default")){
-  packageStartupMessage("creating generic 'is.ordered'\n")
+  packageStartupMessage("creating generic 'is.ordered'")
   is.ordered.default <- get("is.ordered", mode = "function") #pos = NULL,
   is.ordered <- function (x)
     UseMethod("is.ordered")
@@ -176,10 +176,10 @@ vt <- function(x, ...)UseMethod("vt")
 #!   df <- ffdf(a,b,c)
 #!   nrow(df) <- 2*26
 #!   df
-#!   cat("NOTE that the new rows have silently the first level 'a' for UNSIGNED vmodes\n")
-#!   cat("NOTE that the new rows have an illegal factor level <0> for SIGNED vmodes\n")
-#!   cat("It is your responsibility to put meaningful content here\n")
-#!   cat("As an example we replace the illegal zeros by NA\n")
+#!   message("NOTE that the new rows have silently the first level 'a' for UNSIGNED vmodes")
+#!   message("NOTE that the new rows have an illegal factor level <0> for SIGNED vmodes")
+#!   message("It is your responsibility to put meaningful content here")
+#!   message("As an example we replace the illegal zeros by NA")
 #!   df$b[27:52] <- NA
 #!   df
 #!

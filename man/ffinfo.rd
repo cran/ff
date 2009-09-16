@@ -21,7 +21,10 @@ ffinfo(file)
   \item{rootpath}{ the root path relative to which the files are stored in the .ffData zip }
 }
 \author{
-  Jens Oehlchlägel
+  Jens Oehlschlägel
+}
+\note{
+  For large files and the zip64 format use \code{zip 3.0} and \code{unzip 6.0} from \url{http://www.info-zip.org/}.
 }
 \seealso{
   \code{\link{ffsave}}, \code{\link{ffload}}, \code{\link{ffdrop}}

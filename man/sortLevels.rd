@@ -53,9 +53,9 @@ sortLevels(x)
   \code{\link{read.table.ffdf}}, \code{\link{levels.ff}}
 }
 \examples{
-  cat("Let's create a factor with little levels\n")
+  message("Let's create a factor with little levels")
   x <- ff(letters[4:6], levels=letters[4:6])
-  cat("Let's interpret the same ff file without levels in order to see the codes\n")
+  message("Let's interpret the same ff file without levels in order to see the codes")
   y <- x
   levels(y) <- NULL
 
@@ -70,9 +70,9 @@ sortLevels(x)
   levels(x)
   data.frame(factor=x[], codes=y[])
 
-  cat("NEVER forget to reassign the result of recodeLevels or sortLevels, look at the following mess\n")
+  message("NEVER forget to reassign the result of recodeLevels or sortLevels, look at the following mess")
   recodeLevels(x, rev(levels(x)))
-  cat("NOW the codings have changed, but not the levels, the result is wrong data\n")
+  message("NOW the codings have changed, but not the levels, the result is wrong data")
   levels(x)
   data.frame(factor=x[], codes=y[])
 
@@ -81,7 +81,7 @@ sortLevels(x)
 \dontrun{
  n <- 5e7
 
- cat("reading a factor from a file ist as fast ...\n")
+ message("reading a factor from a file ist as fast ...")
  system.time(
  fx <- ff(factor(letters[1:25]), length=n)
  )
@@ -90,7 +90,7 @@ sortLevels(x)
  rm(x); gc()
 
 
- cat("... as creating it in-RAM (R-2.11.1) which is theoretically impossible ...\n")
+ message("... as creating it in-RAM (R-2.11.1) which is theoretically impossible ...")
  system.time({
  x <- integer(n)
  x[] <- 1:25
@@ -101,7 +101,7 @@ sortLevels(x)
  rm(x); gc()
 
 
- cat("... but is possible if we avoid some  unnecessary copying that is triggered by assignment functions\n")
+ message("... but is possible if we avoid some  unnecessary copying that is triggered by assignment functions")
  system.time({
  x <- integer(n)
  x[] <- 1:25

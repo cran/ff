@@ -1,3 +1,26 @@
+		CHANGES IN ff VERSION 2.2.2
+
+
+
+USER VISIBLE CHANGES
+
+    o	In read.table.ffdf arguments 'colClasses' and 'col.names' are now 
+        enforced also during 'next.rows' chunks. If they are not provided
+        by the user, they are derived now BEFORE argument 'transFUN' is 
+        applied. This allows dropping columns in transFUN - and still
+        having all columns info ready for next chunk's call.
+
+    o	all calls to 'seq.int' have been replaced by 'seq_along' or 'seq_len'
+
+    o	most calls to 'cat' have been replaced by 'message' or 'packageStartupMessage'
+
+    
+BUG FIXES
+
+    o	fforder no longer creates an integer overflow (thanks to Edwin de Jonge)
+
+
+
 		CHANGES IN ff VERSION 2.2.0
 
 

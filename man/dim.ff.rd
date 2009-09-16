@@ -62,9 +62,9 @@
   x[,bydim=c(2,1)]
   y[,bydim=c(2,1)]
 
-  cat("NOTE that x[] like x[,] returns a matrix (respects dimorder),\n")
-  cat("while x[1:12] returns a vector IN STORAGE ORDER\n")
-  cat("check the following examples twice to make sure you understand this\n")
+  message("NOTE that x[] like x[,] returns a matrix (respects dimorder),")
+  message("while x[1:12] returns a vector IN STORAGE ORDER")
+  message("check the following examples twice to make sure you understand this")
   x[,]
   x[]
   as.vector(x[])
@@ -72,13 +72,13 @@
   rm(x,y); gc()
 
   \dontshow{
-    cat("some regression test with regard to different dimorders\n")
+    message("some regression test with regard to different dimorders")
     k <- 24
     d <- 3:5
     n <- prod(d)
     for (i in 1:k){
       a <- array(sample(n), dim=sample(d))
-      x <- as.ff(a, dimorder=sample(seq.int(along=d)))
+      x <- as.ff(a, dimorder=sample(seq_along(d)))
       if (!identical(a[1:n], x[1:n]))
         stop("error in caclulating access positions")
       if (!identical(a[1:dim(a)[1],,], x[1:dim(a)[1],,]))
@@ -87,7 +87,7 @@
     rm(x); gc()
   }
   \dontrun{
-    cat("some performance comparison between different dimorders\n")
+    message("some performance comparison between different dimorders")
     n <- 100
     m <- 100000
     a <- ff(1L,dim=c(n,m))

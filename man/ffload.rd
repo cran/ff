@@ -33,6 +33,10 @@ ffload(file, list = character(0L), envir = parent.frame(), rootpath = NULL, over
 \value{
   A character vector with the names of the restored ff files
 }
+\note{
+  The ff files are not platform-independent with regard to byte order.
+  For large files and the zip64 format use \code{zip 3.0} and \code{unzip 6.0} from \url{http://www.info-zip.org/}.
+}
 \author{
   Jens Oehlschlägel
 }

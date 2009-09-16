@@ -9,7 +9,7 @@
 
 .onLoad <- function(lib, pkg) {
   ##library.dynam("ff", pkg, lib) use useDynLib(ff) in NAMESPACE instead
-  packageStartupMessage("Loading package ff", packageDescription("ff", lib, fields="Version"), "\n")
+  packageStartupMessage("Loading package ff", packageDescription("ff", lib, fields="Version"), "")
   # allow fftempdir to be set before package is loaded
   if (is.null(getOption("fftempdir"))){
     # create tempdir and make tempdir name independent of platform (otherwise dirname(tempfile)!=getOption("fftempdir"))
@@ -107,9 +107,9 @@
 }
 
 .onAttach <- function(libname, pkgname){
-  packageStartupMessage("Attaching package ff\n")
+  packageStartupMessage("Attaching package ff")
   if (getRversion()<="2.10.0"){
-    packageStartupMessage('fixing [.AsIs in base namespace because if the NextMethod("[") returns a different class, [.AsIs was reverting this\n')
+    packageStartupMessage('fixing [.AsIs in base namespace because if the NextMethod("[") returns a different class, [.AsIs was reverting this')
     #assignInNamespace(
     #  "[.AsIs"
     #, function (x, i, ...){
@@ -128,9 +128,9 @@
 }
 
 .Last.lib <- function(libpath) {
-   packageStartupMessage("Detaching package ff\n")
+   packageStartupMessage("Detaching package ff")
   if (getRversion()<="2.10.0"){
-    packageStartupMessage('restoring [.AsIs\n')
+    packageStartupMessage('restoring [.AsIs')
     assignInNamespace(
       "[.AsIs"
     , function (x, i, ...){
@@ -144,12 +144,12 @@
 }
 
 .onUnload <- function(libpath){
-   packageStartupMessage("Unloading package ff\n")
+   packageStartupMessage("Unloading package ff")
    #remove(list=".fftemp", envir=globalenv())
    #gc()
    library.dynam.unload("ff", libpath)
    if (unlink(getOption("fftempdir"), recursive = TRUE))
-     packageStartupMessage("Error in unlinking fftempdir\n")
+     packageStartupMessage("Error in unlinking fftempdir")
    else
      options(fftempdir=NULL, ffextension=NULL, fffinonexit=NULL, ffpagesize=NULL, ffcaching=NULL, ffdrop=NULL, ffbatchbytes=NULL, ffmaxbytes=NULL)
 }

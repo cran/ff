@@ -87,10 +87,10 @@
 #!   do.call("data.frame", c(list(ident=ident, pathfile=pathfile, dirnam=dirnam, basnam=basnam), splitted))
 #!
 #!   \dontrun{
-#!     cat("show the difference between tempfile and fftempfile\\n")
+#!     message("show the difference between tempfile and fftempfile")
 #!     do.call("data.frame", c(list(ident=ident, pathfile=pathfile, dirnam=dirnam, basnam=basnam), splitted, list(filename=tempPathFile(splitted), fftempfile=fftempfile(pathfile))))
 #!
-#!     cat("for a single string splitPathFile is slower, for vectors of strings it scales much better than dirname+basename\\n")
+#!     message("for a single string splitPathFile is slower, for vectors of strings it scales much better than dirname+basename")
 #!
 #!     system.time(for (i in 1:1000){
 #!       d <- dirname(pathfile)

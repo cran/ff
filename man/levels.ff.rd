@@ -40,31 +40,31 @@
 \note{ When levels as assigned to an ff object that formerly had not levels, we assign automatically \code{\link{ramclass}} == "factor". If you want to change to an ordered factor, use \code{\link[=virtual.ff]{virtual}$ramclass <- c("ordered", "factor")} }
 \seealso{ \code{\link{ramclass}}, \code{\link{factor}}, \code{\link[=physical.ff]{virtual}} }
 \examples{
-  cat("--- create an ff factor including NA as last level\n")
+  message("--- create an ff factor including NA as last level")
   x <- ff("a", levels=c(letters, NA), length=99)
-  cat('    we expect a warning because "A" is an unknown level\n')
+  message('    we expect a warning because "A" is an unknown level')
   x[] <- c("a", NA,"A")
   x
   levels(x)
 
-  cat("--- create an ff ordered factor\n")
+  message("--- create an ff ordered factor")
   x <- ff(letters, levels=letters, ramclass=c("ordered","factor"), length=260)
   x
   levels(x)
 
-  cat("    make it a non-ordered factor\n")
+  message("    make it a non-ordered factor")
   virtual(x)$ramclass <- "factor"
   x
   rm(x); gc()
 
  \dontrun{
-  cat("--- create an unsigned quad factor\n")
+  message("--- create an unsigned quad factor")
   x <- ff(c("A","T","G","C"), levels=c("A","T","G","C"), vmode="quad", length=100)
   x
-  cat("  0:3 coding usually invisible to the user\n")
+  message("  0:3 coding usually invisible to the user")
   unclass(x[1:4])
-  cat("    after removing levels, the 0:3 coding becomes visible to the user\n")
-  cat("    we expect a warning here\n")
+  message("    after removing levels, the 0:3 coding becomes visible to the user")
+  message("    we expect a warning here")
   levels(x) <- NULL
   x[1:4]
   rm(x); gc()

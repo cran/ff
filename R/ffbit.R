@@ -48,10 +48,10 @@ as.bitwhich.hi <- function(x, ...){
       if (x[[1]]<0)
         bitwhich(maxindex, poslength, x)
       else
-        bitwhich(maxindex, poslength, -as.integer(seq.int(length = maxindex))[-x])
+        bitwhich(maxindex, poslength, -as.integer(seq_len( maxindex))[-x])
     }else{
       if (x[[1]]<0)
-        bitwhich(maxindex, poslength, as.integer(seq.int(length = maxindex))[x])
+        bitwhich(maxindex, poslength, as.integer(seq_len( maxindex))[x])
       else
         bitwhich(maxindex, poslength, x)
     }
@@ -123,15 +123,15 @@ as.hi.bit <- function(x
 
 regtest.as.hi.bit <- function(){
 
-  cat("testing correctness of max.bit\n")
+  message("testing correctness of max.bit")
   for (n in c(0, 1, 2, 31, 32, 33, 63, 64, 65, 95, 96, 97, 127,128,129)){
-    for (to1 in seq.int(length=n)){
-      cat("n", n, "to", to1, "\n")
-      for (from1 in seq.int(from=1, to=to1, by=1L)){
+    for (to1 in seq_len(n)){
+      message("n ", n, " to ", to1, "")
+      for (from1 in seq.int(from=1L, to=to1, by=1L)){
       x <- bit(n)
       if (!identical(max(x, from=from1, to=to1), as.integer(NA)))
         stop("wrong")
-      for (i in seq.int(length=n)){
+      for (i in seq_len(n)){
         x[i] <- TRUE
         if (!identical(i, max(x, from=from1, to=to1)))
           stop("wrong")
@@ -141,15 +141,15 @@ regtest.as.hi.bit <- function(){
   }
 
 
-  cat("testing correctness of min.bit\n")
+  message("testing correctness of min.bit")
   for (n in c(0, 1, 2, 31, 32, 33, 63, 64, 65, 95, 96, 97, 127,128,129)){
-    for (to1 in seq.int(length=n)){
-      cat("n", n, "to", to1, "\n")
-      for (from1 in seq.int(from=1, to=to1, by=1L)){
+    for (to1 in seq_len(n)){
+      message("n ", n, " to ", to1, "")
+      for (from1 in seq.int(from=1L, to=to1, by=1L)){
       x <- bit(n)
       if (!identical(min(x, from=from1, to=to1), as.integer(NA)))
         stop("wrong")
-      for (i in rev(seq.int(length=n))){
+      for (i in rev(seq_len(n))){
         x[i] <- TRUE
         if (!identical(i, min(x, from=from1, to=to1)))
           stop("wrong")
@@ -159,15 +159,15 @@ regtest.as.hi.bit <- function(){
   }
 
 
-  cat("testing correctness of as.hi.bit()\n")
+  message("testing correctness of as.hi.bit()")
   for (n in c(0, 1, 2, 31, 32, 33, 63, 64, 65, 95, 96, 97, 127,128,129)){
-    for (to1 in seq.int(length=n)){
-      cat("n", n, "to", to1, "\n")
-      for (from1 in seq.int(from=1, to=to1, by=1L)){
+    for (to1 in seq_len(n)){
+      message("n ", n, " to ", to1, "")
+      for (from1 in seq.int(from=1L, to=to1, by=1L)){
       x <- bit(n)
       if (!identical(min(x, from=from1, to=to1), as.integer(NA)))
         stop("wrong")
-      for (i in seq.int(length=n)){
+      for (i in seq_len(n)){
         x[i] <- TRUE
         if (!identical(as.vector(as.which(x)), (1:n)[as.vector(as.integer(as.hi.bit(x)))]))
           stop("wrong")

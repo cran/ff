@@ -47,21 +47,21 @@
 #! \seealso{  \code{\link{as.ff.bit}}, \code{\link{ff}}, \code{\link{clone}} %, \code{\link{as.symm}}
 #!          , \code{\link{as.vmode}}, \code{\link{vmode}}, \code{\link{as.hi}} }
 #! \examples{
-#!    cat("create ff\n")
+#!    message("create ff")
 #!    myintff <- ff(1:12)
-#!    cat("coerce (=clone) integer ff to double ff\n")
+#!    message("coerce (=clone) integer ff to double ff")
 #!    mydoubleff <- as.ff(myintff, vmode="double")
-#!    cat("cache (=clone) integer ff to integer ram AND close original ff\n")
+#!    message("cache (=clone) integer ff to integer ram AND close original ff")
 #!    myintram <- as.ram(myintff) # filename is retained
 #!    close(myintff)
-#!    cat("modify ram cache and write back (=clone) to ff\n")
+#!    message("modify ram cache and write back (=clone) to ff")
 #!    myintram[1] <- -1L
 #!    myintff <- as.ff(myintram, overwrite=TRUE)
-#!    cat("coerce (=clone) integer ram to double ram\n")
+#!    message("coerce (=clone) integer ram to double ram")
 #!    mydoubleram <- as.ram(myintram, vmode="double")
-#!    cat("coerce (inplace) integer ram to double ram\n")
+#!    message("coerce (inplace) integer ram to double ram")
 #!    myintram <- as.ram(myintram, vmode="double")
-#!    cat("more classic: coerce (inplace) double ram to integer ram\n")
+#!    message("more classic: coerce (inplace) double ram to integer ram")
 #!    vmode(myintram) <- "integer"
 #!    rm(myintff, myintram, mydoubleff, mydoubleram); gc()
 #! }

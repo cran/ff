@@ -113,13 +113,14 @@ This is necessary because we cannot provide \code{x} with zero rows (we cannot c
   \cr
   \code{read.table.ffdf} has been designed to behave as much like \code{\link{read.table}} as possible. Hoever, note the following differences:
   \enumerate{
+    \item Arguments 'colClasses' and 'col.names' are now enforced also during 'next.rows' chunks.
+          For example giving \code{colClasses=NA} will force that no colClasses are derived from the \code{first.rows} respective from the \code{\link{ffdf}} object in parameter \code{x}.
     \item colClass 'ordered' is allowed and will create an \code{\link{ordered}} factor
     \item character vector are not supported, character data must be read as one of the following colClasses: 'Date', 'POSIXct', 'factor, 'ordered'.
           By default character columns are read as factors.
           Accordingly arguments 'as.is' and 'stringsAsFactors' are not allowed.
     \item the sequence of \code{\link{levels.ff}} from chunked reading can depend on chunk size: by default new levels found on a chunk are appended to the levels found in previous chunks, no attempt is made to sort and recode the levels during chunked processing, levels can be sorted and recoded most efficiently \emph{after} all records have been read using \code{\link{sortLevels}}.
     \item the default for argument 'comment.char' is \code{""} even for those FUN that have a different default. However, explicit specification of 'comment.char' will have priority.
-    \item Arguments 'colClasses' and 'col.names' are ignored during 'next.rows' chunks and thus can be completely ignored if no 'first.rows' chunk is read because argument \code{x} has given a \code{\link{ffdf}} object.
   }
 }
 \note{
@@ -150,7 +151,7 @@ This is necessary because we cannot provide \code{x} with zero rows (we cannot c
     ffx
     sapply(ffx[,], class)
 
-    cat("NOTE that read.table fails for ordered factors, this is fixed in read.table.ffdf\n")
+    message("NOTE that read.table fails for ordered factors, this is fixed in read.table.ffdf")
     try(read.csv(file=csvfile, header=TRUE, colClasses=c(ord="ordered")))
     # could fix this with the following two lines (Gabor Grothendieck) but does not know what bad side-effects this could have
      #setOldClass("ordered")
@@ -162,40 +163,40 @@ This is necessary because we cannot provide \code{x} with zero rows (we cannot c
     ffx
     sapply(ffx[,], class)
 
-    cat("NOTE that reading in chunks can change the sequence of levels and thus the coding\n")
-    cat("(Sorting levels during chunked reading can be too expensive)\n")
+    message("NOTE that reading in chunks can change the sequence of levels and thus the coding")
+    message("(Sorting levels during chunked reading can be too expensive)")
     ffx <- read.csv.ffdf(file=csvfile, header=TRUE, colClasses=c(ord="ordered", dct="POSIXct", dat="Date"), first.rows=6, next.rows=10, VERBOSE=TRUE)
     y <- ffx$fac[]
     print(levels(y))
     data.frame(values=as.character(y), codes=as.integer(y))
 
-    cat("If we don't know the levels we can sort then after reading\n")
-    cat("(Will rewrite all factor codes)\n")
-    cat("NOTE that you MUST assign the return value of sortLevels()\n")
+    message("If we don't know the levels we can sort then after reading")
+    message("(Will rewrite all factor codes)")
+    message("NOTE that you MUST assign the return value of sortLevels()")
     ffx <- sortLevels(ffx)
     y <- ffx$fac[]
     print(levels(y))
     data.frame(values=as.character(y), codes=as.integer(y))
 
-    cat("If we KNOW the levels we can fix levels upfront\n")
+    message("If we KNOW the levels we can fix levels upfront")
     ffx <- read.csv.ffdf(file=csvfile, header=TRUE, colClasses=c(ord="ordered", dct="POSIXct", dat="Date"), first.rows=6, next.rows=10, levels=list(fac=letters, ord=LETTERS))
     y <- ffx$fac[]
     print(levels(y))
     data.frame(values=as.character(y), codes=as.integer(y))
 
-    cat("Or we inspect a sufficiently large chunk of data and use those\n")
+    message("Or we inspect a sufficiently large chunk of data and use those")
     ffx1 <- read.csv.ffdf(file=csvfile, header=TRUE, colClasses=c(ord="ordered", dct="POSIXct", dat="Date"), nrows=13)
     ffx <- read.csv.ffdf(x=ffx1, file=csvfile, header=FALSE, skip=1+nrow(ffx1), VERBOSE=TRUE)
 
-    cat("We can check for unexpected factor levels, say we only allowed a:l\n")
+    message("We can check for unexpected factor levels, say we only allowed a:l")
     ffx <- read.csv.ffdf(file=csvfile, header=TRUE, colClasses=c(ord="ordered", dct="POSIXct", dat="Date"), levels=list(fac=letters[1:12], ord=LETTERS[1:12]), appendLevels=FALSE)
     sapply(colnames(ffx), function(i)sum(is.na(ffx[[i]][])))
 
-    cat("We can fine-tune the creation of the ffdf:\n")
-    cat("- let's create the ff files outside of fftempdir\n")
-    cat("- let's reduce required disk space and thus file.system cache RAM\n")
+    message("We can fine-tune the creation of the ffdf:")
+    message("- let's create the ff files outside of fftempdir")
+    message("- let's reduce required disk space and thus file.system cache RAM")
     vmode(ffx)
-    cat("By default we had record size\n")
+    message("By default we had record size")
     sum(.ffbytes[vmode(ffx)])
 
     ffy <- read.csv.ffdf(file=csvfile, header=TRUE, colClasses=c(ord="ordered", dct="POSIXct", dat="Date")
@@ -205,12 +206,12 @@ This is necessary because we cannot provide \code{x} with zero rows (we cannot c
       )
     )
     vmode(ffy)
-    cat("This recordsize is more than 50\% reduced\n")
+    message("This recordsize is more than 50\% reduced")
     sum(.ffbytes[vmode(ffy)])
 
-    cat("Don't forget to wrap-up files that are not in fftempdir\n")
+    message("Don't forget to wrap-up files that are not in fftempdir")
     delete(ffy); rm(ffy)
-    cat("It's a good habit to also wrap-up temporary stuff (or at least know how this is done)\n")
+    message("It's a good habit to also wrap-up temporary stuff (or at least know how this is done)")
     rm(ffx); gc()
 
     fwffile <- tempfile()

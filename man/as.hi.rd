@@ -83,47 +83,47 @@ as.hi(x, \dots)
 \note{ Avoid changing the Hybrid Index representation, this might crash the \code{\link{[.ff}} subscripting. }
 \seealso{ \code{\link{hi}} for the Hybrid Index class, \code{\link{hiparse}} for parsing details, \code{\link{as.integer.hi}} for back-coercion, \code{\link{[.ff}} for ff subscripting }
 \examples{
-  cat("integer indexing with and without rel-packing\n")
+  message("integer indexing with and without rel-packing")
   as.hi(1:12)
   as.hi(1:12, pack=FALSE)
-  cat("if index is double, the wrapper method just converts to integer\n")
+  message("if index is double, the wrapper method just converts to integer")
   as.hi(as.double(1:12))
-  cat("if index is character, the wrapper method just converts to integer\n")
+  message("if index is character, the wrapper method just converts to integer")
   as.hi(c("a","b","c"), names=letters)
-  cat("negative index must use maxindex (or vw)\n")
+  message("negative index must use maxindex (or vw)")
   as.hi(-(1:3), maxindex=12)
-  cat("logical index can use maxindex\n")
+  message("logical index can use maxindex")
   as.hi(c(FALSE, FALSE, TRUE, TRUE))
   as.hi(c(FALSE, FALSE, TRUE, TRUE), maxindex=12)
 
-  cat("matrix index\n")
+  message("matrix index")
   x <- matrix(1:12, 6)
   as.hi(rbind(c(1,1), c(1,2), c(2,1)), dim=dim(x))
 
-  cat("first ten positions within virtual window\n")
+  message("first ten positions within virtual window")
   i <- as.hi(1:10, vw=c(10, 80, 10))
   i
-  cat("back-coerce relativ to virtual window\n")
+  message("back-coerce relativ to virtual window")
   as.integer(i)
-  cat("back-coerce relativ to absolute origin\n")
+  message("back-coerce relativ to absolute origin")
   as.integer(i, vw.convert=FALSE)
 
-  cat("parsed index expressions save index RAM\n")
+  message("parsed index expressions save index RAM")
     as.hi(quote(1:1000000000))
 \dontrun{
-  cat("compare to RAM requirement when the index experssion is evaluated\n")
+  message("compare to RAM requirement when the index experssion is evaluated")
     as.hi(1:1000000000)
 }
 
-cat("example of parsable index expression\n")
+message("example of parsable index expression")
   a <- seq(100, 200, 20)
   as.hi(substitute(c(1:5, 4:9, a)))
   hi(c(1,4, 100),c(5,9, 200), by=c(1,1,20))
 
-cat("example of index expression partially expanded and accepting token\n")
+message("example of index expression partially expanded and accepting token")
   as.hi(quote(1+(1:16)))  # non-supported use of brackets '(' and mathematical operators '+' expands 1:16, parsing is aborted because length>16
 
-cat("example of index expression completely evaluated after token has been rejected\n")
+message("example of index expression completely evaluated after token has been rejected")
   as.hi(quote(1+(1:17)))  # non-supported use of brackets '(' and mathematical operators '+' expands 1:17, parsing is aborted because length>16
 }
 \keyword{ IO }

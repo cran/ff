@@ -796,7 +796,7 @@ function (x, ...)
 #!  ram2ffcode(letters, letters, vmode="byte")
 #!  ram2ffcode(letters, letters, vmode="ubyte")
 #!  ram2ffcode(letters, letters, vmode="nibble")
-#!  cat('note that ram2ffcode() does NOT warn that vmode="nibble" cannot store 26 levels\n')
+#!  message('note that ram2ffcode() does NOT warn that vmode="nibble" cannot store 26 levels')
 #! }
 #! \keyword{ IO }
 #! \keyword{ data }
@@ -915,7 +915,7 @@ regtest.vmode <- function(){
   #testmodes <- setdiff(testmodes, "integer")
   OK <- TRUE
   for (v in testmodes){
-    cat(v,"\n")
+    message(v)
     if (v=="raw")
       oldopt <- options(warn=-1)
     if (v=="integer")

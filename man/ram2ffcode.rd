@@ -26,7 +26,7 @@ ram2ramcode(value, levels)
  ram2ffcode(letters, letters, vmode="byte")
  ram2ffcode(letters, letters, vmode="ubyte")
  ram2ffcode(letters, letters, vmode="nibble")
- cat('note that ram2ffcode() does NOT warn that vmode="nibble" cannot store 26 levels\n')
+ message('note that ram2ffcode() does NOT warn that vmode="nibble" cannot store 26 levels')
 }
 \keyword{ IO }
 \keyword{ data }

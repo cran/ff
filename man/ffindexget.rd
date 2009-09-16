@@ -58,7 +58,7 @@ ffindexset(x, index, value, indexorder = NULL, BATCHSIZE = NULL, BATCHBYTES = ge
   \code{\link{Extract.ff}}, \code{\link{ffdfindexget}}, \code{\link{ffindexorder}}
 }
 \examples{
-cat("ff integer subscripts with ff return/assign values\n")
+message("ff integer subscripts with ff return/assign values")
 x <- ff(factor(letters))
 i <- ff(2:9)
 xi <- x[i]
@@ -67,7 +67,7 @@ xi[] <- NA
 xi
 x[i] <- xi
 x
-cat("ff integer subscripts: more control with ffindexget/ffindexset\n")
+message("ff integer subscripts: more control with ffindexget/ffindexset")
 xi <- ffindexget(x, i, FF_RETURN=xi)
 x <- ffindexset(x, i, xi)
 rm(x, i, xi)

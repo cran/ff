@@ -88,7 +88,7 @@ This function is called for its side-effects and breaks the functional programmi
    x
 
    \dontrun{
-      cat("Note how the datatype influences sorting speed")
+      message("Note how the datatype influences sorting speed")
       n <- 5e6
       x <- sample(1:26, n, TRUE)
 

@@ -67,8 +67,7 @@ ffsave.image(file = stop("'file' must be specified"), safe = TRUE, ...)
 \details{
   \code{ffsave} stores objects and ff files in an \code{ffarchive} named \code{<file>}:
   i.e. it saves all specified objects via \code{\link{save}} in a file named \code{<file>.RData}
-  and saves all ff files related to these objects in a zipfile named \code{<file>.ffData} using an external \code{zip} utility,
-  e.g. for windows in \code{Rtools} on \url{http://www.murdoch-sutherland.com/Rtools/}.
+  and saves all ff files related to these objects in a zipfile named \code{<file>.ffData} using an external \code{zip} utility.
   \cr
   By default files are stored relative to the \code{rootpath="\"} and will be restored relative to \code{"\"} (in its original location).
   By providing a partial path prefix via argument \code{rootpath} the files are stored relative to this \code{rootpath}.
@@ -93,6 +92,7 @@ ffsave.image(file = stop("'file' must be specified"), safe = TRUE, ...)
 }
 \note{
   The ff files are not platform-independent with regard to byte order.
+  For large files and the zip64 format use \code{zip 3.0} and \code{unzip 6.0} from \url{http://www.info-zip.org/}.
 }
 \seealso{
   \code{\link{ffinfo}} for inspecting the content of the \code{ffarchive} \cr
@@ -101,7 +101,7 @@ ffsave.image(file = stop("'file' must be specified"), safe = TRUE, ...)
 }
 \examples{
   \dontrun{
-  cat("let's create some ff objects\n")
+  message("let's create some ff objects")
   n <- 8e3
   a <- ff(sample(n, n, TRUE), vmode="integer", length=n, filename="d:/tmp/a.ff")
   b <- ff(sample(255, n, TRUE), vmode="ubyte", length=n, filename="d:/tmp/b.ff")
@@ -111,30 +111,30 @@ ffsave.image(file = stop("'file' must be specified"), safe = TRUE, ...)
   df <- ffdf(x=x, y=y, z=z)
   rm(x,y,z)
 
-  cat("save all of them\n")
+  message("save all of them")
   ffsave.image("d:/tmp/x")
   str(ffinfo("d:/tmp/x"))
 
-  cat("save some of them with shorter relative pathnames ...\n")
+  message("save some of them with shorter relative pathnames ...")
   ffsave(a, b, file="d:/tmp/y", rootpath="d:/tmp")
   str(ffinfo("d:/tmp/y"))
 
-  cat("... and add others later\n")
+  message("... and add others later")
   ffsave(df, add=TRUE, file="d:/tmp/y", rootpath="d:/tmp")
   str(ffinfo("d:/tmp/y"))
 
-  cat("... and add others later\n")
+  message("... and add others later")
   system.time(ffsave(a, file="d:/tmp/z", move=TRUE))
   ffinfo("d:/tmp/z")
 
-  cat("let's delete/close/remove all objects\n")
+  message("let's delete/close/remove all objects")
   close(a)  # no file anymore, since we moved a into the ffarchive
   delete(b, df)
   rm(df, a, b, n)
-  cat("prove it\n")
+  message("prove it")
   ls()
 
-  cat("restore all but ff files in a different directory\n")
+  message("restore all but ff files in a different directory")
   system.time(ffload("d:/tmp/x", rootpath="d:/tmp2"))
   lapply(ls(), function(i)filename(get(i)))
 

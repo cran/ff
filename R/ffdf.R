@@ -144,7 +144,7 @@ if (FALSE){
   #emulate partitioning
   y <- vector("list", 10)
   for (h in 1:10){
-    cat(h, "\n")
+    message(h, "\n")
     y[[h]] <- ff(1:n, dim=c(n/10,10), dimorder=2:1, vmode="integer", caching="mmeachflush")
   }
 
@@ -172,7 +172,7 @@ if (FALSE){
   system.time({
     ii <- split(as.integer(i%%(n10))+1L, (i%/%(n10))+1L)
     iin <- as.integer(names(ii))
-    for (h in seq.int(length=length(ii))){
+    for (h in seq_len(length(ii))){
       j <- ii[[h]]
       z[[h]] <- y[[iin[h]]][j,]
     }
@@ -526,9 +526,9 @@ ffdf <- function(
       # don't need this if splitting, only if joining
       if (joining){
         if (is.null(colnames(f)))
-          pnam[offset+seq.int(length.out=fcols)] <<- ""
+          pnam[offset+seq_len(fcols)] <<- ""
         else
-          pnam[offset+seq.int(length.out=fcols)] <<- colnames(f)
+          pnam[offset+seq_len(fcols)] <<- colnames(f)
       }
 
        if (!VirtualIsMatrix || AsIs | inherits(f, "model.matrix")){
@@ -554,15 +554,15 @@ ffdf <- function(
 
          if (is.null(fnam)){
            if (hasdotnam[d]){
-             fnam <- paste(dotnam[d], seq.int(length.out=fcols), sep=".")
+             fnam <- paste(dotnam[d], seq_len(fcols), sep=".")
            }else{
-             fnam <- paste(dotstr[d], seq.int(length.out=fcols), sep="")
+             fnam <- paste(dotstr[d], seq_len(fcols), sep="")
            }
          }else{
            if (hasdotnam[d])
              fnam <- paste(dotnam[d], fnam, sep=".")
          }
-         for (pc in seq.int(length.out=fcols)){
+         for (pc in seq_len(fcols)){
            v <<- v + 1L
            virtual <<- rbind(virtual, data.frame(
              VirtualVmode      = vmode(f)
@@ -614,7 +614,7 @@ ffdf <- function(
     Dimorder <- 1:2  # we reuse the existing physical ff objects, however the virtual layout of the data.frame
 
     physical <- dotval
-    for (p in seq.int(length.out=dotlen)){
+    for (p in seq_len(dotlen)){
       offset <- 0L
       f <- dotval[[p]]
       if (!is.ff(f))
@@ -647,7 +647,7 @@ ffdf <- function(
       if (is.character(ff_split)){
         jsplit <- match(ff_split, names(dotval))
       }else{
-        jsplit <- match(ff_split, seq.int(length.out=dotlen))
+        jsplit <- match(ff_split, seq_len(dotlen))
       }
       if (any(is.na(jsplit)))
         stop("could not find ff_split elements", "<", paste(ff_split[is.na(jsplit)], collapse="><"), ">")
@@ -667,12 +667,12 @@ ffdf <- function(
       joinlen <- length(ff_join)
       if (is.null(names(ff_join)))
         names(ff_join) <- rep("join", joinlen)
-      for (j in seq.int(length.out=joinlen)){
+      for (j in seq_len(joinlen)){
         jjoin <- ff_join[[j]]
         if (is.character(jjoin)){
           jjoin <- match(jjoin, names(dotval))
         }else{
-          jjoin <- match(jjoin, seq.int(length.out=dotlen))
+          jjoin <- match(jjoin, seq_len(dotlen))
         }
         if (any(is.na(jjoin)))
           stop("could not find ff_join elements", "<", paste(ff_join[[j]][is.na(jjoin)], collapse="><"), ">")
@@ -681,7 +681,7 @@ ffdf <- function(
     splitjoin <- c(ff_split, unlist(ff_join))
     if (any(duplicated(splitjoin)))
       stop("some elements duplicatd in ff_split and ff_join")
-    ff_rest <- setdiff(seq.int(length.out=dotlen), abs(unlist(splitjoin)))
+    ff_rest <- setdiff(seq_len(dotlen), abs(unlist(splitjoin)))
     names(ff_rest) <- ifelse(hasdotnam[ff_rest], dotnam[ff_rest], dotstr[ff_rest])
 
     # split elements have length=1 and negative position, rest elements are treated like join elements of length 1
@@ -692,7 +692,7 @@ ffdf <- function(
 
     physical <- vector("list", splitjoinlen)
     p <- 0L
-    for (sji in seq.int(length.out=splitjoinlen)){
+    for (sji in seq_len(splitjoinlen)){
       sjinam <- names(splitjoin)[sji]
       sj <- splitjoin[[sji]]
       nsj <- length(sj)
@@ -703,7 +703,7 @@ ffdf <- function(
           f <- dotval[[d]]
           nf <- ncol(f)
           sjmodes <- vmode(f)
-          for (i in seq.int(length.out=nf)){
+          for (i in seq_len(nf)){
             p <- p + 1L
             offset <- 0L
             make.virtual(d=d, p=p, splitcol=i)  # maintaining offset, v, virtual
@@ -724,7 +724,7 @@ ffdf <- function(
           p <- p + 1L
           offset <- 0L
           pnam <- character(0)
-          for (i in seq.int(length.out=nsj)){
+          for (i in seq_len(nsj)){
             d <- sj[i]
             f <- dotval[[d]]
             sjmodes[i] <- vmode(f)
@@ -750,7 +750,7 @@ ffdf <- function(
             # store physically as ff_matrix
             offset <- 0L
             anyAsIs <- FALSE
-            for (i in seq.int(length.out=nsj)){
+            for (i in seq_len(nsj)){
               f <- dotval[[sj[i]]]
               d <- dim(f)
               if (is.null(d))
@@ -767,7 +767,7 @@ ffdf <- function(
                 useffargs[c("vmode", "dim","dimorder","pattern")] <- list(names(maxffmode(sjmodes)), c(nrows, n), 2:1, paste(ff_args$pattern, fnam, sep="."))
 
                 physical[[p]] <- do.call("clone", c(list(f), useffargs))
-                colnames(physical[[p]]) <- pnam[offset+seq.int(length.out=n)]
+                colnames(physical[[p]]) <- pnam[offset+seq_len(n)]
                 names(physical)[p] <- fnam
               }
               if (n!=1 && anyAsIs && is.null(rownames(physical[[p]]))){
@@ -1119,10 +1119,10 @@ ffdf <- function(
         }
         ncols <- nrow(virtual)
         df <- vector("list", ncols)
-        pv <- split(seq.int(length.out=ncols), virtual$PhysicalElementNo)
+        pv <- split(seq_len(ncols), virtual$PhysicalElementNo)
         np <- length(pv)
         last_nvw <- NULL
-        for (ip in seq.int(length.out=np)){
+        for (ip in seq_len(np)){
           v <- pv[[ip]]
           vi <- virtual[v,]
           vi1 <- vi[1,,drop=TRUE]
@@ -1151,7 +1151,7 @@ ffdf <- function(
             cols <- vecseq(c(1L, cols[-length(cols)] + 1L), cols, concat=FALSE)
             colindex <- vecseq(vi$PhysicalFirstCol, vi$PhysicalLastCol, eval=FALSE)
             pvalue <- p[i2, colindex, drop=FALSE]
-            for (iv in seq.int(length.out=length(v))){
+            for (iv in seq_len(length(v))){
               elem <- pvalue[, cols[[iv]], drop=!vi$VirtualIsMatrix[iv]]
               if (vi$AsIs[iv]){
                 oldClass(elem) <- c("AsIs", oldClass(elem))
@@ -1191,7 +1191,7 @@ ffdf <- function(
       if (is.data.frame(df)){
         if (is.null(rownam)){
           if (missing(i))
-            row.names(df) <- seq.int(length.out=nrows)
+            row.names(df) <- seq_len(nrows)
           else
             row.names(df) <- as.which(i2)
         }else{
@@ -1232,7 +1232,7 @@ ffdf <- function(
       else if (is.matrix(i)){
         value <- split(rep(value, length.out=nrow(i)), i[,2])
         ii <- split(i[,1], i[,2])
-        lapply(seq.int(along.with=ii), function(i){
+        lapply(seq_along(ii), function(i){
           x[[i]][ii[[i]]] <- value[[i]]
         })
         return(x)
@@ -1253,7 +1253,7 @@ ffdf <- function(
       if (length(i)>d[2])
         stop("too many columns selected for replacement")
 
-      selector <- seq.int(length=d[2])
+      selector <- seq_len(d[2])
       names(selector) <- colnames(x)
       i <- selector[i]
       if (any(is.na(i)))
@@ -1274,7 +1274,7 @@ ffdf <- function(
       value$virtual$PhysicalElementNo <- length(uniqueoldpy) + value$virtual$PhysicalElementNo
 
       # recycle value
-      j <- repfromto(seq.int(length.out=dv[[2]]), 1, n)
+      j <- repfromto(seq_len(dv[[2]]), 1, n)
       virtual[i,] <- value$virtual[j,]
 
       names(physical) <- make.names(names(physical), unique=TRUE)
@@ -1326,10 +1326,10 @@ ffdf <- function(
         #not needed here: valcols <- cumsum(virtual$PhysicalLastCol - virtual$PhysicalFirstCol + 1L)
         #not needed here: valcols <- vecseq(c(1L, valcols[-length(valcols)] + 1L), valcols, concat=FALSE)
 
-        pv <- split(seq.int(length.out=ncols), virtual$PhysicalElementNo)
+        pv <- split(seq_len(ncols), virtual$PhysicalElementNo)
         np <- length(pv)
         last_nvw <- NULL
-        for (ip in seq.int(length.out=np)){
+        for (ip in seq_len(np)){
           v <- pv[[ip]]
           vi <- virtual[v,]
           vi1 <- vi[1,,drop=TRUE]
@@ -1426,12 +1426,12 @@ ffdf <- function(
 #! \examples{
 #!   x <- as.ffdf(data.frame(a=1:26, b=letters))
 #!
-#!   cat("Here we change the content of both x and y by reference\n")
+#!   message("Here we change the content of both x and y by reference")
 #!   y <- x
 #!   x$a[1] <- -1
 #!   y$a[1]
 #!
-#!   cat("Here we change the content only of x because y is a deep copy\n")
+#!   message("Here we change the content only of x because y is a deep copy")
 #!   y <- clone(x)
 #!   x$a[2] <- -2
 #!   y$a[2]
@@ -1488,7 +1488,7 @@ update.ffdf <- function(object, from, ...){
   cellbytes <- mean(.rambytes[vmode(object)])
   i1 <- i2 <- 0L # keep R CMD CHECK quiet
   if (dfrom[[1]]<dobject[[1]]){
-    ffrowapply(object[i1:i2,] <- from[repfromto(seq.int(length.out=dfrom[[1]]), i1, i2),,drop=FALSE], X=object, VBYTES=cellbytes, ...)
+    ffrowapply(object[i1:i2,] <- from[repfromto(seq_len(dfrom[[1]]), i1, i2),,drop=FALSE], X=object, VBYTES=cellbytes, ...)
   }else
     ffrowapply(object[i1:i2,] <- from[i1:i2,,drop=FALSE], X=object, VBYTES=cellbytes, ...)
   object
@@ -1584,7 +1584,7 @@ as.ffdf.data.frame <- function(
 ){
   rnam <- attr(x, "row.names")
   if (is.integer(rnam)){
-    if (all(rnam==seq.int(along=rnam)))
+    if (all(rnam==seq_along(rnam)))
       rnam <- NULL
     else
       rnam <- as.character(rnam)
@@ -1619,7 +1619,7 @@ as.ffdf.data.frame <- function(
   l <- list(...)
   if (is.null(l$ff_args$pattern))
     l$ff_args$pattern <- "ffdf"
-  ret <- lapply(seq.int(along=x)
+  ret <- lapply(seq_along(x)
   , function(i, ...){
     xi <- x[[i]]
     AsIs <- inherits(xi, "AsIs")
@@ -1763,10 +1763,10 @@ vmode.ffdf <- function(x, ...){
 #!   chunk(a, from=1, to = 13, BATCHBYTES=100)
 #!   rm(a); gc()
 #!
-#!  cat("dummy example for linear regression with biglm on ffdf\n")
+#!   message("dummy example for linear regression with biglm on ffdf")
 #!   library(biglm)
 #!
-#!   cat("NOTE that . in formula requires calculating terms manually because . as a data-dependant term is not allowed in biglm\n")
+#!   message("NOTE that . in formula requires calculating terms manually because . as a data-dependant term is not allowed in biglm")
 #!   form <- Sepal.Length ~ Sepal.Width + Petal.Length + Petal.Width + Species
 #!
 #!   lmfit <- lm(form, data=iris)
@@ -1774,10 +1774,10 @@ vmode.ffdf <- function(x, ...){
 #!   firis <- as.ffdf(iris)
 #!   for (i in chunk(firis, by=50)){
 #!     if (i[1]==1){
-#!       cat("first chunk is: "); print(i)
+#!       message("first chunk is: ", i[[1]],":",i[[2]])
 #!       biglmfit <- biglm(form, data=firis[i,,drop=FALSE])
 #!     }else{
-#!       cat("next chunk is: "); print(i)
+#!       message("next chunk is: ", i[[1]],":",i[[2]])
 #!       biglmfit <- update(biglmfit, firis[i,,drop=FALSE])
 #!     }
 #!   }
@@ -1879,7 +1879,7 @@ dim.ffdf <- function(x){
 
 
   np <- length(physical)
-  for (p in seq.int(length.out=np)){
+  for (p in seq_len(np)){
     d <- dim(physical[[p]])
     if (is.null(d))
       length(physical[[p]]) <- v1
@@ -2055,21 +2055,20 @@ dimnames.ffdf <- function(x){
 #!   y <- matrix(1:4, 2, 2)
 #!   z <- matrix(1:4, 2, 2)
 #!
-#!   cat("Here the y matrix is first converted to single columns by data.frame, then those columns become ff\n")
+#!   message("Here the y matrix is first converted to single columns by data.frame, then those columns become ff")
 #!   d <- as.ffdf(data.frame(x=x, y=y, z=I(z)))
 #!   physical(d)
 #!   virtual(d)
 #!
-#!   cat("Here the y matrix is first converted to ff, and then stored still as matrix in the ffdf object (although virtually treated as columns of ffdf)\n")
-#!   cat("\n")
+#!   message("Here the y matrix is first converted to ff, and then stored still as matrix in the ffdf object (although virtually treated as columns of ffdf)")
 #!   d <- ffdf(x=as.ff(x), y=as.ff(y), z=I(as.ff(z)))
 #!   physical(d)
 #!   virtual(d)
 #!
-#!   cat("Apply the usual methods extracting physical attributes\n")
+#!   message("Apply the usual methods extracting physical attributes")
 #!   lapply(physical(d), filename)
 #!   lapply(physical(d), vmode)
-#!   cat("And don't confuse with virtual vmode\n")
+#!   message("And don't confuse with virtual vmode")
 #!   vmode(d)
 #!
 #!   rm(d); gc()

@@ -34,10 +34,10 @@
   chunk(a, from=1, to = 13, BATCHBYTES=100)
   rm(a); gc()
 
- cat("dummy example for linear regression with biglm on ffdf\n")
+  message("dummy example for linear regression with biglm on ffdf")
   library(biglm)
 
-  cat("NOTE that . in formula requires calculating terms manually because . as a data-dependant term is not allowed in biglm\n")
+  message("NOTE that . in formula requires calculating terms manually because . as a data-dependant term is not allowed in biglm")
   form <- Sepal.Length ~ Sepal.Width + Petal.Length + Petal.Width + Species
 
   lmfit <- lm(form, data=iris)
@@ -45,10 +45,10 @@
   firis <- as.ffdf(iris)
   for (i in chunk(firis, by=50)){
     if (i[1]==1){
-      cat("first chunk is: "); print(i)
+      message("first chunk is: ", i[[1]],":",i[[2]])
       biglmfit <- biglm(form, data=firis[i,,drop=FALSE])
     }else{
-      cat("next chunk is: "); print(i)
+      message("next chunk is: ", i[[1]],":",i[[2]])
       biglmfit <- update(biglmfit, firis[i,,drop=FALSE])
     }
   }

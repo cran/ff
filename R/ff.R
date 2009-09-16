@@ -204,23 +204,23 @@ geterrstr.ff <- function(x)
 #! \seealso{  \code{\link{fftempfile}}, \code{\link{finalizer}}, \code{\link{ff}}, \code{\link{as.ff}}, \code{\link{as.ram}}, \code{\link{update.ff}} }
 #! \examples{
 #!   \dontrun{
-#!   cat("Neither giving pattern nor filename gives a random filename with extension ffextension in fftempdir\n")
+#!   message("Neither giving pattern nor filename gives a random filename with extension ffextension in fftempdir")
 #!   x <- ff(1:12)
 #!   finalizer(x)
 #!   filename(x)
-#!   cat("Giving a pattern with just a prefix moves to a random filename beginning with the prefix in fftempdir\n")
+#!   message("Giving a pattern with just a prefix moves to a random filename beginning with the prefix in fftempdir")
 #!   pattern(x) <- "myprefix_"
 #!   filename(x)
-#!   cat("Giving a pattern with a path and prefix moves to a random filename beginning with prefix in path (use . for getwd) \n")
+#!   message("Giving a pattern with a path and prefix moves to a random filename beginning with prefix in path (use . for getwd) ")
 #!   pattern(x) <- "./myprefix"
 #!   filename(x)
-#!   cat("Giving a filename moves to exactly this filename and extension in the R-expected place) \n")
+#!   message("Giving a filename moves to exactly this filename and extension in the R-expected place) ")
 #!   if (!file.exists("./myfilename.myextension")){
 #!     filename(x) <- "./myfilename.myextension"
 #!     filename(x)
 #!   }
 #!
-#!   cat("NOTE that the finalizer has changed from 'delete' to 'close': now WE are responsible for deleting the file - NOT the finalizer")
+#!   message("NOTE that the finalizer has changed from 'delete' to 'close': now WE are responsible for deleting the file - NOT the finalizer")
 #!   finalizer(x)
 #!   delete(x)
 #!   rm(x)
@@ -311,7 +311,7 @@ filename.ffdf <- function(x, ...)
 
 
 "pattern<-.ffdf" <- function(x, ..., value){
-  for (i in seq.int(length=ncol(x)))
+  for (i in seq_len(ncol(x)))
     pattern(x[[i]]) <- value
   x
 }
@@ -638,13 +638,13 @@ fixdiag.dist <- function(x
 #!   is.sorted(x) <- !( is.na(is.unsorted(x)) || is.unsorted(x))  # actually calling is.unsorted twice is stupid
 #!   is.sorted(x)
 #!   x[1] <- 100L
-#!   cat("don't forget to maintain once it's no longer TRUE")
+#!   message("don't forget to maintain once it's no longer TRUE")
 #!   is.sorted(x) <- FALSE
-#!   cat("check whether as 'is.sorted' attribute is maintained\n")
+#!   message("check whether as 'is.sorted' attribute is maintained")
 #!   !is.null(physical(x)$is.sorted)
-#!   cat("remove the 'is.sorted' attribute\n")
+#!   message("remove the 'is.sorted' attribute")
 #!   is.sorted(x) <- NULL
-#!   cat("NOTE that querying 'is.sorted' still returns FALSE\n")
+#!   message("NOTE that querying 'is.sorted' still returns FALSE")
 #!   is.sorted(x)
 #! }
 #! \keyword{ IO }
@@ -712,27 +712,27 @@ is.sorted <- function(x
 #! \author{ Jens Oehlschlägel, Daniel Adler (C++ back-end) }
 #! \seealso{ \code{\link{getset.ff}}, \code{\link{readwrite.ff}} and \code{\link{swap}} for methods that support maintenance of 'na.count', \code{\link[base]{NA}}, \code{\link{is.sorted}} for yet another \code{\link[=physical.ff]{physical}} attribute }
 #! \examples{
-#!   cat("--- ff examples ---\n")
+#!   message("--- ff examples ---")
 #!   x <- ff(1:12)
 #!   na.count(x)
-#!   cat("activate the 'na.count' physical attribute and set the current na.count manually\n")
+#!   message("activate the 'na.count' physical attribute and set the current na.count manually")
 #!   na.count(x) <- 0L
-#!   cat("add one NA with a method that maintains na.count\n")
+#!   message("add one NA with a method that maintains na.count")
 #!   swap(x, NA, 1)
 #!   na.count(x)
-#!   cat("remove the 'na.count' physical attribute (and stop automatic maintenance)\n")
+#!   message("remove the 'na.count' physical attribute (and stop automatic maintenance)")
 #!   na.count(x) <- NULL
-#!   cat("activate the 'na.count' physical attribute and have ff automatically calculate the current na.count\n")
+#!   message("activate the 'na.count' physical attribute and have ff automatically calculate the current na.count")
 #!   na.count(x) <- TRUE
 #!   na.count(x)
-#!   cat("--- ram examples ---\n")
+#!   message("--- ram examples ---")
 #!   x <- 1:12
 #!   na.count(x)
 #!   x[1] <- NA
-#!   cat("activate the 'na.count' physical attribute and have R automatically calculate the current na.count\n")
+#!   message("activate the 'na.count' physical attribute and have R automatically calculate the current na.count")
 #!   na.count(x) <- TRUE
 #!   na.count(x)
-#!   cat("remove the 'na.count' physical attribute (and stop automatic maintenance)\n")
+#!   message("remove the 'na.count' physical attribute (and stop automatic maintenance)")
 #!   na.count(x) <- NULL
 #!   na.count(x)
 #!   rm(x); gc()
@@ -1115,31 +1115,31 @@ length.ff <- function(x)
 #! \note{ When levels as assigned to an ff object that formerly had not levels, we assign automatically \code{\link{ramclass}} == "factor". If you want to change to an ordered factor, use \code{\link[=virtual.ff]{virtual}$ramclass <- c("ordered", "factor")} }
 #! \seealso{ \code{\link{ramclass}}, \code{\link{factor}}, \code{\link[=physical.ff]{virtual}} }
 #! \examples{
-#!   cat("--- create an ff factor including NA as last level\n")
+#!   message("--- create an ff factor including NA as last level")
 #!   x <- ff("a", levels=c(letters, NA), length=99)
-#!   cat('    we expect a warning because "A" is an unknown level\n')
+#!   message('    we expect a warning because "A" is an unknown level')
 #!   x[] <- c("a", NA,"A")
 #!   x
 #!   levels(x)
 #!
-#!   cat("--- create an ff ordered factor\n")
+#!   message("--- create an ff ordered factor")
 #!   x <- ff(letters, levels=letters, ramclass=c("ordered","factor"), length=260)
 #!   x
 #!   levels(x)
 #!
-#!   cat("    make it a non-ordered factor\n")
+#!   message("    make it a non-ordered factor")
 #!   virtual(x)$ramclass <- "factor"
 #!   x
 #!   rm(x); gc()
 #!
 #!  \dontrun{
-#!   cat("--- create an unsigned quad factor\n")
+#!   message("--- create an unsigned quad factor")
 #!   x <- ff(c("A","T","G","C"), levels=c("A","T","G","C"), vmode="quad", length=100)
 #!   x
-#!   cat("  0:3 coding usually invisible to the user\n")
+#!   message("  0:3 coding usually invisible to the user")
 #!   unclass(x[1:4])
-#!   cat("    after removing levels, the 0:3 coding becomes visible to the user\n")
-#!   cat("    we expect a warning here\n")
+#!   message("    after removing levels, the 0:3 coding becomes visible to the user")
+#!   message("    we expect a warning here")
 #!   levels(x) <- NULL
 #!   x[1:4]
 #!   rm(x); gc()
@@ -1426,9 +1426,9 @@ dimnames.ff_array <- function(x){
 #!   x[,bydim=c(2,1)]
 #!   y[,bydim=c(2,1)]
 #!
-#!   cat("NOTE that x[] like x[,] returns a matrix (respects dimorder),\n")
-#!   cat("while x[1:12] returns a vector IN STORAGE ORDER\n")
-#!   cat("check the following examples twice to make sure you understand this\n")
+#!   message("NOTE that x[] like x[,] returns a matrix (respects dimorder),")
+#!   message("while x[1:12] returns a vector IN STORAGE ORDER")
+#!   message("check the following examples twice to make sure you understand this")
 #!   x[,]
 #!   x[]
 #!   as.vector(x[])
@@ -1436,13 +1436,13 @@ dimnames.ff_array <- function(x){
 #!   rm(x,y); gc()
 #!
 #!   \dontshow{
-#!     cat("some regression test with regard to different dimorders\n")
+#!     message("some regression test with regard to different dimorders")
 #!     k <- 24
 #!     d <- 3:5
 #!     n <- prod(d)
 #!     for (i in 1:k){
 #!       a <- array(sample(n), dim=sample(d))
-#!       x <- as.ff(a, dimorder=sample(seq.int(along=d)))
+#!       x <- as.ff(a, dimorder=sample(seq_along(d)))
 #!       if (!identical(a[1:n], x[1:n]))
 #!         stop("error in caclulating access positions")
 #!       if (!identical(a[1:dim(a)[1],,], x[1:dim(a)[1],,]))
@@ -1451,7 +1451,7 @@ dimnames.ff_array <- function(x){
 #!     rm(x); gc()
 #!   }
 #!   \dontrun{
-#!     cat("some performance comparison between different dimorders\n")
+#!     message("some performance comparison between different dimorders")
 #!     n <- 100
 #!     m <- 100000
 #!     a <- ff(1L,dim=c(n,m))
@@ -2081,7 +2081,7 @@ str.ff <- function(object, nest.lev=0, ...){
 #! \section{Licence}{Package under GPL-2, included C++ code released by Daniel Adler under the less restrictive ISCL}
 #! \seealso{ \code{\link{vector}}, \code{\link{matrix}}, \code{\link{array}}, \code{\link{as.ff}}, \code{\link{as.ram}} }
 #! \examples{
-#!   cat("make sure you understand the following ff options before you start using the ff package!!\n")
+#!   message("make sure you understand the following ff options before you start using the ff package!!")
 #!   oldoptions <- options(fffinalizer="deleteIfOpen", fffinonexit="TRUE", fftempdir=tempdir())
 #!   ff(1:12)                        # an integer vector
 #!   ff(0, 12)                       # a double vector of length 12
@@ -2100,7 +2100,7 @@ str.ff <- function(object, nest.lev=0, ...){
 #!
 #!   \dontrun{
 #!
-#!      cat("This 2GB biglm example can take long, you might want to change the size in order to define a size appropriate for your computer\n")
+#!      message("This 2GB biglm example can take long, you might want to change the size in order to define a size appropriate for your computer")
 #!      require(biglm)
 #!
 #!      b <- 1000
@@ -2196,16 +2196,16 @@ ff <- function(
     if (!ffsymmxtensions()){
       symm <- function(...).NotYetImplemented()
       if (symmetric){
-        cat("You are requesting a dual-licence feature that currently is only available to parties who support the development of package ff and friends\n")
+        message("You are requesting a dual-licence feature that currently is only available to parties who support the development of package ff and friends")
        .NotYetUsed("symmetric", error = TRUE)
       }
       if (!is.null(fixdiag)){
-        cat("You are requesting a dual-licence feature that currently is only available to parties who support the development of package ff and friends\n")
+        message("You are requesting a dual-licence feature that currently is only available to parties who support the development of package ff and friends")
        .NotYetUsed("fixdiag", error = TRUE)
       }
     }
     if (!is.na(match(vmode, c("boolean", "quad", "nibble", "byte", "ubyte", "short", "ushort", "single")))){
-      cat("You are requesting a dual-licence feature that currently is only available to parties who support the development of package ff and friends\n")
+      message("You are requesting a dual-licence feature that currently is only available to parties who support the development of package ff and friends")
       stop("vmode='", vmode, "' not on CRAN")
     }
   }
@@ -2556,7 +2556,7 @@ ff <- function(
 #! \examples{
 #!   x <- ff(1:100)
 #!   y <- ff(-(1:100))
-#!   cat("You should make it a habit to re-assign the return value of update although this is not needed currently.\n")
+#!   message("You should make it a habit to re-assign the return value of update although this is not needed currently.")
 #!   x <- update(x, from=y)
 #!   x
 #!   y
@@ -2571,7 +2571,7 @@ ff <- function(
 #!   rm(x,y); gc()
 #!
 #!   \dontrun{
-#!     cat("timings\n")
+#!     message("timings")
 #!     x <- ff(1:10000000)
 #!     y <- ff(-(1:10000000))
 #!     system.time(update(x, from=y))
@@ -3199,7 +3199,7 @@ finalize.ff_pointer <- function(
   x     # ff_pointer
 , ...   # ignored
 ){
-  #cat("R is finalizing" , attr(x, "filename"), "\n")
+  #message("R is finalizing" , attr(x, "filename"), "")
   fin <- attr(x, "finalizer")
   if (is.null(fin))
     TRUE
@@ -3431,7 +3431,7 @@ close.ff <- function(con
 #! }
 #! \seealso{ \code{\link{ff}}, \code{\link{close.ff}}, \code{\link{open.ff}}, \code{\link[base]{reg.finalizer}} }
 #! \examples{
-#!   cat('create the ff file outside getOption("fftempir"), it will have default finalizer "close", so you need to delete it explicitely\n')
+#!   message('create the ff file outside getOption("fftempir"), it will have default finalizer "close", so you need to delete it explicitely')
 #!   x <- ff(1:12, pattern="./ffexample")
 #!   delete(x)
 #!   rm(x)
@@ -3498,14 +3498,14 @@ if (FALSE){
   , ... # dummy to keep R CMD check quiet
   )
   {
-    cat("--- Here deleteIfOpen.default ---\n")
-    cat("--- x ---\n")
+    message("--- Here deleteIfOpen.default ---")
+    message("--- x ---")
     print(x)
     str(x)
-    cat("--- ... ---\n")
+    message("--- ... ---")
     print(list(...))
     str(list(...))
-    cat("------\n")
+    message("------")
   }
 }
 
@@ -3936,7 +3936,7 @@ write.ff <- function(x, i, value, add=FALSE)
 #! \author{ Jens Oehlschlägel }
 #! \seealso{ \code{\link{ff}}, \code{\link{swap}}, \code{\link{add}}, \code{\link{readwrite.ff}}, \code{\link{LimWarn}} }
 #! \examples{
-#!    cat("look at different dimorders\n")
+#!    message("look at different dimorders")
 #!    x <- ff(1:12, dim=c(3,4), dimorder=c(1,2))
 #!    x[]
 #!    as.vector(x[])
@@ -3944,10 +3944,10 @@ write.ff <- function(x, i, value, add=FALSE)
 #!    x <- ff(1:12, dim=c(3,4), dimorder=c(2,1))
 #!    x[]
 #!    as.vector(x[])
-#!    cat("Beware (might be changed)\n")
+#!    message("Beware (might be changed)")
 #!    x[1:12]
 #!
-#!    cat("look at different bydim\n")
+#!    message("look at different bydim")
 #!    matrix(1:12, nrow=3, ncol=4, byrow=FALSE)
 #!    x <- ff(1:12, dim=c(3,4), bydim=c(1,2))
 #!    x
@@ -3956,7 +3956,7 @@ write.ff <- function(x, i, value, add=FALSE)
 #!    x
 #!    x[,, bydim=c(2,1)]
 #!    as.vector(x[,, bydim=c(2,1)])
-#!    cat("even consistent interpretation of vectors in assignments\n")
+#!    message("even consistent interpretation of vectors in assignments")
 #!    x[,, bydim=c(1,2)] <- x[,, bydim=c(1,2)]
 #!    x
 #!    x[,, bydim=c(2,1)] <- x[,, bydim=c(2,1)]
@@ -3964,7 +3964,7 @@ write.ff <- function(x, i, value, add=FALSE)
 #!    rm(x); gc()
 #!
 #!   \dontrun{
-#!    cat("some performance implications of different dimorders\n")
+#!    message("some performance implications of different dimorders")
 #!    n <- 100
 #!    m <- 100000
 #!    a <- ff(1L,dim=c(n,m))
@@ -4747,7 +4747,7 @@ swap.ff_array <- function(
 #! }
 #! \seealso{ \code{\link{swap}}, \code{\link{[.ff}}, \code{\link{LimWarn}} }
 #! \examples{
-#!    cat("incrementing parts of a vector\n")
+#!    message("incrementing parts of a vector")
 #!    x <- ff(0, length=12)
 #!    y <- rep(0, 12)
 #!    add(x, 1, 1:6)
@@ -4755,7 +4755,7 @@ swap.ff_array <- function(
 #!    x
 #!    y
 #!
-#!    cat("incrementing parts of a matrix\n")
+#!    message("incrementing parts of a matrix")
 #!    x <- ff(0, dim=3:4)
 #!    y <- array(0, dim=3:4)
 #!    add(x, 1, 1:2, 1:2)
@@ -4763,7 +4763,7 @@ swap.ff_array <- function(
 #!    x
 #!    y
 #!
-#!    cat("BEWARE that ff and ram methods differ in treatment of duplicated index positions\n")
+#!    message("BEWARE that ff and ram methods differ in treatment of duplicated index positions")
 #!    add(x, 1, c(3,3))
 #!    add(y, 1, c(3,3))
 #!    x

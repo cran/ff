@@ -98,7 +98,7 @@
 \author{ Jens Oehlschlägel }
 \seealso{ \code{\link{ff}}, \code{\link{swap}}, \code{\link{add}}, \code{\link{readwrite.ff}}, \code{\link{LimWarn}} }
 \examples{
-   cat("look at different dimorders\n")
+   message("look at different dimorders")
    x <- ff(1:12, dim=c(3,4), dimorder=c(1,2))
    x[]
    as.vector(x[])
@@ -106,10 +106,10 @@
    x <- ff(1:12, dim=c(3,4), dimorder=c(2,1))
    x[]
    as.vector(x[])
-   cat("Beware (might be changed)\n")
+   message("Beware (might be changed)")
    x[1:12]
 
-   cat("look at different bydim\n")
+   message("look at different bydim")
    matrix(1:12, nrow=3, ncol=4, byrow=FALSE)
    x <- ff(1:12, dim=c(3,4), bydim=c(1,2))
    x
@@ -118,7 +118,7 @@
    x
    x[,, bydim=c(2,1)]
    as.vector(x[,, bydim=c(2,1)])
-   cat("even consistent interpretation of vectors in assignments\n")
+   message("even consistent interpretation of vectors in assignments")
    x[,, bydim=c(1,2)] <- x[,, bydim=c(1,2)]
    x
    x[,, bydim=c(2,1)] <- x[,, bydim=c(2,1)]
@@ -126,7 +126,7 @@
    rm(x); gc()
 
   \dontrun{
-   cat("some performance implications of different dimorders\n")
+   message("some performance implications of different dimorders")
    n <- 100
    m <- 100000
    a <- ff(1L,dim=c(n,m))

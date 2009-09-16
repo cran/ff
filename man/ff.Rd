@@ -275,7 +275,7 @@ ff( initdata  = NULL
 \section{Licence}{Package under GPL-2, included C++ code released by Daniel Adler under the less restrictive ISCL}
 \seealso{ \code{\link{vector}}, \code{\link{matrix}}, \code{\link{array}}, \code{\link{as.ff}}, \code{\link{as.ram}} }
 \examples{
-  cat("make sure you understand the following ff options before you start using the ff package!!\n")
+  message("make sure you understand the following ff options before you start using the ff package!!")
   oldoptions <- options(fffinalizer="deleteIfOpen", fffinonexit="TRUE", fftempdir=tempdir())
   ff(1:12)                        # an integer vector
   ff(0, 12)                       # a double vector of length 12
@@ -294,7 +294,7 @@ ff( initdata  = NULL
 
   \dontrun{
 
-     cat("This 2GB biglm example can take long, you might want to change the size in order to define a size appropriate for your computer\n")
+     message("This 2GB biglm example can take long, you might want to change the size in order to define a size appropriate for your computer")
      require(biglm)
 
      b <- 1000

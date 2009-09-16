@@ -54,23 +54,23 @@ pattern(x, \dots) <- value
 \seealso{  \code{\link{fftempfile}}, \code{\link{finalizer}}, \code{\link{ff}}, \code{\link{as.ff}}, \code{\link{as.ram}}, \code{\link{update.ff}} }
 \examples{
   \dontrun{
-  cat("Neither giving pattern nor filename gives a random filename with extension ffextension in fftempdir\n")
+  message("Neither giving pattern nor filename gives a random filename with extension ffextension in fftempdir")
   x <- ff(1:12)
   finalizer(x)
   filename(x)
-  cat("Giving a pattern with just a prefix moves to a random filename beginning with the prefix in fftempdir\n")
+  message("Giving a pattern with just a prefix moves to a random filename beginning with the prefix in fftempdir")
   pattern(x) <- "myprefix_"
   filename(x)
-  cat("Giving a pattern with a path and prefix moves to a random filename beginning with prefix in path (use . for getwd) \n")
+  message("Giving a pattern with a path and prefix moves to a random filename beginning with prefix in path (use . for getwd) ")
   pattern(x) <- "./myprefix"
   filename(x)
-  cat("Giving a filename moves to exactly this filename and extension in the R-expected place) \n")
+  message("Giving a filename moves to exactly this filename and extension in the R-expected place) ")
   if (!file.exists("./myfilename.myextension")){
     filename(x) <- "./myfilename.myextension"
     filename(x)
   }
 
-  cat("NOTE that the finalizer has changed from 'delete' to 'close': now WE are responsible for deleting the file - NOT the finalizer")
+  message("NOTE that the finalizer has changed from 'delete' to 'close': now WE are responsible for deleting the file - NOT the finalizer")
   finalizer(x)
   delete(x)
   rm(x)

@@ -39,7 +39,7 @@ update.ffdf(object, from, \dots)
 \examples{
   x <- ff(1:100)
   y <- ff(-(1:100))
-  cat("You should make it a habit to re-assign the return value of update although this is not needed currently.\n")
+  message("You should make it a habit to re-assign the return value of update although this is not needed currently.")
   x <- update(x, from=y)
   x
   y
@@ -54,7 +54,7 @@ update.ffdf(object, from, \dots)
   rm(x,y); gc()
 
   \dontrun{
-    cat("timings\n")
+    message("timings")
     x <- ff(1:10000000)
     y <- ff(-(1:10000000))
     system.time(update(x, from=y))

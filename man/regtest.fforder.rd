@@ -31,9 +31,9 @@ regtest.fforder(n = 100)
 
  \dontrun{
     n <- 5e6
-    cat("performance comparison at n=", n, "\n")
+    message("performance comparison at n=", n, "")
 
-    cat("sorting doubles\n")
+    message("sorting doubles")
     x <- y <- as.double(runif(n))
 
     x[] <- y
@@ -127,7 +127,7 @@ regtest.fforder(n = 100)
     rm(x,y)
 
 
-    cat("ordering doubles\n")
+    message("ordering doubles")
 
     x <- as.double(runif(n))
     system.time(order(x))[3]
@@ -218,79 +218,79 @@ regtest.fforder(n = 100)
         y <- sample(k, n, TRUE)
       }
 
-      cat("sorting",v,"\n")
+      message("sorting ",v)
 
       x <- y
-      cat("sort(x) ");print(system.time(sort(x))[3])
+      message("sort(x) ", system.time(sort(x))[3])
       x <- y
-      cat("shellsort(x) ");print(system.time(shellsort(x))[3])
+      message("shellsort(x) ", system.time(shellsort(x))[3])
       x <- y
-      cat("mergesort(x) ");print(system.time(mergesort(x))[3])
+      message("mergesort(x) ", system.time(mergesort(x))[3])
       x <- y
-      cat("radixsort(x) ");print(system.time(radixsort(x))[3])
+      message("radixsort(x) ", system.time(radixsort(x))[3])
       if (v \%in\% keys){
         x <- y
-        cat("keysort(x) ");print(system.time(keysort(x))[3])
+        message("keysort(x) ", system.time(keysort(x))[3])
         x <- y
-        cat("keysort(x, keyrange=c(.vmin[v],.vmax[v])) ");print(system.time(keysort(x, keyrange=c(.vmin[v],.vmax[v])))[3])
+        message("keysort(x, keyrange=c(.vmin[v],.vmax[v])) ", system.time(keysort(x, keyrange=c(.vmin[v],.vmax[v])))[3])
       }
 
       if (!is.na(.vNA[v])){
         x <- y
-        cat("shellsort(x, has.na=FALSE) ");print(system.time(shellsort(x, has.na=FALSE))[3])
+        message("shellsort(x, has.na=FALSE) ", system.time(shellsort(x, has.na=FALSE))[3])
         x <- y
-        cat("mergesort(x, has.na=FALSE) ");print(system.time(mergesort(x, has.na=FALSE))[3])
+        message("mergesort(x, has.na=FALSE) ", system.time(mergesort(x, has.na=FALSE))[3])
         x <- y
-        cat("radixsort(x, has.na=FALSE) ");print(system.time(radixsort(x, has.na=FALSE))[3])
+        message("radixsort(x, has.na=FALSE) ", system.time(radixsort(x, has.na=FALSE))[3])
         if (v \%in\% keys){
           x <- y
-          cat("keysort(x, has.na=FALSE) ");print(system.time(keysort(x, has.na=FALSE))[3])
+          message("keysort(x, has.na=FALSE) ", system.time(keysort(x, has.na=FALSE))[3])
           x <- y
-          cat("keysort(x, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])) ");print(system.time(keysort(x, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])))[3])
+          message("keysort(x, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])) ", system.time(keysort(x, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])))[3])
         }
       }
 
 
-      cat("ordering",v,"\n")
+      message("ordering",v)
 
       x[] <- y
       i <- 1:n
-      cat("order(x) ");print(system.time(order(x))[3])
+      message("order(x) ", system.time(order(x))[3])
       x[] <- y
       i <- 1:n
-      cat("shellorder(x, i) ");print(system.time(shellorder(x, i))[3])
+      message("shellorder(x, i) ", system.time(shellorder(x, i))[3])
       x[] <- y
       i <- 1:n
-      cat("mergeorder(x, i) ");print(system.time(mergeorder(x, i))[3])
+      message("mergeorder(x, i) ", system.time(mergeorder(x, i))[3])
       x[] <- y
       i <- 1:n
-      cat("radixorder(x, i) ");print(system.time(radixorder(x, i))[3])
+      message("radixorder(x, i) ", system.time(radixorder(x, i))[3])
       if (v \%in\% keys){
         x[] <- y
         i <- 1:n
-        cat("keyorder(x, i) ");print(system.time(keyorder(x, i))[3])
+        message("keyorder(x, i) ", system.time(keyorder(x, i))[3])
         x[] <- y
         i <- 1:n
-        cat("keyorder(x, i, keyrange=c(.vmin[v],.vmax[v])) ");print(system.time(keyorder(x, i, keyrange=c(.vmin[v],.vmax[v])))[3])
+        message("keyorder(x, i, keyrange=c(.vmin[v],.vmax[v])) ", system.time(keyorder(x, i, keyrange=c(.vmin[v],.vmax[v])))[3])
       }
 
       if (!is.na(.vNA[v])){
         x[] <- y
         i <- 1:n
-        cat("shellorder(x, i, has.na=FALSE) ");print(system.time(shellorder(x, i, has.na=FALSE))[3])
+        message("shellorder(x, i, has.na=FALSE) ", system.time(shellorder(x, i, has.na=FALSE))[3])
         x[] <- y
         i <- 1:n
-        cat("mergeorder(x, i, has.na=FALSE) ");print(system.time(mergeorder(x, i, has.na=FALSE))[3])
+        message("mergeorder(x, i, has.na=FALSE) ", system.time(mergeorder(x, i, has.na=FALSE))[3])
         x[] <- y
         i <- 1:n
-        cat("radixorder(x, i, has.na=FALSE) ");print(system.time(radixorder(x, i, has.na=FALSE))[3])
+        message("radixorder(x, i, has.na=FALSE) ", system.time(radixorder(x, i, has.na=FALSE))[3])
         if (v \%in\% keys){
           x[] <- y
           i <- 1:n
-          cat("keyorder(x, i, has.na=FALSE) ");print(system.time(keyorder(x, i, has.na=FALSE))[3])
+          message("keyorder(x, i, has.na=FALSE) ", system.time(keyorder(x, i, has.na=FALSE))[3])
           x[] <- y
           i <- 1:n
-          cat("keyorder(x, i, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])) ");print(system.time(keyorder(x, i, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])))[3])
+          message("keyorder(x, i, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])) ", system.time(keyorder(x, i, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])))[3])
         }
       }
 

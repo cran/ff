@@ -35,11 +35,11 @@ repnam(argument, names = NULL, len=length(names), default = list(NULL))
   \code{\link{rep}}, \code{\link{vector}}, \code{\link[bit]{repfromto}}
 }
 \examples{
- cat("a list example\n")
+ message("a list example")
  repnam(list(y=c(1,2), z=3), letters)
  repnam(list(c(1,2), 3), letters)
 
- cat("a vector example\n")
+ message("a vector example")
  repnam(c(y=1, z=3), letters, default=NA)
  repnam(c(1, 3), letters, default=NA)
 

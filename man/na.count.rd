@@ -35,27 +35,27 @@ na.count(x, \dots) <- value
 \author{ Jens Oehlschlägel, Daniel Adler (C++ back-end) }
 \seealso{ \code{\link{getset.ff}}, \code{\link{readwrite.ff}} and \code{\link{swap}} for methods that support maintenance of 'na.count', \code{\link[base]{NA}}, \code{\link{is.sorted}} for yet another \code{\link[=physical.ff]{physical}} attribute }
 \examples{
-  cat("--- ff examples ---\n")
+  message("--- ff examples ---")
   x <- ff(1:12)
   na.count(x)
-  cat("activate the 'na.count' physical attribute and set the current na.count manually\n")
+  message("activate the 'na.count' physical attribute and set the current na.count manually")
   na.count(x) <- 0L
-  cat("add one NA with a method that maintains na.count\n")
+  message("add one NA with a method that maintains na.count")
   swap(x, NA, 1)
   na.count(x)
-  cat("remove the 'na.count' physical attribute (and stop automatic maintenance)\n")
+  message("remove the 'na.count' physical attribute (and stop automatic maintenance)")
   na.count(x) <- NULL
-  cat("activate the 'na.count' physical attribute and have ff automatically calculate the current na.count\n")
+  message("activate the 'na.count' physical attribute and have ff automatically calculate the current na.count")
   na.count(x) <- TRUE
   na.count(x)
-  cat("--- ram examples ---\n")
+  message("--- ram examples ---")
   x <- 1:12
   na.count(x)
   x[1] <- NA
-  cat("activate the 'na.count' physical attribute and have R automatically calculate the current na.count\n")
+  message("activate the 'na.count' physical attribute and have R automatically calculate the current na.count")
   na.count(x) <- TRUE
   na.count(x)
-  cat("remove the 'na.count' physical attribute (and stop automatic maintenance)\n")
+  message("remove the 'na.count' physical attribute (and stop automatic maintenance)")
   na.count(x) <- NULL
   na.count(x)
   rm(x); gc()
