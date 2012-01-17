@@ -108,8 +108,8 @@
 
 .onAttach <- function(libname, pkgname){
   packageStartupMessage("Attaching package ff")
-  if (getRversion()<="2.10.0"){
-    packageStartupMessage('fixing [.AsIs in base namespace because if the NextMethod("[") returns a different class, [.AsIs was reverting this')
+  # if (getRversion()<="2.10.0"){
+    # packageStartupMessage('fixing [.AsIs in base namespace because if the NextMethod("[") returns a different class, [.AsIs was reverting this')
     #assignInNamespace(
     #  "[.AsIs"
     #, function (x, i, ...){
@@ -119,28 +119,28 @@
     #  }
     #, "base"
     #)
-    assignInNamespace(
-      "[.AsIs"
-    , function (x, i, ...)I(NextMethod("["))
-    , "base"
-    )
-  }
+    # assignInNamespace(
+      # "[.AsIs"
+    # , function (x, i, ...)I(NextMethod("["))
+    # , "base"
+    # )
+  # }
 }
 
 .Last.lib <- function(libpath) {
    packageStartupMessage("Detaching package ff")
-  if (getRversion()<="2.10.0"){
-    packageStartupMessage('restoring [.AsIs')
-    assignInNamespace(
-      "[.AsIs"
-    , function (x, i, ...){
-        ret <- NextMethod("[")
-        oldClass(ret) <- c("AsIs", oldClass(x))
-        ret
-      }
-    , "base"
-    )
-  }
+  # if (getRversion()<="2.10.0"){
+    # packageStartupMessage('restoring [.AsIs')
+    # assignInNamespace(
+      # "[.AsIs"
+    # , function (x, i, ...){
+        # ret <- NextMethod("[")
+        # oldClass(ret) <- c("AsIs", oldClass(x))
+        # ret
+      # }
+    # , "base"
+    # )
+  # }
 }
 
 .onUnload <- function(libpath){
