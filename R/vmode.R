@@ -255,24 +255,6 @@
 #! \keyword{ attribute }
 
 
-#.vimplemented is initialized .onLoad
-#.vimplemented <- c(
-#  boolean   = .Call("ffmode_implemented", .ffmode["boolean"]   , PACKAGE="ff")
-#, logical   = .Call("ffmode_implemented", .ffmode["logical"]  , PACKAGE="ff")
-#, quad      = .Call("ffmode_implemented", .ffmode["quad"]     , PACKAGE="ff")
-#, nibble    = .Call("ffmode_implemented", .ffmode["nibble"]   , PACKAGE="ff")
-#, byte      = .Call("ffmode_implemented", .ffmode["byte"]     , PACKAGE="ff")
-#, ubyte     = .Call("ffmode_implemented", .ffmode["ubyte"]    , PACKAGE="ff")
-#, short     = .Call("ffmode_implemented", .ffmode["short"]    , PACKAGE="ff")
-#, ushort    = .Call("ffmode_implemented", .ffmode["ushort"]   , PACKAGE="ff")
-#, integer   = .Call("ffmode_implemented", .ffmode["integer"]  , PACKAGE="ff")
-#, single    = .Call("ffmode_implemented", .ffmode["single"]   , PACKAGE="ff")
-#, double    = .Call("ffmode_implemented", .ffmode["double"]   , PACKAGE="ff")
-#, complex   = .Call("ffmode_implemented", .ffmode["complex"]  , PACKAGE="ff")
-#, raw       = .Call("ffmode_implemented", .ffmode["raw"]      , PACKAGE="ff")
-#, character = .Call("ffmode_implemented", .ffmode["character"], PACKAGE="ff")
-#)
-
 .vmode <- c(
   boolean   = "boolean"   # {FALSE,TRUE} no NA
 , logical   = "logical"   # {FALSE,TRUE,NA}
@@ -465,6 +447,26 @@
 , character = NA
 )
 
+# Note: .vimplemented is finally initialized in .onLoad using a .Call into the dll
+.vimplemented <- c(
+ boolean    = FALSE
+, logical   = FALSE
+, quad      = FALSE
+, nibble    = FALSE
+, byte      = FALSE
+, ubyte     = FALSE
+, short     = FALSE
+, ushort    = FALSE
+, integer   = FALSE
+, single    = FALSE
+, double    = FALSE
+, complex   = FALSE
+, raw       = FALSE
+, character = FALSE
+)
+
+# Note: .vcoerceable is finally initialized in .onLoad using a .Call into the dll
+.vcoerceable <- NULL 
 
 #xx
 #rambytes <- function(vmode){

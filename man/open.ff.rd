@@ -6,14 +6,15 @@
   \command{open.ff} opens an ff file, optionally marking it readonly and optionally specifying a caching scheme.
 }
 \usage{
- \method{open}{ff}(con, readonly = FALSE, pagesize = NULL, caching = NULL, \dots)
- \method{open}{ffdf}(con, readonly = FALSE, pagesize = NULL, caching = NULL, \dots)
+ \method{open}{ff}(con, readonly = FALSE, pagesize = NULL, caching = NULL, assert = FALSE, \dots)
+ \method{open}{ffdf}(con, readonly = FALSE, pagesize = NULL, caching = NULL, assert = FALSE, \dots)
 }
 \arguments{
   \item{con}{ an \code{\link{ff}} or \code{\link{ffdf}} object }
   \item{readonly}{ \code{readonly} }
   \item{pagesize}{ number of bytes to use as pagesize or NULL to take the pagesize stored in the \code{\link[=physical.ff]{physical}} attribute of the ff object, see \code{\link{getalignedpagesize}} }
   \item{caching}{ one of 'mmnoflush' or 'mmeachflush', see \code{\link{ff}} }
+  \item{assert}{ setting this to TRUE will give a message if the ff was not open already }
   \item{\dots}{ further arguments (not used) }
 }
 \details{

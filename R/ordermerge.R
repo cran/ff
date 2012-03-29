@@ -736,6 +736,8 @@ ffsort <- function(
       # fallback: do it on-disk
       if (!inplace)
         x <- clone(x)
+			else
+				open(x, assert=TRUE)
 
         if (k && (k < .vvalues["short"])){
 
@@ -765,6 +767,7 @@ ffsort <- function(
             stop("vmode(aux) does not match vmode(x)")
             if (length(aux) != n)
             stop("length(aux) does not match length(x)")
+						open(aux, assert=TRUE)
           }
           nNA <- .Call("ffsortmerge"
           , ffmode_       = .ffmode[v]
@@ -1042,6 +1045,8 @@ fforder <- function(
         stop("vmode(auxindex) does not match 'integer'")
       if (length(auxindex) != n)
         stop("length(auxindex) does not match length(x)")
+			open(index, assert=TRUE)
+			open(auxindex, assert=TRUE)
     }
 
     for (i in nl:1){
@@ -1062,6 +1067,7 @@ fforder <- function(
         }else{
           if (length(aux[[v]]) != n)
             stop("length(aux) does not match length(x)")
+					open(aux[[v]], assert=TRUE)
         }
       }
 
@@ -1088,8 +1094,6 @@ fforder <- function(
     }
 
   }
-
-
   attr(index, "na.count") <- nNA
   index
 }
@@ -1200,6 +1204,8 @@ ffindexorder <- function(
     stopifnot(is.null(vw(FF_RETURN)))
     stopifnot(vmode(FF_RETURN)=="integer")
     stopifnot(length(FF_RETURN)==n)
+		open(index, assert=TRUE)
+		open(FF_RETURN, assert=TRUE)
   }
 
   .Call("ffchunkorder"
@@ -1320,6 +1326,8 @@ ffindexget <- function(
     FF_RETURN <- clone(x, length=n, initdata=NULL)
   }else{
     stopifnot(vmode(FF_RETURN)==v)
+		open(x, assert=TRUE)
+		open(FF_RETURN, assert=TRUE)
     if (length(FF_RETURN)!=n)
       length(FF_RETURN) <- n
   }
@@ -1363,8 +1371,10 @@ ffindexget <- function(
       BATCHSIZE <- attr(indexorder, "BATCHSIZE")
       if (VERBOSE)
         cat("method=indexorder  BATCHSIZE=", BATCHSIZE, "\n", sep="")
+				open(indexorder, assert=TRUE)
     }
 
+		open(index, assert=TRUE)
     .Call("ffindexget"
     , ffmode_       = .ffmode[v]
     , baseff_       = attr(x, "physical")
@@ -1438,7 +1448,11 @@ ffindexset <- function(
       BATCHSIZE <- attr(indexorder, "BATCHSIZE")
       if (VERBOSE)
         cat("method=indexorder  BATCHSIZE=", BATCHSIZE, "\n", sep="")
+			open(indexorder, assert=TRUE)
     }
+		open(x, assert=TRUE)
+		open(value, assert=TRUE)
+		open(index, assert=TRUE)
 
     .Call("ffindexset"
     , ffmode_       = .ffmode[v]
@@ -2309,161 +2323,161 @@ ffdfsort <- function(
 
 regtest.fforder <- function(n=100){
 
-# insituorder integer
+	# insituorder integer
 
-#x <- as.integer(runif(n, 1, n))
-#o <- order(x)
-#insituorder(x, o)
-#stopifnot(identical(x, sort(x)))
+	#x <- as.integer(runif(n, 1, n))
+	#o <- order(x)
+	#insituorder(x, o)
+	#stopifnot(identical(x, sort(x)))
 
-# applyorder double
+	# applyorder double
 
-#x <- runif(n, 1, n)
-#o <- order(x)
-#insituorder(x, o)
-#stopifnot(identical(x, sort(x)))
+	#x <- runif(n, 1, n)
+	#o <- order(x)
+	#insituorder(x, o)
+	#stopifnot(identical(x, sort(x)))
 
-# shellsort integer
+	# shellsort integer
 
-x <- as.integer(runif(n, 1, n))
-stopifnot(identical(0L, shellsort(x)))
-stopifnot(identical(x, sort(x)))
+	x <- as.integer(runif(n, 1, n))
+	stopifnot(identical(0L, shellsort(x)))
+	stopifnot(identical(x, sort(x)))
 
-x <- as.integer(runif(n, 1, n))
-stopifnot(identical(0L, shellsort(x, decreasing=TRUE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE)))
+	x <- as.integer(runif(n, 1, n))
+	stopifnot(identical(0L, shellsort(x, decreasing=TRUE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE)))
 
-x <- as.integer(runif(n, 1, n))
-stopifnot(identical(0L, shellsort(x, has.na=FALSE)))
-stopifnot(identical(x, sort(x)))
+	x <- as.integer(runif(n, 1, n))
+	stopifnot(identical(0L, shellsort(x, has.na=FALSE)))
+	stopifnot(identical(x, sort(x)))
 
-x <- as.integer(runif(n, 1, n))
-stopifnot(identical(0L, shellsort(x, decreasing=TRUE, has.na=FALSE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE)))
+	x <- as.integer(runif(n, 1, n))
+	stopifnot(identical(0L, shellsort(x, decreasing=TRUE, has.na=FALSE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), shellsort(x)))
-stopifnot(identical(x, sort(x, na.last=TRUE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), shellsort(x)))
+	stopifnot(identical(x, sort(x, na.last=TRUE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), shellsort(x, decreasing=TRUE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=TRUE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), shellsort(x, decreasing=TRUE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=TRUE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), shellsort(x, na.last=FALSE)))
-stopifnot(identical(x, sort(x, na.last=FALSE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), shellsort(x, na.last=FALSE)))
+	stopifnot(identical(x, sort(x, na.last=FALSE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), shellsort(x, decreasing=TRUE, na.last=FALSE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=FALSE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), shellsort(x, decreasing=TRUE, na.last=FALSE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=FALSE)))
 
 
-# shellsort double
+	# shellsort double
 
-x <- as.double(runif(n, 1, n))
-stopifnot(identical(0L, shellsort(x)))
-stopifnot(identical(x, sort(x)))
+	x <- as.double(runif(n, 1, n))
+	stopifnot(identical(0L, shellsort(x)))
+	stopifnot(identical(x, sort(x)))
 
-x <- as.double(runif(n, 1, n))
-stopifnot(identical(0L, shellsort(x, decreasing=TRUE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE)))
+	x <- as.double(runif(n, 1, n))
+	stopifnot(identical(0L, shellsort(x, decreasing=TRUE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE)))
 
-x <- as.double(runif(n, 1, n))
-stopifnot(identical(0L, shellsort(x, has.na=FALSE)))
-stopifnot(identical(x, sort(x)))
+	x <- as.double(runif(n, 1, n))
+	stopifnot(identical(0L, shellsort(x, has.na=FALSE)))
+	stopifnot(identical(x, sort(x)))
 
-x <- as.double(runif(n, 1, n))
-stopifnot(identical(0L, shellsort(x, decreasing=TRUE, has.na=FALSE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE)))
+	x <- as.double(runif(n, 1, n))
+	stopifnot(identical(0L, shellsort(x, decreasing=TRUE, has.na=FALSE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE)))
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), shellsort(x)))
-stopifnot(identical(x, sort(x, na.last=TRUE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), shellsort(x)))
+	stopifnot(identical(x, sort(x, na.last=TRUE)))
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), shellsort(x, decreasing=TRUE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=TRUE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), shellsort(x, decreasing=TRUE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=TRUE)))
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), shellsort(x, na.last=FALSE)))
-stopifnot(identical(x, sort(x, na.last=FALSE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), shellsort(x, na.last=FALSE)))
+	stopifnot(identical(x, sort(x, na.last=FALSE)))
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), shellsort(x, decreasing=TRUE, na.last=FALSE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=FALSE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), shellsort(x, decreasing=TRUE, na.last=FALSE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=FALSE)))
 
 
 
 
 
-# mergesort integer
+	# mergesort integer
 
-x <- as.integer(runif(n, 1, n))
-stopifnot(identical(0L, mergesort(x)))
-stopifnot(identical(x, sort(x)))
+	x <- as.integer(runif(n, 1, n))
+	stopifnot(identical(0L, mergesort(x)))
+	stopifnot(identical(x, sort(x)))
 
-x <- as.integer(runif(n, 1, n))
-stopifnot(identical(0L, mergesort(x, decreasing=TRUE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE)))
+	x <- as.integer(runif(n, 1, n))
+	stopifnot(identical(0L, mergesort(x, decreasing=TRUE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE)))
 
-x <- as.integer(runif(n, 1, n))
-stopifnot(identical(0L, mergesort(x, has.na=FALSE)))
-stopifnot(identical(x, sort(x)))
+	x <- as.integer(runif(n, 1, n))
+	stopifnot(identical(0L, mergesort(x, has.na=FALSE)))
+	stopifnot(identical(x, sort(x)))
 
-x <- as.integer(runif(n, 1, n))
-stopifnot(identical(0L, mergesort(x, decreasing=TRUE, has.na=FALSE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE)))
+	x <- as.integer(runif(n, 1, n))
+	stopifnot(identical(0L, mergesort(x, decreasing=TRUE, has.na=FALSE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), mergesort(x)))
-stopifnot(identical(x, sort(x, na.last=TRUE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), mergesort(x)))
+	stopifnot(identical(x, sort(x, na.last=TRUE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), mergesort(x, decreasing=TRUE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=TRUE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), mergesort(x, decreasing=TRUE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=TRUE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), mergesort(x, na.last=FALSE)))
-stopifnot(identical(x, sort(x, na.last=FALSE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), mergesort(x, na.last=FALSE)))
+	stopifnot(identical(x, sort(x, na.last=FALSE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), mergesort(x, decreasing=TRUE, na.last=FALSE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=FALSE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), mergesort(x, decreasing=TRUE, na.last=FALSE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=FALSE)))
 
 
-# mergesort double
+	# mergesort double
 
-x <- as.double(runif(n, 1, n))
-stopifnot(identical(0L, mergesort(x)))
-stopifnot(identical(x, sort(x)))
+	x <- as.double(runif(n, 1, n))
+	stopifnot(identical(0L, mergesort(x)))
+	stopifnot(identical(x, sort(x)))
 
-x <- as.double(runif(n, 1, n))
-stopifnot(identical(0L, mergesort(x, decreasing=TRUE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE)))
+	x <- as.double(runif(n, 1, n))
+	stopifnot(identical(0L, mergesort(x, decreasing=TRUE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE)))
 
-x <- as.double(runif(n, 1, n))
-stopifnot(identical(0L, mergesort(x, has.na=FALSE)))
-stopifnot(identical(x, sort(x)))
+	x <- as.double(runif(n, 1, n))
+	stopifnot(identical(0L, mergesort(x, has.na=FALSE)))
+	stopifnot(identical(x, sort(x)))
 
-x <- as.double(runif(n, 1, n))
-stopifnot(identical(0L, mergesort(x, decreasing=TRUE, has.na=FALSE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE)))
+	x <- as.double(runif(n, 1, n))
+	stopifnot(identical(0L, mergesort(x, decreasing=TRUE, has.na=FALSE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE)))
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), mergesort(x)))
-stopifnot(identical(x, sort(x, na.last=TRUE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), mergesort(x)))
+	stopifnot(identical(x, sort(x, na.last=TRUE)))
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), mergesort(x, decreasing=TRUE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=TRUE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), mergesort(x, decreasing=TRUE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=TRUE)))
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), mergesort(x, na.last=FALSE)))
-stopifnot(identical(x, sort(x, na.last=FALSE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), mergesort(x, na.last=FALSE)))
+	stopifnot(identical(x, sort(x, na.last=FALSE)))
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), mergesort(x, decreasing=TRUE, na.last=FALSE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=FALSE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), mergesort(x, decreasing=TRUE, na.last=FALSE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=FALSE)))
 
 
 
@@ -2471,487 +2485,487 @@ stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=FALSE)))
 
 
 
-# shellorder integer without stabilize
+	# shellorder integer without stabilize
 
-x <- as.integer(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, shellorder(x,i)))
-stopifnot(identical(x[i], sort(x)))
+	x <- as.integer(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, shellorder(x,i)))
+	stopifnot(identical(x[i], sort(x)))
 
-x <- as.integer(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, shellorder(x,i,decreasing=TRUE)))
-stopifnot(identical(x[i], sort(x,decreasing=TRUE)))
+	x <- as.integer(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, shellorder(x,i,decreasing=TRUE)))
+	stopifnot(identical(x[i], sort(x,decreasing=TRUE)))
 
-x <- as.integer(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, shellorder(x,i,has.na=FALSE)))
-stopifnot(identical(x[i], sort(x)))
+	x <- as.integer(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, shellorder(x,i,has.na=FALSE)))
+	stopifnot(identical(x[i], sort(x)))
 
-x <- as.integer(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, shellorder(x,i,decreasing=TRUE,has.na=FALSE)))
-stopifnot(identical(x[i], sort(x,decreasing=TRUE)))
+	x <- as.integer(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, shellorder(x,i,decreasing=TRUE,has.na=FALSE)))
+	stopifnot(identical(x[i], sort(x,decreasing=TRUE)))
 
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), shellorder(x,i)))
-stopifnot(identical(x[i], sort(x, na.last=TRUE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), shellorder(x,i)))
+	stopifnot(identical(x[i], sort(x, na.last=TRUE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), shellorder(x,i, decreasing=TRUE)))
-stopifnot(identical(x[i], sort(x, decreasing=TRUE, na.last=TRUE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), shellorder(x,i, decreasing=TRUE)))
+	stopifnot(identical(x[i], sort(x, decreasing=TRUE, na.last=TRUE)))
 
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), shellorder(x,i, na.last=FALSE)))
-stopifnot(identical(x[i], sort(x, na.last=FALSE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), shellorder(x,i, na.last=FALSE)))
+	stopifnot(identical(x[i], sort(x, na.last=FALSE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), shellorder(x,i, decreasing=TRUE, na.last=FALSE)))
-stopifnot(identical(x[i], sort(x, decreasing=TRUE, na.last=FALSE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), shellorder(x,i, decreasing=TRUE, na.last=FALSE)))
+	stopifnot(identical(x[i], sort(x, decreasing=TRUE, na.last=FALSE)))
 
 
-# shellorder integer with stabilize
+	# shellorder integer with stabilize
 
-x <- as.integer(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, shellorder(x,i,stabilize=TRUE)))
-stopifnot(identical(i, order(x)))
+	x <- as.integer(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, shellorder(x,i,stabilize=TRUE)))
+	stopifnot(identical(i, order(x)))
 
-x <- as.integer(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, shellorder(x,i,decreasing=TRUE,stabilize=TRUE)))
-stopifnot(identical(i, order(x,decreasing=TRUE)))
+	x <- as.integer(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, shellorder(x,i,decreasing=TRUE,stabilize=TRUE)))
+	stopifnot(identical(i, order(x,decreasing=TRUE)))
 
-x <- as.integer(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, shellorder(x,i,has.na=FALSE,stabilize=TRUE)))
-stopifnot(identical(i, order(x)))
+	x <- as.integer(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, shellorder(x,i,has.na=FALSE,stabilize=TRUE)))
+	stopifnot(identical(i, order(x)))
 
-x <- as.integer(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, shellorder(x,i,decreasing=TRUE,has.na=FALSE,stabilize=TRUE)))
-stopifnot(identical(i, order(x,decreasing=TRUE)))
+	x <- as.integer(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, shellorder(x,i,decreasing=TRUE,has.na=FALSE,stabilize=TRUE)))
+	stopifnot(identical(i, order(x,decreasing=TRUE)))
 
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), shellorder(x,i,stabilize=TRUE)))
-stopifnot(identical(i, order(x, na.last=TRUE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), shellorder(x,i,stabilize=TRUE)))
+	stopifnot(identical(i, order(x, na.last=TRUE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), shellorder(x,i, decreasing=TRUE,stabilize=TRUE)))
-stopifnot(identical(i, order(x, decreasing=TRUE, na.last=TRUE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), shellorder(x,i, decreasing=TRUE,stabilize=TRUE)))
+	stopifnot(identical(i, order(x, decreasing=TRUE, na.last=TRUE)))
 
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), shellorder(x,i, na.last=FALSE,stabilize=TRUE)))
-stopifnot(identical(i, order(x, na.last=FALSE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), shellorder(x,i, na.last=FALSE,stabilize=TRUE)))
+	stopifnot(identical(i, order(x, na.last=FALSE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), shellorder(x,i, decreasing=TRUE, na.last=FALSE,stabilize=TRUE)))
-stopifnot(identical(i, order(x, decreasing=TRUE, na.last=FALSE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), shellorder(x,i, decreasing=TRUE, na.last=FALSE,stabilize=TRUE)))
+	stopifnot(identical(i, order(x, decreasing=TRUE, na.last=FALSE)))
 
 
 
 
-# shellorder double without stabilize
+	# shellorder double without stabilize
 
-x <- as.double(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, shellorder(x,i)))
-stopifnot(identical(x[i], sort(x)))
+	x <- as.double(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, shellorder(x,i)))
+	stopifnot(identical(x[i], sort(x)))
 
-x <- as.double(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, shellorder(x,i,decreasing=TRUE)))
-stopifnot(identical(x[i], sort(x,decreasing=TRUE)))
+	x <- as.double(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, shellorder(x,i,decreasing=TRUE)))
+	stopifnot(identical(x[i], sort(x,decreasing=TRUE)))
 
-x <- as.double(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, shellorder(x,i,has.na=FALSE)))
-stopifnot(identical(x[i], sort(x)))
+	x <- as.double(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, shellorder(x,i,has.na=FALSE)))
+	stopifnot(identical(x[i], sort(x)))
 
-x <- as.double(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, shellorder(x,i,decreasing=TRUE,has.na=FALSE)))
-stopifnot(identical(x[i], sort(x,decreasing=TRUE)))
+	x <- as.double(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, shellorder(x,i,decreasing=TRUE,has.na=FALSE)))
+	stopifnot(identical(x[i], sort(x,decreasing=TRUE)))
 
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), shellorder(x,i)))
-stopifnot(identical(x[i], sort(x, na.last=TRUE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), shellorder(x,i)))
+	stopifnot(identical(x[i], sort(x, na.last=TRUE)))
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), shellorder(x,i, decreasing=TRUE)))
-stopifnot(identical(x[i], sort(x, decreasing=TRUE, na.last=TRUE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), shellorder(x,i, decreasing=TRUE)))
+	stopifnot(identical(x[i], sort(x, decreasing=TRUE, na.last=TRUE)))
 
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), shellorder(x,i, na.last=FALSE)))
-stopifnot(identical(x[i], sort(x, na.last=FALSE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), shellorder(x,i, na.last=FALSE)))
+	stopifnot(identical(x[i], sort(x, na.last=FALSE)))
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), shellorder(x,i, decreasing=TRUE, na.last=FALSE)))
-stopifnot(identical(x[i], sort(x, decreasing=TRUE, na.last=FALSE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), shellorder(x,i, decreasing=TRUE, na.last=FALSE)))
+	stopifnot(identical(x[i], sort(x, decreasing=TRUE, na.last=FALSE)))
 
 
-# shellorder double with stabilize
+	# shellorder double with stabilize
 
-x <- as.double(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, shellorder(x,i,stabilize=TRUE)))
-stopifnot(identical(i, order(x)))
+	x <- as.double(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, shellorder(x,i,stabilize=TRUE)))
+	stopifnot(identical(i, order(x)))
 
-x <- as.double(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, shellorder(x,i,decreasing=TRUE,stabilize=TRUE)))
-stopifnot(identical(i, order(x,decreasing=TRUE)))
+	x <- as.double(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, shellorder(x,i,decreasing=TRUE,stabilize=TRUE)))
+	stopifnot(identical(i, order(x,decreasing=TRUE)))
 
-x <- as.double(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, shellorder(x,i,has.na=FALSE,stabilize=TRUE)))
-stopifnot(identical(i, order(x)))
+	x <- as.double(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, shellorder(x,i,has.na=FALSE,stabilize=TRUE)))
+	stopifnot(identical(i, order(x)))
 
-x <- as.double(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, shellorder(x,i,decreasing=TRUE,has.na=FALSE,stabilize=TRUE)))
-stopifnot(identical(i, order(x,decreasing=TRUE)))
+	x <- as.double(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, shellorder(x,i,decreasing=TRUE,has.na=FALSE,stabilize=TRUE)))
+	stopifnot(identical(i, order(x,decreasing=TRUE)))
 
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), shellorder(x,i,stabilize=TRUE)))
-stopifnot(identical(i, order(x, na.last=TRUE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), shellorder(x,i,stabilize=TRUE)))
+	stopifnot(identical(i, order(x, na.last=TRUE)))
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), shellorder(x,i, decreasing=TRUE,stabilize=TRUE)))
-stopifnot(identical(i, order(x, decreasing=TRUE, na.last=TRUE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), shellorder(x,i, decreasing=TRUE,stabilize=TRUE)))
+	stopifnot(identical(i, order(x, decreasing=TRUE, na.last=TRUE)))
 
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), shellorder(x,i, na.last=FALSE,stabilize=TRUE)))
-stopifnot(identical(i, order(x, na.last=FALSE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), shellorder(x,i, na.last=FALSE,stabilize=TRUE)))
+	stopifnot(identical(i, order(x, na.last=FALSE)))
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), shellorder(x,i, decreasing=TRUE, na.last=FALSE,stabilize=TRUE)))
-stopifnot(identical(i, order(x, decreasing=TRUE, na.last=FALSE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), shellorder(x,i, decreasing=TRUE, na.last=FALSE,stabilize=TRUE)))
+	stopifnot(identical(i, order(x, decreasing=TRUE, na.last=FALSE)))
 
 
 
-# mergeorder integer
+	# mergeorder integer
 
-x <- as.integer(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, mergeorder(x,i)))
-stopifnot(identical(i, order(x)))
+	x <- as.integer(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, mergeorder(x,i)))
+	stopifnot(identical(i, order(x)))
 
-x <- as.integer(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, mergeorder(x,i,decreasing=TRUE)))
-stopifnot(identical(i, order(x,decreasing=TRUE)))
+	x <- as.integer(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, mergeorder(x,i,decreasing=TRUE)))
+	stopifnot(identical(i, order(x,decreasing=TRUE)))
 
-x <- as.integer(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, mergeorder(x,i,has.na=FALSE)))
-stopifnot(identical(i, order(x)))
+	x <- as.integer(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, mergeorder(x,i,has.na=FALSE)))
+	stopifnot(identical(i, order(x)))
 
-x <- as.integer(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, mergeorder(x,i,decreasing=TRUE,has.na=FALSE)))
-stopifnot(identical(i, order(x,decreasing=TRUE)))
+	x <- as.integer(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, mergeorder(x,i,decreasing=TRUE,has.na=FALSE)))
+	stopifnot(identical(i, order(x,decreasing=TRUE)))
 
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), nNA <- mergeorder(x,i)))
-stopifnot(identical(i, order(x, na.last=TRUE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), nNA <- mergeorder(x,i)))
+	stopifnot(identical(i, order(x, na.last=TRUE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), mergeorder(x,i, decreasing=TRUE)))
-stopifnot(identical(i, order(x, decreasing=TRUE, na.last=TRUE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), mergeorder(x,i, decreasing=TRUE)))
+	stopifnot(identical(i, order(x, decreasing=TRUE, na.last=TRUE)))
 
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), mergeorder(x,i, na.last=FALSE)))
-stopifnot(identical(i, order(x, na.last=FALSE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), mergeorder(x,i, na.last=FALSE)))
+	stopifnot(identical(i, order(x, na.last=FALSE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), mergeorder(x,i, decreasing=TRUE, na.last=FALSE)))
-stopifnot(identical(i, order(x, decreasing=TRUE, na.last=FALSE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), mergeorder(x,i, decreasing=TRUE, na.last=FALSE)))
+	stopifnot(identical(i, order(x, decreasing=TRUE, na.last=FALSE)))
 
 
-# mergeorder double
+	# mergeorder double
 
-x <- as.double(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, mergeorder(x,i)))
-stopifnot(identical(i, order(x)))
+	x <- as.double(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, mergeorder(x,i)))
+	stopifnot(identical(i, order(x)))
 
-x <- as.double(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, mergeorder(x,i,decreasing=TRUE)))
-stopifnot(identical(i, order(x,decreasing=TRUE)))
+	x <- as.double(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, mergeorder(x,i,decreasing=TRUE)))
+	stopifnot(identical(i, order(x,decreasing=TRUE)))
 
-x <- as.double(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, mergeorder(x,i,has.na=FALSE)))
-stopifnot(identical(i, order(x)))
+	x <- as.double(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, mergeorder(x,i,has.na=FALSE)))
+	stopifnot(identical(i, order(x)))
 
-x <- as.double(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, mergeorder(x,i,decreasing=TRUE,has.na=FALSE)))
-stopifnot(identical(i, order(x,decreasing=TRUE)))
+	x <- as.double(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, mergeorder(x,i,decreasing=TRUE,has.na=FALSE)))
+	stopifnot(identical(i, order(x,decreasing=TRUE)))
 
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), nNA <- mergeorder(x,i)))
-stopifnot(identical(i, order(x, na.last=TRUE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), nNA <- mergeorder(x,i)))
+	stopifnot(identical(i, order(x, na.last=TRUE)))
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), mergeorder(x,i, decreasing=TRUE)))
-stopifnot(identical(i, order(x, decreasing=TRUE, na.last=TRUE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), mergeorder(x,i, decreasing=TRUE)))
+	stopifnot(identical(i, order(x, decreasing=TRUE, na.last=TRUE)))
 
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), mergeorder(x,i, na.last=FALSE)))
-stopifnot(identical(i, order(x, na.last=FALSE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), mergeorder(x,i, na.last=FALSE)))
+	stopifnot(identical(i, order(x, na.last=FALSE)))
 
-x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), mergeorder(x,i, decreasing=TRUE, na.last=FALSE)))
-stopifnot(identical(i, order(x, decreasing=TRUE, na.last=FALSE)))
+	x <- as.double(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), mergeorder(x,i, decreasing=TRUE, na.last=FALSE)))
+	stopifnot(identical(i, order(x, decreasing=TRUE, na.last=FALSE)))
 
 
-# keysort integer
+	# keysort integer
 
-x <- as.integer(runif(n, .vmin["short"], .vmax["short"]))
-stopifnot(identical(0L, keysort(x)))
-stopifnot(identical(x, sort(x)))
+	x <- as.integer(runif(n, .vmin["short"], .vmax["short"]))
+	stopifnot(identical(0L, keysort(x)))
+	stopifnot(identical(x, sort(x)))
 
-x <- as.integer(runif(n, .vmin["short"], .vmax["short"]))
-stopifnot(identical(0L, keysort(x, decreasing=TRUE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE)))
+	x <- as.integer(runif(n, .vmin["short"], .vmax["short"]))
+	stopifnot(identical(0L, keysort(x, decreasing=TRUE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE)))
 
-x <- as.integer(runif(n, .vmin["short"], .vmax["short"]))
-stopifnot(identical(0L, keysort(x, has.na=FALSE)))
-stopifnot(identical(x, sort(x)))
+	x <- as.integer(runif(n, .vmin["short"], .vmax["short"]))
+	stopifnot(identical(0L, keysort(x, has.na=FALSE)))
+	stopifnot(identical(x, sort(x)))
 
-x <- as.integer(runif(n, .vmin["short"], .vmax["short"]))
-stopifnot(identical(0L, keysort(x, decreasing=TRUE, has.na=FALSE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE)))
+	x <- as.integer(runif(n, .vmin["short"], .vmax["short"]))
+	stopifnot(identical(0L, keysort(x, decreasing=TRUE, has.na=FALSE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["short"], .vmax["short"])), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), keysort(x)))
-stopifnot(identical(x, sort(x, na.last=TRUE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["short"], .vmax["short"])), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), keysort(x)))
+	stopifnot(identical(x, sort(x, na.last=TRUE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["short"], .vmax["short"])), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), keysort(x, decreasing=TRUE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=TRUE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["short"], .vmax["short"])), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), keysort(x, decreasing=TRUE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=TRUE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["short"], .vmax["short"])), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), keysort(x, na.last=FALSE)))
-stopifnot(identical(x, sort(x, na.last=FALSE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["short"], .vmax["short"])), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), keysort(x, na.last=FALSE)))
+	stopifnot(identical(x, sort(x, na.last=FALSE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["short"], .vmax["short"])), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), keysort(x, decreasing=TRUE, na.last=FALSE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=FALSE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["short"], .vmax["short"])), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), keysort(x, decreasing=TRUE, na.last=FALSE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=FALSE)))
 
 
-# keyorder integer
+	# keyorder integer
 
-x <- as.integer(runif(n, .vmin["short"], .vmax["short"]))
-i <- 1:n
-stopifnot(identical(0L, keyorder(x,i)))
-stopifnot(identical(i, order(x)))
+	x <- as.integer(runif(n, .vmin["short"], .vmax["short"]))
+	i <- 1:n
+	stopifnot(identical(0L, keyorder(x,i)))
+	stopifnot(identical(i, order(x)))
 
-x <- as.integer(runif(n, .vmin["short"], .vmax["short"]))
-i <- 1:n
-stopifnot(identical(0L, keyorder(x,i,decreasing=TRUE)))
-stopifnot(identical(i, order(x,decreasing=TRUE)))
+	x <- as.integer(runif(n, .vmin["short"], .vmax["short"]))
+	i <- 1:n
+	stopifnot(identical(0L, keyorder(x,i,decreasing=TRUE)))
+	stopifnot(identical(i, order(x,decreasing=TRUE)))
 
-x <- as.integer(runif(n, .vmin["short"], .vmax["short"]))
-i <- 1:n
-stopifnot(identical(0L, keyorder(x,i,has.na=FALSE)))
-stopifnot(identical(i, order(x)))
+	x <- as.integer(runif(n, .vmin["short"], .vmax["short"]))
+	i <- 1:n
+	stopifnot(identical(0L, keyorder(x,i,has.na=FALSE)))
+	stopifnot(identical(i, order(x)))
 
-x <- as.integer(runif(n, .vmin["short"], .vmax["short"]))
-i <- 1:n
-stopifnot(identical(0L, keyorder(x,i,decreasing=TRUE,has.na=FALSE)))
-stopifnot(identical(i, order(x,decreasing=TRUE)))
+	x <- as.integer(runif(n, .vmin["short"], .vmax["short"]))
+	i <- 1:n
+	stopifnot(identical(0L, keyorder(x,i,decreasing=TRUE,has.na=FALSE)))
+	stopifnot(identical(i, order(x,decreasing=TRUE)))
 
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["short"], .vmax["short"])), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), nNA <- keyorder(x,i)))
-stopifnot(identical(i, order(x, na.last=TRUE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["short"], .vmax["short"])), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), nNA <- keyorder(x,i)))
+	stopifnot(identical(i, order(x, na.last=TRUE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["short"], .vmax["short"])), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), keyorder(x,i, decreasing=TRUE)))
-stopifnot(identical(i, order(x, decreasing=TRUE, na.last=TRUE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["short"], .vmax["short"])), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), keyorder(x,i, decreasing=TRUE)))
+	stopifnot(identical(i, order(x, decreasing=TRUE, na.last=TRUE)))
 
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["short"], .vmax["short"])), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), keyorder(x,i, na.last=FALSE)))
-stopifnot(identical(i, order(x, na.last=FALSE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["short"], .vmax["short"])), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), keyorder(x,i, na.last=FALSE)))
+	stopifnot(identical(i, order(x, na.last=FALSE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["short"], .vmax["short"])), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), keyorder(x,i, decreasing=TRUE, na.last=FALSE)))
-stopifnot(identical(i, order(x, decreasing=TRUE, na.last=FALSE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["short"], .vmax["short"])), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), keyorder(x,i, decreasing=TRUE, na.last=FALSE)))
+	stopifnot(identical(i, order(x, decreasing=TRUE, na.last=FALSE)))
 
 
 
 
-# radixsort integer
+	# radixsort integer
 
-x <- as.integer(runif(n, .vmin["integer"], .vmax["integer"]))
-stopifnot(identical(0L, radixsort(x)))
-stopifnot(identical(x, sort(x)))
+	x <- as.integer(runif(n, .vmin["integer"], .vmax["integer"]))
+	stopifnot(identical(0L, radixsort(x)))
+	stopifnot(identical(x, sort(x)))
 
-x <- as.integer(runif(n, .vmin["integer"], .vmax["integer"]))
-stopifnot(identical(0L, radixsort(x, decreasing=TRUE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE)))
+	x <- as.integer(runif(n, .vmin["integer"], .vmax["integer"]))
+	stopifnot(identical(0L, radixsort(x, decreasing=TRUE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE)))
 
-x <- as.integer(runif(n, .vmin["integer"], .vmax["integer"]))
-stopifnot(identical(0L, radixsort(x, has.na=FALSE)))
-stopifnot(identical(x, sort(x)))
+	x <- as.integer(runif(n, .vmin["integer"], .vmax["integer"]))
+	stopifnot(identical(0L, radixsort(x, has.na=FALSE)))
+	stopifnot(identical(x, sort(x)))
 
-x <- as.integer(runif(n, .vmin["integer"], .vmax["integer"]))
-stopifnot(identical(0L, radixsort(x, decreasing=TRUE, has.na=FALSE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE)))
+	x <- as.integer(runif(n, .vmin["integer"], .vmax["integer"]))
+	stopifnot(identical(0L, radixsort(x, decreasing=TRUE, has.na=FALSE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["integer"], .vmax["integer"])), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), radixsort(x)))
-stopifnot(identical(x, sort(x, na.last=TRUE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["integer"], .vmax["integer"])), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), radixsort(x)))
+	stopifnot(identical(x, sort(x, na.last=TRUE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["integer"], .vmax["integer"])), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), radixsort(x, decreasing=TRUE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=TRUE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["integer"], .vmax["integer"])), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), radixsort(x, decreasing=TRUE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=TRUE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["integer"], .vmax["integer"])), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), radixsort(x, na.last=FALSE)))
-stopifnot(identical(x, sort(x, na.last=FALSE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["integer"], .vmax["integer"])), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), radixsort(x, na.last=FALSE)))
+	stopifnot(identical(x, sort(x, na.last=FALSE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["integer"], .vmax["integer"])), 2*n, TRUE))
-stopifnot(identical(sum(is.na(x)), radixsort(x, decreasing=TRUE, na.last=FALSE)))
-stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=FALSE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, .vmin["integer"], .vmax["integer"])), 2*n, TRUE))
+	stopifnot(identical(sum(is.na(x)), radixsort(x, decreasing=TRUE, na.last=FALSE)))
+	stopifnot(identical(x, sort(x, decreasing=TRUE, na.last=FALSE)))
 
 
 
-# radixorder integer
+	# radixorder integer
 
-x <- as.integer(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, radixorder(x,i)))
-stopifnot(identical(i, order(x)))
+	x <- as.integer(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, radixorder(x,i)))
+	stopifnot(identical(i, order(x)))
 
-x <- as.integer(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, radixorder(x,i,decreasing=TRUE)))
-stopifnot(identical(i, order(x,decreasing=TRUE)))
+	x <- as.integer(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, radixorder(x,i,decreasing=TRUE)))
+	stopifnot(identical(i, order(x,decreasing=TRUE)))
 
-x <- as.integer(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, radixorder(x,i,has.na=FALSE)))
-stopifnot(identical(i, order(x)))
+	x <- as.integer(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, radixorder(x,i,has.na=FALSE)))
+	stopifnot(identical(i, order(x)))
 
-x <- as.integer(runif(n, 1, n))
-i <- 1:n
-stopifnot(identical(0L, radixorder(x,i,decreasing=TRUE,has.na=FALSE)))
-stopifnot(identical(i, order(x,decreasing=TRUE)))
+	x <- as.integer(runif(n, 1, n))
+	i <- 1:n
+	stopifnot(identical(0L, radixorder(x,i,decreasing=TRUE,has.na=FALSE)))
+	stopifnot(identical(i, order(x,decreasing=TRUE)))
 
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), nNA <- radixorder(x,i)))
-stopifnot(identical(i, order(x, na.last=TRUE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), nNA <- radixorder(x,i)))
+	stopifnot(identical(i, order(x, na.last=TRUE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), radixorder(x,i, decreasing=TRUE)))
-stopifnot(identical(i, order(x, decreasing=TRUE, na.last=TRUE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), radixorder(x,i, decreasing=TRUE)))
+	stopifnot(identical(i, order(x, decreasing=TRUE, na.last=TRUE)))
 
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), radixorder(x,i, na.last=FALSE)))
-stopifnot(identical(i, order(x, na.last=FALSE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), radixorder(x,i, na.last=FALSE)))
+	stopifnot(identical(i, order(x, na.last=FALSE)))
 
-x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
-i <- 1:(2*n)
-stopifnot(identical(sum(is.na(x)), radixorder(x,i, decreasing=TRUE, na.last=FALSE)))
-stopifnot(identical(i, order(x, decreasing=TRUE, na.last=FALSE)))
+	x <- as.integer(sample(c(rep(NA, n), runif(n, 1, n)), 2*n, TRUE))
+	i <- 1:(2*n)
+	stopifnot(identical(sum(is.na(x)), radixorder(x,i, decreasing=TRUE, na.last=FALSE)))
+	stopifnot(identical(i, order(x, decreasing=TRUE, na.last=FALSE)))
 
 
 
-n <- 1e2
+	n <- 1e2
 
-x <- sample(c(Inf, Inf, 5,5, 0,0, NA,NA, NaN, NaN, -5,-5, -Inf,-Inf), n, TRUE)
-i <- 1:length(x)
-mergeorder(x, i)
-stopifnot(identical(order(x), i))
+	x <- sample(c(Inf, Inf, 5,5, 0,0, NA,NA, NaN, NaN, -5,-5, -Inf,-Inf), n, TRUE)
+	i <- 1:length(x)
+	mergeorder(x, i)
+	stopifnot(identical(order(x), i))
 
-x <- sample(c(Inf, Inf, 5,5, 0,0, NA,NA, NaN, NaN, -5,-5, -Inf,-Inf), n, TRUE)
-i <- 1:length(x)
-shellorder(x, i, stabilize=TRUE)
-stopifnot(identical(order(x), i))
+	x <- sample(c(Inf, Inf, 5,5, 0,0, NA,NA, NaN, NaN, -5,-5, -Inf,-Inf), n, TRUE)
+	i <- 1:length(x)
+	shellorder(x, i, stabilize=TRUE)
+	stopifnot(identical(order(x), i))
 
-x <- sample(c(Inf, Inf, 5,5, 0,0, NA,NA, -5,-5, -Inf,-Inf), n, TRUE)
-i <- 1:length(x)
-shellorder(x, i)
-# since shellorder is not stable, the result is NOT identical with order()
-stopifnot(identical(sort(x, na.last=TRUE), x[i]))
+	x <- sample(c(Inf, Inf, 5,5, 0,0, NA,NA, -5,-5, -Inf,-Inf), n, TRUE)
+	i <- 1:length(x)
+	shellorder(x, i)
+	# since shellorder is not stable, the result is NOT identical with order()
+	stopifnot(identical(sort(x, na.last=TRUE), x[i]))
 
 
 
-x <- as.integer(sample(c(5,5, 0,0, NA,NA, -5,-5), n, TRUE))
-i <- 1:length(x)
-shellorder(x, i)
-# since shellorder is not stable, the result is NOT identical with order()
-stopifnot(identical(sort(x, na.last=TRUE), x[i]))
+	x <- as.integer(sample(c(5,5, 0,0, NA,NA, -5,-5), n, TRUE))
+	i <- 1:length(x)
+	shellorder(x, i)
+	# since shellorder is not stable, the result is NOT identical with order()
+	stopifnot(identical(sort(x, na.last=TRUE), x[i]))
 
-x <- as.integer(sample(c(5,5, 0,0, NA,NA, -5,-5), n, TRUE))
-i <- 1:length(x)
-shellorder(x, i, stabilize=TRUE)
-stopifnot(identical(order(x), i))
+	x <- as.integer(sample(c(5,5, 0,0, NA,NA, -5,-5), n, TRUE))
+	i <- 1:length(x)
+	shellorder(x, i, stabilize=TRUE)
+	stopifnot(identical(order(x), i))
 
-x <- as.integer(sample(c(5,5, 0,0, NA,NA, -5,-5), n, TRUE))
-i <- 1:length(x)
-mergeorder(x, i)
-stopifnot(identical(order(x), i))
+	x <- as.integer(sample(c(5,5, 0,0, NA,NA, -5,-5), n, TRUE))
+	i <- 1:length(x)
+	mergeorder(x, i)
+	stopifnot(identical(order(x), i))
 
-x <- as.integer(sample(c(5,5, 0,0, NA,NA, -5,-5), n, TRUE))
-i <- 1:length(x)
-radixorder(x, i)
-stopifnot(identical(order(x), i))
+	x <- as.integer(sample(c(5,5, 0,0, NA,NA, -5,-5), n, TRUE))
+	i <- 1:length(x)
+	radixorder(x, i)
+	stopifnot(identical(order(x), i))
 
-x <- as.integer(sample(c(5,5, 0,0, NA,NA, -5,-5), n, TRUE))
-i <- 1:length(x)
-keyorder(x, i)
+	x <- as.integer(sample(c(5,5, 0,0, NA,NA, -5,-5), n, TRUE))
+	i <- 1:length(x)
+	keyorder(x, i)
 stopifnot(identical(order(x), i))
 
 
@@ -2965,23 +2979,23 @@ if (FALSE){
 
 
 
-# test ffsort
+	# test ffsort
 
-library(ff)
-n <- 26e4L
-ordersize <- 26e4L
-has.na <- TRUE
-na.last <- TRUE
-decreasing <- FALSE
+	library(ff)
+	n <- 26e4L
+	ordersize <- 26e4L
+	has.na <- TRUE
+	na.last <- TRUE
+	decreasing <- FALSE
 
-x <- ff(factor(rev(letters)), vmode="short", length=n)
-system.time(ffsort(x, verbose=TRUE))
+	x <- ff(factor(rev(letters)), vmode="short", length=n)
+	system.time(ffsort(x, verbose=TRUE))
 
-x <- ff(26:1, vmode="short", length=n)
-system.time(ffsort(x, verbose=TRUE))
+	x <- ff(26:1, vmode="short", length=n)
+	system.time(ffsort(x, verbose=TRUE))
 
-x <- ff(26:1, vmode="integer", length=n)
-system.time(ffsort(x, verbose=TRUE))
+	x <- ff(26:1, vmode="integer", length=n)
+	system.time(ffsort(x, verbose=TRUE))
 
 
 
@@ -2991,73 +3005,73 @@ system.time(ffsort(x, verbose=TRUE))
 
 
 
-library(ff)
-n <- 52e6L
-has.na <- TRUE
-na.last <- TRUE
-decreasing <- FALSE
+	library(ff)
+	n <- 52e6L
+	has.na <- TRUE
+	na.last <- TRUE
+	decreasing <- FALSE
 
-i <- ff(vmode="integer", length=n)
+	i <- ff(vmode="integer", length=n)
 
-x <- ff(26:1, vmode="short", length=n)
-y <- clone(x)
-for (j in chunk(i))i[j] <- j[[1]]:j[[2]]
-system.time(fforder(x, i, verbose=TRUE))
-j <- 1:n; system.time(ramorder(y[], j))
-identical(i[], j)
+	x <- ff(26:1, vmode="short", length=n)
+	y <- clone(x)
+	for (j in chunk(i))i[j] <- j[[1]]:j[[2]]
+	system.time(fforder(x, i, verbose=TRUE))
+	j <- 1:n; system.time(ramorder(y[], j))
+	identical(i[], j)
 
-x <- ff(26:1, vmode="integer", length=n)
-y <- clone(x)
-for (j in chunk(i))i[j] <- j[[1]]:j[[2]]
-system.time(fforder(x, i, verbose=TRUE))
-j <- 1:n; system.time(ramorder(y[], j))
-identical(i[], j)
-system.time(j <- order(y[]))
-identical(i[], j)
+	x <- ff(26:1, vmode="integer", length=n)
+	y <- clone(x)
+	for (j in chunk(i))i[j] <- j[[1]]:j[[2]]
+	system.time(fforder(x, i, verbose=TRUE))
+	j <- 1:n; system.time(ramorder(y[], j))
+	identical(i[], j)
+	system.time(j <- order(y[]))
+	identical(i[], j)
 
-x <- ff(26:1, vmode="double", length=n)
-y <- clone(x)
-for (j in chunk(i))i[j] <- j[[1]]:j[[2]]
-system.time(fforder(x, i, verbose=TRUE))
-j <- 1:n; system.time(ramorder(y[], j))
-identical(i[], j)
-system.time(j <- order(y[]))
-identical(i[], j)
+	x <- ff(26:1, vmode="double", length=n)
+	y <- clone(x)
+	for (j in chunk(i))i[j] <- j[[1]]:j[[2]]
+	system.time(fforder(x, i, verbose=TRUE))
+	j <- 1:n; system.time(ramorder(y[], j))
+	identical(i[], j)
+	system.time(j <- order(y[]))
+	identical(i[], j)
 
-x <- ff(26:1, vmode="single", length=n)
-y <- clone(x)
-for (j in chunk(i))i[j] <- j[[1]]:j[[2]]
-system.time(fforder(x, i, verbose=TRUE))
-j <- 1:n; system.time(ramorder(y[], j))
-identical(i[], j)
+	x <- ff(26:1, vmode="single", length=n)
+	y <- clone(x)
+	for (j in chunk(i))i[j] <- j[[1]]:j[[2]]
+	system.time(fforder(x, i, verbose=TRUE))
+	j <- 1:n; system.time(ramorder(y[], j))
+	identical(i[], j)
 
-x <- ff(factor(rev(letters)), length=n)
-y <- clone(x)
-for (j in chunk(i))i[j] <- j[[1]]:j[[2]]
-system.time(fforder(x, i, verbose=TRUE))
-j <- 1:n; system.time(ramorder(y[], j))
-identical(i[], j)
-system.time(j <- order(y[]))
-identical(i[], j)
+	x <- ff(factor(rev(letters)), length=n)
+	y <- clone(x)
+	for (j in chunk(i))i[j] <- j[[1]]:j[[2]]
+	system.time(fforder(x, i, verbose=TRUE))
+	j <- 1:n; system.time(ramorder(y[], j))
+	identical(i[], j)
+	system.time(j <- order(y[]))
+	identical(i[], j)
 
 
-library(ff)
-x1 <- sample(5, 25, TRUE)
-x2 <- sample(5, 25, TRUE)
-f1 <- ff(x1)
-f2 <- ff(x2)
-fo <- ff(1:25)
+	library(ff)
+	x1 <- sample(5, 25, TRUE)
+	x2 <- sample(5, 25, TRUE)
+	f1 <- ff(x1)
+	f2 <- ff(x2)
+	fo <- ff(1:25)
 
-o <- 1:25
-o1 <- f1[]
-o2 <- f2[]
-ramorder(o2, o)
-ramorder(o1, o)
-cbind(x1, x2)[o,]
+	o <- 1:25
+	o1 <- f1[]
+	o2 <- f2[]
+	ramorder(o2, o)
+	ramorder(o1, o)
+	cbind(x1, x2)[o,]
 
-fforder(f2, fo)
-fforder(f1, fo, use.index=TRUE)
-cbind(x1,x2)[fo[],]
+	fforder(f2, fo)
+	fforder(f1, fo, use.index=TRUE)
+	cbind(x1,x2)[fo[],]
 
 
 
@@ -3068,29 +3082,29 @@ cbind(x1,x2)[fo[],]
 
 
 
-nNA <- .Call("ffkeysort"
-      , ffmode_       = .ffmode[vmode(x)]
-      , ff_           = attr(x, "physical")
-      , left_         = 1L
-      , right_        = length(x)
-      , keyrange_     = as.integer(keyrange)
-      , ordersize_    = as.integer(ordersize)
-      , has_na_       = as.logical(has.na)
-      , na_last_      = as.logical(na.last)
-      , decreasing_   = as.logical(decreasing)
-      , PACKAGE="ff"
-      )
+	nNA <- .Call("ffkeysort"
+				, ffmode_       = .ffmode[vmode(x)]
+				, ff_           = attr(x, "physical")
+				, left_         = 1L
+				, right_        = length(x)
+				, keyrange_     = as.integer(keyrange)
+				, ordersize_    = as.integer(ordersize)
+				, has_na_       = as.logical(has.na)
+				, na_last_      = as.logical(na.last)
+				, decreasing_   = as.logical(decreasing)
+				, PACKAGE="ff"
+				)
 
-# stürzt nicht ab
-x <- ff(sample(as.factor(letters)), length=100000)
-ffsort(x)
+	# stürzt nicht ab
+	x <- ff(sample(as.factor(letters)), length=100000)
+	ffsort(x)
 
-# stürzt ab
-x <- ff(sample(as.factor(letters)), length=100000, vmode="byte")
-ffsort(x)
+	# stürzt ab
+	x <- ff(sample(as.factor(letters)), length=100000, vmode="byte")
+	ffsort(x)
 
-x <- ff(sample(as.factor(letters)), length=100000, vmode="ubyte")
-ffsort(x)
+	x <- ff(sample(as.factor(letters)), length=100000, vmode="ubyte")
+	ffsort(x)
 
 
 
@@ -3098,602 +3112,602 @@ ffsort(x)
 
 
 
-library(ff)
+	library(ff)
 
-n <- 1e6L
-o <- 1e6L
-m <- as.integer(32768/2) #1e6
-v <- "double"
-keyrange <- c(1L, 1000L)
+	n <- 1e6L
+	o <- 1e6L
+	m <- as.integer(32768/2) #1e6
+	v <- "double"
+	keyrange <- c(1L, 1000L)
 
-ffx <- ff(vmode=v, length=n, caching="mmeachflush")
-left <- 1L
-right <- n
+	ffx <- ff(vmode=v, length=n, caching="mmeachflush")
+	left <- 1L
+	right <- n
 
-s <- 1L
-#for (s in 1:1000){
-  cat("seed",s,"\n")
-  #sink("d:/tmp/t.txt")
-  set.seed(s)
+	s <- 1L
+	#for (s in 1:1000){
+		cat("seed",s,"\n")
+		#sink("d:/tmp/t.txt")
+		set.seed(s)
 
-  #for (i in chunk(ffx))ffx[i] <- sample(c(Inf, 1, 0, NA, NaN, -1, -Inf, runif(7)), sum(i), TRUE)
-  #for (i in chunk(ffx))ffx[i] <- sample(c(Inf, 1, 0, -1, -Inf, runif(7)), sum(i), TRUE)
-  #for (i in chunk(ffx))ffx[i] <- sample(c(keyrange[1]:keyrange[2], rep(NA, diff(keyrange))), sum(i), TRUE)
-  #for (i in chunk(ffx))ffx[i] <- sample(keyrange[1]:keyrange[2], sum(i), TRUE)
-  #system.time(for (i in chunk(ffx))ffx[i] <- as.integer(runif(sum(i), max=.Machine$integer.max)))
-  system.time(for (i in chunk(ffx))ffx[i] <- runif(sum(i), max=.Machine$integer.max))
+		#for (i in chunk(ffx))ffx[i] <- sample(c(Inf, 1, 0, NA, NaN, -1, -Inf, runif(7)), sum(i), TRUE)
+		#for (i in chunk(ffx))ffx[i] <- sample(c(Inf, 1, 0, -1, -Inf, runif(7)), sum(i), TRUE)
+		#for (i in chunk(ffx))ffx[i] <- sample(c(keyrange[1]:keyrange[2], rep(NA, diff(keyrange))), sum(i), TRUE)
+		#for (i in chunk(ffx))ffx[i] <- sample(keyrange[1]:keyrange[2], sum(i), TRUE)
+		#system.time(for (i in chunk(ffx))ffx[i] <- as.integer(runif(sum(i), max=.Machine$integer.max)))
+		system.time(for (i in chunk(ffx))ffx[i] <- runif(sum(i), max=.Machine$integer.max))
 
-  system.time(ffx2 <- clone(ffx))
-  system.time(
-  nNA <- .Call("ffkeysort"
-  , ff_           = attr(ffx2, "physical")
-  , left_         = left
-  , right_        = right
-  , keyrange_       = as.integer(keyrange)
-  , ordersize_    = as.integer(o)
-  , has_na_       = TRUE
-  , na_last_      = TRUE
-  , decreasing_   = TRUE
-  , PACKAGE="ff"
-  )
-  )
-
-
-
-
+		system.time(ffx2 <- clone(ffx))
+		system.time(
+		nNA <- .Call("ffkeysort"
+		, ff_           = attr(ffx2, "physical")
+		, left_         = left
+		, right_        = right
+		, keyrange_       = as.integer(keyrange)
+		, ordersize_    = as.integer(o)
+		, has_na_       = TRUE
+		, na_last_      = TRUE
+		, decreasing_   = TRUE
+		, PACKAGE="ff"
+		)
+		)
+
+
+
+
 
-
-  x <- ffx[]
-  sum(is.na(x))
-  nNA
-
-  system.time(i <- sort(x, decreasing=TRUE, na.last=TRUE))
-  identical(ffx2[], i)
-
-
-
-  ffy <- ff(vmode=vmode(ffx), length=length(ffx), caching="mmeachflush")
-
-  method <- 0L
-  system.time(ffx2 <- clone(ffx))
-
-  system.time(
-  .Call("ffsortmerge"
-  , ffmode_       = .ffmode[vmode(ffx2)]
-  , ff_           = attr(ffx2, "physical")
-  , auxff_        = attr(ffy, "physical")
-  , left_         = left
-  , right_        = right
-  , method_       = as.integer(method)
-  , keyrange_       = as.integer(keyrange)
-  , ordersize_    = as.integer(o)
-  , mergesize_    = as.integer(m)
-  , has_na_       = TRUE
-  , na_last_      = FALSE #TRUE
-  , decreasing_   = TRUE #FALSE
-  , PACKAGE="ff"
-  )
-  )
+
+		x <- ffx[]
+		sum(is.na(x))
+		nNA
+
+		system.time(i <- sort(x, decreasing=TRUE, na.last=TRUE))
+		identical(ffx2[], i)
+
+
+
+		ffy <- ff(vmode=vmode(ffx), length=length(ffx), caching="mmeachflush")
+
+		method <- 0L
+		system.time(ffx2 <- clone(ffx))
+
+		system.time(
+		.Call("ffsortmerge"
+		, ffmode_       = .ffmode[vmode(ffx2)]
+		, ff_           = attr(ffx2, "physical")
+		, auxff_        = attr(ffy, "physical")
+		, left_         = left
+		, right_        = right
+		, method_       = as.integer(method)
+		, keyrange_       = as.integer(keyrange)
+		, ordersize_    = as.integer(o)
+		, mergesize_    = as.integer(m)
+		, has_na_       = TRUE
+		, na_last_      = FALSE #TRUE
+		, decreasing_   = TRUE #FALSE
+		, PACKAGE="ff"
+		)
+		)
 
-  x <- ffx[]
-  sum(is.na(x))
-  nNA
+		x <- ffx[]
+		sum(is.na(x))
+		nNA
 
-  system.time(i <- sort(x, decreasing=TRUE, na.last=FALSE))
-  identical(ffx2[], i)
+		system.time(i <- sort(x, decreasing=TRUE, na.last=FALSE))
+		identical(ffx2[], i)
 
 
-  method <- 1L
-  system.time(ffx2 <- clone(ffx))
+		method <- 1L
+		system.time(ffx2 <- clone(ffx))
 
-  system.time(
-  .Call("ffsortmerge"
-  , ffmode_       = .ffmode[vmode(ffx2)]
-  , ff_           = attr(ffx2, "physical")
-  , auxff_        = attr(ffy, "physical")
-  , left_         = left
-  , right_        = right
-  , method_       = as.integer(method)
-  , keyrange_       = as.integer(keyrange)
-  , ordersize_    = as.integer(o)
-  , mergesize_    = as.integer(m)
-  , has_na_       = TRUE
-  , na_last_      = FALSE #TRUE
-  , decreasing_   = TRUE #FALSE
-  , PACKAGE="ff"
-  )
-  )
-
-  x <- ffx[]
-  sum(is.na(x))
-  nNA
-
-  system.time(i <- sort(x, decreasing=TRUE, na.last=FALSE))
-  identical(ffx2[], i)
-
-
-  method <- 2L
-  system.time(ffx2 <- clone(ffx))
-
-  system.time(
-  .Call("ffsortmerge"
-  , ffmode_       = .ffmode[vmode(ffx2)]
-  , ff_           = attr(ffx2, "physical")
-  , auxff_        = attr(ffy, "physical")
-  , left_         = left
-  , right_        = right
-  , method_       = as.integer(method)
-  , keyrange_       = as.integer(keyrange)
-  , ordersize_    = as.integer(o)
-  , mergesize_    = as.integer(m)
-  , has_na_       = TRUE
-  , na_last_      = FALSE #TRUE
-  , decreasing_   = TRUE #FALSE
-  , PACKAGE="ff"
-  )
-  )
-
-  x <- ffx[]
-  sum(is.na(x))
-  nNA
-
-  system.time(i <- sort(x, decreasing=TRUE, na.last=FALSE))
-  identical(ffx2[], i)
-
-
-  method <- 3L
-  system.time(ffx2 <- clone(ffx))
-
-  system.time(
-  .Call("ffsortmerge"
-  , ffmode_       = .ffmode[vmode(ffx2)]
-  , ff_           = attr(ffx2, "physical")
-  , auxff_        = attr(ffy, "physical")
-  , left_         = left
-  , right_        = right
-  , method_       = as.integer(method)
-  , keyrange_       = as.integer(keyrange)
-  , ordersize_    = as.integer(o)
-  , mergesize_    = as.integer(m)
-  , has_na_       = TRUE
-  , na_last_      = FALSE #TRUE
-  , decreasing_   = TRUE #FALSE
-  , PACKAGE="ff"
-  )
-  )
-
-  x <- ffx[]
-  sum(is.na(x))
-  nNA
-
-  system.time(i <- sort(x, decreasing=TRUE, na.last=FALSE))
-  identical(ffx2[], i)
-
-
-
-
-
-
-
-
-  ffo <- ff(vmode="integer", length=n, caching="mmeachflush")
-  ffp <- ff(vmode=vmode(ffo), length=length(ffo), caching="mmeachflush")
-
-
-  method <- 0L
-  for (i in chunk(ffo))ffo[i] <- (i[[1]]):(i[[2]])
-  system.time(ffx2 <- clone(ffx))
-
-  system.time(
-  nNA <- .Call("ffordermerge"
-  , ffmode_       = .ffmode[vmode(ffx2)]
-  , ff_           = attr(ffx2, "physical")
-  , index_        = attr(ffo, "physical")
-  , auxff_        = attr(ffy, "physical")
-  , auxindex_     = attr(ffp, "physical")
-  , left_         = left
-  , right_        = right
-  , method_       = as.integer(method)
-  , keyrange_     = as.integer(keyrange)
-  , ordersize_    = as.integer(o)
-  , mergesize_    = as.integer(m)
-  , orderindex_   = TRUE
-  , has_na_       = TRUE
-  , na_last_      = FALSE #TRUE
-  , decreasing_   = TRUE #FALSE
-  , PACKAGE="ff"
-  )
-  )
-
-  #ffx[ffo[]]
-  x <- ffx[]
-  sum(is.na(x))
-  nNA
-
-  #system.time(i <- order(x, decreasing=TRUE, na.last=FALSE))
-  system.time({i <- 1:n;mergeorder(x, i, decreasing=TRUE, na.last=FALSE)})
-  identical(ffo[], i)
-
-
-
-  method <- 1L
-  system.time(for (i in chunk(ffo))ffo[i] <- (i[[1]]):(i[[2]]))
-  system.time(ffx2 <- clone(ffx))
-
-  system.time(
-  nNA <- .Call("ffordermerge"
-  , ffmode_       = .ffmode[vmode(ffx2)]
-  , ff_           = attr(ffx2, "physical")
-  , index_        = attr(ffo, "physical")
-  , auxff_        = attr(ffy, "physical")
-  , auxindex_     = attr(ffp, "physical")
-  , left_         = left
-  , right_        = right
-  , method_       = as.integer(method)
-  , keyrange_       = as.integer(keyrange)
-  , ordersize_    = as.integer(o)
-  , mergesize_    = as.integer(m)
-  , orderindex_   = TRUE
-  , has_na_       = TRUE
-  , na_last_      = FALSE #TRUE
-  , decreasing_   = TRUE #FALSE
-  , PACKAGE="ff"
-  )
-  )
-
-  #ffx[ffo[]]
-  x <- ffx[]
-  sum(is.na(x))
-  nNA
-
-  #system.time(i <- order(x, decreasing=TRUE, na.last=FALSE))
-  system.time({i <- 1:n;mergeorder(x, i, decreasing=TRUE, na.last=FALSE)})
-  identical(ffo[], i)
-
-
-
-  method <- 2L
-  for (i in chunk(ffo))ffo[i] <- (i[[1]]):(i[[2]])
-  system.time(ffx2 <- clone(ffx))
-
-  system.time(
-  nNA <- .Call("ffordermerge"
-  , ffmode_       = .ffmode[vmode(ffx2)]
-  , ff_           = attr(ffx2, "physical")
-  , index_        = attr(ffo, "physical")
-  , auxff_        = attr(ffy, "physical")
-  , auxindex_     = attr(ffp, "physical")
-  , left_         = left
-  , right_        = right
-  , method_       = as.integer(method)
-  , keyrange_       = as.integer(keyrange)
-  , ordersize_    = as.integer(o)
-  , mergesize_    = as.integer(m)
-  , orderindex_   = TRUE
-  , has_na_       = TRUE
-  , na_last_      = FALSE #TRUE
-  , decreasing_   = TRUE #FALSE
-  , PACKAGE="ff"
-  )
-  )
-  #sink()
-
-  #ffx[ffo[]]
-  x <- ffx[]
-  sum(is.na(x))
-  nNA
-
-  #system.time(i <- order(x, decreasing=TRUE, na.last=FALSE))
-  system.time({i <- 1:n;mergeorder(x, i, decreasing=TRUE, na.last=FALSE)})
-  identical(ffo[], i)
-
-
-
-  method <- 3L
-  for (i in chunk(ffo))ffo[i] <- (i[[1]]):(i[[2]])
-  system.time(ffx2 <- clone(ffx))
-
-  system.time(
-  nNA <- .Call("ffordermerge"
-  , ffmode_       = .ffmode[vmode(ffx2)]
-  , ff_           = attr(ffx2, "physical")
-  , index_        = attr(ffo, "physical")
-  , auxff_        = attr(ffy, "physical")
-  , auxindex_     = attr(ffp, "physical")
-  , left_         = left
-  , right_        = right
-  , method_       = as.integer(method)
-  , keyrange_       = as.integer(keyrange)
-  , ordersize_    = as.integer(o)
-  , mergesize_    = as.integer(m)
-  , orderindex_   = TRUE
-  , has_na_       = TRUE
-  , na_last_      = FALSE #TRUE
-  , decreasing_   = TRUE #FALSE
-  , PACKAGE="ff"
-  )
-  )
-  #sink()
-
-  #ffx[ffo[]]
-  x <- ffx[]
-  sum(is.na(x))
-  nNA
-
-  #system.time(i <- order(x, decreasing=TRUE, na.last=FALSE))
-  system.time({i <- 1:n;mergeorder(x, i, decreasing=TRUE, na.last=FALSE)})
-  identical(ffo[], i)
-
-
-
-
-
-
-
-  library(ff)
-  n <- 1e8L
-  o <- 5e7L
-  m <- as.integer(32768/2) #1e6
-  v <- "double"
-  caching <- "mmeachflush"
-
-  ffx <- ff(vmode=v, length=n, caching=caching)
-  left <- 1L
-  right <- n
-
-  s <- 1L
-  cat("seed",s,"\n")
-  set.seed(s)
-
-  #for (i in chunk(ffx))ffx[i] <- sample(c(Inf, 1, 0, NA, NaN, -1, -Inf, runif(7)), sum(i), TRUE)
-  #system.time(for (i in chunk(ffx))ffx[i] <- as.integer(runif(sum(i), max=n)))
-  system.time(for (i in chunk(ffx))ffx[i] <- runif(sum(i), max=n))
-
-  ffy <- ff(vmode=vmode(ffx), length=length(ffx), caching=caching)
-  ffo <- ff(vmode="integer", length=n, caching=caching)
-  ffp <- clone(ffo)
-
-  method <- 0L
-  system.time(ffx2 <- clone(ffx))
-  for (i in chunk(ffo))ffo[i] <- (i[[1]]):(i[[2]])
-
-  system.time(
-  nNA <- .Call("ffordermerge"
-  , ffmode_       = .ffmode[vmode(ffx2)]
-  , ff_           = attr(ffx2, "physical")
-  , index_        = attr(ffo, "physical")
-  , auxff_        = attr(ffy, "physical")
-  , auxindex_     = attr(ffp, "physical")
-  , left_         = left
-  , right_        = right
-  , method_       = as.integer(method)
-  , keyrange_       = c(1L, .Machine$integer.max) # NULL
-  , ordersize_    = as.integer(o)
-  , mergesize_    = as.integer(m)
-  , orderindex_   = TRUE
-  , has_na_       = TRUE
-  , na_last_      = TRUE
-  , decreasing_   = FALSE
-  , PACKAGE="ff"
-  )
-  )
-
-  #x <- ffx[]
-  #sum(is.na(x))
-  #nNA
-  #system.time(i <- sort(x, decreasing=FALSE, na.last=TRUE))
-  #identical(ffx2[], i)
-
-  #m <- matrix(ffo[], nrow=o)
-  #for (i in 1:ncol(m))
-  #m[,i] <- sort(m[,i])
-
-  #io <- (0:(n %/% o))*o
-  #io <- rep(io, rep(o, length(io)))[1:n]
-  #io <- io + 1
-  #x <- ffo[]
-  #system.time(
-  #sort.int(x, index.return=TRUE, method="quick")
-  #)
-  #x <- ffo[]
-  #i <- 1:n
-  #system.time({
-  #radixorder(x, i, has.na=FALSE)
-  #})
-
-  method2 <- 4L
-
-  system.time(
-  .Call("ffchunkorder"
-  , index_        = attr(ffo, "physical")
-  , outindex_        = attr(ffp, "physical")
-  , indexsize_  = as.integer(n)
-  , method_       = method2  #/* 0=mergeorder 1=shellorder 2=radixorder 4=quickorder */
-  , ordersize_    = as.integer(o) #/* int no of elements to be ordered in RAM (must be same as in r_ff_index_chunkorder) */
-  )
-  )
-  #identical(matrix(ffo[ffp[]+io], nrow=o), m)
-
-
-  #ffy[] <- 0
-  system.time(
-  .Call("ffindexget"
-  , ffmode_       = .ffmode[vmode(ffx)]
-  , ffin_         = attr(ffx, "physical")
-  , ffout_        = attr(ffy, "physical")
-  , index_        = attr(ffo, "physical")
-  , auxindex_     = NULL
-  , offset_       = 1  # 1 for R2C
-  , left_         = 1
-  , right_        = n
-  , method_       = method2  #/* 0=mergeorder 1=shellorder */
-  , ordersize_    = as.integer(o) #/* int no of elements to be ordered in RAM (must be same as in r_ff_index_chunkorder) */
-  )
-  )
-  #identical(ffx2[],ffy[])
-
-
-  #sink("d:/tmp/t.txt")
-
-  #ffy[] <- 0
-  system.time(
-  .Call("ffindexget"
-  , ffmode_       = .ffmode[vmode(ffx)]
-  , ffin_         = attr(ffx, "physical")
-  , ffout_        = attr(ffy, "physical")
-  , index_        = attr(ffo, "physical")
-  , auxindex_     = attr(ffp, "physical")
-  , offset_       = 1  # 1 for R2C
-  , left_         = 1
-  , right_        = n
-  , method_       = method2  #/* 0=mergeorder 1=shellorder */
-  , ordersize_    = as.integer(o) #/* int no of elements to be ordered in RAM (must be same as in r_ff_index_chunkorder) */
-  )
-  )
-  #sink()
-  #identical(ffx2[],ffy[])
-
-
-  #ffy[] <- 0
-  system.time(
-  .Call("ffindexget"
-  , ffmode_       = .ffmode[vmode(ffx)]
-  , ffin_         = attr(ffx, "physical")
-  , ffout_        = attr(ffy, "physical")
-  , index_        = attr(ffo, "physical")
-  , auxindex_     = FALSE
-  , offset_       = 1  # 1 for R2C
-  , left_         = 1
-  , right_        = n
-  , method_       = method2  #/* 0=mergeorder 1=shellorder */
-  , ordersize_    = as.integer(o) #/* int no of elements to be ordered in RAM (must be same as in r_ff_index_chunkorder) */
-  )
-  )
-  #identical(ffx2[],ffy[])
-
-
-
-
-  #data test(keep=x);
-  #   seed = 1;
-  #   do i = 1 to 1e8;
-  #      call ranuni(seed, x);
-  #      output;
-  #   end;
-  #run;
-
-  #proc sort data=test;
-  #by x;
-  #run;
-
-
-
-  #data test(keep=x y);
-  #   seed = 1;
-  #   do i = 1 to 1e8;
-  #      call ranuni(seed, x);
-  #      call ranuni(seed, y);
-  #      output;
-  #   end;
-  #run;
-
-  #proc sort data=test;
-  #by x;
-  #run;
-
-
-
-  #data test(keep=x y z);
-  #   seed = 1;
-  #   do i = 1 to 1e8;
-  #      call ranuni(seed, x);
-  #      call ranuni(seed, y);
-  #      call ranuni(seed, z);
-  #      output;
-  #   end;
-  #run;
-
-  #proc sort data=test;
-  #by x;
-  #run;
-
-
-
-
-#}
-
-
-  dforder <- function(x, ...){
-    k <- ncol(x)
-    l <- vector("list", k)
-    for (i in 1:k)
-      l[[i]] <- x[[i]]
-    do.call("order", c(l, ...))
-  }
-
-
-  library(ff)
-
-  N <- c(3e6L, 9e6L, 27e6, 81e6)
-  M <- c(2L, 4L, 6L)
-  K <- c(1L, 2L)
-  tim <- array(NA, dim=c(2, 4, length(N), length(M), length(K)), dimnames=list(c("R","ff")
-  , c("o <- order(x)", "xo <- x[o]", "x2 <- clone(xo)", "x2[o] <- xo"), N, M, K))
-
-  ki <- 1L
-  mi <- 1L
-  ni <- 1L
-
-  for (ki in 1:length(K)){
-    for (mi in 1:length(M)){
-      for (ni in 1:length(N)){
-        k <- K[ki]
-        m <- M[mi]
-        n <- N[ni]
-
-        vmode <- rep("integer", m)
-        l <- list()
-        for (j in 1:m){
-          l[[j]] <- ff(vmode=vmode[j], length=n)
-        }
-        for (i in chunk(l[[2]])){
-          h <- as.hi(i)
-          for (j in 1:m){
-            if (j==1)
-              x <- sample(1000, sum(i), TRUE)
-            else if (j==2)
-              x <- runif(sum(i), 1, n)
-            l[[j]][h] <- x + j
-          }
-          rm(x)
-        }
-        names(l) <- paste("c", 1:m, sep="")
-        fd <- do.call("ffdf", l)
-
-        if (TRUE){
-          gc()
-          tim["ff", 1,ni,mi,ki] <- system.time( fo <- ffdforder(fd[1:k])          )[3]
-          tim["ff", 2,ni,mi,ki] <- system.time( fdo <- fd[fo,]                    )[3]
-          tim["ff", 3,ni,mi,ki] <- system.time( fd2 <- clone(fdo)                 )[3]
-          tim["ff", 4,ni,mi,ki] <- system.time( fd2[fo,] <- fdo                   )[3]
-        }
-        if (n<=9e6){  # limit to cases where we do not exhaust RAM
-          d <- fd[,]
-          gc()
-          tim["R", 1,ni,mi,ki] <- system.time( o <- dforder(d[1:k]) )[3]
-          tim["R", 2,ni,mi,ki] <- system.time( do <- d[o,]          )[3]
-          rm(d)
-          gc()
-          tim["R", 3,ni,mi,ki] <- system.time( d2 <- do             )[3]
-          tim["R", 4,ni,mi,ki] <- system.time( d2[o,] <- do         )[3]
-          rm(o, do, d2)
-        }
-
-        print(tim)
-        gc()
-      }
-    }
-  }
+		system.time(
+		.Call("ffsortmerge"
+		, ffmode_       = .ffmode[vmode(ffx2)]
+		, ff_           = attr(ffx2, "physical")
+		, auxff_        = attr(ffy, "physical")
+		, left_         = left
+		, right_        = right
+		, method_       = as.integer(method)
+		, keyrange_       = as.integer(keyrange)
+		, ordersize_    = as.integer(o)
+		, mergesize_    = as.integer(m)
+		, has_na_       = TRUE
+		, na_last_      = FALSE #TRUE
+		, decreasing_   = TRUE #FALSE
+		, PACKAGE="ff"
+		)
+		)
+
+		x <- ffx[]
+		sum(is.na(x))
+		nNA
+
+		system.time(i <- sort(x, decreasing=TRUE, na.last=FALSE))
+		identical(ffx2[], i)
+
+
+		method <- 2L
+		system.time(ffx2 <- clone(ffx))
+
+		system.time(
+		.Call("ffsortmerge"
+		, ffmode_       = .ffmode[vmode(ffx2)]
+		, ff_           = attr(ffx2, "physical")
+		, auxff_        = attr(ffy, "physical")
+		, left_         = left
+		, right_        = right
+		, method_       = as.integer(method)
+		, keyrange_       = as.integer(keyrange)
+		, ordersize_    = as.integer(o)
+		, mergesize_    = as.integer(m)
+		, has_na_       = TRUE
+		, na_last_      = FALSE #TRUE
+		, decreasing_   = TRUE #FALSE
+		, PACKAGE="ff"
+		)
+		)
+
+		x <- ffx[]
+		sum(is.na(x))
+		nNA
+
+		system.time(i <- sort(x, decreasing=TRUE, na.last=FALSE))
+		identical(ffx2[], i)
+
+
+		method <- 3L
+		system.time(ffx2 <- clone(ffx))
+
+		system.time(
+		.Call("ffsortmerge"
+		, ffmode_       = .ffmode[vmode(ffx2)]
+		, ff_           = attr(ffx2, "physical")
+		, auxff_        = attr(ffy, "physical")
+		, left_         = left
+		, right_        = right
+		, method_       = as.integer(method)
+		, keyrange_       = as.integer(keyrange)
+		, ordersize_    = as.integer(o)
+		, mergesize_    = as.integer(m)
+		, has_na_       = TRUE
+		, na_last_      = FALSE #TRUE
+		, decreasing_   = TRUE #FALSE
+		, PACKAGE="ff"
+		)
+		)
+
+		x <- ffx[]
+		sum(is.na(x))
+		nNA
+
+		system.time(i <- sort(x, decreasing=TRUE, na.last=FALSE))
+		identical(ffx2[], i)
+
+
+
+
+
+
+
+
+		ffo <- ff(vmode="integer", length=n, caching="mmeachflush")
+		ffp <- ff(vmode=vmode(ffo), length=length(ffo), caching="mmeachflush")
+
+
+		method <- 0L
+		for (i in chunk(ffo))ffo[i] <- (i[[1]]):(i[[2]])
+		system.time(ffx2 <- clone(ffx))
+
+		system.time(
+		nNA <- .Call("ffordermerge"
+		, ffmode_       = .ffmode[vmode(ffx2)]
+		, ff_           = attr(ffx2, "physical")
+		, index_        = attr(ffo, "physical")
+		, auxff_        = attr(ffy, "physical")
+		, auxindex_     = attr(ffp, "physical")
+		, left_         = left
+		, right_        = right
+		, method_       = as.integer(method)
+		, keyrange_     = as.integer(keyrange)
+		, ordersize_    = as.integer(o)
+		, mergesize_    = as.integer(m)
+		, orderindex_   = TRUE
+		, has_na_       = TRUE
+		, na_last_      = FALSE #TRUE
+		, decreasing_   = TRUE #FALSE
+		, PACKAGE="ff"
+		)
+		)
+
+		#ffx[ffo[]]
+		x <- ffx[]
+		sum(is.na(x))
+		nNA
+
+		#system.time(i <- order(x, decreasing=TRUE, na.last=FALSE))
+		system.time({i <- 1:n;mergeorder(x, i, decreasing=TRUE, na.last=FALSE)})
+		identical(ffo[], i)
+
+
+
+		method <- 1L
+		system.time(for (i in chunk(ffo))ffo[i] <- (i[[1]]):(i[[2]]))
+		system.time(ffx2 <- clone(ffx))
+
+		system.time(
+		nNA <- .Call("ffordermerge"
+		, ffmode_       = .ffmode[vmode(ffx2)]
+		, ff_           = attr(ffx2, "physical")
+		, index_        = attr(ffo, "physical")
+		, auxff_        = attr(ffy, "physical")
+		, auxindex_     = attr(ffp, "physical")
+		, left_         = left
+		, right_        = right
+		, method_       = as.integer(method)
+		, keyrange_       = as.integer(keyrange)
+		, ordersize_    = as.integer(o)
+		, mergesize_    = as.integer(m)
+		, orderindex_   = TRUE
+		, has_na_       = TRUE
+		, na_last_      = FALSE #TRUE
+		, decreasing_   = TRUE #FALSE
+		, PACKAGE="ff"
+		)
+		)
+
+		#ffx[ffo[]]
+		x <- ffx[]
+		sum(is.na(x))
+		nNA
+
+		#system.time(i <- order(x, decreasing=TRUE, na.last=FALSE))
+		system.time({i <- 1:n;mergeorder(x, i, decreasing=TRUE, na.last=FALSE)})
+		identical(ffo[], i)
+
+
+
+		method <- 2L
+		for (i in chunk(ffo))ffo[i] <- (i[[1]]):(i[[2]])
+		system.time(ffx2 <- clone(ffx))
+
+		system.time(
+		nNA <- .Call("ffordermerge"
+		, ffmode_       = .ffmode[vmode(ffx2)]
+		, ff_           = attr(ffx2, "physical")
+		, index_        = attr(ffo, "physical")
+		, auxff_        = attr(ffy, "physical")
+		, auxindex_     = attr(ffp, "physical")
+		, left_         = left
+		, right_        = right
+		, method_       = as.integer(method)
+		, keyrange_       = as.integer(keyrange)
+		, ordersize_    = as.integer(o)
+		, mergesize_    = as.integer(m)
+		, orderindex_   = TRUE
+		, has_na_       = TRUE
+		, na_last_      = FALSE #TRUE
+		, decreasing_   = TRUE #FALSE
+		, PACKAGE="ff"
+		)
+		)
+		#sink()
+
+		#ffx[ffo[]]
+		x <- ffx[]
+		sum(is.na(x))
+		nNA
+
+		#system.time(i <- order(x, decreasing=TRUE, na.last=FALSE))
+		system.time({i <- 1:n;mergeorder(x, i, decreasing=TRUE, na.last=FALSE)})
+		identical(ffo[], i)
+
+
+
+		method <- 3L
+		for (i in chunk(ffo))ffo[i] <- (i[[1]]):(i[[2]])
+		system.time(ffx2 <- clone(ffx))
+
+		system.time(
+		nNA <- .Call("ffordermerge"
+		, ffmode_       = .ffmode[vmode(ffx2)]
+		, ff_           = attr(ffx2, "physical")
+		, index_        = attr(ffo, "physical")
+		, auxff_        = attr(ffy, "physical")
+		, auxindex_     = attr(ffp, "physical")
+		, left_         = left
+		, right_        = right
+		, method_       = as.integer(method)
+		, keyrange_       = as.integer(keyrange)
+		, ordersize_    = as.integer(o)
+		, mergesize_    = as.integer(m)
+		, orderindex_   = TRUE
+		, has_na_       = TRUE
+		, na_last_      = FALSE #TRUE
+		, decreasing_   = TRUE #FALSE
+		, PACKAGE="ff"
+		)
+		)
+		#sink()
+
+		#ffx[ffo[]]
+		x <- ffx[]
+		sum(is.na(x))
+		nNA
+
+		#system.time(i <- order(x, decreasing=TRUE, na.last=FALSE))
+		system.time({i <- 1:n;mergeorder(x, i, decreasing=TRUE, na.last=FALSE)})
+		identical(ffo[], i)
+
+
+
+
+
+
+
+		library(ff)
+		n <- 1e8L
+		o <- 5e7L
+		m <- as.integer(32768/2) #1e6
+		v <- "double"
+		caching <- "mmeachflush"
+
+		ffx <- ff(vmode=v, length=n, caching=caching)
+		left <- 1L
+		right <- n
+
+		s <- 1L
+		cat("seed",s,"\n")
+		set.seed(s)
+
+		#for (i in chunk(ffx))ffx[i] <- sample(c(Inf, 1, 0, NA, NaN, -1, -Inf, runif(7)), sum(i), TRUE)
+		#system.time(for (i in chunk(ffx))ffx[i] <- as.integer(runif(sum(i), max=n)))
+		system.time(for (i in chunk(ffx))ffx[i] <- runif(sum(i), max=n))
+
+		ffy <- ff(vmode=vmode(ffx), length=length(ffx), caching=caching)
+		ffo <- ff(vmode="integer", length=n, caching=caching)
+		ffp <- clone(ffo)
+
+		method <- 0L
+		system.time(ffx2 <- clone(ffx))
+		for (i in chunk(ffo))ffo[i] <- (i[[1]]):(i[[2]])
+
+		system.time(
+		nNA <- .Call("ffordermerge"
+		, ffmode_       = .ffmode[vmode(ffx2)]
+		, ff_           = attr(ffx2, "physical")
+		, index_        = attr(ffo, "physical")
+		, auxff_        = attr(ffy, "physical")
+		, auxindex_     = attr(ffp, "physical")
+		, left_         = left
+		, right_        = right
+		, method_       = as.integer(method)
+		, keyrange_       = c(1L, .Machine$integer.max) # NULL
+		, ordersize_    = as.integer(o)
+		, mergesize_    = as.integer(m)
+		, orderindex_   = TRUE
+		, has_na_       = TRUE
+		, na_last_      = TRUE
+		, decreasing_   = FALSE
+		, PACKAGE="ff"
+		)
+		)
+
+		#x <- ffx[]
+		#sum(is.na(x))
+		#nNA
+		#system.time(i <- sort(x, decreasing=FALSE, na.last=TRUE))
+		#identical(ffx2[], i)
+
+		#m <- matrix(ffo[], nrow=o)
+		#for (i in 1:ncol(m))
+		#m[,i] <- sort(m[,i])
+
+		#io <- (0:(n %/% o))*o
+		#io <- rep(io, rep(o, length(io)))[1:n]
+		#io <- io + 1
+		#x <- ffo[]
+		#system.time(
+		#sort.int(x, index.return=TRUE, method="quick")
+		#)
+		#x <- ffo[]
+		#i <- 1:n
+		#system.time({
+		#radixorder(x, i, has.na=FALSE)
+		#})
+
+		method2 <- 4L
+
+		system.time(
+		.Call("ffchunkorder"
+		, index_        = attr(ffo, "physical")
+		, outindex_        = attr(ffp, "physical")
+		, indexsize_  = as.integer(n)
+		, method_       = method2  #/* 0=mergeorder 1=shellorder 2=radixorder 4=quickorder */
+		, ordersize_    = as.integer(o) #/* int no of elements to be ordered in RAM (must be same as in r_ff_index_chunkorder) */
+		)
+		)
+		#identical(matrix(ffo[ffp[]+io], nrow=o), m)
+
+
+		#ffy[] <- 0
+		system.time(
+		.Call("ffindexget"
+		, ffmode_       = .ffmode[vmode(ffx)]
+		, ffin_         = attr(ffx, "physical")
+		, ffout_        = attr(ffy, "physical")
+		, index_        = attr(ffo, "physical")
+		, auxindex_     = NULL
+		, offset_       = 1  # 1 for R2C
+		, left_         = 1
+		, right_        = n
+		, method_       = method2  #/* 0=mergeorder 1=shellorder */
+		, ordersize_    = as.integer(o) #/* int no of elements to be ordered in RAM (must be same as in r_ff_index_chunkorder) */
+		)
+		)
+		#identical(ffx2[],ffy[])
+
+
+		#sink("d:/tmp/t.txt")
+
+		#ffy[] <- 0
+		system.time(
+		.Call("ffindexget"
+		, ffmode_       = .ffmode[vmode(ffx)]
+		, ffin_         = attr(ffx, "physical")
+		, ffout_        = attr(ffy, "physical")
+		, index_        = attr(ffo, "physical")
+		, auxindex_     = attr(ffp, "physical")
+		, offset_       = 1  # 1 for R2C
+		, left_         = 1
+		, right_        = n
+		, method_       = method2  #/* 0=mergeorder 1=shellorder */
+		, ordersize_    = as.integer(o) #/* int no of elements to be ordered in RAM (must be same as in r_ff_index_chunkorder) */
+		)
+		)
+		#sink()
+		#identical(ffx2[],ffy[])
+
+
+		#ffy[] <- 0
+		system.time(
+		.Call("ffindexget"
+		, ffmode_       = .ffmode[vmode(ffx)]
+		, ffin_         = attr(ffx, "physical")
+		, ffout_        = attr(ffy, "physical")
+		, index_        = attr(ffo, "physical")
+		, auxindex_     = FALSE
+		, offset_       = 1  # 1 for R2C
+		, left_         = 1
+		, right_        = n
+		, method_       = method2  #/* 0=mergeorder 1=shellorder */
+		, ordersize_    = as.integer(o) #/* int no of elements to be ordered in RAM (must be same as in r_ff_index_chunkorder) */
+		)
+		)
+		#identical(ffx2[],ffy[])
+
+
+
+
+		#data test(keep=x);
+		#   seed = 1;
+		#   do i = 1 to 1e8;
+		#      call ranuni(seed, x);
+		#      output;
+		#   end;
+		#run;
+
+		#proc sort data=test;
+		#by x;
+		#run;
+
+
+
+		#data test(keep=x y);
+		#   seed = 1;
+		#   do i = 1 to 1e8;
+		#      call ranuni(seed, x);
+		#      call ranuni(seed, y);
+		#      output;
+		#   end;
+		#run;
+
+		#proc sort data=test;
+		#by x;
+		#run;
+
+
+
+		#data test(keep=x y z);
+		#   seed = 1;
+		#   do i = 1 to 1e8;
+		#      call ranuni(seed, x);
+		#      call ranuni(seed, y);
+		#      call ranuni(seed, z);
+		#      output;
+		#   end;
+		#run;
+
+		#proc sort data=test;
+		#by x;
+		#run;
+
+
+
+
+	#}
+
+
+		dforder <- function(x, ...){
+			k <- ncol(x)
+			l <- vector("list", k)
+			for (i in 1:k)
+				l[[i]] <- x[[i]]
+			do.call("order", c(l, ...))
+		}
+
+
+		library(ff)
+
+		N <- c(3e6L, 9e6L, 27e6, 81e6)
+		M <- c(2L, 4L, 6L)
+		K <- c(1L, 2L)
+		tim <- array(NA, dim=c(2, 4, length(N), length(M), length(K)), dimnames=list(c("R","ff")
+		, c("o <- order(x)", "xo <- x[o]", "x2 <- clone(xo)", "x2[o] <- xo"), N, M, K))
+
+		ki <- 1L
+		mi <- 1L
+		ni <- 1L
+
+		for (ki in 1:length(K)){
+			for (mi in 1:length(M)){
+				for (ni in 1:length(N)){
+					k <- K[ki]
+					m <- M[mi]
+					n <- N[ni]
+
+					vmode <- rep("integer", m)
+					l <- list()
+					for (j in 1:m){
+						l[[j]] <- ff(vmode=vmode[j], length=n)
+					}
+					for (i in chunk(l[[2]])){
+						h <- as.hi(i)
+						for (j in 1:m){
+							if (j==1)
+								x <- sample(1000, sum(i), TRUE)
+							else if (j==2)
+								x <- runif(sum(i), 1, n)
+							l[[j]][h] <- x + j
+						}
+						rm(x)
+					}
+					names(l) <- paste("c", 1:m, sep="")
+					fd <- do.call("ffdf", l)
+
+					if (TRUE){
+						gc()
+						tim["ff", 1,ni,mi,ki] <- system.time( fo <- ffdforder(fd[1:k])          )[3]
+						tim["ff", 2,ni,mi,ki] <- system.time( fdo <- fd[fo,]                    )[3]
+						tim["ff", 3,ni,mi,ki] <- system.time( fd2 <- clone(fdo)                 )[3]
+						tim["ff", 4,ni,mi,ki] <- system.time( fd2[fo,] <- fdo                   )[3]
+					}
+					if (n<=9e6){  # limit to cases where we do not exhaust RAM
+						d <- fd[,]
+						gc()
+						tim["R", 1,ni,mi,ki] <- system.time( o <- dforder(d[1:k]) )[3]
+						tim["R", 2,ni,mi,ki] <- system.time( do <- d[o,]          )[3]
+						rm(d)
+						gc()
+						tim["R", 3,ni,mi,ki] <- system.time( d2 <- do             )[3]
+						tim["R", 4,ni,mi,ki] <- system.time( d2[o,] <- do         )[3]
+						rm(o, do, d2)
+					}
+
+					print(tim)
+					gc()
+				}
+			}
+		}
 
 
 }

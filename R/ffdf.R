@@ -1187,13 +1187,16 @@ ffdf <- function(
         df <- list()
         class(df) <- "data.frame"
       }
-
       if (is.data.frame(df)){
         if (is.null(rownam)){
           if (missing(i))
             row.names(df) <- seq_len(nrows)
-          else
-            row.names(df) <- as.which(i2)
+          else{
+						if (bit:::anyDuplicated.rlepack(i2$x))
+							row.names(df) <- make.unique(as.character(as.which(i2)))
+						else
+							row.names(df) <- as.which(i2)
+					}
         }else{
           if (is.ff(rownam)){
             nvw <- get_nvw(rownam)
@@ -1204,14 +1207,20 @@ ffdf <- function(
                 i2 <- as.hi(i, maxindex=nvw$n, vw=nvw$vw, pack=FALSE, envir=parent.frame(), names=rownam)
               }
             }
-            row.names(df) <- rownam[i2]
+						if (bit:::anyDuplicated.rlepack(i2$x))
+							row.names(df) <- make.unique(as.character(rownam[i2]))
+						else
+							row.names(df) <- rownam[i2]
           }else{
             if (missing(i)){
               row.names(df) <- rownam
             }else if(is.character(i))
-              row.names(df) <- i
+              row.names(df) <- make.unique(i)
             else{
-              row.names(df) <- rownam[as.integer(as.hi(i2))]
+							if (bit:::anyDuplicated.rlepack(i2$x))
+								row.names(df) <- make.unique(rownam[as.integer(i2)])
+							else
+								row.names(df) <- rownam[as.integer(i2)]
             }
           }
         }
@@ -2102,9 +2111,11 @@ is.open.ffdf <- function(x, ...){
   else FALSE
 }
 
-open.ffdf <- function (con, readonly = FALSE, pagesize = NULL, caching = NULL, ...){
+open.ffdf <- function (con, readonly = FALSE, pagesize = NULL, caching = NULL
+, assert = FALSE
+, ...){
   p <- .subset2(con, "physical")
-  o <- sapply(p, open, readonly=readonly, pagesize=pagesize, caching=caching)
+  o <- sapply(p, open, readonly=readonly, pagesize=pagesize, caching=caching, assert=assert)
   rnam <- .subset2(con, "row.names")
   if (is.ff(rnam))
     o <- c(row.names=open(rnam, readonly=readonly, pagesize=pagesize, caching=caching), o)

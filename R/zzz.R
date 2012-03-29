@@ -9,7 +9,7 @@
 
 .onLoad <- function(lib, pkg) {
   ##library.dynam("ff", pkg, lib) use useDynLib(ff) in NAMESPACE instead
-  packageStartupMessage("Loading package ff", packageDescription("ff", lib, fields="Version"), "")
+  ##packageStartupMessage("Loading package ff", packageDescription("ff", lib, fields="Version"), "")
   # allow fftempdir to be set before package is loaded
   if (is.null(getOption("fftempdir"))){
     # create tempdir and make tempdir name independent of platform (otherwise dirname(tempfile)!=getOption("fftempdir"))
@@ -51,39 +51,71 @@
       options(ffmaxbytes=0.5*1024^3)
     }
   }
-  packageStartupMessage('- getOption("fftempdir")=="',getOption("fftempdir"),'"\n',sep='')
-  packageStartupMessage('- getOption("ffextension")=="',getOption("ffextension"),'"\n',sep='')
-  packageStartupMessage('- getOption("ffdrop")==',getOption("ffdrop"),'\n',sep='')
-  packageStartupMessage('- getOption("fffinonexit")==',getOption("fffinonexit"),'\n',sep='')
-  packageStartupMessage('- getOption("ffpagesize")==',getOption("ffpagesize"),'\n',sep='')
-  packageStartupMessage('- getOption("ffcaching")=="',getOption("ffcaching"),'"  -- consider "ffeachflush" if your system stalls on large writes\n',sep='')
-  packageStartupMessage('- getOption("ffbatchbytes")==',getOption("ffbatchbytes"),' -- consider a different value for tuning your system\n',sep='')
-  packageStartupMessage('- getOption("ffmaxbytes")==',getOption("ffmaxbytes"),' -- consider a different value for tuning your system\n',sep='')
   # if we want an explicit list of ff objects, we should store them in an environment with hash=TRUE (much faster than a list)
   #assign(".fftemp", new.env(hash=TRUE), envir=globalenv())
 
-  assign(".vimplemented"
-  , c(
-      boolean   = .Call("ffmode_implemented", .ffmode["boolean"]  , PACKAGE="ff")
-    , logical   = .Call("ffmode_implemented", .ffmode["logical"]  , PACKAGE="ff")
-    , quad      = .Call("ffmode_implemented", .ffmode["quad"]     , PACKAGE="ff")
-    , nibble    = .Call("ffmode_implemented", .ffmode["nibble"]   , PACKAGE="ff")
-    , byte      = .Call("ffmode_implemented", .ffmode["byte"]     , PACKAGE="ff")
-    , ubyte     = .Call("ffmode_implemented", .ffmode["ubyte"]    , PACKAGE="ff")
-    , short     = .Call("ffmode_implemented", .ffmode["short"]    , PACKAGE="ff")
-    , ushort    = .Call("ffmode_implemented", .ffmode["ushort"]   , PACKAGE="ff")
-    , integer   = .Call("ffmode_implemented", .ffmode["integer"]  , PACKAGE="ff")
-    , single    = .Call("ffmode_implemented", .ffmode["single"]   , PACKAGE="ff")
-    , double    = .Call("ffmode_implemented", .ffmode["double"]   , PACKAGE="ff")
-    , complex   = .Call("ffmode_implemented", .ffmode["complex"]  , PACKAGE="ff")
-    , raw       = .Call("ffmode_implemented", .ffmode["raw"]      , PACKAGE="ff")
-    , character = .Call("ffmode_implemented", .ffmode["character"], PACKAGE="ff")
-    ), envir=globalenv()
-  )
+  # assign(".vimplemented"
+  # , c(
+      # boolean   = .Call("ffmode_implemented", .ffmode["boolean"]  , PACKAGE="ff")
+    # , logical   = .Call("ffmode_implemented", .ffmode["logical"]  , PACKAGE="ff")
+    # , quad      = .Call("ffmode_implemented", .ffmode["quad"]     , PACKAGE="ff")
+    # , nibble    = .Call("ffmode_implemented", .ffmode["nibble"]   , PACKAGE="ff")
+    # , byte      = .Call("ffmode_implemented", .ffmode["byte"]     , PACKAGE="ff")
+    # , ubyte     = .Call("ffmode_implemented", .ffmode["ubyte"]    , PACKAGE="ff")
+    # , short     = .Call("ffmode_implemented", .ffmode["short"]    , PACKAGE="ff")
+    # , ushort    = .Call("ffmode_implemented", .ffmode["ushort"]   , PACKAGE="ff")
+    # , integer   = .Call("ffmode_implemented", .ffmode["integer"]  , PACKAGE="ff")
+    # , single    = .Call("ffmode_implemented", .ffmode["single"]   , PACKAGE="ff")
+    # , double    = .Call("ffmode_implemented", .ffmode["double"]   , PACKAGE="ff")
+    # , complex   = .Call("ffmode_implemented", .ffmode["complex"]  , PACKAGE="ff")
+    # , raw       = .Call("ffmode_implemented", .ffmode["raw"]      , PACKAGE="ff")
+    # , character = .Call("ffmode_implemented", .ffmode["character"], PACKAGE="ff")
+    # ), envir=globalenv()
+  # )
 
   # list of possible coercions without information loss
-  assign(".vcoerceable"
-  , lapply(
+  # assign(".vcoerceable"
+  # , lapply(
+      # list(
+        # boolean   = 1:13
+      # , logical   = c(2L, 5L, 7L, 9:12)
+      # , quad      = 3:13
+      # , nibble    = 4:13
+      # , byte      = c(5L, 7L, 9:12)
+      # , ubyte     = 6:13
+      # , short     = c(7L, 9:12)
+      # , ushort    = 8:12
+      # , integer   = 9:12
+      # , single    = 10:12
+      # , double    = 11:12
+      # , complex   = 12L
+      # , raw       = 6:12
+      # , character = 14L
+      # )
+      # , function(i)i[.vimplemented[i]]
+    # )
+    # , envir=globalenv()
+  # )
+	
+  .vimplemented <<- c(
+		boolean   = .Call("ffmode_implemented", .ffmode["boolean"]  , PACKAGE="ff")
+	, logical   = .Call("ffmode_implemented", .ffmode["logical"]  , PACKAGE="ff")
+	, quad      = .Call("ffmode_implemented", .ffmode["quad"]     , PACKAGE="ff")
+	, nibble    = .Call("ffmode_implemented", .ffmode["nibble"]   , PACKAGE="ff")
+	, byte      = .Call("ffmode_implemented", .ffmode["byte"]     , PACKAGE="ff")
+	, ubyte     = .Call("ffmode_implemented", .ffmode["ubyte"]    , PACKAGE="ff")
+	, short     = .Call("ffmode_implemented", .ffmode["short"]    , PACKAGE="ff")
+	, ushort    = .Call("ffmode_implemented", .ffmode["ushort"]   , PACKAGE="ff")
+	, integer   = .Call("ffmode_implemented", .ffmode["integer"]  , PACKAGE="ff")
+	, single    = .Call("ffmode_implemented", .ffmode["single"]   , PACKAGE="ff")
+	, double    = .Call("ffmode_implemented", .ffmode["double"]   , PACKAGE="ff")
+	, complex   = .Call("ffmode_implemented", .ffmode["complex"]  , PACKAGE="ff")
+	, raw       = .Call("ffmode_implemented", .ffmode["raw"]      , PACKAGE="ff")
+	, character = .Call("ffmode_implemented", .ffmode["character"], PACKAGE="ff")
+	)
+	
+  # list of possible coercions without information loss
+  .vcoerceable <<- lapply(
       list(
         boolean   = 1:13
       , logical   = c(2L, 5L, 7L, 9:12)
@@ -102,12 +134,19 @@
       )
       , function(i)i[.vimplemented[i]]
     )
-    , envir=globalenv()
-  )
+	
 }
 
 .onAttach <- function(libname, pkgname){
   packageStartupMessage("Attaching package ff")
+  packageStartupMessage('- getOption("fftempdir")=="',getOption("fftempdir"),'"\n',sep='')
+  packageStartupMessage('- getOption("ffextension")=="',getOption("ffextension"),'"\n',sep='')
+  packageStartupMessage('- getOption("ffdrop")==',getOption("ffdrop"),'\n',sep='')
+  packageStartupMessage('- getOption("fffinonexit")==',getOption("fffinonexit"),'\n',sep='')
+  packageStartupMessage('- getOption("ffpagesize")==',getOption("ffpagesize"),'\n',sep='')
+  packageStartupMessage('- getOption("ffcaching")=="',getOption("ffcaching"),'"  -- consider "ffeachflush" if your system stalls on large writes\n',sep='')
+  packageStartupMessage('- getOption("ffbatchbytes")==',getOption("ffbatchbytes"),' -- consider a different value for tuning your system\n',sep='')
+  packageStartupMessage('- getOption("ffmaxbytes")==',getOption("ffmaxbytes"),' -- consider a different value for tuning your system\n',sep='')
   # if (getRversion()<="2.10.0"){
     # packageStartupMessage('fixing [.AsIs in base namespace because if the NextMethod("[") returns a different class, [.AsIs was reverting this')
     #assignInNamespace(

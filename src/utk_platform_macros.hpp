@@ -105,9 +105,9 @@
 
 /* Check architecture. */
 #if defined(UTK__C_Intel) || defined(UTK__C_MSVC)
-  #if defined(_M_IX86)
+  #if defined(_M_IX86) || defined(__i386) || defined(__i386__) || defined(i386)
     #define UTK__Arch_Intel_x86
-  #elif defined(_M_X64) || defined(_M_AMD64)
+  #elif defined(_M_X64) || defined(_M_AMD64) || defined(__x86_64) || defined(__x86_64__)
     #define UTK__Arch_AMD64
   #elif defined(_M_PPC)
     #define UTK__Arch_PowerPC

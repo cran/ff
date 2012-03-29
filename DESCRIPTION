@@ -1,5 +1,5 @@
 Package: ff
-Version: 2.2-10
+Version: 2.2-11
 Date: 2012-03-29
 Title: memory-efficient storage of large data on disk and fast access
         functions
@@ -9,7 +9,7 @@ Author: Daniel Adler <dadler@uni-goettingen.de>, Christian Gläser
         <Jens.Oehlschlaegel@truecluster.com>, Walter Zucchini
         <wzucchi@uni-goettingen.de>
 Maintainer: Jens Oehlschlägel <Jens.Oehlschlaegel@truecluster.com>
-Depends: R (>= 2.10.1), utils, tools, bit (>= 1.1-6)
+Depends: R (>= 2.10.1), utils, tools, bit (>= 1.1-10)
 Suggests: biglm
 Description: The ff package provides data structures that are stored on
         disk but behave (almost) as if they were in RAM by
@@ -60,11 +60,12 @@ Description: The ff package provides data structures that are stored on
         interactively with selections of large datasets and quickly
         modify selection criteria.  Further high-performance
         enhancements can be made available upon request.
-License: file LICENSE
+License: GPL-2 | file LICENSE
 LazyLoad: yes
 ByteCompile: yes
 Encoding: latin1
 URL: http://ff.r-forge.r-project.org/
-Packaged: 2012-11-05 21:38:56 UTC; root
+Packaged: 2013-03-11 18:48:06 UTC; jens
+NeedsCompilation: yes
 Repository: CRAN
-Date/Publication: 2012-11-06 10:30:44
+Date/Publication: 2013-03-12 07:59:05

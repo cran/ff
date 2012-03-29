@@ -1,3 +1,18 @@
+		CHANGES IN ff VERSION 2.2.11
+
+		
+USER VISIBLE CHANGES
+
+    o	Methods 'open.ff' and 'open.ffdf' gain a new parameter 'assert' by which 'open' can be used to assert openness. 
+	
+	
+BUG FIXES
+
+	o   ff no longer segfaults when using closed ff objects, e.g. if an integer ff index was used and index or object was closed (reported by Jan Wijffels)
+	o	ffdf[DuplicatedRows,] works now (reported by Debabrata Midya)
+
+			
+
 		CHANGES IN ff VERSION 2.2.10
 
 		

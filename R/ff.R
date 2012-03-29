@@ -3242,14 +3242,15 @@ x       # ff object
 #!   \command{open.ff} opens an ff file, optionally marking it readonly and optionally specifying a caching scheme.
 #! }
 #! \usage{
-#!  \method{open}{ff}(con, readonly = FALSE, pagesize = NULL, caching = NULL, \dots)
-#!  \method{open}{ffdf}(con, readonly = FALSE, pagesize = NULL, caching = NULL, \dots)
+#!  \method{open}{ff}(con, readonly = FALSE, pagesize = NULL, caching = NULL, assert = FALSE, \dots)
+#!  \method{open}{ffdf}(con, readonly = FALSE, pagesize = NULL, caching = NULL, assert = FALSE, \dots)
 #! }
 #! \arguments{
 #!   \item{con}{ an \code{\link{ff}} or \code{\link{ffdf}} object }
 #!   \item{readonly}{ \code{readonly} }
 #!   \item{pagesize}{ number of bytes to use as pagesize or NULL to take the pagesize stored in the \code{\link[=physical.ff]{physical}} attribute of the ff object, see \code{\link{getalignedpagesize}} }
 #!   \item{caching}{ one of 'mmnoflush' or 'mmeachflush', see \code{\link{ff}} }
+#!   \item{assert}{ setting this to TRUE will give a message if the ff was not open already }
 #!   \item{\dots}{ further arguments (not used) }
 #! }
 #! \details{
@@ -3283,16 +3284,19 @@ open.ff <- function(con
 , readonly  = FALSE
 , pagesize = NULL
 , caching = NULL
+, assert = FALSE
 , ... # dummy to keep R CMD check quiet
 )
 {
   readonly <- as.logical(readonly)
   physical <- attr(con, "physical")
   if (is.open(con)){
-    if (attr(physical, "readonly")!=readonly)
+    if (attr(physical, "readonly")!=readonly && !assert)
       stop(paste("ff is already open with readonly=", attr(physical, "readonly"), sep=""))
     return(FALSE)
-  }
+  }else if (assert){
+		message("opening ff ", filename(con))
+	}
   filename <- attr(physical, "filename")
   stopifnot(file.access(filename,0)==0 )
   if (!readonly && file.access(filename,2)){
@@ -3314,6 +3318,7 @@ open.ff <- function(con
     }
     return(TRUE)
   }else{
+		stop("failed opening ff ", filename(con), "because ", geterrstr.ff(con))
     return(FALSE)
   }
 }
@@ -3563,12 +3568,7 @@ if (FALSE){
 
 getset.ff <- function(x, i, value, add=FALSE)
 {
-  if (!is.open(x)){
-    if (open(x))
-      message("opening ff ", filename(x))
-    else
-      stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
-  }
+	open(x, assert=TRUE)
   if( is.readonly(x) ) stop("ff is readonly")
   if (is.double(i))
     i <- as.integer(i)
@@ -3592,12 +3592,7 @@ getset.ff <- function(x, i, value, add=FALSE)
 
 get.ff   <- function(x, i)
 {
-  if (!is.open(x)){
-    if (open(x))
-      message("opening ff ", filename(x))
-    else
-      stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
-  }
+	open(x, assert=TRUE)
   if (is.double(i))
     i <- as.integer(i)
   if (!is.integer(i) || i<1 || i>length(x)) stop("illegal index")
@@ -3608,12 +3603,7 @@ get.ff   <- function(x, i)
 
 set.ff   <- function(x, i, value, add=FALSE)
 {
-  if (!is.open(x)){
-    if (open(x))
-      message("opening ff ", filename(x))
-    else
-      stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
-  }
+	open(x, assert=TRUE)
   if( is.readonly(x) ) stop("ff is readonly")
   if (is.double(i))
     i <- as.integer(i)
@@ -3693,12 +3683,7 @@ set.ff   <- function(x, i, value, add=FALSE)
 
 readwrite.ff <- function(x, i, value, add=FALSE)
 {
-  if (!is.open(x)){
-    if (open(x))
-      message("opening ff ", filename(x))
-    else
-      stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
-  }
+	open(x, assert=TRUE)
   if( is.readonly(x) ) stop("ff is readonly")
   if(!is.null(vw(x))) stop("please use '[' to access ff with vw")
 
@@ -3723,12 +3708,7 @@ readwrite.ff <- function(x, i, value, add=FALSE)
 
 read.ff <- function(x, i, n)
 {
-  if (!is.open(x)){
-    if (open(x))
-      message("opening ff ", attr(x, "filename"))
-    else
-      stop("failed opening ff ", attr(x, "filename"), "because ", geterrstr.ff(x))
-  }
+	open(x, assert=TRUE)
   if(!is.null(vw(x))) stop("please use '[' to access ff with vw")
 
   stopifnot( 0 < i && i+n-1 <= length(x) )
@@ -3737,12 +3717,7 @@ read.ff <- function(x, i, n)
 
 write.ff <- function(x, i, value, add=FALSE)
 {
-  if (!is.open(x)){
-    if (open(x))
-      message("opening ff ", attr(x, "filename"))
-    else
-      stop("failed opening ff ", attr(x, "filename"), "because ", geterrstr.ff(x))
-  }
+	open(x, assert=TRUE)
   if( is.readonly(x) ) stop("ff is readonly")
   if(!is.null(vw(x))) stop("please use '[' to access ff with vw")
 
@@ -4010,12 +3985,7 @@ swap.ff <- function(
 , pack  = FALSE
 , ... # dummy to keep R CMD check quiet
 ){
-  if (!is.open(x)){
-    if (open(x))
-      message("opening ff ", filename(x))
-    else
-      stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
-  }
+	open(x, assert=TRUE)
   if( is.readonly(x) ) stop("ff is readonly")
 
   vmode <- vmode(x)
@@ -4105,12 +4075,6 @@ swap.ff <- function(
 , pack = FALSE
 )
 {
-  if (!is.open(x)){
-    if (open(x))
-      message("opening ff ", filename(x))
-    else
-      stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
-  }
 
   vmode <- vmode(x)
   vw <- vw(x)
@@ -4135,6 +4099,7 @@ swap.ff <- function(
     nreturn <- 0:0
   }
   if (nreturn){
+		open(x, assert=TRUE)
     if (simple){
       ret <- .Call("get_contiguous", .ffmode[vmode], attr(x, "physical"), if (is.null(vw)) 1L else vw[1]+1L, nreturn, PACKAGE="ff")
       if (!is.null(ffnam))
@@ -4173,12 +4138,7 @@ swap.ff <- function(
 , value
 )
 {
-  if (!is.open(x)){
-    if (open(x))
-      message("opening ff ", filename(x))
-    else
-      stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
-  }
+	open(x, assert=TRUE)
   if( is.readonly(x) ) stop("ff is readonly")
   physical <- physical(x)
   if(!is.null(physical$na.count)) stop("use swap instead to maintain na.count (or deactivate na.count(x)<-NULL for assigning)")
@@ -4246,12 +4206,7 @@ swap.ff_array <- function(
 , pack  = FALSE
 )
 {
-  if (!is.open(x)){
-    if (open(x))
-      message("opening ff ", filename(x))
-    else
-      stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
-  }
+	open(x, assert=TRUE)
   if( is.readonly(x) ) stop("ff is readonly")
 
   vmode <- vmode(x)
@@ -4448,13 +4403,7 @@ swap.ff_array <- function(
 , pack  = FALSE
 )
 {
-  if (!is.open(x)){
-    if (open(x))
-      message("opening ff ", filename(x))
-    else
-      stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
-  }
-
+	open(x, assert=TRUE)
   vmode <- vmode(x)
   vw <- vw(x)
   fflen <- length(x)
@@ -4580,12 +4529,7 @@ swap.ff_array <- function(
 , value
 )
 {
-  if (!is.open(x)){
-    if (open(x))
-      message("opening ff ", filename(x))
-    else
-      stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
-  }
+	open(x, assert=TRUE)
   if( is.readonly(x) ) stop("ff is readonly")
   physical <- physical(x)
   if(!is.null(physical$na.count)) stop("use swap instead to maintain na.count (or deactivate na.count(x)<-NULL for assigning)")
