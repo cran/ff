@@ -1,3 +1,13 @@
+		CHANGES IN ff VERSION 2.2.10
+
+		
+BUG FIXES
+
+	o   .Call("R_bit_as_hi") now again addresses package="bit" as it 
+		should be (reported by Martijn Tennekes)
+
+			
+
 		CHANGES IN ff VERSION 2.2.9
 
 		

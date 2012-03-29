@@ -2,17 +2,17 @@
 0b459ec01daec57e448b8e47ab17d09c *ANNOUNCEMENT-2.1.2.txt
 23be119d22e32b26a7f49cf1bbb15fae *ANNOUNCEMENT-2.1.txt
 fb8473cf9ca9d8d8d03709ea0451e3b5 *ANNOUNCEMENT-2.2.txt
-a8eda662cde56ea7c529817447b345f5 *DESCRIPTION
+a0323d32b95b550ad5d7e3ad56251b06 *DESCRIPTION
 056e55978f319aae8a3583a7a087aed6 *LICENSE
 712f25c517115a07d57eb579c8ddb999 *NAMESPACE
-df6ceb98c8789aa9dc089e0da2af35da *NEWS
+8c8b34f2acee9e0c499fe1aac92db46a *NEWS
 f71929bf871c50f45360d9b690d9ed0b *R/CFUN.R
 c489dc1909be649c41a20050b34f1b4b *R/array.R
 21c4749587a37eda61f969b5e2d954ef *R/as.ff.R
 5b58909b8313fb527c1095314fe8ab6c *R/bigsample.R
 5ce079a35add8b3e043582801e940e29 *R/ff.R
 3f94d52f7078f9642cb80b8fb2641562 *R/ffapply.R
-4e62c207db90abfb8d298c1a8ed33ac6 *R/ffbit.R
+d5de15e73b07f1643724478666cee7b2 *R/ffbit.R
 8cb2654c3e717a3abb388fe7bf3a765c *R/ffcsv.R
 949b7cac6de98c124b7b136855c06744 *R/ffdf.R
 fc28c16cb934c59c419f8c9e01680092 *R/fffactor.R
@@ -32,6 +32,7 @@ cd594b4687c2ada322714ade941358a5 *R/vmode.R
 a9d0b6c41735af37d2d1d40bfa3ea8a4 *configure
 7037db0cfa0cf32537728c8a25f33f13 *configure.ac
 c713193bd00e945a08ef544493dd5cd1 *exec/make_rd.pl
+2a24a6b85161c079a806c3188ed2d238 *ff-Ex.R
 89d44461588ee99ba81f502efa3e8fd2 *man/CFUN.rd
 030c5812477708cddfc0d799bbd63b96 *man/Extract.ff.rd
 e37d27e73e59f990d364131d8bf16130 *man/Extract.ffdf.rd
@@ -146,6 +147,7 @@ d444873ed9b1a9386e66364ac055c0c7 *src/FSInfo.hpp
 86a1f70d0e3432dc3e00d6f05c014f5d *src/MMapFileMapping.hpp
 03d34060b4a0cb2fccc83a06fd99b8d4 *src/Win32FileMapping.cpp
 d9f1f6ce515c8a37210fba343a3cecee *src/Win32FileMapping.hpp
+a4084586df40096677b818d3df64103f *src/ac_config.h
 3e93c254ad225393f3faeda78d17b2d2 *src/ac_config.h.in
 c649650aaed3dd41641804365b00947d *src/config.h
 b9ee29b72aaed42d26eed99095996fd7 *src/ff.cpp
