@@ -603,11 +603,13 @@ SEXP r_ff_open(SEXP ff_, SEXP ffmode, SEXP ro, SEXP autoflush)
 
   R_SetExternalPtrAddr(ff_, ff);
 
-  SEXP sro = getAttrib(ff_, install("readonly"));
-  LOGICAL(sro)[0] = LOGICAL(ro)[0];
+  SEXP ro_; 
+  PROTECT( ro_ = allocVector(LGLSXP,1) );
+  LOGICAL(ro_)[0] = LOGICAL(ro)[0];
+  setAttrib(ff_, install("readonly"), ro_);
 
   LOGICAL(ret_)[0] = TRUE;
-  UNPROTECT(1);
+  UNPROTECT(2);
   return ret_;
 }
 

@@ -1,12 +1,12 @@
-fa705ef73822ba29dbaf38c3e1403058 *DESCRIPTION
+89a274fef24094b82ac0cee5d36d120f *DESCRIPTION
 7d5ec13515fc8b5255d172e0d7239a98 *LICENSE
-61d2b444487b5721588d981c815bd3b4 *NAMESPACE
-3f55e952c1276648025b43a051a61eab *NEWS
+d1a4f0de111ae7f0a341f320c48bba7b *NAMESPACE
+5b7b7c5124edcc513d9f77d5a2a6f96b *NEWS
 f71929bf871c50f45360d9b690d9ed0b *R/CFUN.R
 a0e8dd2a6862d5fa3f7d0fec6432096b *R/array.R
 21c4749587a37eda61f969b5e2d954ef *R/as.ff.R
 cc7e5300f958f062b665d7992524fcf5 *R/bigsample.R
-34e9242adc909a3e7ad8964f4a59fa5f *R/ff.R
+0a4c673a67e9fa64f78fb2122fef715d *R/ff.R
 fc1ed189a2bd16b079657010184789f4 *R/ffapply.R
 08b0e9128525c5dbf6786e4270e8abe8 *R/ffbit.R
 16282c0d014ce6c6184ab5df28ca9173 *R/ffcsv.R
@@ -52,7 +52,7 @@ bb4bc48c5dcb9d2c80cb715aecf2f5a1 *man/bigsample.rd
 2dcf3e78a25d04a7328b45b82296de60 *man/chunk.bit.rd
 8a36ac7235e2534e644d44aab24056f3 *man/chunk.ffdf.rd
 1d5d693fe6ee67ceb41c69d8ec834273 *man/clone.ffdf.rd
-c746440c2370cb89b11c7ca828fd91a4 *man/clone.rd
+487f8090833b7ec8b40a624ef148e2aa *man/clone.rd
 5f54fe219ed78db3de20cd91c04c5b09 *man/close.ff.rd
 96b2d5a0de5fe2cf1e6b751357cdb745 *man/delete.rd
 7e7b736cce96b9d6ac82e269fe90d40e *man/dim.ff.rd
@@ -78,7 +78,7 @@ c1e9d29b3d1cb59c004462925cfdb8b6 *man/ffsave.rd
 6bfdc19d650bc87333eb2ab212c73b50 *man/ffsuitable.rd
 5134f722a662a36c6437aa5469b0c6f5 *man/ffxtensions.rd
 af8a1ce46a87059c39f67503e9f172f5 *man/file.resize.rd
-5e2e6b802cb2101a52256151b29b5de2 *man/filename.rd
+792d72941c3ac2a6e56e5ac0c21dc308 *man/filename.rd
 88f1507d9ff6b275d8932f7e32c576dc *man/finalize.rd
 fa9de934e0f6fac984bdc7e39549ae37 *man/finalizer.rd
 1d60c0796be2b4779f016c7d81db66aa *man/fixdiag.rd
@@ -151,8 +151,8 @@ a4084586df40096677b818d3df64103f *src/ac_config.h
 c649650aaed3dd41641804365b00947d *src/config.h
 b9ee29b72aaed42d26eed99095996fd7 *src/ff.cpp
 1826e8f4251137bfea9453a4c219a7bd *src/ff.h
-94d862be4630154f5fbdbe235a64d53c *src/ordermerge.c
-9350b3d3323f686666f9e5990c9de462 *src/r_ff.c
+84cd5757efbca7d3aad97ddd475f2009 *src/ordermerge.c
+66d8e459df176716d85ed45594cd5ef3 *src/r_ff.c
 3ebe3fb8cf557489b122846bc237278e *src/r_ff.h
 2559540d788bc5dd750a963ba28a1cf1 *src/r_ff_addgetset.h
 de006028a55182c1016ad06da7163261 *src/r_ff_makevmodes.h

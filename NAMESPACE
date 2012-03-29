@@ -14,10 +14,13 @@ export(
 
 # == this is a complete list of R functions and metadata of this package sorted by filenames, non-exported functions are commented away ==
 
-
+# wish of CRAN maintainers: export another time here (now maintained and exported in bit)
+  "clone"
+, "clone.default"
+, "clone.list"
 
 # -- generics.R - all new generics --
- as.hi
+, as.hi
 #,physical
 #,"physical<-"
 #,virtual
@@ -41,7 +44,6 @@ export(
 ,finalize
 ,delete
 ,deleteIfOpen
-,clone
 ,as.ff
 ,as.ram
 ,dimorder
@@ -182,7 +184,6 @@ export(
 ,ff
 ,update.ff
 ,clone.ff
-,clone.default
 ,finalizer.ff
 ,"finalizer<-.ff"
 ,finalize.ff_pointer
@@ -592,7 +593,6 @@ S3method(print,ff_matrix)
 S3method(str,ff)
 S3method(update,ff)
 S3method(clone,ff)
-S3method(clone,default)
 S3method(finalizer, ff)
 S3method("finalizer<-", ff)
 S3method(finalize, ff_pointer)
@@ -782,3 +782,7 @@ S3method(str, ffdf)
 #S3method("radixsort", default)
 #S3method("ramorder", default)
 #S3method("ramsort", default)
+
+# wish of CRAN maintainers: export another time here (now maintained and exported in bit)
+S3method(clone, default)
+S3method(clone, list)

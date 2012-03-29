@@ -47,11 +47,8 @@ pattern(x, \dots) <- value
   \code{filename<-} exhibits R's standard behaviour of considering "filename" and "./filename" both to be located in \code{\link{getwd}}.
   By constrast \code{pattern<-} will create "filename" without path in \code{getOption("fftempdir")} and only "./filename" in \code{\link{getwd}}.
 }
-\note{
-   \code{\link{file.rename}} will not move files across borders of file systems, currently it is the responsibility of the user to make sure that the renaming is possible.
-}
 \author{ Jens Oehlschlägel }
-\seealso{  \code{\link{fftempfile}}, \code{\link{finalizer}}, \code{\link{ff}}, \code{\link{as.ff}}, \code{\link{as.ram}}, \code{\link{update.ff}} }
+\seealso{  \code{\link{fftempfile}}, \code{\link{finalizer}}, \code{\link{ff}}, \code{\link{as.ff}}, \code{\link{as.ram}}, \code{\link{update.ff}},  \code{\link{file.move}}}
 \examples{
   \dontrun{
   message("Neither giving pattern nor filename gives a random filename 

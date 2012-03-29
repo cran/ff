@@ -2398,6 +2398,9 @@ ff <- function(
   if (is.null(finonexit))
     finonexit <- getOption("fffinonexit")
 
+	# rr <- logical(1)
+	# rr[1] <- readonly[1]
+		
   pattr <- list(  # physical attributes
     vmode     = vmode
   , maxlength = if (maxlength){if (length > maxlength) stop("length exceeds file length") else maxlength} else length # the physical file size
@@ -2406,7 +2409,7 @@ ff <- function(
   , pagesize  = pagesize
   , finalizer = finalizer
   , finonexit = finonexit
-  , readonly  = readonly      # FALSE
+  , readonly  = readonly 
   , caching   = caching
   , class     = "ff_pointer"  # class of pointer within ff class needed for finalizer dispatch
   )
@@ -2778,6 +2781,7 @@ update.ff <- function(
 #! \name{clone}
 #! \alias{clone}
 #! \alias{clone.ff}
+#! \alias{clone.list}
 #! \alias{clone.default}
 #! \title{ Cloning ff and ram objects }
 #! \description{
@@ -2813,6 +2817,7 @@ update.ff <- function(
 #! , BATCHBYTES = getOption("ffbatchbytes")
 #! , VERBOSE = FALSE
 #! , \dots)
+#! \method{clone}{list}(x, \dots)
 #! \method{clone}{default}(x, \dots)
 #! }
 #! \arguments{
@@ -2849,7 +2854,6 @@ update.ff <- function(
 #! \details{
 #!   \command{clone} is generic. \command{clone.ff} is the workhorse behind \code{\link{as.ram}} and \code{\link{as.ff}}.
 #!   For creating the desired object it calls \code{\link{ff}} which calls \code{\link{update}} for initialization.
-#!   \command{clone.default} is currently a simply wrapper to \command{clone.ff}, which will add some ff attributes also when cloning ram objects.
 #! }
 #! \value{
 #!   an ff or ram object
@@ -3026,9 +3030,7 @@ clone.ff <- function(
 clone.default <- function(x
 , ... # passed to clone
 ){
-  if (length(list(...)))
-    clone.ff(x, ...)
-  else if (is.atomic(x)){
+  if (is.atomic(x)){
     if (length(x))
       x[1] <- x[1]  # force a copy around COPY ON MODIFY
     x

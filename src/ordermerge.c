@@ -1306,7 +1306,8 @@ void ram_integer_shellsort_asc(IndexT *data, IndexT l, IndexT r)
     IndexT i, j, h, lh, t, n=r-l+1;
 
     for (t = 0; incs[t] > n; t++);
-    for (h = incs[t]; t < SHELLARRAYSIZE; h = incs[++t]){
+    for (; t < SHELLARRAYSIZE; ++t){
+      h = incs[t];
       lh = l+h;
       for (i = lh; i <= r; i++) {
           v = data[i];
@@ -1326,7 +1327,8 @@ void ram_integer_shellsort_desc(IndexT *data, IndexT l, IndexT r)
     IndexT i, j, h, lh, t, n=r-l+1;
 
     for (t = 0; incs[t] > n; t++);
-    for (h = incs[t]; t < SHELLARRAYSIZE; h = incs[++t]){
+    for (; t < SHELLARRAYSIZE; ++t){
+      h = incs[t];
       lh = l+h;
       for (i = lh; i <= r; i++) {
           v = data[i];
@@ -1347,7 +1349,8 @@ void ram_integer_shellorder_asc(IndexT *data, IndexT *index, IndexT l, IndexT r)
     IndexT i, j, h, lh, t, n=r-l+1;
 
     for (t = 0; incs[t] > n; t++);
-    for (h = incs[t]; t < SHELLARRAYSIZE; h = incs[++t]){
+    for (; t < SHELLARRAYSIZE; ++t){
+      h = incs[t];
       lh = l+h;
       for (i = lh; i <= r; i++) {
           v = index[i];
@@ -1368,7 +1371,8 @@ void ram_integer_shellorder_desc(IndexT *data, IndexT *index, IndexT l, IndexT r
     IndexT i, j, h, lh, t, n=r-l+1;
 
     for (t = 0; incs[t] > n; t++);
-    for (h = incs[t]; t < SHELLARRAYSIZE; h = incs[++t]){
+    for (; t < SHELLARRAYSIZE; ++t){
+      h = incs[t];
       lh = l+h;
       for (i = lh; i <= r; i++) {
           v = index[i];
@@ -1579,7 +1583,8 @@ void ram_double_shellsort_asc(ValueT *data, IndexT l, IndexT r)
     IndexT i, j, h, lh, t, n=r-l+1;
 
     for (t = 0; incs[t] > n; t++);
-    for (h = incs[t]; t < SHELLARRAYSIZE; h = incs[++t]){
+    for (; t < SHELLARRAYSIZE; ++t){
+      h = incs[t];
       lh = l+h;
       for (i = lh; i <= r; i++) {
           v = data[i];
@@ -1599,7 +1604,8 @@ void ram_double_shellsort_desc(ValueT *data, IndexT l, IndexT r)
     IndexT i, j, h, lh, t, n=r-l+1;
 
     for (t = 0; incs[t] > n; t++);
-    for (h = incs[t]; t < SHELLARRAYSIZE; h = incs[++t]){
+    for (; t < SHELLARRAYSIZE; ++t){
+      h = incs[t];
       lh = l+h;
       for (i = lh; i <= r; i++) {
           v = data[i];
@@ -1620,7 +1626,8 @@ void ram_double_shellorder_asc(ValueT *data, IndexT *index, IndexT l, IndexT r)
     IndexT i, j, h, lh, t, n=r-l+1;
 
     for (t = 0; incs[t] > n; t++);
-    for (h = incs[t]; t < SHELLARRAYSIZE; h = incs[++t]){
+    for (; t < SHELLARRAYSIZE; ++t){
+      h = incs[t];
       lh = l+h;
       for (i = lh; i <= r; i++) {
           v = index[i];
@@ -1641,7 +1648,8 @@ void ram_double_shellorder_desc(ValueT *data, IndexT *index, IndexT l, IndexT r)
     IndexT i, j, h, lh, t, n=r-l+1;
 
     for (t = 0; incs[t] > n; t++);
-    for (h = incs[t]; t < SHELLARRAYSIZE; h = incs[++t]){
+    for (; t < SHELLARRAYSIZE; ++t){
+      h = incs[t];
       lh = l+h;
       for (i = lh; i <= r; i++) {
           v = index[i];
@@ -2765,8 +2773,8 @@ SEXP r_ff_double_ordermerge(
   IndexT merges = 0;
 
   /* define function pointers and assign */
-  void (*ff_vmode_get_contiguous)( void *handle, int index, int size, ValueT *ret ) = 0 ;
-  void (*ff_vmode_set_contiguous)( void *, int, int, ValueT * ) = 0;
+  void (*ff_vmode_get_contiguous)( void *handle, int index, int size, ValueT *ret );
+  void (*ff_vmode_set_contiguous)( void *, int, int, ValueT * );
   switch (asInteger(ffmode_)) {
 #if VMODE_COMPILE_SINGLE
   case 10: ff_vmode_get_contiguous =  ff_single_get_contiguous;
@@ -2779,20 +2787,19 @@ SEXP r_ff_double_ordermerge(
   default: error("unknown .ffmode[vmode(ffobj)]");
   }
 
-
-  ValueT (*ff_vmode_get)( void *, int ) = 0;
-  void (*ff_vmode_set)( void *, int, ValueT ) = 0;
+  // ValueT (*ff_vmode_get)( void *, int );
+  void (*ff_vmode_set)( void *, int, ValueT );
   switch (asInteger(ffmode_)) {
 #if VMODE_COMPILE_SINGLE
-  case 10: ff_vmode_get =  ff_single_get;
+  case 10: //ff_vmode_get =  ff_single_get;
            ff_vmode_set =  ff_single_set; break;
 #endif
 #if VMODE_COMPILE_DOUBLE
-  case 11: ff_vmode_get =  ff_double_get;
+  case 11: //ff_vmode_get =  ff_double_get;
            ff_vmode_set =  ff_double_set; break;
 #endif
 #if VMODE_COMPILE_COMPLEX
-  case 12: ff_vmode_get =  ff_double_get;
+  case 12: //ff_vmode_get =  ff_double_get;
            ff_vmode_set =  ff_double_set; break;
 #endif
   default: error("unknown .ffmode[vmode(ffobj)]");
@@ -3347,8 +3354,8 @@ SEXP r_ff_double_sortmerge(
   ValueT *valuebuffer1;
   ValueT *valuebuffer2;
 
-  void (*ff_vmode_get_contiguous)( void *handle, int index, int size, ValueT *ret ) = 0 ;
-  void (*ff_vmode_set_contiguous)( void *, int, int, ValueT * ) = 0;
+  void (*ff_vmode_get_contiguous)( void *handle, int index, int size, ValueT *ret );
+  void (*ff_vmode_set_contiguous)( void *, int, int, ValueT * );
   switch (asInteger(ffmode_)) {
 #if VMODE_COMPILE_SINGLE
   case 10: ff_vmode_get_contiguous =  ff_single_get_contiguous;
@@ -3369,7 +3376,7 @@ SEXP r_ff_double_sortmerge(
     auxvaluebuffer = 0; // keep compiler quiet
 
   IndexT l,r,i,n,N;
-  IndexT l1,l2,r1,r2,n1,n2,m1,m2,m;
+  IndexT l1,l2,r1,r2,n1,n2,m1,m2;
   IndexT i1,i2;
   IndexT L1,L2,R1,R2;
   IndexT T=right-left+1;
@@ -3518,7 +3525,6 @@ SEXP r_ff_double_sortmerge(
           l2 += m2;
           n1 += m1;
           n2 += m2;
-          m = n1+n2;
 
           // doing the merge
           for(i=0, i1=0, i2=0; ; i++){
@@ -3664,8 +3670,8 @@ SEXP r_ff_integer_ordermerge(
   IndexT *valuebuffer2;
   IndexT *indexbuffer2;
 
-  void (*ff_vmode_get_contiguous)( void *handle, int index, int size, IndexT *ret ) = 0 ;
-  void (*ff_vmode_set_contiguous)( void *, int, int, IndexT * ) = 0;
+  void (*ff_vmode_get_contiguous)( void *handle, int index, int size, IndexT *ret );
+  void (*ff_vmode_set_contiguous)( void *, int, int, IndexT * );
   switch (asInteger(ffmode_)) {
 #if VMODE_COMPILE_BOOLEAN
   case 1: ff_vmode_get_contiguous = ff_boolean_get_contiguous;
@@ -3707,43 +3713,43 @@ SEXP r_ff_integer_ordermerge(
   }
 
 
-  IndexT (*ff_vmode_get)( void *, int ) = 0;
-  void (*ff_vmode_set)( void *, int, IndexT ) = 0;
+  //IndexT (*ff_vmode_get)( void *, int );
+  void (*ff_vmode_set)( void *, int, IndexT );
   switch (asInteger(ffmode_)) {
 #if VMODE_COMPILE_BOOLEAN
-  case 1: ff_vmode_get = ff_boolean_get;
+  case 1: //ff_vmode_get = ff_boolean_get;
           ff_vmode_set = ff_boolean_set; break;
 #endif
 #if VMODE_COMPILE_LOGICAL
-  case 2: ff_vmode_get = ff_logical_get;
+  case 2: //ff_vmode_get = ff_logical_get;
           ff_vmode_set = ff_logical_set; break;
 #endif
 #if VMODE_COMPILE_QUAD
-  case 3: ff_vmode_get = ff_quad_get;
+  case 3: //ff_vmode_get = ff_quad_get;
           ff_vmode_set = ff_quad_set; break;
 #endif
 #if VMODE_COMPILE_NIBBLE
-  case 4: ff_vmode_get = ff_nibble_get;
+  case 4: //ff_vmode_get = ff_nibble_get;
           ff_vmode_set = ff_nibble_set; break;
 #endif
 #if VMODE_COMPILE_BYTE
-  case 5: ff_vmode_get = ff_byte_get;
+  case 5: //ff_vmode_get = ff_byte_get;
           ff_vmode_set = ff_byte_set; break;
 #endif
 #if VMODE_COMPILE_UBYTE
-  case 6: ff_vmode_get = ff_ubyte_get;
+  case 6: //ff_vmode_get = ff_ubyte_get;
           ff_vmode_set = ff_ubyte_set; break;
 #endif
 #if VMODE_COMPILE_SHORT
-  case 7: ff_vmode_get = ff_short_get;
+  case 7: //ff_vmode_get = ff_short_get;
           ff_vmode_set = ff_short_set; break;
 #endif
 #if VMODE_COMPILE_USHORT
-  case 8: ff_vmode_get = ff_ushort_get;
+  case 8: //ff_vmode_get = ff_ushort_get;
           ff_vmode_set = ff_ushort_set; break;
 #endif
 #if VMODE_COMPILE_INTEGER
-  case 9: ff_vmode_get = ff_integer_get;
+  case 9: //ff_vmode_get = ff_integer_get;
           ff_vmode_set = ff_integer_set; break;
 #endif
   default: error("unknown .ffmode[vmode(ffobj)]");
@@ -3775,7 +3781,7 @@ SEXP r_ff_integer_ordermerge(
 
 
   IndexT l,r,i,n,N,offset;
-  IndexT l1,l2,r1,r2,n1,n2,m1,m2,m;
+  IndexT l1,l2,r1,r2,n1,n2,m1,m2;
   IndexT i1,i2;
   IndexT L1,L2,R1,R2;
   IndexT T=right-left+1;
@@ -3973,7 +3979,6 @@ SEXP r_ff_integer_ordermerge(
             l2 += m2;
             n1 += m1;
             n2 += m2;
-            m = n1+n2;
 
             // doing the merge
             if (nNA){
@@ -4179,7 +4184,6 @@ SEXP r_ff_integer_ordermerge(
             l2 += m2;
             n1 += m1;
             n2 += m2;
-            m = n1+n2;
 
             // doing the merge
             if (nNA){
@@ -4348,8 +4352,8 @@ SEXP r_ff_integer_sortmerge(
   IndexT *valuebuffer1;
   IndexT *valuebuffer2;
 
-  void (*ff_vmode_get_contiguous)( void *handle, int index, int size, IndexT *ret ) = 0 ;
-  void (*ff_vmode_set_contiguous)( void *, int, int, IndexT * ) = 0;
+  void (*ff_vmode_get_contiguous)( void *handle, int index, int size, IndexT *ret );
+  void (*ff_vmode_set_contiguous)( void *, int, int, IndexT * );
   switch (asInteger(ffmode_)) {
 #if VMODE_COMPILE_BOOLEAN
   case 1: ff_vmode_get_contiguous = ff_boolean_get_contiguous;
@@ -4416,7 +4420,7 @@ SEXP r_ff_integer_sortmerge(
 
 
   IndexT l,r,i,n,N;
-  IndexT l1,l2,r1,r2,n1,n2,m1,m2,m;
+  IndexT l1,l2,r1,r2,n1,n2,m1,m2;
   IndexT i1,i2;
   IndexT L1,L2,R1,R2;
   IndexT T=right-left+1;
@@ -4575,7 +4579,6 @@ SEXP r_ff_integer_sortmerge(
           l2 += m2;
           n1 += m1;
           n2 += m2;
-          m = n1+n2;
 
           // doing the merge
           for(i=0, i1=0, i2=0; ; i++){
@@ -4705,8 +4708,8 @@ SEXP r_ff_integer_keysort(
 
   IndexT l,r,i,k,v,n;
 
-  void (*ff_vmode_get_contiguous)( void *handle, int index, int size, IndexT *ret ) = 0 ;
-  void (*ff_vmode_set_contiguous)( void *, int, int, IndexT * ) = 0;
+  void (*ff_vmode_get_contiguous)( void *handle, int index, int size, IndexT *ret );
+  void (*ff_vmode_set_contiguous)( void *, int, int, IndexT * );
   switch (asInteger(ffmode_)) {
 #if VMODE_COMPILE_BOOLEAN
   case 1: ff_vmode_get_contiguous = ff_boolean_get_contiguous;
@@ -5039,30 +5042,32 @@ SEXP r_ff_double_index_get(
   IndexT *auxindexbuffer2 = 0; // keep compiler quiet
   IndexT *count = 0; // keep compiler quiet
 
-  void (*ff_vmode_get_contiguous)( void *handle, int index, int size, ValueT *ret ) = 0 ;
-  void (*ff_vmode_set_contiguous)( void *, int, int, ValueT * ) = 0;
+  //void (*ff_vmode_get_contiguous)( void *handle, int index, int size, ValueT *ret );
+  void (*ff_vmode_set_contiguous)( void *, int, int, ValueT * );
    switch (asInteger(ffmode_)) {
  #if VMODE_COMPILE_SINGLE
-   case 10: ff_vmode_get_contiguous =  ff_single_get_contiguous;
+   case 10: //ff_vmode_get_contiguous =  ff_single_get_contiguous;
             ff_vmode_set_contiguous =  ff_single_set_contiguous; break;
  #endif
  #if VMODE_COMPILE_DOUBLE
-   case 11: ff_vmode_get_contiguous =  ff_double_get_contiguous;
+   case 11: //ff_vmode_get_contiguous =  ff_double_get_contiguous;
             ff_vmode_set_contiguous =  ff_double_set_contiguous; break;
  #endif
    default: error("unknown .ffmode[vmode(ffobj)]");
    }
 
-  ValueT (*ff_vmode_get)( void *, int ) = 0;
-  void (*ff_vmode_set)( void *, int, ValueT ) = 0;
+  ValueT (*ff_vmode_get)( void *, int );
+  //void (*ff_vmode_set)( void *, int, ValueT );
    switch (asInteger(ffmode_)) {
  #if VMODE_COMPILE_SINGLE
    case 10: ff_vmode_get =  ff_single_get;
-            ff_vmode_set =  ff_single_set; break;
+            //ff_vmode_set =  ff_single_set; 
+            break;
  #endif
  #if VMODE_COMPILE_DOUBLE
    case 11: ff_vmode_get =  ff_double_get;
-            ff_vmode_set =  ff_double_set; break;
+            //ff_vmode_set =  ff_double_set; 
+            break;
  #endif
    default: error("unknown .ffmode[vmode(ffobj)]");
    }
@@ -5222,86 +5227,95 @@ SEXP r_ff_integer_index_get(
   IndexT *auxindexbuffer2 = 0; // keep compiler quiet
   IndexT *count = 0; // keep compiler quiet
 
-  void (*ff_vmode_get_contiguous)( void *handle, int index, int size, IndexT *ret ) = 0 ;
-  void (*ff_vmode_set_contiguous)( void *, int, int, IndexT * ) = 0;
+  //void (*ff_vmode_get_contiguous)( void *handle, int index, int size, IndexT *ret );
+  void (*ff_vmode_set_contiguous)( void *, int, int, IndexT * );
   switch (asInteger(ffmode_)) {
 #if VMODE_COMPILE_BOOLEAN
-  case 1: ff_vmode_get_contiguous = ff_boolean_get_contiguous;
+  case 1: //ff_vmode_get_contiguous = ff_boolean_get_contiguous;
           ff_vmode_set_contiguous = ff_boolean_set_contiguous; break;
 #endif
 #if VMODE_COMPILE_LOGICAL
-  case 2: ff_vmode_get_contiguous = ff_logical_get_contiguous;
+  case 2: //ff_vmode_get_contiguous = ff_logical_get_contiguous;
           ff_vmode_set_contiguous = ff_logical_set_contiguous; break;
 #endif
 #if VMODE_COMPILE_QUAD
-  case 3: ff_vmode_get_contiguous = ff_quad_get_contiguous;
+  case 3: //ff_vmode_get_contiguous = ff_quad_get_contiguous;
           ff_vmode_set_contiguous = ff_quad_set_contiguous; break;
 #endif
 #if VMODE_COMPILE_NIBBLE
-  case 4: ff_vmode_get_contiguous = ff_nibble_get_contiguous;
+  case 4: //ff_vmode_get_contiguous = ff_nibble_get_contiguous;
           ff_vmode_set_contiguous = ff_nibble_set_contiguous; break;
 #endif
 #if VMODE_COMPILE_BYTE
-  case 5: ff_vmode_get_contiguous = ff_byte_get_contiguous;
+  case 5: //ff_vmode_get_contiguous = ff_byte_get_contiguous;
           ff_vmode_set_contiguous = ff_byte_set_contiguous; break;
 #endif
 #if VMODE_COMPILE_UBYTE
-  case 6: ff_vmode_get_contiguous = ff_ubyte_get_contiguous;
+  case 6: //ff_vmode_get_contiguous = ff_ubyte_get_contiguous;
           ff_vmode_set_contiguous = ff_ubyte_set_contiguous; break;
 #endif
 #if VMODE_COMPILE_SHORT
-  case 7: ff_vmode_get_contiguous = ff_short_get_contiguous;
+  case 7: //ff_vmode_get_contiguous = ff_short_get_contiguous;
           ff_vmode_set_contiguous = ff_short_set_contiguous; break;
 #endif
 #if VMODE_COMPILE_USHORT
-  case 8: ff_vmode_get_contiguous = ff_ushort_get_contiguous;
+  case 8: //ff_vmode_get_contiguous = ff_ushort_get_contiguous;
           ff_vmode_set_contiguous = ff_ushort_set_contiguous; break;
 #endif
 #if VMODE_COMPILE_INTEGER
-  case 9: ff_vmode_get_contiguous = ff_integer_get_contiguous;
+  case 9: //ff_vmode_get_contiguous = ff_integer_get_contiguous;
           ff_vmode_set_contiguous = ff_integer_set_contiguous; break;
 #endif
   default: error("unknown .ffmode[vmode(ffobj)]");
   }
 
-  IndexT (*ff_vmode_get)( void *, int ) = 0;
-  void (*ff_vmode_set)( void *, int, IndexT ) = 0;
+  IndexT (*ff_vmode_get)( void *, int );
+  // void (*ff_vmode_set)( void *, int, IndexT );
   switch (asInteger(ffmode_)) {
 #if VMODE_COMPILE_BOOLEAN
   case 1: ff_vmode_get = ff_boolean_get;
-          ff_vmode_set = ff_boolean_set; break;
+          //ff_vmode_set = ff_boolean_set; 
+          break;
 #endif
 #if VMODE_COMPILE_LOGICAL
   case 2: ff_vmode_get = ff_logical_get;
-          ff_vmode_set = ff_logical_set; break;
+          //ff_vmode_set = ff_logical_set; 
+          break;
 #endif
 #if VMODE_COMPILE_QUAD
   case 3: ff_vmode_get = ff_quad_get;
-          ff_vmode_set = ff_quad_set; break;
+          //ff_vmode_set = ff_quad_set; 
+          break;
 #endif
 #if VMODE_COMPILE_NIBBLE
   case 4: ff_vmode_get = ff_nibble_get;
-          ff_vmode_set = ff_nibble_set; break;
+          //ff_vmode_set = ff_nibble_set; 
+          break;
 #endif
 #if VMODE_COMPILE_BYTE
   case 5: ff_vmode_get = ff_byte_get;
-          ff_vmode_set = ff_byte_set; break;
+          //ff_vmode_set = ff_byte_set; 
+          break;
 #endif
 #if VMODE_COMPILE_UBYTE
   case 6: ff_vmode_get = ff_ubyte_get;
-          ff_vmode_set = ff_ubyte_set; break;
+          //ff_vmode_set = ff_ubyte_set; 
+          break;
 #endif
 #if VMODE_COMPILE_SHORT
   case 7: ff_vmode_get = ff_short_get;
-          ff_vmode_set = ff_short_set; break;
+          //ff_vmode_set = ff_short_set; 
+          break;
 #endif
 #if VMODE_COMPILE_USHORT
   case 8: ff_vmode_get = ff_ushort_get;
-          ff_vmode_set = ff_ushort_set; break;
+          //ff_vmode_set = ff_ushort_set; 
+          break;
 #endif
 #if VMODE_COMPILE_INTEGER
   case 9: ff_vmode_get = ff_integer_get;
-          ff_vmode_set = ff_integer_set; break;
+          //ff_vmode_set = ff_integer_set; 
+          break;
 #endif
   default: error("unknown .ffmode[vmode(ffobj)]");
   }
@@ -5469,29 +5483,31 @@ SEXP r_ff_double_index_set(
   IndexT *auxindexbuffer2 = 0; // keep compiler quiet
   IndexT *count = 0; // keep compiler quiet
 
-  void (*ff_vmode_get_contiguous)( void *handle, int index, int size, ValueT *ret ) = 0 ;
-  void (*ff_vmode_set_contiguous)( void *, int, int, ValueT * ) = 0;
+  void (*ff_vmode_get_contiguous)( void *handle, int index, int size, ValueT *ret );
+  //void (*ff_vmode_set_contiguous)( void *, int, int, ValueT * );
    switch (asInteger(ffmode_)) {
  #if VMODE_COMPILE_SINGLE
    case 10: ff_vmode_get_contiguous =  ff_single_get_contiguous;
-            ff_vmode_set_contiguous =  ff_single_set_contiguous; break;
+            //ff_vmode_set_contiguous =  ff_single_set_contiguous; 
+            break;
  #endif
  #if VMODE_COMPILE_DOUBLE
    case 11: ff_vmode_get_contiguous =  ff_double_get_contiguous;
-            ff_vmode_set_contiguous =  ff_double_set_contiguous; break;
+            //ff_vmode_set_contiguous =  ff_double_set_contiguous; 
+            break;
  #endif
    default: error("unknown .ffmode[vmode(ffobj)]");
    }
 
-  ValueT (*ff_vmode_get)( void *, int ) = 0;
-  void (*ff_vmode_set)( void *, int, ValueT ) = 0;
+  //ValueT (*ff_vmode_get)( void *, int );
+  void (*ff_vmode_set)( void *, int, ValueT );
    switch (asInteger(ffmode_)) {
  #if VMODE_COMPILE_SINGLE
-   case 10: ff_vmode_get =  ff_single_get;
+   case 10: //ff_vmode_get =  ff_single_get;
             ff_vmode_set =  ff_single_set; break;
  #endif
  #if VMODE_COMPILE_DOUBLE
-   case 11: ff_vmode_get =  ff_double_get;
+   case 11: //ff_vmode_get =  ff_double_get;
             ff_vmode_set =  ff_double_set; break;
  #endif
    default: error("unknown .ffmode[vmode(ffobj)]");
@@ -5653,85 +5669,94 @@ SEXP r_ff_integer_index_set(
   IndexT *auxindexbuffer2 = 0; // keep compiler quiet
   IndexT *count = 0; // keep compiler quiet
 
-  void (*ff_vmode_get_contiguous)( void *handle, int index, int size, IndexT *ret ) = 0 ;
-  void (*ff_vmode_set_contiguous)( void *, int, int, IndexT * ) = 0;
+  void (*ff_vmode_get_contiguous)( void *handle, int index, int size, IndexT *ret );
+  //void (*ff_vmode_set_contiguous)( void *, int, int, IndexT * );
   switch (asInteger(ffmode_)) {
 #if VMODE_COMPILE_BOOLEAN
   case 1: ff_vmode_get_contiguous = ff_boolean_get_contiguous;
-          ff_vmode_set_contiguous = ff_boolean_set_contiguous; break;
+          //ff_vmode_set_contiguous = ff_boolean_set_contiguous; 
+          break;
 #endif
 #if VMODE_COMPILE_LOGICAL
   case 2: ff_vmode_get_contiguous = ff_logical_get_contiguous;
-          ff_vmode_set_contiguous = ff_logical_set_contiguous; break;
+          //ff_vmode_set_contiguous = ff_logical_set_contiguous; 
+          break;
 #endif
 #if VMODE_COMPILE_QUAD
   case 3: ff_vmode_get_contiguous = ff_quad_get_contiguous;
-          ff_vmode_set_contiguous = ff_quad_set_contiguous; break;
+          //ff_vmode_set_contiguous = ff_quad_set_contiguous; 
+          break;
 #endif
 #if VMODE_COMPILE_NIBBLE
   case 4: ff_vmode_get_contiguous = ff_nibble_get_contiguous;
-          ff_vmode_set_contiguous = ff_nibble_set_contiguous; break;
+          //ff_vmode_set_contiguous = ff_nibble_set_contiguous; 
+          break;
 #endif
 #if VMODE_COMPILE_BYTE
   case 5: ff_vmode_get_contiguous = ff_byte_get_contiguous;
-          ff_vmode_set_contiguous = ff_byte_set_contiguous; break;
+          //ff_vmode_set_contiguous = ff_byte_set_contiguous; 
+          break;
 #endif
 #if VMODE_COMPILE_UBYTE
   case 6: ff_vmode_get_contiguous = ff_ubyte_get_contiguous;
-          ff_vmode_set_contiguous = ff_ubyte_set_contiguous; break;
+          //ff_vmode_set_contiguous = ff_ubyte_set_contiguous; 
+          break;
 #endif
 #if VMODE_COMPILE_SHORT
   case 7: ff_vmode_get_contiguous = ff_short_get_contiguous;
-          ff_vmode_set_contiguous = ff_short_set_contiguous; break;
+          //ff_vmode_set_contiguous = ff_short_set_contiguous; 
+          break;
 #endif
 #if VMODE_COMPILE_USHORT
   case 8: ff_vmode_get_contiguous = ff_ushort_get_contiguous;
-          ff_vmode_set_contiguous = ff_ushort_set_contiguous; break;
+          //ff_vmode_set_contiguous = ff_ushort_set_contiguous; 
+          break;
 #endif
 #if VMODE_COMPILE_INTEGER
   case 9: ff_vmode_get_contiguous = ff_integer_get_contiguous;
-          ff_vmode_set_contiguous = ff_integer_set_contiguous; break;
+          //ff_vmode_set_contiguous = ff_integer_set_contiguous; 
+          break;
 #endif
   default: error("unknown .ffmode[vmode(ffobj)]");
   }
 
-  IndexT (*ff_vmode_get)( void *, int ) = 0;
-  void (*ff_vmode_set)( void *, int, IndexT ) = 0;
+  //IndexT (*ff_vmode_get)( void *, int );
+  void (*ff_vmode_set)( void *, int, IndexT );
   switch (asInteger(ffmode_)) {
 #if VMODE_COMPILE_BOOLEAN
-  case 1: ff_vmode_get = ff_boolean_get;
+  case 1: //ff_vmode_get = ff_boolean_get;
           ff_vmode_set = ff_boolean_set; break;
 #endif
 #if VMODE_COMPILE_LOGICAL
-  case 2: ff_vmode_get = ff_logical_get;
+  case 2: //ff_vmode_get = ff_logical_get;
           ff_vmode_set = ff_logical_set; break;
 #endif
 #if VMODE_COMPILE_QUAD
-  case 3: ff_vmode_get = ff_quad_get;
+  case 3: //ff_vmode_get = ff_quad_get;
           ff_vmode_set = ff_quad_set; break;
 #endif
 #if VMODE_COMPILE_NIBBLE
-  case 4: ff_vmode_get = ff_nibble_get;
+  case 4: //ff_vmode_get = ff_nibble_get;
           ff_vmode_set = ff_nibble_set; break;
 #endif
 #if VMODE_COMPILE_BYTE
-  case 5: ff_vmode_get = ff_byte_get;
+  case 5: //ff_vmode_get = ff_byte_get;
           ff_vmode_set = ff_byte_set; break;
 #endif
 #if VMODE_COMPILE_UBYTE
-  case 6: ff_vmode_get = ff_ubyte_get;
+  case 6: //ff_vmode_get = ff_ubyte_get;
           ff_vmode_set = ff_ubyte_set; break;
 #endif
 #if VMODE_COMPILE_SHORT
-  case 7: ff_vmode_get = ff_short_get;
+  case 7: //ff_vmode_get = ff_short_get;
           ff_vmode_set = ff_short_set; break;
 #endif
 #if VMODE_COMPILE_USHORT
-  case 8: ff_vmode_get = ff_ushort_get;
+  case 8: //ff_vmode_get = ff_ushort_get;
           ff_vmode_set = ff_ushort_set; break;
 #endif
 #if VMODE_COMPILE_INTEGER
-  case 9: ff_vmode_get = ff_integer_get;
+  case 9: //ff_vmode_get = ff_integer_get;
           ff_vmode_set = ff_integer_set; break;
 #endif
   default: error("unknown .ffmode[vmode(ffobj)]");

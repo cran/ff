@@ -1,3 +1,27 @@
+		CHANGES IN ff VERSION 2.2.13
+
+USER VISIBLE CHANGES
+
+    o	clone.default no longer switches to clone.ff if dot-arguments are used.
+
+MAINTENANCE
+
+    o	clone(), clone.default() and clone.list() were moved to package bit
+    o	clone(), clone.default() and clone.list() are also exported from ff
+	    (wish of CRAN maintainers)
+    o	several compiler warnings have been removed
+
+BUG FIXES
+
+	o   On opening an ff vector the C-code now properly assignes the 'readonly'
+		value to fresh memory. Changing the readonly status of an ff *could* 
+		have unwanted side effects in R <= 3.0.2 and definitely *would* have 
+		for R >= 3.1.0. Big thanks to Luke Tierney for spotting this!
+	o	the C-code of the shellsorts at loop termination no longer reads at 
+		incs[SHELLARRAYSIZE] (UBSAN)
+
+	
+
 		CHANGES IN ff VERSION 2.2.12
 
 USER VISIBLE CHANGES
