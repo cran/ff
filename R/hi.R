@@ -371,17 +371,22 @@ hiparse <- function(x, envir, first=as.integer(NA), last=as.integer(NA)){
 #! as.hi(x, \dots)
 #! \method{as.hi}{hi}(x, \dots)
 #! \method{as.hi}{ri}(x, maxindex = length(x), \dots)
-#! \method{as.hi}{bit}(x, range = NULL, maxindex = length(x), vw = NULL, dim = NULL, dimorder = NULL, pack = TRUE, \dots)
+#! \method{as.hi}{bit}(x, range = NULL, maxindex = length(x), vw = NULL
+#! , dim = NULL, dimorder = NULL, pack = TRUE, \dots)
 #! \method{as.hi}{bitwhich}(x, maxindex = length(x), pack = FALSE, \dots)
-#! \method{as.hi}{call}(x, maxindex = NA, dim = NULL, dimorder = NULL, vw = NULL, vw.convert = TRUE, pack = TRUE, envir = parent.frame(), \dots)
+#! \method{as.hi}{call}(x, maxindex = NA, dim = NULL, dimorder = NULL, vw = NULL
+#! , vw.convert = TRUE, pack = TRUE, envir = parent.frame(), \dots)
 #! \method{as.hi}{name}(x, envir = parent.frame(), \dots)
 #! %\method{as.hi}{(}(x, envir = parent.frame(), \dots)
-#! \method{as.hi}{integer}(x, maxindex = NA, dim = NULL, dimorder = NULL, symmetric = FALSE, fixdiag = NULL, vw = NULL, vw.convert = TRUE, dimorder.convert  = TRUE, pack = TRUE, NAs = NULL, \dots)
+#! \method{as.hi}{integer}(x, maxindex = NA, dim = NULL, dimorder = NULL
+#! , symmetric = FALSE, fixdiag = NULL, vw = NULL, vw.convert = TRUE
+#! , dimorder.convert  = TRUE, pack = TRUE, NAs = NULL, \dots)
 #! \method{as.hi}{which}(x, \dots)
 #! \method{as.hi}{double}(x, \dots)
 #! \method{as.hi}{logical}(x, maxindex = NA, dim = NULL, vw = NULL, pack = TRUE, \dots)
 #! \method{as.hi}{character}(x, names, vw = NULL, vw.convert = TRUE, \dots)
-#! \method{as.hi}{matrix}(x, dim, dimorder = NULL, symmetric = FALSE, fixdiag = NULL, vw = NULL, pack = TRUE, \dots)
+#! \method{as.hi}{matrix}(x, dim, dimorder = NULL, symmetric = FALSE, fixdiag = NULL
+#! , vw = NULL, pack = TRUE, \dots)
 #! }
 #! \arguments{
 #!   \item{x}{ an appropriate object of the class for which we dispatched }
@@ -468,11 +473,12 @@ hiparse <- function(x, envir, first=as.integer(NA), last=as.integer(NA)){
 #!   as.hi(substitute(c(1:5, 4:9, a)))
 #!   hi(c(1,4, 100),c(5,9, 200), by=c(1,1,20))
 #!
-#! message("example of index expression partially expanded and accepting token")
-#!   as.hi(quote(1+(1:16)))  # non-supported use of brackets '(' and mathematical operators '+' expands 1:16, parsing is aborted because length>16
-#!
-#! message("example of index expression completely evaluated after token has been rejected")
-#!   as.hi(quote(1+(1:17)))  # non-supported use of brackets '(' and mathematical operators '+' expands 1:17, parsing is aborted because length>16
+#! message("two examples of index expression temporarily expanded to full length due to 
+#! non-supported use of brackets '(' and mathematical operators '+' accepting token")
+#! message("example1: accepted token but aborted parsing because length>16")
+#!   as.hi(quote(1+(1:16)))
+#! message("example1: rejected token and aborted parsing because length>16")
+#!   as.hi(quote(1+(1:17)))
 #! }
 #! \keyword{ IO }
 #! \keyword{ data }
@@ -964,7 +970,8 @@ as.hi.character <- function(x
 #! \method{as.integer}{hi}(x, vw.convert = TRUE, \dots)
 #! \method{as.logical}{hi}(x, maxindex = NULL, \dots)
 #! \method{as.character}{hi}(x, names, vw.convert = TRUE, \dots)
-#! \method{as.matrix}{hi}(x, dim = x$dim, dimorder = x$dimorder, vw = x$vw, symmetric = x$symmetric, fixdiag = x$fixdiag, \dots)
+#! \method{as.matrix}{hi}(x, dim = x$dim, dimorder = x$dimorder
+#! , vw = x$vw, symmetric = x$symmetric, fixdiag = x$fixdiag, \dots)
 #! }
 #! \arguments{
 #!   \item{x}{ an object of class \code{\link{hi}} }

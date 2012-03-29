@@ -33,11 +33,12 @@ bigsample(x, ...)
 \examples{
 message("Specify pool size")
 bigsample(1e8, 10)
-message("Sample ff elements")
-bigsample(ff(1:100 / 10), 10) # same as x[bigsample(length(ff(1:100 / 10)), 10)]
+message("Sample ff elements (same as x[bigsample(length(ff(1:100 / 10)), 10)])")
+bigsample(ff(1:100 / 10), 10)
  \dontrun{
    message("Speed factor")
-   (system.time(for(i in 1:10)sample(1e8, 10))[3]/10) / (system.time(for(i in 1:1000)bigsample(1e8, 10))[3]/1000)
+     (system.time(for(i in 1:10)sample(1e8, 10))[3]/10) 
+   / (system.time(for(i in 1:1000)bigsample(1e8, 10))[3]/1000)
  }
 }
 \keyword{ distribution }

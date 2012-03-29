@@ -6,7 +6,8 @@
   \command{ffsuitable} tests whether \code{FF_RETURN} is an \code{\link{ff}} object like \code{FF_PROTO} and having attributes \code{FF_ATTR}.
 }
 \usage{
-ffsuitable(FF_RETURN, FF_PROTO = NULL, FF_ATTR = list(), strict.dimorder = TRUE, fail = "warning")
+ffsuitable(FF_RETURN, FF_PROTO = NULL, FF_ATTR = list()
+, strict.dimorder = TRUE, fail = "warning")
 ffsuitable_attribs(x)
 }
 \arguments{

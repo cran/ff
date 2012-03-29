@@ -41,14 +41,16 @@
   na.count(x)
   message("remove the 'na.count' physical attribute (and stop automatic maintenance)")
   na.count(x) <- NULL
-  message("activate the 'na.count' physical attribute and have ff automatically calculate the current na.count")
+  message("activate the 'na.count' physical attribute and have ff automatically 
+calculate the current na.count")
   na.count(x) <- TRUE
   na.count(x)
   message("--- ram examples ---")
   x <- 1:12
   na.count(x)
   x[1] <- NA
-  message("activate the 'na.count' physical attribute and have R automatically calculate the current na.count")
+  message("activate the 'na.count' physical attribute and have R automatically 
+calculate the current na.count")
   na.count(x) <- TRUE
   na.count(x)
   message("remove the 'na.count' physical attribute (and stop automatic maintenance)")

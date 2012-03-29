@@ -275,26 +275,37 @@ ff( initdata  = NULL
 \section{Licence}{Package under GPL-2, included C++ code released by Daniel Adler under the less restrictive ISCL}
 \seealso{ \code{\link{vector}}, \code{\link{matrix}}, \code{\link{array}}, \code{\link{as.ff}}, \code{\link{as.ram}} }
 \examples{
-  message("make sure you understand the following ff options before you start using the ff package!!")
+  message("make sure you understand the following ff options 
+    before you start using the ff package!!")
   oldoptions <- options(fffinalizer="deleteIfOpen", fffinonexit="TRUE", fftempdir=tempdir())
-  ff(1:12)                        # an integer vector
-  ff(0, 12)                       # a double vector of length 12
-  ff(vmode="logical", length=12)  # a logical vector of length 12 (due to NA using 2 bit per cell on disk, vmode="boolean" uses 1 bit)
-  ff(1:12, dim=c(3,4))            # an integer matrix 3x4 (standard colwise physical layout)
-  ff(1:12, dim=c(3,4), dimorder=c(2,1)) # an integer matrix 3x4 (rowwise physical layout, but filled in standard colwise order)
-  ff(1:12, dim=c(3,4), bydim=c(2,1)) # an integer matrix 3x4 (standard colwise physical layout, but filled in rowwise order aka matrix(, byrow=TRUE))
+  message("an integer vector")
+  ff(1:12)                  
+  message("a double vector of length 12")
+  ff(0, 12)
+  message("a 2-bit logical vector of length 12 (vmode='boolean' has 1 bit)")
+  ff(vmode="logical", length=12)
+  message("an integer matrix 3x4 (standard colwise physical layout)")
+  ff(1:12, dim=c(3,4))
+  message("an integer matrix 3x4 (rowwise physical layout, but filled in standard colwise order)")
+  ff(1:12, dim=c(3,4), dimorder=c(2,1))
+  message("an integer matrix 3x4 (standard colwise physical layout, but filled in rowwise order
+aka matrix(, byrow=TRUE))")
+  ff(1:12, dim=c(3,4), bydim=c(2,1))
   gc()
   options(oldoptions)
 
   if (ffxtensions()){
-     a <- ff(vmode="boolean", dim=rep(2, 26)) # a 26-dimensional boolean array using 1-bit representation (file size 8 MB compared to 256 MB int in ram)
+     message("a 26-dimensional boolean array using 1-bit representation
+      (file size 8 MB compared to 256 MB int in ram)")
+     a <- ff(vmode="boolean", dim=rep(2, 26))
      dimnames(a) <- dummy.dimnames(a)
      rm(a); gc()
   }
 
   \dontrun{
 
-     message("This 2GB biglm example can take long, you might want to change the size in order to define a size appropriate for your computer")
+     message("This 2GB biglm example can take long, you might want to change
+       the size in order to define a size appropriate for your computer")
      require(biglm)
 
      b <- 1000

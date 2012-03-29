@@ -54,7 +54,8 @@ deleteIfOpen(x, \dots)
 }
 \seealso{ \code{\link{ff}}, \code{\link{close.ff}}, \code{\link{open.ff}}, \code{\link[base]{reg.finalizer}} }
 \examples{
-  message('create the ff file outside getOption("fftempir"), it will have default finalizer "close", so you need to delete it explicitely')
+  message('create the ff file outside getOption("fftempir"), 
+    it will have default finalizer "close", so you need to delete it explicitely')
   x <- ff(1:12, pattern="./ffexample")
   delete(x)
   rm(x)

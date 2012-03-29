@@ -7,7 +7,8 @@
   Reload datasets written with the function \code{ffsave} or \code{ffsave.image} .
 }
 \usage{
-ffload(file, list = character(0L), envir = parent.frame(), rootpath = NULL, overwrite = FALSE)
+ffload(file, list = character(0L), envir = parent.frame()
+, rootpath = NULL, overwrite = FALSE)
 }
 \arguments{
   \item{file}{

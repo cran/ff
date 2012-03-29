@@ -11,8 +11,10 @@
   These functions allow more control than the method dispatch of \code{[} and  \code{[<-} if an ff integer subscript is used.
 }
 \usage{
-  ffdfindexget(x, index, indexorder = NULL, autoindexorder = 3, FF_RETURN = NULL, BATCHSIZE = NULL, BATCHBYTES = getOption("ffmaxbytes"), VERBOSE = FALSE)
-  ffdfindexset(x, index, value, indexorder = NULL, autoindexorder = 3, BATCHSIZE = NULL, BATCHBYTES = getOption("ffmaxbytes"), VERBOSE = FALSE)
+  ffdfindexget(x, index, indexorder = NULL, autoindexorder = 3, FF_RETURN = NULL
+  , BATCHSIZE = NULL, BATCHBYTES = getOption("ffmaxbytes"), VERBOSE = FALSE)
+  ffdfindexset(x, index, value, indexorder = NULL, autoindexorder = 3
+  , BATCHSIZE = NULL, BATCHBYTES = getOption("ffmaxbytes"), VERBOSE = FALSE)
 }
 \arguments{
   \item{x}{

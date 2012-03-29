@@ -71,8 +71,10 @@
 #!   \code{\link{tempfile}}, \code{\link{dirname}}, \code{\link{basename}}, \code{\link{file.path}}
 #! }
 #! \examples{
-#!   pathfile <- c("", ".", "/.", "./", "./.", "/", "a", "a/", "/a", "a/a", "./a", "a/.", "c:/a/b/c", "c:/a/b/c/"
-#!   , "..", "../", "/..", "../..", "//", "\\\\\\\\a\\\\", "\\\\\\\\a/", "\\\\\\\\a/b", "\\\\\\\\a/b/", "~", "~/", "~/a", "~/a/")
+#!   pathfile <- c("", ".", "/.", "./", "./.", "/"
+#!   , "a", "a/", "/a", "a/a", "./a", "a/.", "c:/a/b/c", "c:/a/b/c/"
+#!   , "..", "../", "/..", "../..", "//", "\\\\\\\\a\\\\", "\\\\\\\\a/"
+#!   , "\\\\\\\\a/b", "\\\\\\\\a/b/", "~", "~/", "~/a", "~/a/")
 #!   splitted <- splitPathFile(pathfile)
 #!   restored <- unsplitPathFile(splitted)
 #!   stopifnot(all(gsub("\\\\\\\\","/",restored)==gsub("\\\\\\\\","/",pathfile)))
@@ -84,13 +86,16 @@
 #!   ident = gsub("\\\\\\\\","/",db) == gsub("\\\\\\\\","/",pathfile)
 #!   sum(!ident)
 #!
-#!   do.call("data.frame", c(list(ident=ident, pathfile=pathfile, dirnam=dirnam, basnam=basnam), splitted))
+#!   do.call("data.frame", c(list(ident=ident, pathfile=pathfile
+#!    , dirnam=dirnam, basnam=basnam), splitted))
 #!
 #!   \dontrun{
 #!     message("show the difference between tempfile and fftempfile")
-#!     do.call("data.frame", c(list(ident=ident, pathfile=pathfile, dirnam=dirnam, basnam=basnam), splitted, list(filename=tempPathFile(splitted), fftempfile=fftempfile(pathfile))))
+#!     do.call("data.frame", c(list(ident=ident, pathfile=pathfile, dirnam=dirnam, basnam=basnam)
+#! , splitted, list(filename=tempPathFile(splitted), fftempfile=fftempfile(pathfile))))
 #!
-#!     message("for a single string splitPathFile is slower, for vectors of strings it scales much better than dirname+basename")
+#!     message("for a single string splitPathFile is slower, 
+#! for vectors of strings it scales much better than dirname+basename")
 #!
 #!     system.time(for (i in 1:1000){
 #!       d <- dirname(pathfile)

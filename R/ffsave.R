@@ -397,10 +397,10 @@ function (
 
     on.exit()
     if (safe){
-        if (!file.rename(imgfile, paste(file, "RData", sep="."))) {
+        if (!file.move(imgfile, paste(file, "RData", sep="."))) {
             stop("R image could not be renamed and is left in ", imgfile)
         }
-        if (!file.rename(zipfile, paste(file, "ffData", sep="."))) {
+        if (!file.move(zipfile, paste(file, "ffData", sep="."))) {
             stop("ff image could not be renamed and is left in ", zipfile)
         }
     }
@@ -492,7 +492,8 @@ function (file)
 #!   Reload datasets written with the function \code{ffsave} or \code{ffsave.image} .
 #! }
 #! \usage{
-#! ffload(file, list = character(0L), envir = parent.frame(), rootpath = NULL, overwrite = FALSE)
+#! ffload(file, list = character(0L), envir = parent.frame()
+#! , rootpath = NULL, overwrite = FALSE)
 #! }
 #! \arguments{
 #!   \item{file}{

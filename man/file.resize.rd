@@ -1,22 +1,26 @@
 \name{file.resize}
 \alias{file.resize}
-\title{ Change size of an existing file }
+\alias{file.move}
+\title{ Change size of move an existing file }
 \description{
-  Change size of an existing file. On some platforms spare files are
-  used.
+  Change size of an existing file (on some platforms sparse files are
+  used) or move file to other name and/or location.
 }
 \usage{
   file.resize(path, size)
+  file.move(from, to)
 }
 \arguments{
    \item{path}{ file path (on windows it uses a 'windows' backslash path!)  }
    \item{size}{ new filesize in bytes as double }
+   \item{from}{ old file path  }
+   \item{to}{ new file path }
 }
 \value{
   logical scalar repesenting the success of this operation
 }
 \details{
-  Either the file is enlarged or shrinked. When enlarged, the file
+  \code{file.resize} can enlarge or shrink the file. When enlarged, the file
   is filled up with zeros. Some platform implementations feature
   sparse files, so that this operation is very fast. We have tested:
   \itemize{
@@ -31,9 +35,12 @@
    \item Mac OS X 10.5, i386
    \item Mac OS X 10.4, PPC
   }
+ \code{file.move} tries  to \code{\link{file.rename}}, 
+ if this fails (e.g. across file systems) the file is copied to the new location and the old file is removed, 
+ see  \code{\link{file.copy}} and \code{\link{file.remove}}.
 }
 \author{ Daniel Adler }
-\seealso{ \code{\link[base]{file.create}}, \code{\link[base]{file.rename}}, \code{\link[base]{file.info}} }
+\seealso{ \code{\link[base]{file.create}}, \code{\link[base]{file.rename}}, \code{\link[base]{file.info}}, \code{\link{file.copy}}, \code{\link{file.remove}} }
 \examples{
  x <- tempfile()
  newsize <- 23       # resize and size to 23 bytes.
@@ -44,7 +51,9 @@
    file.resize(x, newsize)
    file.info(x)$size == newsize
  }
- file.remove(x)
+ y <- tempfile()
+ file.move(x,y)
+ file.remove(y)
 }
 \keyword{ IO }
 \keyword{ data }

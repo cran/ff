@@ -9,8 +9,10 @@
    Chunking method for ff_vector and ffdf objects (row-wise) automatically considering RAM requirements from recordsize as calculated from \code{\link{sum}(\link{.rambytes}[\link{vmode}])}
 }
 \usage{
-\method{chunk}{ff_vector}(x, RECORDBYTES = .rambytes[vmode(x)], BATCHBYTES = getOption("ffbatchbytes"), \dots)
-\method{chunk}{ffdf}(x, RECORDBYTES = sum(.rambytes[vmode(x)]), BATCHBYTES = getOption("ffbatchbytes"), \dots)
+\method{chunk}{ff_vector}(x
+, RECORDBYTES = .rambytes[vmode(x)], BATCHBYTES = getOption("ffbatchbytes"), \dots)
+\method{chunk}{ffdf}(x
+, RECORDBYTES = sum(.rambytes[vmode(x)]), BATCHBYTES = getOption("ffbatchbytes"), \dots)
 }
 \arguments{
   \item{x}{\code{\link{ff}} or \code{\link{ffdf}}}
@@ -37,7 +39,8 @@
   message("dummy example for linear regression with biglm on ffdf")
   library(biglm)
 
-  message("NOTE that . in formula requires calculating terms manually because . as a data-dependant term is not allowed in biglm")
+  message("NOTE that . in formula requires calculating terms manually
+    because . as a data-dependant term is not allowed in biglm")
   form <- Sepal.Length ~ Sepal.Width + Petal.Length + Petal.Width + Species
 
   lmfit <- lm(form, data=iris)

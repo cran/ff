@@ -15,10 +15,27 @@
   For support of creating return values see details.
 }
 \usage{
-ffvecapply(EXPR, X = NULL, N = NULL, VMODE = NULL, VBYTES = NULL, RETURN = FALSE, CFUN = NULL, USE.NAMES = TRUE, FF_RETURN = TRUE, BREAK = ".break", FROM = "i1", TO = "i2", BATCHSIZE = .Machine$integer.max, BATCHBYTES = getOption("ffbatchbytes"), VERBOSE = FALSE)
-ffrowapply(EXPR, X = NULL, N = NULL, NCOL = NULL, VMODE = NULL, VBYTES = NULL, RETURN = FALSE, RETCOL = NCOL, CFUN = NULL, USE.NAMES = TRUE, FF_RETURN = TRUE, FROM = "i1", TO = "i2", BATCHSIZE = .Machine$integer.max, BATCHBYTES = getOption("ffbatchbytes"), VERBOSE = FALSE)
-ffcolapply(EXPR, X = NULL, N = NULL, NROW = NULL, VMODE = NULL, VBYTES = NULL, RETURN = FALSE, RETROW = NROW, CFUN = NULL, USE.NAMES = TRUE, FF_RETURN = TRUE, FROM = "i1", TO = "i2", BATCHSIZE = .Machine$integer.max, BATCHBYTES = getOption("ffbatchbytes"), VERBOSE = FALSE)
-ffapply(EXPR = NULL, AFUN = NULL, MARGIN = NULL, X = NULL, N = NULL, DIM = NULL, VMODE = NULL, VBYTES = NULL, RETURN = FALSE, CFUN = NULL, USE.NAMES = TRUE, FF_RETURN = TRUE, IDIM = "idim", FROM = "i1", TO = "i2", BREAK = ".break", BATCHSIZE = .Machine$integer.max, BATCHBYTES = getOption("ffbatchbytes"), VERBOSE = FALSE)
+ffvecapply(EXPR, X = NULL, N = NULL, VMODE = NULL, VBYTES = NULL, RETURN = FALSE
+, CFUN = NULL, USE.NAMES = TRUE, FF_RETURN = TRUE, BREAK = ".break"
+, FROM = "i1", TO = "i2"
+, BATCHSIZE = .Machine$integer.max, BATCHBYTES = getOption("ffbatchbytes")
+, VERBOSE = FALSE)
+ffrowapply(EXPR, X = NULL, N = NULL, NCOL = NULL, VMODE = NULL, VBYTES = NULL
+, RETURN = FALSE, RETCOL = NCOL, CFUN = NULL, USE.NAMES = TRUE, FF_RETURN = TRUE
+, FROM = "i1", TO = "i2"
+, BATCHSIZE = .Machine$integer.max, BATCHBYTES = getOption("ffbatchbytes")
+, VERBOSE = FALSE)
+ffcolapply(EXPR, X = NULL, N = NULL, NROW = NULL, VMODE = NULL, VBYTES = NULL
+, RETURN = FALSE, RETROW = NROW, CFUN = NULL, USE.NAMES = TRUE, FF_RETURN = TRUE
+, FROM = "i1", TO = "i2"
+, BATCHSIZE = .Machine$integer.max, BATCHBYTES = getOption("ffbatchbytes")
+, VERBOSE = FALSE)
+ffapply(EXPR = NULL, AFUN = NULL, MARGIN = NULL, X = NULL, N = NULL, DIM = NULL
+, VMODE = NULL, VBYTES = NULL, RETURN = FALSE, CFUN = NULL, USE.NAMES = TRUE
+, FF_RETURN = TRUE, IDIM = "idim"
+, FROM = "i1", TO = "i2", BREAK = ".break"
+, BATCHSIZE = .Machine$integer.max, BATCHBYTES = getOption("ffbatchbytes")
+, VERBOSE = FALSE)
 }
 \arguments{
   \item{EXPR}{ the \code{\link{expression}} to be applied }
@@ -116,7 +133,8 @@ ffapply(EXPR = NULL, AFUN = NULL, MARGIN = NULL, X = NULL, N = NULL, DIM = NULL,
    message("lets return a single row aggregate")
    ffrowapply(t(apply(x[i1:i2,,drop=FALSE], 1, mean)), X=x, RETURN=TRUE, RETCOL=NULL, BATCHSIZE=200)
    message("lets return a 6 column aggregates")
-   y <- ffrowapply( t(apply(x[i1:i2,,drop=FALSE], 1, summary)), X=x, RETURN=TRUE, RETCOL=length(summary(0)), BATCHSIZE=200)
+   y <- ffrowapply( t(apply(x[i1:i2,,drop=FALSE], 1, summary)), X=x
+   , RETURN=TRUE, RETCOL=length(summary(0)), BATCHSIZE=200)
    colnames(y) <- names(summary(0))
    y
    message("determine column minima if a complete column does not fit into RAM")

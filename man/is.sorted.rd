@@ -31,7 +31,7 @@
 \seealso{ \code{\link{is.ordered.ff}} for testing factor levels, \code{\link[base]{is.unsorted}} for testing the data, \code{\link[bit]{intisasc}} for a quick version thereof, \code{\link{na.count}} for yet another \code{\link[=physical.ff]{physical}} attribute }
 \examples{
   x <- 1:12
-  is.sorted(x) <- !( is.na(is.unsorted(x)) || is.unsorted(x))  # actually calling is.unsorted twice is stupid
+  is.sorted(x) <- !( is.na(is.unsorted(x)) || is.unsorted(x))
   is.sorted(x)
   x[1] <- 100L
   message("don't forget to maintain once it's no longer TRUE")

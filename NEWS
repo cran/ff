@@ -1,3 +1,14 @@
+		CHANGES IN ff VERSION 2.2.12
+
+USER VISIBLE CHANGES
+
+    o	new function file.move used instead of file.rename in order to 
+		allow moving files across filesystem boundaries
+    o	filename<-.ff now copies and deletes if file.rename cannot move 
+		across filesystem boundaries (suggested by Milan Bouchet-Valat)
+
+	
+	
 		CHANGES IN ff VERSION 2.2.11
 
 		

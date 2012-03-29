@@ -477,6 +477,7 @@ export(
 
 # -- fileresize.R (by Daniel Adler, ISC license) --
 ,file.resize
+,file.move
 
 
 # -- ordermerge.R  --

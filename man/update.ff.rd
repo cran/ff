@@ -6,7 +6,9 @@
   \command{update} copies updates one ff object with the content of another object.
 }
 \usage{
-\method{update}{ff}(object, from, delete = FALSE, bydim = NULL, fromdim = NULL, BATCHSIZE = .Machine$integer.max, BATCHBYTES = getOption("ffbatchbytes"), VERBOSE = FALSE, \dots)
+\method{update}{ff}(object, from, delete = FALSE, bydim = NULL, fromdim = NULL
+, BATCHSIZE = .Machine$integer.max, BATCHBYTES = getOption("ffbatchbytes")
+, VERBOSE = FALSE, \dots)
 \method{update}{ffdf}(object, from, \dots)
 }
 \arguments{
@@ -39,7 +41,8 @@
 \examples{
   x <- ff(1:100)
   y <- ff(-(1:100))
-  message("You should make it a habit to re-assign the return value of update although this is not needed currently.")
+  message("You should make it a habit to re-assign the return value 
+of update although this is not needed currently.")
   x <- update(x, from=y)
   x
   y

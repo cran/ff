@@ -15,7 +15,8 @@ Function \code{ramsort} will sort the input vector in-place (without making a co
 , optimize = c("time", "memory"), VERBOSE = FALSE, \dots)
 \method{mergesort}{default}(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
 \method{radixsort}{default}(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
-\method{keysort}{default}(x, keyrange=range(x, na.rm=has.na), has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
+\method{keysort}{default}(x, keyrange=range(x, na.rm=has.na), has.na = TRUE
+, na.last = TRUE, decreasing = FALSE, \dots)
 \method{shellsort}{default}(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
 }
 \arguments{

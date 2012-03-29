@@ -59,9 +59,11 @@ ffindexorder(index, BATCHSIZE, FF_RETURN = NULL, VERBOSE = FALSE)
      i <- fforder(x)
      message("applying this order i is done by ffindexget")
      x[i]
-     message("applying this order i requires random access, therefore ffindexget does chunkwise sorting")
+     message("applying this order i requires random access, 
+       therefore ffindexget does chunkwise sorting")
      ffindexget(x, i)
-     message("if we want to apply the order i multiple times, we can do the chunkwise sorting once and store it")
+     message("if we want to apply the order i multiple times,
+       we can do the chunkwise sorting once and store it")
      s <- ffindexordersize(length(i), vmode(i), BATCHBYTES = 100)
      o <- ffindexorder(i, s$b)
      message("this is how the stored chunkwise sorting is used")

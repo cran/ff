@@ -24,7 +24,8 @@
 #! , optimize = c("time", "memory"), VERBOSE = FALSE, \dots)
 #! \method{mergesort}{default}(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
 #! \method{radixsort}{default}(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
-#! \method{keysort}{default}(x, keyrange=range(x, na.rm=has.na), has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
+#! \method{keysort}{default}(x, keyrange=range(x, na.rm=has.na), has.na = TRUE
+#! , na.last = TRUE, decreasing = FALSE, \dots)
 #! \method{shellsort}{default}(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
 #! }
 #! \arguments{
@@ -136,11 +137,12 @@
 #! Function \code{ramorder} will order the input vector in-place (without making a copy) and return the number of NAs found
 #! }
 #! \usage{
-#! \method{ramorder}{default}(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, stable = TRUE
-#! , optimize = c("time", "memory"), VERBOSE = FALSE, \dots)
+#! \method{ramorder}{default}(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE
+#! , stable = TRUE, optimize = c("time", "memory"), VERBOSE = FALSE, \dots)
 #! \method{mergeorder}{default}(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
 #! \method{radixorder}{default}(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
-#! \method{keyorder}{default}(x, i, keyrange=range(x, na.rm=has.na), has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
+#! \method{keyorder}{default}(x, i, keyrange=range(x, na.rm=has.na), has.na = TRUE, na.last = TRUE
+#! , decreasing = FALSE, \dots)
 #! \method{shellorder}{default}(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, stabilize=FALSE, \dots)
 #! }
 #! \arguments{
@@ -1163,9 +1165,11 @@ fforder <- function(
 #!      i <- fforder(x)
 #!      message("applying this order i is done by ffindexget")
 #!      x[i]
-#!      message("applying this order i requires random access, therefore ffindexget does chunkwise sorting")
+#!      message("applying this order i requires random access, 
+#!        therefore ffindexget does chunkwise sorting")
 #!      ffindexget(x, i)
-#!      message("if we want to apply the order i multiple times, we can do the chunkwise sorting once and store it")
+#!      message("if we want to apply the order i multiple times,
+#!        we can do the chunkwise sorting once and store it")
 #!      s <- ffindexordersize(length(i), vmode(i), BATCHBYTES = 100)
 #!      o <- ffindexorder(i, s$b)
 #!      message("this is how the stored chunkwise sorting is used")
@@ -1198,13 +1202,13 @@ ffindexorder <- function(
   n <- length(index)
 
 
+	open(index, assert=TRUE)
   if (is.null(FF_RETURN)){
     FF_RETURN <- clone(index, vmode="integer", initdata=NULL)
   }else{
     stopifnot(is.null(vw(FF_RETURN)))
     stopifnot(vmode(FF_RETURN)=="integer")
     stopifnot(length(FF_RETURN)==n)
-		open(index, assert=TRUE)
 		open(FF_RETURN, assert=TRUE)
   }
 
@@ -1238,8 +1242,10 @@ ffindexorder <- function(
 #!   These functions allow more control than the method dispatch of \code{[} and  \code{[<-} if an ff integer subscript is used.
 #! }
 #! \usage{
-#! ffindexget(x, index, indexorder = NULL, FF_RETURN = NULL, BATCHSIZE = NULL, BATCHBYTES = getOption("ffmaxbytes"), VERBOSE = FALSE)
-#! ffindexset(x, index, value, indexorder = NULL, BATCHSIZE = NULL, BATCHBYTES = getOption("ffmaxbytes"), VERBOSE = FALSE)
+#! ffindexget(x, index, indexorder = NULL, FF_RETURN = NULL
+#! , BATCHSIZE = NULL, BATCHBYTES = getOption("ffmaxbytes"), VERBOSE = FALSE)
+#! ffindexset(x, index, value, indexorder = NULL
+#! , BATCHSIZE = NULL, BATCHBYTES = getOption("ffmaxbytes"), VERBOSE = FALSE)
 #! }
 #! \arguments{
 #!   \item{x}{
@@ -1326,7 +1332,6 @@ ffindexget <- function(
     FF_RETURN <- clone(x, length=n, initdata=NULL)
   }else{
     stopifnot(vmode(FF_RETURN)==v)
-		open(x, assert=TRUE)
 		open(FF_RETURN, assert=TRUE)
     if (length(FF_RETURN)!=n)
       length(FF_RETURN) <- n
@@ -1374,6 +1379,7 @@ ffindexget <- function(
 				open(indexorder, assert=TRUE)
     }
 
+		open(x, assert=TRUE)
 		open(index, assert=TRUE)
     .Call("ffindexget"
     , ffmode_       = .ffmode[v]
@@ -1487,8 +1493,10 @@ ffindexset <- function(
 #!   These functions allow more control than the method dispatch of \code{[} and  \code{[<-} if an ff integer subscript is used.
 #! }
 #! \usage{
-#!   ffdfindexget(x, index, indexorder = NULL, autoindexorder = 3, FF_RETURN = NULL, BATCHSIZE = NULL, BATCHBYTES = getOption("ffmaxbytes"), VERBOSE = FALSE)
-#!   ffdfindexset(x, index, value, indexorder = NULL, autoindexorder = 3, BATCHSIZE = NULL, BATCHBYTES = getOption("ffmaxbytes"), VERBOSE = FALSE)
+#!   ffdfindexget(x, index, indexorder = NULL, autoindexorder = 3, FF_RETURN = NULL
+#!   , BATCHSIZE = NULL, BATCHBYTES = getOption("ffmaxbytes"), VERBOSE = FALSE)
+#!   ffdfindexset(x, index, value, indexorder = NULL, autoindexorder = 3
+#!   , BATCHSIZE = NULL, BATCHBYTES = getOption("ffmaxbytes"), VERBOSE = FALSE)
 #! }
 #! \arguments{
 #!   \item{x}{
@@ -2251,7 +2259,8 @@ ffdfsort <- function(
 #!         x <- y
 #!         message("keysort(x) ", system.time(keysort(x))[3])
 #!         x <- y
-#!         message("keysort(x, keyrange=c(.vmin[v],.vmax[v])) ", system.time(keysort(x, keyrange=c(.vmin[v],.vmax[v])))[3])
+#!         message("keysort(x, keyrange=c(.vmin[v],.vmax[v])) "
+#! , system.time(keysort(x, keyrange=c(.vmin[v],.vmax[v])))[3])
 #!       }
 #!
 #!       if (!is.na(.vNA[v])){
@@ -2265,7 +2274,8 @@ ffdfsort <- function(
 #!           x <- y
 #!           message("keysort(x, has.na=FALSE) ", system.time(keysort(x, has.na=FALSE))[3])
 #!           x <- y
-#!           message("keysort(x, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])) ", system.time(keysort(x, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])))[3])
+#!           message("keysort(x, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])) "
+#! , system.time(keysort(x, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])))[3])
 #!         }
 #!       }
 #!
@@ -2290,7 +2300,8 @@ ffdfsort <- function(
 #!         message("keyorder(x, i) ", system.time(keyorder(x, i))[3])
 #!         x[] <- y
 #!         i <- 1:n
-#!         message("keyorder(x, i, keyrange=c(.vmin[v],.vmax[v])) ", system.time(keyorder(x, i, keyrange=c(.vmin[v],.vmax[v])))[3])
+#!         message("keyorder(x, i, keyrange=c(.vmin[v],.vmax[v])) "
+#! , system.time(keyorder(x, i, keyrange=c(.vmin[v],.vmax[v])))[3])
 #!       }
 #!
 #!       if (!is.na(.vNA[v])){
@@ -2309,7 +2320,8 @@ ffdfsort <- function(
 #!           message("keyorder(x, i, has.na=FALSE) ", system.time(keyorder(x, i, has.na=FALSE))[3])
 #!           x[] <- y
 #!           i <- 1:n
-#!           message("keyorder(x, i, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])) ", system.time(keyorder(x, i, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])))[3])
+#!           message("keyorder(x, i, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])) "
+#! , system.time(keyorder(x, i, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])))[3])
 #!         }
 #!       }
 #!

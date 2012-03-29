@@ -88,7 +88,8 @@ vmode(x) <- value
 \author{ Jens Oehlschlägel }
 \seealso{  \code{\link{ff}}, \code{\link{storage.mode}}, \code{\link{mode}} }
 \examples{
- data.frame(.vmode=.vmode, .vimplemented=.vimplemented, .rammode=.rammode, .ffmode=.ffmode, .vmin=.vmin, .vmax=.vmax, .vNA=.vNA, .rambytes=.rambytes, .ffbytes=.ffbytes)
+ data.frame(.vmode=.vmode, .vimplemented=.vimplemented, .rammode=.rammode, .ffmode=.ffmode
+, .vmin=.vmin, .vmax=.vmax, .vNA=.vNA, .rambytes=.rambytes, .ffbytes=.ffbytes)
   vmode(1)
   vmode(1L)
   .vcoerceable[["byte"]]

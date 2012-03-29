@@ -11,11 +11,12 @@ Sorting: order R vector in-RAM and in-place
 Function \code{ramorder} will order the input vector in-place (without making a copy) and return the number of NAs found
 }
 \usage{
-\method{ramorder}{default}(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, stable = TRUE
-, optimize = c("time", "memory"), VERBOSE = FALSE, \dots)
+\method{ramorder}{default}(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE
+, stable = TRUE, optimize = c("time", "memory"), VERBOSE = FALSE, \dots)
 \method{mergeorder}{default}(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
 \method{radixorder}{default}(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
-\method{keyorder}{default}(x, i, keyrange=range(x, na.rm=has.na), has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
+\method{keyorder}{default}(x, i, keyrange=range(x, na.rm=has.na), has.na = TRUE, na.last = TRUE
+, decreasing = FALSE, \dots)
 \method{shellorder}{default}(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, stabilize=FALSE, \dots)
 }
 \arguments{

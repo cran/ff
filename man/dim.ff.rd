@@ -24,7 +24,7 @@
    dimorder(x, \dots) <- value
   \method{dimorder}{default}(x, \dots)
   \method{dimorder}{ff_array}(x, \dots)
-  \method{dimorder}{ffdf}(x, \dots)           # reports 2:1 if any of the embedded ff objects have nonStandard dimorder
+  \method{dimorder}{ffdf}(x, \dots)
   \method{dimorder}{ff_array}(x, \dots) <- value
   \method{dimorder}{ffdf}(x, \dots) <- value  # just here to catch forbidden assignments
 }

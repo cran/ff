@@ -27,8 +27,10 @@ vectorIndex2arrayIndex(x, dim = NULL, dimorder = NULL, vw = NULL)
   vectorIndex2arrayIndex(1:12, dim=3:4)
   vectorIndex2arrayIndex(1:12, dim=3:4, dimorder=2:1)
   matrix(1:30, 5, 6)
-  vectorIndex2arrayIndex(c(6L, 7L, 8L, 11L, 12L, 13L, 16L, 17L, 18L, 21L, 22L, 23L), vw=rbind(c(0,1), c(3,4), c(2,1)))
-  vectorIndex2arrayIndex(c(2L, 8L, 14L, 3L, 9L, 15L, 4L, 10L, 16L, 5L, 11L, 17L), vw=rbind(c(0,1), c(3,4), c(2,1)), dimorder=2:1)
+  vectorIndex2arrayIndex(c(6L, 7L, 8L, 11L, 12L, 13L, 16L, 17L, 18L, 21L, 22L, 23L)
+, vw=rbind(c(0,1), c(3,4), c(2,1)))
+  vectorIndex2arrayIndex(c(2L, 8L, 14L, 3L, 9L, 15L, 4L, 10L, 16L, 5L, 11L, 17L)
+, vw=rbind(c(0,1), c(3,4), c(2,1)), dimorder=2:1)
 
   \dontshow{
     # incomplete regression tests

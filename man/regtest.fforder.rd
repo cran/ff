@@ -232,7 +232,8 @@ regtest.fforder(n = 100)
         x <- y
         message("keysort(x) ", system.time(keysort(x))[3])
         x <- y
-        message("keysort(x, keyrange=c(.vmin[v],.vmax[v])) ", system.time(keysort(x, keyrange=c(.vmin[v],.vmax[v])))[3])
+        message("keysort(x, keyrange=c(.vmin[v],.vmax[v])) "
+, system.time(keysort(x, keyrange=c(.vmin[v],.vmax[v])))[3])
       }
 
       if (!is.na(.vNA[v])){
@@ -246,7 +247,8 @@ regtest.fforder(n = 100)
           x <- y
           message("keysort(x, has.na=FALSE) ", system.time(keysort(x, has.na=FALSE))[3])
           x <- y
-          message("keysort(x, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])) ", system.time(keysort(x, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])))[3])
+          message("keysort(x, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])) "
+, system.time(keysort(x, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])))[3])
         }
       }
 
@@ -271,7 +273,8 @@ regtest.fforder(n = 100)
         message("keyorder(x, i) ", system.time(keyorder(x, i))[3])
         x[] <- y
         i <- 1:n
-        message("keyorder(x, i, keyrange=c(.vmin[v],.vmax[v])) ", system.time(keyorder(x, i, keyrange=c(.vmin[v],.vmax[v])))[3])
+        message("keyorder(x, i, keyrange=c(.vmin[v],.vmax[v])) "
+, system.time(keyorder(x, i, keyrange=c(.vmin[v],.vmax[v])))[3])
       }
 
       if (!is.na(.vNA[v])){
@@ -290,7 +293,8 @@ regtest.fforder(n = 100)
           message("keyorder(x, i, has.na=FALSE) ", system.time(keyorder(x, i, has.na=FALSE))[3])
           x[] <- y
           i <- 1:n
-          message("keyorder(x, i, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])) ", system.time(keyorder(x, i, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])))[3])
+          message("keyorder(x, i, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])) "
+, system.time(keyorder(x, i, has.na=FALSE, keyrange=c(.vmin[v],.vmax[v])))[3])
         }
       }
 

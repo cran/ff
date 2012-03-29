@@ -139,7 +139,9 @@ This is necessary because we cannot provide \code{x} with zero rows (we cannot c
   \code{\link{write.table.ffdf}}, \code{\link{read.table}}, \code{\link{ffdf}}
 }
 \examples{
-    x <- data.frame(log=rep(c(FALSE, TRUE), length.out=26), int=1:26, dbl=1:26 + 0.1, fac=factor(letters), ord=ordered(LETTERS), dct=Sys.time()+1:26, dat=seq(as.Date("1910/1/1"), length.out=26, by=1))
+    x <- data.frame(log=rep(c(FALSE, TRUE), length.out=26), int=1:26, dbl=1:26 + 0.1
+, fac=factor(letters), ord=ordered(LETTERS)
+, dct=Sys.time()+1:26, dat=seq(as.Date("1910/1/1"), length.out=26, by=1))
     x <- x[c(13:1, 13:1),]
     csvfile <- tempPathFile(path=getOption("fftempdir"), extension="csv")
     write.csv(x, file=csvfile, row.names=FALSE)
@@ -153,19 +155,23 @@ This is necessary because we cannot provide \code{x} with zero rows (we cannot c
 
     message("NOTE that read.table fails for ordered factors, this is fixed in read.table.ffdf")
     try(read.csv(file=csvfile, header=TRUE, colClasses=c(ord="ordered")))
-    # could fix this with the following two lines (Gabor Grothendieck) but does not know what bad side-effects this could have
+    # TODO could fix this with the following two commands (Gabor Grothendieck) 
+    # but does not know what bad side-effects this could have
      #setOldClass("ordered")
      #setAs("character", "ordered", function(from) ordered(from))
-    y <- read.csv(file=csvfile, header=TRUE, colClasses=c(dct="POSIXct", dat="Date"))  # "ordered" gives an error
+    y <- read.csv(file=csvfile, header=TRUE, colClasses=c(dct="POSIXct", dat="Date"))
     y
 
-    ffx <- read.csv.ffdf(file=csvfile, header=TRUE, colClasses=c(ord="ordered", dct="POSIXct", dat="Date"))
+    ffx <- read.csv.ffdf(file=csvfile, header=TRUE
+, colClasses=c(ord="ordered", dct="POSIXct", dat="Date"))
     ffx
     sapply(ffx[,], class)
 
     message("NOTE that reading in chunks can change the sequence of levels and thus the coding")
     message("(Sorting levels during chunked reading can be too expensive)")
-    ffx <- read.csv.ffdf(file=csvfile, header=TRUE, colClasses=c(ord="ordered", dct="POSIXct", dat="Date"), first.rows=6, next.rows=10, VERBOSE=TRUE)
+    ffx <- read.csv.ffdf(file=csvfile, header=TRUE
+, colClasses=c(ord="ordered", dct="POSIXct", dat="Date"), first.rows=6, next.rows=10
+, VERBOSE=TRUE)
     y <- ffx$fac[]
     print(levels(y))
     data.frame(values=as.character(y), codes=as.integer(y))
@@ -179,17 +185,22 @@ This is necessary because we cannot provide \code{x} with zero rows (we cannot c
     data.frame(values=as.character(y), codes=as.integer(y))
 
     message("If we KNOW the levels we can fix levels upfront")
-    ffx <- read.csv.ffdf(file=csvfile, header=TRUE, colClasses=c(ord="ordered", dct="POSIXct", dat="Date"), first.rows=6, next.rows=10, levels=list(fac=letters, ord=LETTERS))
+    ffx <- read.csv.ffdf(file=csvfile, header=TRUE
+, colClasses=c(ord="ordered", dct="POSIXct", dat="Date")
+, first.rows=6, next.rows=10, levels=list(fac=letters, ord=LETTERS))
     y <- ffx$fac[]
     print(levels(y))
     data.frame(values=as.character(y), codes=as.integer(y))
 
     message("Or we inspect a sufficiently large chunk of data and use those")
-    ffx1 <- read.csv.ffdf(file=csvfile, header=TRUE, colClasses=c(ord="ordered", dct="POSIXct", dat="Date"), nrows=13)
+    ffx1 <- read.csv.ffdf(file=csvfile, header=TRUE
+, colClasses=c(ord="ordered", dct="POSIXct", dat="Date"), nrows=13)
     ffx <- read.csv.ffdf(x=ffx1, file=csvfile, header=FALSE, skip=1+nrow(ffx1), VERBOSE=TRUE)
 
     message("We can check for unexpected factor levels, say we only allowed a:l")
-    ffx <- read.csv.ffdf(file=csvfile, header=TRUE, colClasses=c(ord="ordered", dct="POSIXct", dat="Date"), levels=list(fac=letters[1:12], ord=LETTERS[1:12]), appendLevels=FALSE)
+    ffx <- read.csv.ffdf(file=csvfile, header=TRUE
+, colClasses=c(ord="ordered", dct="POSIXct", dat="Date")
+, levels=list(fac=letters[1:12], ord=LETTERS[1:12]), appendLevels=FALSE)
     sapply(colnames(ffx), function(i)sum(is.na(ffx[[i]][])))
 
     message("We can fine-tune the creation of the ffdf:")
@@ -199,9 +210,11 @@ This is necessary because we cannot provide \code{x} with zero rows (we cannot c
     message("By default we had record size")
     sum(.ffbytes[vmode(ffx)])
 
-    ffy <- read.csv.ffdf(file=csvfile, header=TRUE, colClasses=c(ord="ordered", dct="POSIXct", dat="Date")
+    ffy <- read.csv.ffdf(file=csvfile, header=TRUE
+    , colClasses=c(ord="ordered", dct="POSIXct", dat="Date")
     , asffdf_args=list(
-        vmode = c(log="boolean", int="byte", dbl="single", fac="nibble", ord="nibble", dct="single", dat="single")
+        vmode = c(log="boolean", int="byte", dbl="single", fac="nibble"
+                , ord="nibble", dct="single", dat="single")
       , col_args=list(pattern = "./csv")  # create in getwd() with prefix csv
       )
     )

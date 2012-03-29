@@ -70,7 +70,8 @@ sortLevels(x)
   levels(x)
   data.frame(factor=x[], codes=y[])
 
-  message("NEVER forget to reassign the result of recodeLevels or sortLevels, look at the following mess")
+  message("NEVER forget to reassign the result of recodeLevels or sortLevels, 
+look at the following mess")
   recodeLevels(x, rev(levels(x)))
   message("NOW the codings have changed, but not the levels, the result is wrong data")
   levels(x)
@@ -101,7 +102,8 @@ sortLevels(x)
  rm(x); gc()
 
 
- message("... but is possible if we avoid some  unnecessary copying that is triggered by assignment functions")
+ message("... but is possible if we avoid some  unnecessary copying that is triggered 
+by assignment functions")
  system.time({
  x <- integer(n)
  x[] <- 1:25

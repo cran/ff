@@ -17,7 +17,8 @@
 \method{as.integer}{hi}(x, vw.convert = TRUE, \dots)
 \method{as.logical}{hi}(x, maxindex = NULL, \dots)
 \method{as.character}{hi}(x, names, vw.convert = TRUE, \dots)
-\method{as.matrix}{hi}(x, dim = x$dim, dimorder = x$dimorder, vw = x$vw, symmetric = x$symmetric, fixdiag = x$fixdiag, \dots)
+\method{as.matrix}{hi}(x, dim = x$dim, dimorder = x$dimorder
+, vw = x$vw, symmetric = x$symmetric, fixdiag = x$fixdiag, \dots)
 }
 \arguments{
   \item{x}{ an object of class \code{\link{hi}} }

@@ -42,12 +42,14 @@ The virtual component is itself a dataframe, each row of which defines a column 
   y <- matrix(1:4, 2, 2)
   z <- matrix(1:4, 2, 2)
 
-  message("Here the y matrix is first converted to single columns by data.frame, then those columns become ff")
+  message("Here the y matrix is first converted to single columns by data.frame, 
+then those columns become ff")
   d <- as.ffdf(data.frame(x=x, y=y, z=I(z)))
   physical(d)
   virtual(d)
 
-  message("Here the y matrix is first converted to ff, and then stored still as matrix in the ffdf object (although virtually treated as columns of ffdf)")
+  message("Here the y matrix is first converted to ff, and then stored still as matrix 
+in the ffdf object (although virtually treated as columns of ffdf)")
   d <- ffdf(x=as.ff(x), y=as.ff(y), z=I(as.ff(z)))
   physical(d)
   virtual(d)
