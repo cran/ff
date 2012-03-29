@@ -2604,7 +2604,7 @@ SEXP r_ram_keysort(
   IndexT keylength = INTEGER(keyrange_)[1] - INTEGER(keyrange_)[0] + 1;
 
   IndexT *count;
-  count   = (IndexT *) R_alloc(keylength+1, sizeof(IndexT));
+  count   = (IndexT *) R_alloc(keylength+2, sizeof(IndexT));
 
   INTEGER(ret_)[0] = ram_integer_keysort(
     x

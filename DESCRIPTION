@@ -1,5 +1,5 @@
 Package: ff
-Version: 2.2-6
+Version: 2.2-7
 Date: 2012-03-29
 Title: memory-efficient storage of large data on disk and fast access
         functions
@@ -65,8 +65,8 @@ LazyLoad: yes
 ByteCompile: yes
 Encoding: latin1
 URL: http://ff.r-forge.r-project.org/
-Packaged: 2012-03-30 14:18:05 UTC; rforge
+Packaged: 2012-05-01 22:15:10 UTC; rforge
 Repository: CRAN
 Repository/R-Forge/Project: ff
-Repository/R-Forge/Revision: 102
-Date/Publication: 2012-03-31 05:19:58
+Repository/R-Forge/Revision: 104
+Date/Publication: 2012-05-08 19:23:10
