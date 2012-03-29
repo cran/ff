@@ -609,7 +609,6 @@ ffdf <- function(
       offset <<- offset + 1L
     }
   } # end of make.virtual
-
   if (is.null(ff_join) && is.null(ff_split)){
     Dimorder <- 1:2  # we reuse the existing physical ff objects, however the virtual layout of the data.frame
 
@@ -676,6 +675,7 @@ ffdf <- function(
         }
         if (any(is.na(jjoin)))
           stop("could not find ff_join elements", "<", paste(ff_join[[j]][is.na(jjoin)], collapse="><"), ">")
+		ff_join[[j]] <- jjoin
       }
     }
     splitjoin <- c(ff_split, unlist(ff_join))

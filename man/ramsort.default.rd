@@ -1,9 +1,9 @@
-\name{ramsort}
-\alias{ramsort}
-\alias{mergesort}
-\alias{radixsort}
-\alias{keysort}
-\alias{shellsort}
+\name{ramsort.default}
+\alias{ramsort.default}
+\alias{mergesort.default}
+\alias{radixsort.default}
+\alias{keysort.default}
+\alias{shellsort.default}
 \title{
 Sorting: Sort R vector in-RAM and in-place
 }
@@ -11,12 +11,12 @@ Sorting: Sort R vector in-RAM and in-place
 Function \code{ramsort} will sort the input vector in-place (without making a copy) and return the number of NAs found
 }
 \usage{
-ramsort(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE
-, optimize = c("time", "memory"), VERBOSE = FALSE)
-mergesort(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE)
-radixsort(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE)
-keysort(x, keyrange=range(x, na.rm=has.na), has.na = TRUE, na.last = TRUE, decreasing = FALSE)
-shellsort(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE)
+\method{ramsort}{default}(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE
+, optimize = c("time", "memory"), VERBOSE = FALSE, \dots)
+\method{mergesort}{default}(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
+\method{radixsort}{default}(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
+\method{keysort}{default}(x, keyrange=range(x, na.rm=has.na), has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
+\method{shellsort}{default}(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
 }
 \arguments{
   \item{x}{
@@ -42,6 +42,9 @@ set to 'memory' to minimize RAM requirements and sacrifice speed
 }
   \item{VERBOSE}{
   cat some info about chosen method
+}
+  \item{\dots}{
+  ignored
 }
 }
 \details{

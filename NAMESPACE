@@ -56,10 +56,6 @@ export(
 ,ramattribs
 ,recodeLevels
 ,sortLevels
-,is.sorted
-,"is.sorted<-"
-,na.count
-,"na.count<-"
 ,add
 ,swap
 ,symmetric
@@ -137,6 +133,8 @@ export(
 ,fixdiag.ff
 ,fixdiag.dist
 ,fixdiag.default
+,is.sorted.default
+,"is.sorted<-.default"
 ,na.count.ff
 ,"na.count<-.ff"
 ,na.count.default
@@ -482,17 +480,17 @@ export(
 
 
 # -- ordermerge.R  --
-, mergeorder
-, mergesort
-, shellorder
-, shellsort
-, keyorder
-, keysort
-, radixorder
-, radixsort
+, mergeorder.default
+, mergesort.default
+, shellorder.default
+, shellsort.default
+, keyorder.default
+, keysort.default
+, radixorder.default
+, radixsort.default
+, ramorder.default
+, ramsort.default
 , regtest.fforder
-, ramorder
-, ramsort
 , ffsort
 , fforder
 , ffindexordersize
@@ -548,6 +546,8 @@ S3method(symmetric,dist)
 S3method(fixdiag,ff)
 S3method(fixdiag,dist)
 S3method(fixdiag,default)
+S3method(is.sorted, default)
+S3method("is.sorted<-", default)
 S3method(na.count, ff)
 S3method("na.count<-", ff)
 S3method(na.count, default)
@@ -770,3 +770,14 @@ S3method(str, ffdf)
 #S3method(subset,symm)
 #S3method("subset<-",symm)
 
+# -- ordermerge.R  --
+#S3method("mergeorder", default)
+#S3method("mergesort", default)
+#S3method("shellorder", default)
+#S3method("shellsort", default)
+#S3method("keyorder", default)
+#S3method("keysort", default)
+#S3method("radixorder", default)
+#S3method("radixsort", default)
+#S3method("ramorder", default)
+#S3method("ramsort", default)

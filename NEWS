@@ -1,3 +1,32 @@
+		CHANGES IN ff VERSION 2.2.9
+
+		
+USER VISIBLE CHANGES
+
+    o	Functions 'ramsort', 'ramorder', 'is.sorted' and 'na.count' are now generic 
+		in package 'bit'.
+
+	
+BUG FIXES
+
+    o	in ffdf argument 'ff_join' now also allows naming columns by name as documented (reported by Suharto Anggono)
+
+
+	
+		CHANGES IN ff VERSION 2.2.8
+
+		
+BUG FIXES
+
+    o	read.table.ffdf no longer overwrites the comment.char explicitely given
+		and finally sets comment.char="" if it was not given (now as documented, 
+		reported by Julin Maloof)
+    o	ffsort no longer stops when sorting an fffactor with keysort
+    o	fforder no longer creates NA when ordering an fffactor (reported by Jan Wijffels)
+    o	.Call("R_bit_as_hi") now correctly addresses package="ff"
+	
+
+
 		CHANGES IN ff VERSION 2.2.7
 
 		

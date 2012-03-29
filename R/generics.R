@@ -93,10 +93,6 @@ ramclass <- function (x, ...)
 ramattribs <- function (x, ...)
   UseMethod("ramattribs")
 
-# maintaining NA counts (physical attritbute, part of the HCS concept)
- na.count    <- function(x, ...)UseMethod("na.count")
-"na.count<-" <- function(x, ..., value)UseMethod("na.count<-")
-
 # fffactor
 recodeLevels <- function(x, lev)
   UseMethod("recodeLevels")

@@ -1,8 +1,6 @@
 \name{na.count}
-\alias{na.count}
 \alias{na.count.ff}
 \alias{na.count.default}
-\alias{na.count<-}
 \alias{na.count<-.ff}
 \alias{na.count<-.default}
 \title{ Getting and setting 'na.count' physical attribute }
@@ -10,8 +8,6 @@
   The 'na.count' physical attribute gives the current number of NAs if properly initialized and properly maintained, see details.
 }
 \usage{
-na.count(x, \dots)
-na.count(x, \dots) <- value
 \method{na.count}{ff}(x, \dots)
 \method{na.count}{default}(x, \dots)
 \method{na.count}{ff}(x, \dots) <- value

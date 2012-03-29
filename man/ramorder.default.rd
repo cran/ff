@@ -1,9 +1,9 @@
-\name{ramorder}
-\alias{ramorder}
-\alias{mergeorder}
-\alias{radixorder}
-\alias{keyorder}
-\alias{shellorder}
+\name{ramorder.default}
+\alias{ramorder.default}
+\alias{mergeorder.default}
+\alias{radixorder.default}
+\alias{keyorder.default}
+\alias{shellorder.default}
 \title{
 Sorting: order R vector in-RAM and in-place
 }
@@ -11,12 +11,12 @@ Sorting: order R vector in-RAM and in-place
 Function \code{ramorder} will order the input vector in-place (without making a copy) and return the number of NAs found
 }
 \usage{
-ramorder(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, stable = TRUE
-, optimize = c("time", "memory"), VERBOSE = FALSE)
-mergeorder(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE)
-radixorder(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE)
-keyorder(x, i, keyrange=range(x, na.rm=has.na), has.na = TRUE, na.last = TRUE, decreasing = FALSE)
-shellorder(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, stabilize=FALSE)
+\method{ramorder}{default}(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, stable = TRUE
+, optimize = c("time", "memory"), VERBOSE = FALSE, \dots)
+\method{mergeorder}{default}(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
+\method{radixorder}{default}(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
+\method{keyorder}{default}(x, i, keyrange=range(x, na.rm=has.na), has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
+\method{shellorder}{default}(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, stabilize=FALSE, \dots)
 }
 \arguments{
   \item{x}{
@@ -52,6 +52,9 @@ to minimize RAM requirements and sacrifice speed
   \item{stabilize}{
   Set to \code{TRUE} for stabilizíng the result of shellorder (for equal keys the order values will be sorted, this only works if \code{i=1:n})
 to minimize RAM requirements and sacrifice speed
+}
+  \item{\dots}{
+  ignored
 }
 }
 \details{

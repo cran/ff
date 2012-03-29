@@ -1,6 +1,6 @@
 /*/////////////////////////////////////////////////////////////////////////////
 
- Copyright (c) 2007,2008 Daniel Adler <dadler@uni-goettingen.de>
+ Copyright (c) 2007-2012 Daniel Adler <dadler@uni-goettingen.de>
 
  Permission to use, copy, modify, and distribute this software for any
  purpose with or without fee is hereby granted, provided that the above
@@ -87,34 +87,34 @@ template<typename ImplT, typename T> inline T add(T a, T b) { return a+b; }
 template<typename T, class ImplT, typename IndexT>
 T get(ImplT* impl, IndexT i)
 {
-  return impl->get<T,IndexT>(i);
+  return impl->template get<T,IndexT>(i);
 }
 
 template<typename T, class ImplT, typename IndexT>
 void set(ImplT* impl, IndexT i, T x)
 {
-    impl->set<T,IndexT>(i,x);
+    impl->template set<T,IndexT>(i,x);
 }
 
 template<typename T, class ImplT, typename IndexT>
 T getset(ImplT* impl, IndexT i, T newval)
 {
-  T oldval = impl->get<T,IndexT>(i);
-  impl->set<T,IndexT>(i, newval);
+  T oldval = impl->template get<T,IndexT>(i);
+  impl->template set<T,IndexT>(i, newval);
   return oldval;
 }
 
 template<typename T, class ImplT, typename IndexT>
 void addset(ImplT* impl, IndexT i, T op2)
 {
-  impl->set<T,IndexT>(i, add<ImplT,T>( impl->get<T,IndexT>(i) , op2 ) );
+  impl->template set<T,IndexT>(i, add<ImplT,T>( impl->template get<T,IndexT>(i) , op2 ) );
 }
 
 template<typename T, class ImplT, typename IndexT>
 T addgetset(ImplT* impl, IndexT i, T op2)
 {
-  T newval = add<ImplT,T>( impl->get<T,IndexT>(i) , op2 );
-  impl->set<T,IndexT>(i, newval);
+  T newval = add<ImplT,T>( impl->template get<T,IndexT>(i) , op2 );
+  impl->template set<T,IndexT>(i, newval);
   return newval;
 }
 
@@ -124,21 +124,21 @@ T addgetset(ImplT* impl, IndexT i, T op2)
 template<typename T, class ImplT, typename IndexT, typename SizeT>
 void getV(ImplT* impl, IndexT i, SizeT s, T* p)
 {
-  for (IndexT end = i+s; i < end ; ++i ) *p++ = impl->get<T,IndexT>(i);
+  for (IndexT end = i+s; i < end ; ++i ) *p++ = impl->template get<T,IndexT>(i);
 }
 
 template<typename T, class ImplT, typename IndexT, typename SizeT>
 void setV(ImplT* impl, IndexT i, SizeT s, T* p)
 {
-  for (IndexT end = i+s; i < end ; ++i) impl->set<T,IndexT>( i, *p++ );
+  for (IndexT end = i+s; i < end ; ++i) impl->template set<T,IndexT>( i, *p++ );
 }
 
 template<typename T, class ImplT, typename IndexT, typename SizeT>
 void getsetV(ImplT* impl, IndexT i, SizeT s, T* ret, T* value)
 {
   for (IndexT end = i+s; i < end ; ++i) {
-    *ret++ = impl->get<T>(i);
-    impl->set<T,IndexT>(i, *value++ );
+    *ret++ = impl->template get<T>(i);
+    impl->template set<T,IndexT>(i, *value++ );
   }
 }
 
@@ -146,7 +146,7 @@ template<typename T, class ImplT, typename IndexT, typename SizeT>
 void addsetV(ImplT* impl, IndexT i, SizeT s, T* value)
 {
   for (IndexT end = i+s; i < end ; ++i) {
-    impl->set<T,IndexT>( i, add<ImplT,T>( impl->get<T,IndexT>(i), *value++) );
+    impl->template set<T,IndexT>( i, add<ImplT,T>( impl->template get<T,IndexT>(i), *value++) );
   }
 }
 
@@ -154,8 +154,8 @@ template<typename T, class ImplT, typename IndexT, typename SizeT>
 void addgetsetV(ImplT* impl, IndexT i, SizeT s, T* ret, T* value)
 {
   for (IndexT end = i+s; i < end ; ++i) {
-    T buf = add<ImplT,T>( impl->get<T,IndexT>(i) , *value++ );
-    impl->set<T,IndexT>(i, buf);
+    T buf = add<ImplT,T>( impl->template get<T,IndexT>(i) , *value++ );
+    impl->template set<T,IndexT>(i, buf);
     *ret++ = buf;
   }
 }

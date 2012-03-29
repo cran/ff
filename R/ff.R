@@ -604,18 +604,19 @@ fixdiag.dist <- function(x
   0
 
 #! \name{is.sorted}
-#! \alias{is.sorted}
-#! \alias{is.sorted<-}
+#! \alias{is.sorted.default}
+#! \alias{is.sorted<-.default}
 #! \title{ Getting and setting 'is.sorted' physical attribute }
 #! \description{
 #!   Functions to mark an ff or ram object as 'is.sorted' and query this. Responsibility to maintain this attribute is with the user.
 #! }
 #! \usage{
-#! is.sorted(x)
-#! is.sorted(x) <- value
+#! \method{is.sorted}{default}(x, \dots)
+#! \method{is.sorted}{default}(x, \dots) <- value
 #! }
 #! \arguments{
 #!   \item{x}{ an ff or ram object }
+#!   \item{\dots}{ ignored }
 #!   \item{value}{ NULL (to remove the 'is.sorted' attribute) or TRUE or FALSE }
 #! }
 #! \details{
@@ -653,17 +654,19 @@ fixdiag.dist <- function(x
 
 
 # !is.sorted does not imply is.unsorted
-is.sorted <- function(x
-){
+is.sorted.default <- function(x, ...)
+{
   s <- physical(x)$is.sorted
   if (is.null(s) || !s)
     FALSE
   else
     TRUE
 }
-"is.sorted<-" <- function(x
+"is.sorted<-.default" <- function(x
+, ...
 , value
-){
+)
+{
   if (is.null(value))
     physical(x)$is.sorted <- NULL
   else if (is.na(value) || !value)
@@ -676,10 +679,8 @@ is.sorted <- function(x
 
 
 #! \name{na.count}
-#! \alias{na.count}
 #! \alias{na.count.ff}
 #! \alias{na.count.default}
-#! \alias{na.count<-}
 #! \alias{na.count<-.ff}
 #! \alias{na.count<-.default}
 #! \title{ Getting and setting 'na.count' physical attribute }
@@ -687,8 +688,6 @@ is.sorted <- function(x
 #!   The 'na.count' physical attribute gives the current number of NAs if properly initialized and properly maintained, see details.
 #! }
 #! \usage{
-#! na.count(x, \dots)
-#! na.count(x, \dots) <- value
 #! \method{na.count}{ff}(x, \dots)
 #! \method{na.count}{default}(x, \dots)
 #! \method{na.count}{ff}(x, \dots) <- value
@@ -3297,7 +3296,7 @@ open.ff <- function(con
   filename <- attr(physical, "filename")
   stopifnot(file.access(filename,0)==0 )
   if (!readonly && file.access(filename,2)){
-    warning("opening ff ", filename, " readonly")
+    message("opening ff ", filename, " readonly")
     readonly <- TRUE
   }
   if (!is.null(pagesize)){
@@ -3566,7 +3565,7 @@ getset.ff <- function(x, i, value, add=FALSE)
 {
   if (!is.open(x)){
     if (open(x))
-      warning("opening ff ", filename(x))
+      message("opening ff ", filename(x))
     else
       stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
   }
@@ -3595,7 +3594,7 @@ get.ff   <- function(x, i)
 {
   if (!is.open(x)){
     if (open(x))
-      warning("opening ff ", filename(x))
+      message("opening ff ", filename(x))
     else
       stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
   }
@@ -3611,7 +3610,7 @@ set.ff   <- function(x, i, value, add=FALSE)
 {
   if (!is.open(x)){
     if (open(x))
-      warning("opening ff ", filename(x))
+      message("opening ff ", filename(x))
     else
       stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
   }
@@ -3696,7 +3695,7 @@ readwrite.ff <- function(x, i, value, add=FALSE)
 {
   if (!is.open(x)){
     if (open(x))
-      warning("opening ff ", filename(x))
+      message("opening ff ", filename(x))
     else
       stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
   }
@@ -3726,7 +3725,7 @@ read.ff <- function(x, i, n)
 {
   if (!is.open(x)){
     if (open(x))
-      warning("opening ff ", attr(x, "filename"))
+      message("opening ff ", attr(x, "filename"))
     else
       stop("failed opening ff ", attr(x, "filename"), "because ", geterrstr.ff(x))
   }
@@ -3740,7 +3739,7 @@ write.ff <- function(x, i, value, add=FALSE)
 {
   if (!is.open(x)){
     if (open(x))
-      warning("opening ff ", attr(x, "filename"))
+      message("opening ff ", attr(x, "filename"))
     else
       stop("failed opening ff ", attr(x, "filename"), "because ", geterrstr.ff(x))
   }
@@ -4013,7 +4012,7 @@ swap.ff <- function(
 ){
   if (!is.open(x)){
     if (open(x))
-      warning("opening ff ", filename(x))
+      message("opening ff ", filename(x))
     else
       stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
   }
@@ -4108,7 +4107,7 @@ swap.ff <- function(
 {
   if (!is.open(x)){
     if (open(x))
-      warning("opening ff ", filename(x))
+      message("opening ff ", filename(x))
     else
       stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
   }
@@ -4176,7 +4175,7 @@ swap.ff <- function(
 {
   if (!is.open(x)){
     if (open(x))
-      warning("opening ff ", filename(x))
+      message("opening ff ", filename(x))
     else
       stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
   }
@@ -4249,7 +4248,7 @@ swap.ff_array <- function(
 {
   if (!is.open(x)){
     if (open(x))
-      warning("opening ff ", filename(x))
+      message("opening ff ", filename(x))
     else
       stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
   }
@@ -4451,7 +4450,7 @@ swap.ff_array <- function(
 {
   if (!is.open(x)){
     if (open(x))
-      warning("opening ff ", filename(x))
+      message("opening ff ", filename(x))
     else
       stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
   }
@@ -4583,7 +4582,7 @@ swap.ff_array <- function(
 {
   if (!is.open(x)){
     if (open(x))
-      warning("opening ff ", filename(x))
+      message("opening ff ", filename(x))
     else
       stop("failed opening ff ", filename(x), "because ", geterrstr.ff(x))
   }

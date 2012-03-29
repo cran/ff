@@ -1,16 +1,17 @@
 \name{is.sorted}
-\alias{is.sorted}
-\alias{is.sorted<-}
+\alias{is.sorted.default}
+\alias{is.sorted<-.default}
 \title{ Getting and setting 'is.sorted' physical attribute }
 \description{
   Functions to mark an ff or ram object as 'is.sorted' and query this. Responsibility to maintain this attribute is with the user.
 }
 \usage{
-is.sorted(x)
-is.sorted(x) <- value
+\method{is.sorted}{default}(x, \dots)
+\method{is.sorted}{default}(x, \dots) <- value
 }
 \arguments{
   \item{x}{ an ff or ram object }
+  \item{\dots}{ ignored }
   \item{value}{ NULL (to remove the 'is.sorted' attribute) or TRUE or FALSE }
 }
 \details{

@@ -7,12 +7,12 @@
 
 #source("c:/MWP/eAnalysis/ff/R/ordermerge.R")
 
-#! \name{ramsort}
-#! \alias{ramsort}
-#! \alias{mergesort}
-#! \alias{radixsort}
-#! \alias{keysort}
-#! \alias{shellsort}
+#! \name{ramsort.default}
+#! \alias{ramsort.default}
+#! \alias{mergesort.default}
+#! \alias{radixsort.default}
+#! \alias{keysort.default}
+#! \alias{shellsort.default}
 #! \title{
 #! Sorting: Sort R vector in-RAM and in-place
 #! }
@@ -20,12 +20,12 @@
 #! Function \code{ramsort} will sort the input vector in-place (without making a copy) and return the number of NAs found
 #! }
 #! \usage{
-#! ramsort(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE
-#! , optimize = c("time", "memory"), VERBOSE = FALSE)
-#! mergesort(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE)
-#! radixsort(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE)
-#! keysort(x, keyrange=range(x, na.rm=has.na), has.na = TRUE, na.last = TRUE, decreasing = FALSE)
-#! shellsort(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE)
+#! \method{ramsort}{default}(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE
+#! , optimize = c("time", "memory"), VERBOSE = FALSE, \dots)
+#! \method{mergesort}{default}(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
+#! \method{radixsort}{default}(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
+#! \method{keysort}{default}(x, keyrange=range(x, na.rm=has.na), has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
+#! \method{shellsort}{default}(x, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
 #! }
 #! \arguments{
 #!   \item{x}{
@@ -51,6 +51,9 @@
 #! }
 #!   \item{VERBOSE}{
 #!   cat some info about chosen method
+#! }
+#!   \item{\dots}{
+#!   ignored
 #! }
 #! }
 #! \details{
@@ -120,12 +123,12 @@
 
 
 
-#! \name{ramorder}
-#! \alias{ramorder}
-#! \alias{mergeorder}
-#! \alias{radixorder}
-#! \alias{keyorder}
-#! \alias{shellorder}
+#! \name{ramorder.default}
+#! \alias{ramorder.default}
+#! \alias{mergeorder.default}
+#! \alias{radixorder.default}
+#! \alias{keyorder.default}
+#! \alias{shellorder.default}
 #! \title{
 #! Sorting: order R vector in-RAM and in-place
 #! }
@@ -133,12 +136,12 @@
 #! Function \code{ramorder} will order the input vector in-place (without making a copy) and return the number of NAs found
 #! }
 #! \usage{
-#! ramorder(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, stable = TRUE
-#! , optimize = c("time", "memory"), VERBOSE = FALSE)
-#! mergeorder(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE)
-#! radixorder(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE)
-#! keyorder(x, i, keyrange=range(x, na.rm=has.na), has.na = TRUE, na.last = TRUE, decreasing = FALSE)
-#! shellorder(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, stabilize=FALSE)
+#! \method{ramorder}{default}(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, stable = TRUE
+#! , optimize = c("time", "memory"), VERBOSE = FALSE, \dots)
+#! \method{mergeorder}{default}(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
+#! \method{radixorder}{default}(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
+#! \method{keyorder}{default}(x, i, keyrange=range(x, na.rm=has.na), has.na = TRUE, na.last = TRUE, decreasing = FALSE, \dots)
+#! \method{shellorder}{default}(x, i, has.na = TRUE, na.last = TRUE, decreasing = FALSE, stabilize=FALSE, \dots)
 #! }
 #! \arguments{
 #!   \item{x}{
@@ -174,6 +177,9 @@
 #!   \item{stabilize}{
 #!   Set to \code{TRUE} for stabilizíng the result of shellorder (for equal keys the order values will be sorted, this only works if \code{i=1:n})
 #! to minimize RAM requirements and sacrifice speed
+#! }
+#!   \item{\dots}{
+#!   ignored
 #! }
 #! }
 #! \details{
@@ -250,7 +256,7 @@
 
 
 # orderes i inplace such that x[i] is sorted (x not affected)
-mergeorder <- function(x, i, has.na=TRUE, na.last=TRUE, decreasing=FALSE){
+mergeorder.default <- function(x, i, has.na=TRUE, na.last=TRUE, decreasing=FALSE, ...){
   force(x)
   force(i)
   n <- length(x)
@@ -272,7 +278,7 @@ mergeorder <- function(x, i, has.na=TRUE, na.last=TRUE, decreasing=FALSE){
 }
 
 # sorts x inplace
-mergesort <- function(x, has.na=TRUE, na.last=TRUE, decreasing=FALSE){
+mergesort.default <- function(x, has.na=TRUE, na.last=TRUE, decreasing=FALSE, ...){
   force(x)
   .Call("mergesort"
   , x = x
@@ -286,9 +292,9 @@ mergesort <- function(x, has.na=TRUE, na.last=TRUE, decreasing=FALSE){
 
 
 # orderes i inplace such that x[i] is sorted (x not affected)
-shellorder <- function(x, i, has.na=TRUE, na.last=TRUE, decreasing=FALSE
-, stabilize=FALSE  # note this requires that i was 1:length(x)
-){
+shellorder.default <- function(x, i, has.na=TRUE, na.last=TRUE, decreasing=FALSE
+, stabilize=FALSE, ...)  # note this requires that i was 1:length(x)
+{
   force(x)
   force(i)
   n <- length(x)
@@ -312,7 +318,7 @@ shellorder <- function(x, i, has.na=TRUE, na.last=TRUE, decreasing=FALSE
 
 
 # sorts x inplace
-shellsort <- function(x, has.na=TRUE, na.last=TRUE, decreasing=FALSE){
+shellsort.default <- function(x, has.na=TRUE, na.last=TRUE, decreasing=FALSE, ...){
   force(x)
   .Call("shellsort"
   , x = x
@@ -325,9 +331,9 @@ shellsort <- function(x, has.na=TRUE, na.last=TRUE, decreasing=FALSE){
 
 # orderes i inplace such that x[i] is sorted (x not affected)
 # x must be integer with not too big range (<= 2^16 as a rule of thumb)
-keyorder <- function(x, i, keyrange=range(x, na.rm=has.na)
-, has.na=TRUE, na.last=TRUE, decreasing=FALSE
-){
+keyorder.default <- function(x, i, keyrange=range(x, na.rm=has.na)
+, has.na=TRUE, na.last=TRUE, decreasing=FALSE, ...)
+{
   force(x)
   force(i)
   n <- length(x)
@@ -351,9 +357,10 @@ keyorder <- function(x, i, keyrange=range(x, na.rm=has.na)
 
 # sorts x inplace
 # x must be integer with not too big range (<= 2^16 as a rule of thumb)
-keysort <- function(x
+keysort.default <- function(x
 , keyrange=range(x, na.rm=has.na)
-, has.na=TRUE, na.last=TRUE, decreasing=FALSE){
+, has.na=TRUE, na.last=TRUE, decreasing=FALSE, ...)
+{
   force(x)
   .Call("keysort"
   , x = x
@@ -367,7 +374,7 @@ keysort <- function(x
 
 # orderes i inplace such that x[i] is sorted (x not affected)
 # x must be 4byte integer
-radixorder <- function(x, i, has.na=TRUE, na.last=TRUE, decreasing=FALSE){
+radixorder.default <- function(x, i, has.na=TRUE, na.last=TRUE, decreasing=FALSE, ...){
   force(x)
   force(i)
   n <- length(x)
@@ -390,8 +397,8 @@ radixorder <- function(x, i, has.na=TRUE, na.last=TRUE, decreasing=FALSE){
 
 # sorts x inplace
 # x must be 4byte integer
-radixsort <- function(x
-, has.na=TRUE, na.last=TRUE, decreasing=FALSE){
+radixsort.default <- function(x
+, has.na=TRUE, na.last=TRUE, decreasing=FALSE, ...){
   force(x)
   .Call("radixsort"
   , x = x
@@ -406,10 +413,11 @@ radixsort <- function(x
 # sorts x inplace
 # x must be atomic and currently without names
 # returns the number of NAs encountered
-ramsort <- function(x
+ramsort.default <- function(x
 , has.na=TRUE, na.last=TRUE, decreasing=FALSE
 , optimize = c("time","memory")
 , VERBOSE = FALSE
+, ...
 ){
   n <- length(x)
   if (n){
@@ -463,7 +471,7 @@ ramsort <- function(x
           }
         }else{
           if (VERBOSE)
-            cat("ramorder selected mergeorder\n")
+            cat("ramorder selected mergesort\n")
           mergesort(x
           , has.na=has.na, na.last=na.last, decreasing=decreasing)
         }
@@ -482,11 +490,12 @@ ramsort <- function(x
 # x must be atomic and currently without names
 # i must be integer with valid positions (R counting 1..n)
 # returns the number of NAs encountered
-ramorder <- function(x, i
+ramorder.default <- function(x, i
 , has.na=TRUE, na.last=TRUE, decreasing=FALSE
 , stable = TRUE
 , optimize = c("time","memory")
 , VERBOSE = FALSE
+, ...
 ){
   n <- length(x)
   if (n){
@@ -690,6 +699,7 @@ ffsort <- function(
     recbytes <- .rambytes[v]
 
     if (k && (k < .vvalues["short"])){
+	  method <- 3L
       keybytes <- (k+2L) * .rambytes["integer"]
       maxbytes <- max(BATCHBYTES, 3L*keybytes)
       maxordersize <- (maxbytes - 2L*keybytes) %/% recbytes
@@ -985,6 +995,7 @@ fforder <- function(
 
   if (is.null(index)){
     index <- clone(l[[1]], vmode="integer", initdata=NULL)
+	levels(index) <- NULL
     use.index <- FALSE
   }else{
     stopifnot(vmode(index)=="integer")

@@ -400,7 +400,7 @@ read.table.ffdf <- function(
   rt.args$file <- file
   rt.args$fileEncoding <- fileEncoding
 
-  if (!is.null(rt.args$comment.char))
+  if (is.null(rt.args$comment.char))
     rt.args$comment.char <- ""  # faster than read.table default "#"
 
   nrows <- as.integer(nrows)
