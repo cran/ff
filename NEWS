@@ -1,5 +1,19 @@
-		CHANGES IN ff VERSION 2.2.5
+		CHANGES IN ff VERSION 2.2.6
 
+		
+MAINTENANCE
+
+    o	Removed .Internal calls to as.vector
+
+	
+BUG FIXES
+
+    o	fixed a bug in insertion sort for integers that could have affected function ramsort
+
+	
+	
+		CHANGES IN ff VERSION 2.2.5
+		
 		
 MAINTENANCE
 
@@ -14,7 +28,6 @@ MAINTENANCE
 
 BUG FIXES
 
-    o	fixed a bug in insertion sort for integers that could have affected function ramsort
     o	ff again compiles on NEtBSD (reported by Thomas Vaughan)
     o	as.integer.hi() now correctly returns integer() for an empty subscript (reported by Ivan Zhang)
     o	ffsave now respects argument 'envir'

@@ -628,8 +628,8 @@ function (x, ...){
 as.boolean.default <-
 function (x, ...)
 {
-  x[is.na(x)] <- 0L
-  x <- .Internal(as.vector(x, "logical"))
+  x <- as.vector(x, "logical")
+  x[is.na(x)] <- FALSE
   attr(x, "vmode") <- "boolean"
   x
 }
@@ -651,8 +651,8 @@ function (x, ...){
 as.quad.default <-
 function (x, ...)
 {
+  x <- as.vector(x, "integer")
   x[is.na(x)] <- 0L
-  x <- .Internal(as.vector(x, "integer"))
   attr(x, "vmode") <- "quad"
   x
 }
@@ -673,8 +673,8 @@ function (x, ...){
 as.nibble.default <-
 function (x, ...)
 {
+  x <- as.vector(x, "integer")
   x[is.na(x)] <- 0L
-  x <- .Internal(as.vector(x, "integer"))
   attr(x, "vmode") <- "nibble"
   x
 }
@@ -695,7 +695,7 @@ function (x, ...){
 as.byte.default <-
 function (x, ...)
 {
-  x <- .Internal(as.vector(x, "integer"))
+  x <- as.vector(x, "integer")
   attr(x, "vmode") <- "byte"
   x
 }
@@ -716,8 +716,8 @@ function (x, ...){
 as.ubyte.default <-
 function (x, ...)
 {
+  x <- as.vector(x, "integer")
   x[is.na(x)] <- 0L
-  x <- .Internal(as.vector(x, "integer"))
   attr(x, "vmode") <- "ubyte"
   x
 }
@@ -738,7 +738,7 @@ function (x, ...){
 as.short.default <-
 function (x, ...)
 {
-  x <- .Internal(as.vector(x, "integer"))
+  x <- as.vector(x, "integer")
   attr(x, "vmode") <- "short"
   x
 }
@@ -759,8 +759,8 @@ function (x, ...){
 as.ushort.default <-
 function (x, ...)
 {
+  x <- as.vector(x, "integer")
   x[is.na(x)] <- 0L
-  x <- .Internal(as.vector(x, "integer"))
   attr(x, "vmode") <- "ushort"
   x
 }

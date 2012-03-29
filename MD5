@@ -2,10 +2,10 @@
 0b459ec01daec57e448b8e47ab17d09c *ANNOUNCEMENT-2.1.2.txt
 23be119d22e32b26a7f49cf1bbb15fae *ANNOUNCEMENT-2.1.txt
 fb8473cf9ca9d8d8d03709ea0451e3b5 *ANNOUNCEMENT-2.2.txt
-7a0a4f497d6bae018635bd1f9875f852 *DESCRIPTION
+df39660f2082e9ade73d162e7a45b3c6 *DESCRIPTION
 056e55978f319aae8a3583a7a087aed6 *LICENSE
 7e78872c08110d1711a8f3f82291ffd4 *NAMESPACE
-d85cbc702e4e933214a9ce30633b6124 *NEWS
+05c63b6bdb3dff642ad2f5bd34dab683 *NEWS
 f71929bf871c50f45360d9b690d9ed0b *R/CFUN.R
 c489dc1909be649c41a20050b34f1b4b *R/array.R
 21c4749587a37eda61f969b5e2d954ef *R/as.ff.R
@@ -22,10 +22,10 @@ fc28c16cb934c59c419f8c9e01680092 *R/fffactor.R
 67627fbd64c0f9ae8607fd09254ffe92 *R/fileutil.R
 82a06a377d055a7588306f157dff692f *R/generics.R
 2db5717357ee518ee23ea015f572aa59 *R/getpagesize.R
-edd4367bdaf222aa092e2197d6ef7bc7 *R/hi.R
+c4ee37314cdbbf39e56f0029c4fb577c *R/hi.R
 ae3c8aa939556ac00f17eeebbe5de88f *R/ordermerge.R
 0f0c6fb6cd70ee34650b774fbafc9666 *R/util.R
-95badc1b8d538331ce3b2c8de658ee7c *R/vmode.R
+cd594b4687c2ada322714ade941358a5 *R/vmode.R
 2b4314c7318eace7820e5be145190e31 *R/vt.R
 2ccb75b4214ef731042a581d516c985b *R/zzz.R
 3ee650af34a425d7b78ed799761be305 *README_devel.txt
@@ -123,7 +123,7 @@ f7b4340b57171ff6cf5c0dc033722142 *man/splitPathFile.rd
 2cc111530b58c8703b176b4fe6229350 *man/symmetric.rd
 a5b392961d3c76b8ad0faa7adf38c233 *man/unclass_-.rd
 62abe71dfea2b385491d5b6c33d7abd6 *man/undim.rd
-45fbb47328a3c8260e6d7a0761e3e9f2 *man/unsort.rd
+b093ea4f2a7f1ad6a10ca2a306a6c8af *man/unsort.rd
 6186a2efd913a504ef37a9a6acc6289d *man/update.ff.rd
 2d172b05ae8f78c388e5bb129d151200 *man/vecprint.rd
 d4d4f56119bf922ac11b7022a24cc1bf *man/vector.vmode.rd
@@ -150,7 +150,7 @@ d9f1f6ce515c8a37210fba343a3cecee *src/Win32FileMapping.hpp
 c649650aaed3dd41641804365b00947d *src/config.h
 51c030c6ae79b9455fe59d68d76c4a7c *src/ff.cpp
 1826e8f4251137bfea9453a4c219a7bd *src/ff.h
-bf8cee5ea8511a4a615210c4139ed2ea *src/ordermerge.c
+99a4f1cc8d103ab0f26b67b7605a02b6 *src/ordermerge.c
 9350b3d3323f686666f9e5990c9de462 *src/r_ff.c
 3ebe3fb8cf557489b122846bc237278e *src/r_ff.h
 2559540d788bc5dd750a963ba28a1cf1 *src/r_ff_addgetset.h

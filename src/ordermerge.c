@@ -2057,8 +2057,9 @@ IndexT ram_integer_keyorder(
 // for integer radix sort
 #define BITSWORD 16
 #define NWORD 65536
-#define LOPART(x)(x&65535)
-#define HIPART(x)(x<0 ? (x>>BITSWORD)&32767: (x>>BITSWORD)|32768)
+#define LOPART(x)(x&0x0000FFFF)
+// #define HIPART(x)(x<0 ? (x>>BITSWORD)&0x00007FFF: (x>>BITSWORD)|0x00008000)
+#define HIPART(x)(((x>>BITSWORD)&0x0000FFFF)^(0x00008000))
 
 /*  structure of count: 0..n where n=r-l+1
     after counting the frequencies of data 0:(NWORD-1) are stored in pos 1:NWORD and NAcount

@@ -1254,8 +1254,8 @@ if (!exists("poslength.logical"))
 #! })), ix = lapply(index, function(i) {
 #!     if (is.null(i$ix)) {
 #!         if (i$re)
-#!             orig <- rev(1:length(i))
-#!         else orig <- 1:length(i)
+#!             orig <- rev(1:poslength(i))
+#!         else orig <- 1:poslength(i)
 #!     }
 #!     else {
 #!         orig <- i$ix
