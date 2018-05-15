@@ -33,10 +33,12 @@ namespace ff {
 inline DWORD offset_hi(foff_t offset) { return (DWORD) (offset >> 32); }
 inline DWORD offset_lo(foff_t offset) { return (DWORD) (offset & 0xFFFFFFFF); }
 
+/* JO: seems to be no longer used, commented to avoid compiler warning
 static size_t getZeroPageSize()
 {
   return Win32FileMapping::getPageSize()*4;
 }
+*/
 
 /*
 static void* getZeroPage()

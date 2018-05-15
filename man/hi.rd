@@ -32,7 +32,7 @@ hi(from, to, by = 1L, maxindex = NA, vw = NULL, pack = TRUE, NAs = NULL)
 }
 \value{
   A list of class 'hi' with components
-  \item{ x      }{ directly accessed by the C-code: the sorted index as returned by \code{\link[bit]{rlepack}} }
+  \item{ x      }{ directly accessed by the C-code: the sorted index of class 'rlepack' as returned by \code{\link[bit]{rlepack}} }
   \item{ ix     }{ NULL or positions to restore original order }
   \item{ re     }{ logical scalar indicating if sequence was reversed from descending to ascending (in this case \code{is.null(ix)}) }
   \item{ minindex  }{ directly accessed by the C-code: represents the lowest positive subscript to be enumerated in case of negative subscripts }

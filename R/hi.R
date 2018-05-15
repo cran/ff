@@ -44,7 +44,7 @@
 #! }
 #! \value{
 #!   A list of class 'hi' with components
-#!   \item{ x      }{ directly accessed by the C-code: the sorted index as returned by \code{\link[bit]{rlepack}} }
+#!   \item{ x      }{ directly accessed by the C-code: the sorted index of class 'rlepack' as returned by \code{\link[bit]{rlepack}} }
 #!   \item{ ix     }{ NULL or positions to restore original order }
 #!   \item{ re     }{ logical scalar indicating if sequence was reversed from descending to ascending (in this case \code{is.null(ix)}) }
 #!   \item{ minindex  }{ directly accessed by the C-code: represents the lowest positive subscript to be enumerated in case of negative subscripts }
@@ -82,8 +82,8 @@ hi <- function (from, to, by = 1L, maxindex = NA, vw=NULL, pack = TRUE, NAs = NU
     nspec <- length(from)
     if (nspec > 0) {
         from <- as.integer(from)
-        to <- rep(as.integer(to), length = nspec)
-        by <- rep(as.integer(by), length = nspec)
+        to <- rep(as.integer(to), length.out = nspec)
+        by <- rep(as.integer(by), length.out = nspec)
         d <- to - from
         N <- d%/%by
         if (any(d != 0 & sign(d) != sign(by)) || any(N * by != d))
@@ -111,10 +111,11 @@ hi <- function (from, to, by = 1L, maxindex = NA, vw=NULL, pack = TRUE, NAs = NU
             #    r <- as.integer(cumsum(c(from, rep(r$values, r$lengths))))
             #}
             x <- list(first = from, dat = r, last = to)
+            class(x) <- "rlepack"
             ix <- NULL
             re <- tab[1] > 0
             if (re)
-                x <- rev.rlepack(x)
+                x <- rev(x)  # rev.rlepack
         }else{
             re <- FALSE
             x <- as.integer(cumsum(c(from, rep(r$values, r$lengths))))
@@ -126,7 +127,7 @@ hi <- function (from, to, by = 1L, maxindex = NA, vw=NULL, pack = TRUE, NAs = NU
             #x <- rlepack(x[ix], pack = pack)
         }
 
-        x <- unique.rlepack(x)
+        x <- unique(x) # unique.rlepack
 
         # this ifelse section copied 1L to as.hi.call
         if (x$last < 0) {
@@ -484,9 +485,11 @@ hiparse <- function(x, envir, first=as.integer(NA), last=as.integer(NA)){
 #! \keyword{ data }
 
 
-
+# xx temporary compatibility function setting the rlepack class
 as.hi.hi <- function(x, ...){
-  x
+  if (class(x$x)!="rlepack")
+    class(x$x) <- "rlepack"
+  x    
 }
 
 
@@ -538,7 +541,7 @@ as.hi.call <- function(
   }
 
   if (is.na(r$first)){
-    x <- list(first=as.integer(NA), dat=integer(), last=as.integer(NA))
+    x <- rlepack(integer())
     ix <- NULL
     re <- FALSE
     n <- 0L
@@ -569,10 +572,11 @@ as.hi.call <- function(
         dat <- as.integer(cumsum(c(r$first, rep(r$values, r$lengths))))
       }
       x <- list(first=r$first, dat=dat, last=r$last)
+      class(x) <- "rlepack"
       ix <- NULL
       if (tab[1]){  # sorted descending
         re <- TRUE
-        x <- rev.rlepack(x)
+        x <- rev(x)  # rev.rlepack
       }else{        # sorted ascending
         re <- FALSE
       }
@@ -789,7 +793,7 @@ as.hi.integer <- function(
     #x <- rlepack(x, pack=if (is.null(ix)) FALSE else pack)
 
   }else{ # no data
-    x  <- list(first=as.integer(NA), dat=integer(), last=as.integer(NA))
+    x  <- rlepack(integer())
     ix <- NULL
     re <- FALSE
   }

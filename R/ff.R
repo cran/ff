@@ -4043,7 +4043,7 @@ swap.ff <- function(
           warning("number of elements to replace is not multiple of values for replacement")
         if (ixre){
           # if possible we try to recycle on the C-side, but in case of ix or re we need to recycle already here
-          value <- rep(value, length=nreturn)
+          value <- rep(value, length.out=nreturn)
           nvalue <- nreturn
         }
       }else{
@@ -4196,7 +4196,7 @@ swap.ff <- function(
           warning("number of elements to replace is not multiple of values for replacement")
         if (ixre){
           # if possible we try to recycle on the C-side, but in case of ix or re we need to recycle already here
-          value <- rep(value, length=nreturn)
+          value <- rep(value, length.out=nreturn)
           nvalue <- nreturn
         }
       }
@@ -4307,7 +4307,7 @@ swap.ff_array <- function(
           warning("number of elements to replace is not multiple of values for replacement")
         if (ixre){
           # if possible we try to recycle on the C-side, but in case of ix or re we need to recycle already here
-          value <- rep(value, length=nreturn)
+          value <- rep(value, length.out=nreturn)
           nvalue <- nreturn
         }
       }else{
@@ -4621,7 +4621,7 @@ swap.ff_array <- function(
           warning("number of elements to replace is not multiple of values for replacement")
         if (ixre){
           # if possible we try to recycle on the C-side, but in case of ix or re we need to recycle already here
-          value <- rep(value, length=nreturn)
+          value <- rep(value, length.out=nreturn)
           nvalue <- nreturn
         }
       }

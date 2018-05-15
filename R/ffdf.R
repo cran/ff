@@ -1192,7 +1192,7 @@ ffdf <- function(
           if (missing(i))
             row.names(df) <- seq_len(nrows)
           else{
-						if (bit:::anyDuplicated.rlepack(i2$x))
+						if (anyDuplicated(i2$x)) # anyDuplicated.rlepack
 							row.names(df) <- make.unique(as.character(as.which(i2)))
 						else
 							row.names(df) <- as.which(i2)
@@ -1207,7 +1207,7 @@ ffdf <- function(
                 i2 <- as.hi(i, maxindex=nvw$n, vw=nvw$vw, pack=FALSE, envir=parent.frame(), names=rownam)
               }
             }
-						if (bit:::anyDuplicated.rlepack(i2$x))
+						if (anyDuplicated(i2$x)) # anyDuplicated.rlepack
 							row.names(df) <- make.unique(as.character(rownam[i2]))
 						else
 							row.names(df) <- rownam[i2]
@@ -1217,7 +1217,7 @@ ffdf <- function(
             }else if(is.character(i))
               row.names(df) <- make.unique(i)
             else{
-							if (bit:::anyDuplicated.rlepack(i2$x))
+							if (anyDuplicated(i2$x)) # anyDuplicated.rlepack
 								row.names(df) <- make.unique(rownam[as.integer(i2)])
 							else
 								row.names(df) <- rownam[as.integer(i2)]

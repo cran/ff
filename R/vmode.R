@@ -842,7 +842,7 @@ ram2ramcode <- function(value, levels){
   }else{
     ret <- match(value, levels)
   }
-  if (any(is.na(ret)) & !is.na(value))
+  if (any(is.na(ret) & !is.na(value)))
     warning("unknown factor values mapped to NA")
   ret
 }

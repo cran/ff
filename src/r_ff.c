@@ -477,7 +477,7 @@ SEXP r_ff_open(SEXP ff_, SEXP ffmode, SEXP ro, SEXP autoflush)
   case 1: ff = (void*) ff_boolean_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , 0 /* the current interface of ff_new wants 0 to distinguish re-opening from creating new */
+  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
@@ -487,7 +487,7 @@ SEXP r_ff_open(SEXP ff_, SEXP ffmode, SEXP ro, SEXP autoflush)
   case 2: ff = (void*) ff_logical_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , 0 /* the current interface of ff_new wants 0 to distinguish re-opening from creating new */
+  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
@@ -497,7 +497,7 @@ SEXP r_ff_open(SEXP ff_, SEXP ffmode, SEXP ro, SEXP autoflush)
   case 3: ff = (void*) ff_quad_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , 0 /* the current interface of ff_new wants 0 to distinguish re-opening from creating new */
+  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
@@ -507,7 +507,7 @@ SEXP r_ff_open(SEXP ff_, SEXP ffmode, SEXP ro, SEXP autoflush)
   case 4: ff = (void*) ff_nibble_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , 0 /* the current interface of ff_new wants 0 to distinguish re-opening from creating new */
+  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
@@ -517,7 +517,7 @@ SEXP r_ff_open(SEXP ff_, SEXP ffmode, SEXP ro, SEXP autoflush)
   case 5: ff = (void*) ff_byte_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , 0 /* the current interface of ff_new wants 0 to distinguish re-opening from creating new */
+  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
@@ -527,7 +527,7 @@ SEXP r_ff_open(SEXP ff_, SEXP ffmode, SEXP ro, SEXP autoflush)
   case 6: ff = (void*) ff_ubyte_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , 0 /* the current interface of ff_new wants 0 to distinguish re-opening from creating new */
+  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
@@ -537,7 +537,7 @@ SEXP r_ff_open(SEXP ff_, SEXP ffmode, SEXP ro, SEXP autoflush)
   case 7: ff = (void*) ff_short_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , 0 /* the current interface of ff_new wants 0 to distinguish re-opening from creating new */
+  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
@@ -547,7 +547,7 @@ SEXP r_ff_open(SEXP ff_, SEXP ffmode, SEXP ro, SEXP autoflush)
   case 8: ff = (void*) ff_ushort_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , 0 /* the current interface of ff_new wants 0 to distinguish re-opening from creating new */
+  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
@@ -557,7 +557,7 @@ SEXP r_ff_open(SEXP ff_, SEXP ffmode, SEXP ro, SEXP autoflush)
   case 9: ff = (void*) ff_integer_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , 0 /* the current interface of ff_new wants 0 to distinguish re-opening from creating new */
+  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
@@ -567,7 +567,7 @@ SEXP r_ff_open(SEXP ff_, SEXP ffmode, SEXP ro, SEXP autoflush)
   case 10: ff = (void*) ff_single_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , 0 /* the current interface of ff_new wants 0 to distinguish re-opening from creating new */
+  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
@@ -577,7 +577,7 @@ SEXP r_ff_open(SEXP ff_, SEXP ffmode, SEXP ro, SEXP autoflush)
   case 11: ff = (void*) ff_double_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , 0 /* the current interface of ff_new wants 0 to distinguish re-opening from creating new */
+  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
@@ -587,7 +587,7 @@ SEXP r_ff_open(SEXP ff_, SEXP ffmode, SEXP ro, SEXP autoflush)
   case 13: ff = (void*) ff_raw_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , 0 /* the current interface of ff_new wants 0 to distinguish re-opening from creating new */
+  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)

@@ -2766,7 +2766,7 @@ SEXP r_ff_double_ordermerge(
     auxindexbuffer = 0; // keep compiler quiet
 
   IndexT l,r,i,n,N,offset;
-  IndexT l1,l2,r1,r2,n1,n2,m1,m2,m;
+  IndexT l1,l2,r1,r2,n1,n2,m1,m2;
   IndexT i1,i2;
   IndexT L1,L2,R1,R2;
   IndexT T=right-left+1;
@@ -2983,7 +2983,6 @@ SEXP r_ff_double_ordermerge(
             l2 += m2;
             n1 += m1;
             n2 += m2;
-            m = n1+n2;
 
             // doing the merge
             if (nNA){
@@ -3189,7 +3188,6 @@ SEXP r_ff_double_ordermerge(
             l2 += m2;
             n1 += m1;
             n2 += m2;
-            m = n1+n2;
 
             // doing the merge
             if (nNA){

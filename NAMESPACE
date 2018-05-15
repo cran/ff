@@ -6,9 +6,9 @@
 
 useDynLib(ff)
 
-importFrom(utils, memory.limit, packageDescription)
+importFrom(utils, memory.limit, packageDescription, read.fwf, read.table, str, write.table)
+importFrom(stats, median, quantile, runif)
 import(bit)
-
 
 export(
 
@@ -634,6 +634,7 @@ S3method(as.hi, name)
 S3method(as.hi, call)
 S3method(as.hi, matrix)
 S3method(as.hi, integer)
+S3method(as.hi, logical)
 S3method(as.hi, which)
 S3method(as.hi, double)
 S3method(as.hi, character)
@@ -663,6 +664,7 @@ S3method(as.bit,ff)
 S3method(chunk, bit)
 
 # -- util.R - some utitlities --
+
 # -- vmode.R - metadata and functions for virtual storage modes --
 S3method(vmode,default)
 S3method(vmode,ff)
@@ -677,6 +679,7 @@ S3method(as.byte,default)
 S3method(as.ubyte,default)
 S3method(as.short,default)
 S3method(as.ushort,default)
+
 # -- vt.R - cloned and virtual matrix transpose --
 S3method(vt, default)
 S3method(vt, ff)
@@ -733,7 +736,6 @@ S3method(print, ffdf)
 S3method(str, ffdf)
 
 
-
 # -- x_ff_symm.R - ff extension (dual licensing, no GPL): symmetric  ff matrices with free and fixed diagonal --
 #S3method(diag, default)
 #S3method("diag<-", default)
@@ -752,6 +754,7 @@ S3method(str, ffdf)
 #S3method(swapset,ff_symm)
 #S3method(subset,ff_symm)
 #S3method("subset<-",ff_symm)
+
 # -- x_symm.R    - ff extension (dual licensing, no GPL): symmetric ram matrices with free and fixed diagonal --
 #S3method(dim,symm)
 #S3method("dim<-",symm)
@@ -772,16 +775,16 @@ S3method(str, ffdf)
 #S3method("subset<-",symm)
 
 # -- ordermerge.R  --
-#S3method("mergeorder", default)
-#S3method("mergesort", default)
-#S3method("shellorder", default)
-#S3method("shellsort", default)
-#S3method("keyorder", default)
-#S3method("keysort", default)
-#S3method("radixorder", default)
-#S3method("radixsort", default)
-#S3method("ramorder", default)
-#S3method("ramsort", default)
+S3method("mergeorder", default)
+S3method("mergesort", default)
+S3method("shellorder", default)
+S3method("shellsort", default)
+S3method("keyorder", default)
+S3method("keysort", default)
+S3method("radixorder", default)
+S3method("radixsort", default)
+S3method("ramorder", default)
+S3method("ramsort", default)
 
 # wish of CRAN maintainers: export another time here (now maintained and exported in bit)
 S3method(clone, default)
