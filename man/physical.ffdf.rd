@@ -44,7 +44,7 @@ The virtual component is itself a dataframe, each row of which defines a column 
 
   message("Here the y matrix is first converted to single columns by data.frame, 
 then those columns become ff")
-  d <- as.ffdf(data.frame(x=x, y=y, z=I(z)))
+  d <- as.ffdf(data.frame(x=x, y=y, z=I(z), stringsAsFactors = TRUE))
   physical(d)
   virtual(d)
 

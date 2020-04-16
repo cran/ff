@@ -35,7 +35,7 @@ as.ffdf(x, ...)
   \code{\link{is.ffdf}}, \code{\link{ffdf}}, \code{\link{data.frame}}
 }
 \examples{
-  d <- data.frame(x=1:26, y=letters, z=Sys.time()+1:26)
+  d <- data.frame(x=1:26, y=letters, z=Sys.time()+1:26, stringsAsFactors = TRUE)
   ffd <- as.ffdf(d)
   stopifnot(identical(d, as.data.frame(ffd)))
   rm(ffd); gc()

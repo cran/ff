@@ -70,22 +70,22 @@
 #!   levels(y) <- NULL
 #!
 #!   levels(x)
-#!   data.frame(factor=x[], codes=y[])
+#!   data.frame(factor=x[], codes=y[], stringsAsFactors = TRUE)
 #!
 #!   levels(x) <- appendLevels(levels(x), letters)
 #!   levels(x)
-#!   data.frame(factor=x[], codes=y[])
+#!   data.frame(factor=x[], codes=y[], stringsAsFactors = TRUE)
 #!
 #!   x <- sortLevels(x) # implicit recoding is chunked were necessary
 #!   levels(x)
-#!   data.frame(factor=x[], codes=y[])
+#!   data.frame(factor=x[], codes=y[], stringsAsFactors = TRUE)
 #!
 #!   message("NEVER forget to reassign the result of recodeLevels or sortLevels, 
 #! look at the following mess")
 #!   recodeLevels(x, rev(levels(x)))
 #!   message("NOW the codings have changed, but not the levels, the result is wrong data")
 #!   levels(x)
-#!   data.frame(factor=x[], codes=y[])
+#!   data.frame(factor=x[], codes=y[], stringsAsFactors = TRUE)
 #!
 #!   rm(x);gc()
 #!

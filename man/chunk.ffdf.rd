@@ -28,7 +28,8 @@
 }
 \seealso{ \code{\link[bit]{chunk}}, \code{\link{ffdf}} }
 \examples{
-  x <- data.frame(x=as.double(1:26), y=factor(letters), z=ordered(LETTERS))
+  x <- data.frame(x=as.double(1:26), y=factor(letters), z=ordered(LETTERS)
+  , stringsAsFactors = TRUE)
   a <- as.ffdf(x)
   ceiling(26 / (300 \%/\% sum(.rambytes[vmode(a)])))
   chunk(a, BATCHBYTES=300)

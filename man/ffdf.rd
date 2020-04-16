@@ -132,25 +132,25 @@ However, at least under windows, the OS has difficulties filecaching parts from 
  ffm <- as.ff(m)
  ffv <- as.ff(v)
 
- d <- data.frame(m, v)
+ d <- data.frame(m, v, stringsAsFactors = TRUE)
  ffd <- ffdf(ffm, v=ffv, row.names=row.names(ffm))
  all.equal(d, ffd[,])
  ffd
  physical(ffd)
 
- d <- data.frame(m, v)
+ d <- data.frame(m, v, stringsAsFactors = TRUE)
  ffd <- ffdf(ffm, v=ffv, row.names=row.names(ffm), ff_split=1)
  all.equal(d, ffd[,])
  ffd
  physical(ffd)
 
- d <- data.frame(m, v)
+ d <- data.frame(m, v, stringsAsFactors = TRUE)
  ffd <- ffdf(ffm, v=ffv, row.names=row.names(ffm), ff_join=list(newff=c(1,2)))
  all.equal(d, ffd[,])
  ffd
  physical(ffd)
 
- d <- data.frame(I(m), I(v))
+ d <- data.frame(I(m), I(v), stringsAsFactors = TRUE)
  ffd <- ffdf(m=I(ffm), v=I(ffv), row.names=row.names(ffm))
  all.equal(d, ffd[,])
  ffd

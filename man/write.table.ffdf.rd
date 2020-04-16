@@ -91,7 +91,7 @@ write.csv2(...)
 \examples{
    x <- data.frame(log=rep(c(FALSE, TRUE), length.out=26), int=1:26, dbl=1:26 + 0.1
 , fac=factor(letters), ord=ordered(LETTERS), dct=Sys.time()+1:26
-, dat=seq(as.Date("1910/1/1"), length.out=26, by=1))
+, dat=seq(as.Date("1910/1/1"), length.out=26, by=1), stringsAsFactors = TRUE)
    ffx <- as.ffdf(x)
 
    csvfile <- tempPathFile(path=getOption("fftempdir"), extension="csv")
@@ -114,7 +114,7 @@ write.csv2(...)
   system.time({
     x <- data.frame(log=rep(c(FALSE, TRUE), length.out=26), int=1:26, dbl=1:26 + 0.1
 , fac=factor(letters), ord=ordered(LETTERS), dct=Sys.time()+1:26
-, dat=seq(as.Date("1910/1/1"), length.out=26, by=1))
+, dat=seq(as.Date("1910/1/1"), length.out=26, by=1), stringsAsFactors = TRUE)
     x <- do.call("rbind", rep(list(x), 10))
     x <- do.call("rbind", rep(list(x), 10))
     x <- do.call("rbind", rep(list(x), 10))

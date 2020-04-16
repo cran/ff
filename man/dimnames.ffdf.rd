@@ -37,7 +37,7 @@
   \code{\link{ffdf}}, \code{\link{dimnames.ff}}, \code{\link{rownames}}, \code{\link{colnames}}
 }
 \examples{
-  ffd <- as.ffdf(data.frame(a=1:26, b=letters))
+  ffd <- as.ffdf(data.frame(a=1:26, b=letters, stringsAsFactors = TRUE))
   dimnames(ffd)
   row.names(ffd) <- letters
   dimnames(ffd)

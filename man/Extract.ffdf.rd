@@ -46,7 +46,7 @@
 \author{ Jens Oehlschlägel }
 \seealso{ \code{\link{ffdf}}, \code{\link[=[.data.frame]{Extract.data.frame}}, \code{\link{Extract.ff}}  }
 \examples{
-   d <- data.frame(a=letters, b=rev(letters), c=1:26)
+   d <- data.frame(a=letters, b=rev(letters), c=1:26, stringsAsFactors = TRUE)
    x <- as.ffdf(d)
 
    d[1,]

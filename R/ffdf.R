@@ -440,25 +440,25 @@ get_nvw <- function(x){
 #!  ffm <- as.ff(m)
 #!  ffv <- as.ff(v)
 #!
-#!  d <- data.frame(m, v)
+#!  d <- data.frame(m, v, stringsAsFactors = TRUE)
 #!  ffd <- ffdf(ffm, v=ffv, row.names=row.names(ffm))
 #!  all.equal(d, ffd[,])
 #!  ffd
 #!  physical(ffd)
 #!
-#!  d <- data.frame(m, v)
+#!  d <- data.frame(m, v, stringsAsFactors = TRUE)
 #!  ffd <- ffdf(ffm, v=ffv, row.names=row.names(ffm), ff_split=1)
 #!  all.equal(d, ffd[,])
 #!  ffd
 #!  physical(ffd)
 #!
-#!  d <- data.frame(m, v)
+#!  d <- data.frame(m, v, stringsAsFactors = TRUE)
 #!  ffd <- ffdf(ffm, v=ffv, row.names=row.names(ffm), ff_join=list(newff=c(1,2)))
 #!  all.equal(d, ffd[,])
 #!  ffd
 #!  physical(ffd)
 #!
-#!  d <- data.frame(I(m), I(v))
+#!  d <- data.frame(I(m), I(v), stringsAsFactors = TRUE)
 #!  ffd <- ffdf(m=I(ffm), v=I(ffv), row.names=row.names(ffm))
 #!  all.equal(d, ffd[,])
 #!  ffd
@@ -863,7 +863,7 @@ ffdf <- function(
 #! \author{ Jens Oehlschlägel }
 #! \seealso{ \code{\link{ffdf}}, \code{\link[=[.data.frame]{Extract.data.frame}}, \code{\link{Extract.ff}}  }
 #! \examples{
-#!    d <- data.frame(a=letters, b=rev(letters), c=1:26)
+#!    d <- data.frame(a=letters, b=rev(letters), c=1:26, stringsAsFactors = TRUE)
 #!    x <- as.ffdf(d)
 #!
 #!    d[1,]
@@ -1433,7 +1433,7 @@ ffdf <- function(
 #!   \code{\link{clone}}, \code{\link{ffdf}}
 #! }
 #! \examples{
-#!   x <- as.ffdf(data.frame(a=1:26, b=letters))
+#!   x <- as.ffdf(data.frame(a=1:26, b=letters, stringsAsFactors = TRUE))
 #!
 #!   message("Here we change the content of both x and y by reference")
 #!   y <- x
@@ -1571,7 +1571,7 @@ is.ffdf <- function(x)
 #!   \code{\link{is.ffdf}}, \code{\link{ffdf}}, \code{\link{data.frame}}
 #! }
 #! \examples{
-#!   d <- data.frame(x=1:26, y=letters, z=Sys.time()+1:26)
+#!   d <- data.frame(x=1:26, y=letters, z=Sys.time()+1:26, stringsAsFactors = TRUE)
 #!   ffd <- as.ffdf(d)
 #!   stopifnot(identical(d, as.data.frame(ffd)))
 #!   rm(ffd); gc()
@@ -1674,7 +1674,7 @@ as.data.frame.ffdf <- function(x, ...)
 #!   \code{\link{dim.ffdf}}, \code{\link{length.ff}}, \code{\link{ffdf}}
 #! }
 #! \examples{
-#!   length(as.ffdf(data.frame(a=1:26, b=letters)))
+#!   length(as.ffdf(data.frame(a=1:26, b=letters, stringsAsFactors = TRUE)))
 #!   gc()
 #! }
 #! \keyword{ IO }
@@ -1714,7 +1714,7 @@ length.ffdf <- function(x){
 #! }
 #! \seealso{ \code{\link{vmode}}, \code{\link{ffdf}} }
 #! \examples{
-#!   vmode(as.ffdf(data.frame(a=as.double(1:26), b=letters)))
+#!   vmode(as.ffdf(data.frame(a=as.double(1:26), b=letters, stringsAsFactors = TRUE)))
 #!   gc()
 #! }
 #! \keyword{ IO }
@@ -1766,7 +1766,8 @@ vmode.ffdf <- function(x, ...){
 #! }
 #! \seealso{ \code{\link[bit]{chunk}}, \code{\link{ffdf}} }
 #! \examples{
-#!   x <- data.frame(x=as.double(1:26), y=factor(letters), z=ordered(LETTERS))
+#!   x <- data.frame(x=as.double(1:26), y=factor(letters), z=ordered(LETTERS)
+#!   , stringsAsFactors = TRUE)
 #!   a <- as.ffdf(x)
 #!   ceiling(26 / (300 \%/\% sum(.rambytes[vmode(a)])))
 #!   chunk(a, BATCHBYTES=300)
@@ -1974,7 +1975,7 @@ dimorder.ffdf <- function(x, ...){
 #!   \code{\link{ffdf}}, \code{\link{dimnames.ff}}, \code{\link{rownames}}, \code{\link{colnames}}
 #! }
 #! \examples{
-#!   ffd <- as.ffdf(data.frame(a=1:26, b=letters))
+#!   ffd <- as.ffdf(data.frame(a=1:26, b=letters, stringsAsFactors = TRUE))
 #!   dimnames(ffd)
 #!   row.names(ffd) <- letters
 #!   dimnames(ffd)
@@ -2069,7 +2070,7 @@ dimnames.ffdf <- function(x){
 #!
 #!   message("Here the y matrix is first converted to single columns by data.frame, 
 #! then those columns become ff")
-#!   d <- as.ffdf(data.frame(x=x, y=y, z=I(z)))
+#!   d <- as.ffdf(data.frame(x=x, y=y, z=I(z), stringsAsFactors = TRUE))
 #!   physical(d)
 #!   virtual(d)
 #!

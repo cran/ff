@@ -21,7 +21,7 @@ Getting "length" (number of columns) of a ffdf dataframe
   \code{\link{dim.ffdf}}, \code{\link{length.ff}}, \code{\link{ffdf}}
 }
 \examples{
-  length(as.ffdf(data.frame(a=1:26, b=letters)))
+  length(as.ffdf(data.frame(a=1:26, b=letters, stringsAsFactors = TRUE)))
   gc()
 }
 \keyword{ IO }

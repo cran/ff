@@ -28,7 +28,7 @@ clone physically duplicates ffdf objects
   \code{\link{clone}}, \code{\link{ffdf}}
 }
 \examples{
-  x <- as.ffdf(data.frame(a=1:26, b=letters))
+  x <- as.ffdf(data.frame(a=1:26, b=letters, stringsAsFactors = TRUE))
 
   message("Here we change the content of both x and y by reference")
   y <- x

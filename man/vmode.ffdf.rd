@@ -22,7 +22,7 @@ Function vmode returns the virtual storage mode of each ffdf column
 }
 \seealso{ \code{\link{vmode}}, \code{\link{ffdf}} }
 \examples{
-  vmode(as.ffdf(data.frame(a=as.double(1:26), b=letters)))
+  vmode(as.ffdf(data.frame(a=as.double(1:26), b=letters, stringsAsFactors = TRUE)))
   gc()
 }
 \keyword{ IO }
