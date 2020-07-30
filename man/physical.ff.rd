@@ -26,9 +26,9 @@
 \value{
   \command{physical} and \command{virtual} returns a list with named elements
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{
- \code{\link[bit]{physical}}, \code{\link{physical.ffdf}}, \code{\link{ff}}, \code{\link{as.ram}}; \cr
+ \code{\link{physical}}, \code{\link{physical.ffdf}}, \code{\link{ff}}, \code{\link{as.ram}}; \cr
  \code{\link{is.sorted}} and \code{\link{na.count}} for applications of physical attributes; \cr
  \code{\link{levels.ff}} and \code{\link{ramattribs}} for applications of virtual attributes
 }

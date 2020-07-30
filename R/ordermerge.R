@@ -1,5 +1,5 @@
 # sorting module for ff
-# (c) 2010 Jens Oehlsch‰gel
+# (c) 2010 Jens Oehlsch√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2010-01-01
@@ -84,7 +84,7 @@
 #! Robert Sedgewick (1997). Algorithms in C, Third edition. Addison-Wesley.
 #! }
 #! \author{
-#! Jens Oehlschl‰gel
+#! Jens Oehlschl√§gel
 #! }
 #! \note{
 #! This function is called for its side-effects and breaks the functional programming paradigm. Use with care.
@@ -177,7 +177,7 @@
 #!   cat some info about chosen method
 #! }
 #!   \item{stabilize}{
-#!   Set to \code{TRUE} for stabilizÌng the result of shellorder (for equal keys the order values will be sorted, this only works if \code{i=1:n})
+#!   Set to \code{TRUE} for stabilizing the result of shellorder (for equal keys the order values will be sorted, this only works if \code{i=1:n})
 #! to minimize RAM requirements and sacrifice speed
 #! }
 #!   \item{\dots}{
@@ -211,7 +211,7 @@
 #! Robert Sedgewick (1997). Algorithms in C, Third edition. Addison-Wesley.
 #! }
 #! \author{
-#! Jens Oehlschl‰gel
+#! Jens Oehlschl√§gel
 #! }
 #! \note{
 #! This function is called for its side-effects and breaks the functional programming paradigm. Use with care.
@@ -269,7 +269,7 @@ mergeorder.default <- function(x, i, has.na=TRUE, na.last=TRUE, decreasing=FALSE
   #r <- range(i)
   #if (is.na(r[1]) || r[1]<1 || r[2]>n)
   #  stop("i must be C-code positions from 1:n")
-  .Call("mergeorder"
+  .Call(C_mergeorder
   , x = x
   , i = i
   , has_na     = as.logical(has.na)
@@ -282,7 +282,7 @@ mergeorder.default <- function(x, i, has.na=TRUE, na.last=TRUE, decreasing=FALSE
 # sorts x inplace
 mergesort.default <- function(x, has.na=TRUE, na.last=TRUE, decreasing=FALSE, ...){
   force(x)
-  .Call("mergesort"
+  .Call(C_mergesort
   , x = x
   , has_na     = as.logical(has.na)
   , na_last    = as.logical(na.last)
@@ -295,7 +295,7 @@ mergesort.default <- function(x, has.na=TRUE, na.last=TRUE, decreasing=FALSE, ..
 
 # orderes i inplace such that x[i] is sorted (x not affected)
 shellorder.default <- function(x, i, has.na=TRUE, na.last=TRUE, decreasing=FALSE
-, stabilize=FALSE, ...)  # note this requires that i was 1:length(x)
+, stabilize=FALSE, ...)  # note this requires that i was seq_along(x)
 {
   force(x)
   force(i)
@@ -307,7 +307,7 @@ shellorder.default <- function(x, i, has.na=TRUE, na.last=TRUE, decreasing=FALSE
   #r <- range(i)
   #if (is.na(r[1]) || r[1]<1 || r[2]>n)
   #  stop("i must be C-code positions from 1:n")
-  .Call("shellorder"
+  .Call(C_shellorder
   , x = x
   , i = i
   , has_na     = as.logical(has.na)
@@ -322,7 +322,7 @@ shellorder.default <- function(x, i, has.na=TRUE, na.last=TRUE, decreasing=FALSE
 # sorts x inplace
 shellsort.default <- function(x, has.na=TRUE, na.last=TRUE, decreasing=FALSE, ...){
   force(x)
-  .Call("shellsort"
+  .Call(C_shellsort
   , x = x
   , has_na     = as.logical(has.na)
   , na_last    = as.logical(na.last)
@@ -346,7 +346,7 @@ keyorder.default <- function(x, i, keyrange=range(x, na.rm=has.na)
   #r <- range(i)
   #if (is.na(r[1]) || r[1]<1 || r[2]>n)
   #  stop("i must be C-code positions from 1:n")
-  .Call("keyorder"
+  .Call(C_keyorder
   , x = x
   , i = i
   , keyrange     = as.integer(keyrange)
@@ -364,7 +364,7 @@ keysort.default <- function(x
 , has.na=TRUE, na.last=TRUE, decreasing=FALSE, ...)
 {
   force(x)
-  .Call("keysort"
+  .Call(C_keysort
   , x = x
   , keyrange = as.integer(keyrange)
   , has_na     = as.logical(has.na)
@@ -387,7 +387,7 @@ radixorder.default <- function(x, i, has.na=TRUE, na.last=TRUE, decreasing=FALSE
   #r <- range(i)
   #if (is.na(r[1]) || r[1]<1 || r[2]>n)
   #  stop("i must be C-code positions from ^1:n")
-  .Call("radixorder"
+  .Call(C_radixorder
   , x = x
   , i = i
   , has_na     = as.logical(has.na)
@@ -402,7 +402,7 @@ radixorder.default <- function(x, i, has.na=TRUE, na.last=TRUE, decreasing=FALSE
 radixsort.default <- function(x
 , has.na=TRUE, na.last=TRUE, decreasing=FALSE, ...){
   force(x)
-  .Call("radixsort"
+  .Call(C_radixsort
   , x = x
   , has_na     = as.logical(has.na)
   , na_last    = as.logical(na.last)
@@ -634,7 +634,7 @@ ramorder.default <- function(x, i
 #!   An ff vector -- optionally decorated with \code{\link{is.sorted}} and \code{\link{na.count}}, see argument 'decorate'
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #!
 #! \seealso{
@@ -706,7 +706,7 @@ ffsort <- function(
       maxbytes <- max(BATCHBYTES, 3L*keybytes)
       maxordersize <- (maxbytes - 2L*keybytes) %/% recbytes
       if (maxordersize>n)
-        BATCHSIZE <- bbatch(n, maxordersize)$b
+        BATCHSIZE <- bbatch(n, pmin(maxordersize, .Machine$integer.max))$b
       else
         BATCHSIZE <- n
     }else{
@@ -721,9 +721,10 @@ ffsort <- function(
         BATCHSIZE <- n
       }else{
         method <- 1L  # shellsort
-        BATCHSIZE <- ceiling(n / 2 ^ ceiling(max(0, log(n*(recbytes/maxbytes), 2))))
+        BATCHSIZE <- pmin(ceiling(n / 2 ^ ceiling(max(0, log(n*(recbytes/maxbytes), 2)))), .Machine$integer.max)
       }
-    }
+    }
+
     if (BATCHSIZE>=n){
      # tuning: do it in-ram
      y <- read.ff(x, 1L, n)
@@ -745,7 +746,7 @@ ffsort <- function(
 
           if (VERBOSE)
             cat("method=ffkeysort  BATCHSIZE=", BATCHSIZE, "\n", sep="")
-          nNA <- .Call("ffkeysort"
+          nNA <- .Call(C_ffkeysort
           , .ffmode[v]
           , ff_           = attr(x, "physical")
           , left_         = 1L
@@ -771,7 +772,7 @@ ffsort <- function(
             stop("length(aux) does not match length(x)")
 						open(aux, assert=TRUE)
           }
-          nNA <- .Call("ffsortmerge"
+          nNA <- .Call(C_ffsortmerge
           , ffmode_       = .ffmode[v]
           , ff_           = attr(x, "physical")
           , auxff_        = attr(aux, "physical")
@@ -868,7 +869,7 @@ ffsort <- function(
 #! -- with an attribute \code{\link{na.count}} with as many values as columns in \dots
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #!
 #! \seealso{
@@ -919,7 +920,7 @@ fforder <- function(
   l <- list(...)
   nl <- length(l)
   if (is.null(names(l)))
-    names(l) <- paste("<", 1:nl, ">", sep="")
+    names(l) <- paste("<", seq_len(nl), ">", sep="")
   if (nl==1){
     if (!is.null(aux) && !is.list(aux)){
       aux <- list(aux)
@@ -989,7 +990,7 @@ fforder <- function(
         pieces <- shellpieces
       }
     }
-    BATCHSIZE <- ceiling(n / pieces)
+    BATCHSIZE <- pmin(ceiling(n / pieces), .Machine$integer.max)
 
     list(v=v, n=n, method=method, keyrange=keyrange, BATCHSIZE=BATCHSIZE)
   }
@@ -1006,6 +1007,7 @@ fforder <- function(
     stopifnot(vmode(index)=="integer")
     stopifnot(length(index)==n)
   }
+  if (n){
 
   maxBATCHSIZE <- max(unlist(a["BATCHSIZE", ]))
   nNA <- integer(nl)
@@ -1019,7 +1021,7 @@ fforder <- function(
         if (use.index){
           o <- read.ff(index, 1L, n)
         }else{
-          o <- 1:n
+            o <- seq_len(n)
         }
       }
 
@@ -1075,7 +1077,7 @@ fforder <- function(
 
       if (VERBOSE)
         cat("column=", names(l)[i], "  method=", c("merge","shell","radix","key","quick")[method+1L],"  BATCHSIZE=", BATCHSIZE, "\n", sep="")
-      nNA[i] <- .Call("ffordermerge"
+      nNA[i] <- .Call(C_ffordermerge
       , ffmode_       = .ffmode[v]
       , ff_           = attr(x, "physical")
       , index_        = attr(index, "physical")
@@ -1097,6 +1099,7 @@ fforder <- function(
 
   }
   attr(index, "na.count") <- nNA
+  }
   index
 }
 
@@ -1154,7 +1157,7 @@ fforder <- function(
 #!   Function \code{ffindexordersize} returns a balanced batchsize as returned from \code{\link{bbatch}}.
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #! \seealso{
 #!    \code{\link{ffindexget}},  \code{\link{as.hi}},  \code{\link{bbatch}}
@@ -1185,7 +1188,7 @@ fforder <- function(
 ffindexordersize <- function(length, vmode, BATCHBYTES = getOption("ffmaxbytes")){
   recvalbytes <- .rambytes[vmode]
   recindbytes <- .rambytes["integer"]
-  bbatch(length, BATCHBYTES / (recvalbytes+2*recindbytes))  #assuming chunkorder method 'quick'
+  bbatch(length, pmin(BATCHBYTES / (recvalbytes+2*recindbytes), .Machine$integer.max))  #assuming chunkorder method 'quick'
 }
 
 ffindexorder <- function(
@@ -1212,7 +1215,7 @@ ffindexorder <- function(
 		open(FF_RETURN, assert=TRUE)
   }
 
-  .Call("ffchunkorder"
+  .Call(C_ffchunkorder
   , index_        = attr(index, "physical")
   , indexorder_   = attr(FF_RETURN, "physical")
   , indexsize_    = n
@@ -1285,7 +1288,7 @@ ffindexorder <- function(
 #!   Function \code{ffindexset} returns the ff vector in which we have updated values.
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #! \seealso{
 #!   \code{\link{Extract.ff}}, \code{\link{ffdfindexget}}, \code{\link{ffindexorder}}
@@ -1381,7 +1384,7 @@ ffindexget <- function(
 
 		open(x, assert=TRUE)
 		open(index, assert=TRUE)
-    .Call("ffindexget"
+    .Call(C_ffindexget
     , ffmode_       = .ffmode[v]
     , baseff_       = attr(x, "physical")
     , returnff_     = attr(FF_RETURN, "physical")
@@ -1460,7 +1463,7 @@ ffindexset <- function(
 		open(value, assert=TRUE)
 		open(index, assert=TRUE)
 
-    .Call("ffindexset"
+    .Call(C_ffindexset
     , ffmode_       = .ffmode[v]
     , baseff_       = attr(x, "physical")
     , valueff_      = attr(value, "physical")
@@ -1539,7 +1542,7 @@ ffindexset <- function(
 #!   Function \code{ffdfindexset} returns \code{x} with those rows replaced that had been requested by \code{index} and \code{value}.
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #! \seealso{
 #!   \code{\link{Extract.ff}}, \code{\link{ffindexget}}, \code{\link{ffindexorder}}
@@ -1590,7 +1593,7 @@ ffdfindexget <- function(
   v <- character(np)
   dc <- integer(np)
 
-  for (i in 1:np){
+  for (i in seq_len(np)){
     y <- p[[i]]
     if(!is.null(vw(y)))
       stop("subscripting with ff does not support vw")
@@ -1619,8 +1622,7 @@ ffdfindexget <- function(
     inram <- n*theobytes.inram<=BATCHBYTES & n>=N & BATCHSIZE>=n
 
   theobytes <- ifelse(inram, theobytes.inram, theobytes.chunk)
-
-  b <- bbatch(n, as.integer(BATCHBYTES / theobytes))$b
+  b <- bbatch(n, as.integer(pmin(BATCHBYTES / theobytes, .Machine$integer.max)))$b
 
   if (!is.null(BATCHSIZE) && !all(inram))
     b[!inram] <- pmin(BATCHSIZE, b[!inram])
@@ -1653,7 +1655,7 @@ ffdfindexget <- function(
     physical <- physical(FF_RETURN)
     if(length(physical)!=length(p))
       stop("FF_RETURN not suitable because has different number of physical components")
-    for (i in 1:np){
+    for (i in seq_len(np)){
       y <- p[[i]]
       z <- physical[[i]]
       if (!ffsuitable(z, y, FF_ATTR=list(length=n)))
@@ -1669,7 +1671,7 @@ ffdfindexget <- function(
   #gc();initram <- memory.size()
 
   ramindex <- NULL  # initialize since we query it for being is.null()
-  for (i in 1:np){
+  for (i in seq_len(np)){
     y <- p[[i]]
     if (dc[i]){  # if object has dimension
       if (inram[i]){
@@ -1679,7 +1681,7 @@ ffdfindexget <- function(
         #cat("expected", totaltheobytes[i]/(1024^2), "got"); print(memory.size()-initram)
       }else{
         ramindex <- NULL  # kill RAM reminder
-        for (j in chunk(1, n, b[i], method="seq")){
+        for (j in chunks(1, n, b[i], method="seq")){
           if (is.null(indexorder)){
             physical[[i]][j,] <- y[index[j],,drop=FALSE]
           }else{
@@ -1757,7 +1759,7 @@ ffdfindexset <- function(
   b <- integer(np)
   v <- character(np)
   dc <- integer(np)
-  for (i in 1:np){
+  for (i in seq_len(np)){
     y <- p[[i]]
     if(!is.null(vw(y)))
       stop("subscripting with ff does not support vw")
@@ -1789,7 +1791,7 @@ ffdfindexset <- function(
 
   theobytes <- ifelse(inram, theobytes.inram, theobytes.chunk)
 
-  b <- bbatch(n, as.integer(BATCHBYTES / theobytes))$b
+  b <- bbatch(n, as.integer(pmin(BATCHBYTES / theobytes, .Machine$integer.max)))$b
 
   if (!is.null(BATCHSIZE) && !all(inram))
     b[!inram] <- pmin(BATCHSIZE, b[!inram])
@@ -1823,7 +1825,7 @@ ffdfindexset <- function(
   #gc();initram <- memory.size()
 
   ramindex <- NULL  # initialize since we query it for being is.null()
-  for (i in 1:np){
+  for (i in seq_len(np)){
     y <- p[[i]]
 
     if (dc[i]){  # if object has dimension
@@ -1835,7 +1837,7 @@ ffdfindexset <- function(
         #cat("expected", totaltheobytes[i]/(1024^2), "got"); print(memory.size()-initram)
       }else{
         ramindex <- NULL  # kill RAM reminder
-        for (j in chunk(1, n, b[i], method="seq")){
+        for (j in chunks(1, n, b[i], method="seq")){
           if (is.null(indexorder)){
             y[index[j],] <- physical[[i]][j,]
           }else{
@@ -1910,7 +1912,7 @@ ffdfindexset <- function(
 #!  the order functions return an (ff) vector of integer order positions, the sort functions return a sorted clone of the (ffdf) input data.frame
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #!
 #! \seealso{
@@ -1943,7 +1945,7 @@ ffdfindexset <- function(
 dforder <- function(x, ...){
   k <- ncol(x)
   l <- vector("list", k)
-  for (i in 1:k)
+  for (i in seq_len(k))
     l[[i]] <- x[[i]]
   do.call("order", c(l, ...))
 }
@@ -1967,7 +1969,7 @@ dfsort <- function(
 
 ramdforder <- function(x, ...){
   K <- ncol(x)
-  i <- 1:nrow(x)
+  i <- seq_len(nrow(x))
   for (k in K:1){
     ramorder(x[[k]], i)
   }
@@ -1993,7 +1995,7 @@ ramdfsort <- function(
 ffdforder <- function(x, ...){
   k <- ncol(x)
   l <- vector("list", k)
-  for (i in 1:k)
+  for (i in seq_len(k))
     l[[i]] <- x[[i]]
   do.call("fforder", c(l, ...))
 }
@@ -2048,7 +2050,7 @@ ffdfsort <- function(
 #!  Invisible()
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #! \seealso{
 #!   \code{\link{ramsort}}
@@ -2937,17 +2939,17 @@ regtest.fforder <- function(n=100){
 	n <- 1e2
 
 	x <- sample(c(Inf, Inf, 5,5, 0,0, NA,NA, NaN, NaN, -5,-5, -Inf,-Inf), n, TRUE)
-	i <- 1:length(x)
+	i <- seq_along(x)
 	mergeorder(x, i)
 	stopifnot(identical(order(x), i))
 
 	x <- sample(c(Inf, Inf, 5,5, 0,0, NA,NA, NaN, NaN, -5,-5, -Inf,-Inf), n, TRUE)
-	i <- 1:length(x)
+	i <- seq_along(x)
 	shellorder(x, i, stabilize=TRUE)
 	stopifnot(identical(order(x), i))
 
 	x <- sample(c(Inf, Inf, 5,5, 0,0, NA,NA, -5,-5, -Inf,-Inf), n, TRUE)
-	i <- 1:length(x)
+	i <- seq_along(x)
 	shellorder(x, i)
 	# since shellorder is not stable, the result is NOT identical with order()
 	stopifnot(identical(sort(x, na.last=TRUE), x[i]))
@@ -2955,28 +2957,28 @@ regtest.fforder <- function(n=100){
 
 
 	x <- as.integer(sample(c(5,5, 0,0, NA,NA, -5,-5), n, TRUE))
-	i <- 1:length(x)
+	i <- seq_along(x)
 	shellorder(x, i)
 	# since shellorder is not stable, the result is NOT identical with order()
 	stopifnot(identical(sort(x, na.last=TRUE), x[i]))
 
 	x <- as.integer(sample(c(5,5, 0,0, NA,NA, -5,-5), n, TRUE))
-	i <- 1:length(x)
+	i <- seq_along(x)
 	shellorder(x, i, stabilize=TRUE)
 	stopifnot(identical(order(x), i))
 
 	x <- as.integer(sample(c(5,5, 0,0, NA,NA, -5,-5), n, TRUE))
-	i <- 1:length(x)
+	i <- seq_along(x)
 	mergeorder(x, i)
 	stopifnot(identical(order(x), i))
 
 	x <- as.integer(sample(c(5,5, 0,0, NA,NA, -5,-5), n, TRUE))
-	i <- 1:length(x)
+	i <- seq_along(x)
 	radixorder(x, i)
 	stopifnot(identical(order(x), i))
 
 	x <- as.integer(sample(c(5,5, 0,0, NA,NA, -5,-5), n, TRUE))
-	i <- 1:length(x)
+	i <- seq_along(x)
 	keyorder(x, i)
 stopifnot(identical(order(x), i))
 
@@ -3094,7 +3096,7 @@ if (FALSE){
 
 
 
-	nNA <- .Call("ffkeysort"
+	nNA <- .Call(C_ffkeysort
 				, ffmode_       = .ffmode[vmode(x)]
 				, ff_           = attr(x, "physical")
 				, left_         = 1L
@@ -3107,11 +3109,11 @@ if (FALSE){
 				, PACKAGE="ff"
 				)
 
-	# st¸rzt nicht ab
+	# st√ºrzt nicht ab
 	x <- ff(sample(as.factor(letters)), length=100000)
 	ffsort(x)
 
-	# st¸rzt ab
+	# st√ºrzt ab
 	x <- ff(sample(as.factor(letters)), length=100000, vmode="byte")
 	ffsort(x)
 
@@ -3151,7 +3153,7 @@ if (FALSE){
 
 		system.time(ffx2 <- clone(ffx))
 		system.time(
-		nNA <- .Call("ffkeysort"
+		nNA <- .Call(C_ffkeysort
 		, ff_           = attr(ffx2, "physical")
 		, left_         = left
 		, right_        = right
@@ -3184,7 +3186,7 @@ if (FALSE){
 		system.time(ffx2 <- clone(ffx))
 
 		system.time(
-		.Call("ffsortmerge"
+		.Call(C_ffsortmerge
 		, ffmode_       = .ffmode[vmode(ffx2)]
 		, ff_           = attr(ffx2, "physical")
 		, auxff_        = attr(ffy, "physical")
@@ -3213,7 +3215,7 @@ if (FALSE){
 		system.time(ffx2 <- clone(ffx))
 
 		system.time(
-		.Call("ffsortmerge"
+		.Call(C_ffsortmerge
 		, ffmode_       = .ffmode[vmode(ffx2)]
 		, ff_           = attr(ffx2, "physical")
 		, auxff_        = attr(ffy, "physical")
@@ -3242,7 +3244,7 @@ if (FALSE){
 		system.time(ffx2 <- clone(ffx))
 
 		system.time(
-		.Call("ffsortmerge"
+		.Call(C_ffsortmerge
 		, ffmode_       = .ffmode[vmode(ffx2)]
 		, ff_           = attr(ffx2, "physical")
 		, auxff_        = attr(ffy, "physical")
@@ -3271,7 +3273,7 @@ if (FALSE){
 		system.time(ffx2 <- clone(ffx))
 
 		system.time(
-		.Call("ffsortmerge"
+		.Call(C_ffsortmerge
 		, ffmode_       = .ffmode[vmode(ffx2)]
 		, ff_           = attr(ffx2, "physical")
 		, auxff_        = attr(ffy, "physical")
@@ -3311,7 +3313,7 @@ if (FALSE){
 		system.time(ffx2 <- clone(ffx))
 
 		system.time(
-		nNA <- .Call("ffordermerge"
+		nNA <- .Call(C_ffordermerge
 		, ffmode_       = .ffmode[vmode(ffx2)]
 		, ff_           = attr(ffx2, "physical")
 		, index_        = attr(ffo, "physical")
@@ -3347,7 +3349,7 @@ if (FALSE){
 		system.time(ffx2 <- clone(ffx))
 
 		system.time(
-		nNA <- .Call("ffordermerge"
+		nNA <- .Call(C_ffordermerge
 		, ffmode_       = .ffmode[vmode(ffx2)]
 		, ff_           = attr(ffx2, "physical")
 		, index_        = attr(ffo, "physical")
@@ -3383,7 +3385,7 @@ if (FALSE){
 		system.time(ffx2 <- clone(ffx))
 
 		system.time(
-		nNA <- .Call("ffordermerge"
+		nNA <- .Call(C_ffordermerge
 		, ffmode_       = .ffmode[vmode(ffx2)]
 		, ff_           = attr(ffx2, "physical")
 		, index_        = attr(ffo, "physical")
@@ -3420,7 +3422,7 @@ if (FALSE){
 		system.time(ffx2 <- clone(ffx))
 
 		system.time(
-		nNA <- .Call("ffordermerge"
+		nNA <- .Call(C_ffordermerge
 		, ffmode_       = .ffmode[vmode(ffx2)]
 		, ff_           = attr(ffx2, "physical")
 		, index_        = attr(ffo, "physical")
@@ -3484,7 +3486,7 @@ if (FALSE){
 		for (i in chunk(ffo))ffo[i] <- (i[[1]]):(i[[2]])
 
 		system.time(
-		nNA <- .Call("ffordermerge"
+		nNA <- .Call(C_ffordermerge
 		, ffmode_       = .ffmode[vmode(ffx2)]
 		, ff_           = attr(ffx2, "physical")
 		, index_        = attr(ffo, "physical")
@@ -3530,7 +3532,7 @@ if (FALSE){
 		method2 <- 4L
 
 		system.time(
-		.Call("ffchunkorder"
+		.Call(C_ffchunkorder
 		, index_        = attr(ffo, "physical")
 		, outindex_        = attr(ffp, "physical")
 		, indexsize_  = as.integer(n)
@@ -3543,7 +3545,7 @@ if (FALSE){
 
 		#ffy[] <- 0
 		system.time(
-		.Call("ffindexget"
+		.Call(C_ffindexget
 		, ffmode_       = .ffmode[vmode(ffx)]
 		, ffin_         = attr(ffx, "physical")
 		, ffout_        = attr(ffy, "physical")
@@ -3563,7 +3565,7 @@ if (FALSE){
 
 		#ffy[] <- 0
 		system.time(
-		.Call("ffindexget"
+		.Call(C_ffindexget
 		, ffmode_       = .ffmode[vmode(ffx)]
 		, ffin_         = attr(ffx, "physical")
 		, ffout_        = attr(ffy, "physical")
@@ -3582,7 +3584,7 @@ if (FALSE){
 
 		#ffy[] <- 0
 		system.time(
-		.Call("ffindexget"
+		.Call(C_ffindexget
 		, ffmode_       = .ffmode[vmode(ffx)]
 		, ffin_         = attr(ffx, "physical")
 		, ffout_        = attr(ffy, "physical")
@@ -3670,9 +3672,9 @@ if (FALSE){
 		mi <- 1L
 		ni <- 1L
 
-		for (ki in 1:length(K)){
-			for (mi in 1:length(M)){
-				for (ni in 1:length(N)){
+		for (ki in seq_along(K)){
+			for (mi in seq_along(M)){
+				for (ni in seq_along(N)){
 					k <- K[ki]
 					m <- M[mi]
 					n <- N[ni]

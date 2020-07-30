@@ -13,7 +13,7 @@ dummy.dimnames(x)
 \value{
   a list with character vectors suitable to be assigned as dimnames to x
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{  \code{\link{dimnames}} }
 \examples{
   dummy.dimnames(matrix(1:12, 3, 4))

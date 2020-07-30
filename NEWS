@@ -1,19 +1,109 @@
-		CHANGES IN ff VERSION 2.2.14.2
+    CHANGES IN ff VERSION 4.0.2
 
 BUG FIXES
 
-    o   all calls to data.frame now use 'stringsAsFactors = TRUE'
-        in order to cope with the new defaults in R-4.0.0
+    o now DESCRIPTION URL points to github
 
 
 
-        CHANGES IN ff VERSION 2.2.14
+		CHANGES IN ff VERSION 4.0.1
+
+BUG FIXES
+ 
+    o ffindexget no longer allocates batchsizes lager than vector length
+      (realized via fixes to bbatch() in package 'bit')
+
+
+		CHANGES IN ff VERSION 4.0.0
+
+BUG FIXES
+ 
+    o all calls to data.frame now use 'stringsAsFactors = TRUE' in order to cope with the new defaults in R-4.0.0
+
+
+
+		CHANGES IN ff VERSION 2.2.16
 
 USER VISIBLE CHANGES
 
-    o    The $x component in hybrid indices now has class 'rlepack'.
-	     If you have stored hi's of older versions you can convert them by
-		 i <- as.hi(i)
+    o    license has been extendend from GPL-2 to GPL-2 | GPL-3
+    o    since template ffdfs now can be created with zero rows,
+         read.table.ffdf and wrappers simply append to the template
+         (and no longer treat templates with onw row different)
+    o    parameter 'drop' for ff_array now behaves more like in standard R arrays
+    o    new fftempdir handling (suggested by William Dunlap)
+    o    .onLoad no longer sets an undefined options("fftempdir") to tempdir() 
+         but to standardPathFile(file.path(tempdir(), "ff")), hence by default 
+         .onUnload will not unlink tempdir() but will unlink
+         standardPathFile(file.path(tempdir(), "ff"))
+    o    .onLoad will create the fftempdir if it does not exists,
+         but only if dirname(fftempdir) exists, if it does not exists
+         it will consider fftempdir undefined (see above)
+    o    .onLoad sets a new options("fftempkeep") 
+         to TRUE if the fftempdir already existed 
+         and to FALSE if it was created by .onLoad
+    o    .onUnload will unlink fftempdir only if options("fftempkeep")==FALSE
+         hence you can during a session can decide to keep a user-defined 
+         fftempdir (won't work across R sessions if it was a subdiretory of 
+         tempdir() because this is unlinked anyhow at terminating R).
+    o    furthermore .onUnload will now only set options("fftempdir") to NULL
+         if it was equal to standardPathFile(file.path(tempdir(), "ff"))
+         and hence preserve any (other) value that was set before .onLoad
+    o    clone.default() and clone.list() are no longer exported from ff
+         (covered by clone.default in package bit)
+         
+MAINTENANCE
+         
+    o    ff has been changed for R_useDynamicSymbols(dll, FALSE)
+
+BUG FIXES
+
+    o   read.table.ffdf and wrappers now can handle Coltype "ordered" from template
+    o   getset.ff and readwrite.ff now return the proper vmode
+    o   getset.ff and readwrite.ff now repects add=TRUE
+    o   getset.ff and readwrite.ff with add=TRUE  now longer returns values above the vmode domain
+    o   reducing the length of ff-objects with packed vmodes 
+        (boolean, logical, quad, nibble, byte, ubyte, short, ushort)
+        will now fill non-used parts of the file such that
+        subsequent enlarging the length of the ff-object will
+        all be initialized with the same value 
+        (note that the filling depends on the presence of a names attribtute,
+        with names filling uses .vNA, without names filling uses 0)
+    o   .onUnload no longer fails when fftempkeep=NULL 
+    
+
+    
+		CHANGES IN ff VERSION 2.2.15
+
+USER VISIBLE CHANGES
+
+    o   S3 methods are no longer exported
+    o   The generics maxindex() and poslength() have been moved to package bit,
+	also their methods for 'bit', 'bitwhich', 'ri' and their default methods.
+    o   chunk.bit has been removed.
+    o   ff vectors can now have length=0 (and filesize=0) (with the help of Martijn Schuemje)
+    o   ff() now has default length=0 and default vmode=logical (wish of Martijn Schuemje)
+    o   ffdf data.frames can now have nrow=0 (and filesizes=0)
+    o   get.ff and set.ff no longer throw an error for zero-length index
+    o   get.ff (and [[.ff) now return the appropriate vmode
+    o   read.table.ffdf and its wrappers no longer overwrite one-row-templates 
+        in argument 'x' (since now zero-row-templates are possible)
+	
+
+BUG FIXES
+    o   maxlength of ff with vmodes having .ffbytes < 1 now are multiples of 1/.ffbytes
+    o   default pattern with given filename is now file.path(filename)$path, "ff") instead of the path alone
+    o   [[.ff now calls get.ff and no longer set..ff (reported by me :-)
+	
+    
+
+		CHANGES IN ff VERSION 2.2.14
+
+USER VISIBLE CHANGES
+
+    o   The $x component in hybrid indices now has class 'rlepack'.
+	If you have stored hi's of older versions you can convert them by
+	i <- as.hi(i)
 	
 	
 BUG FIXES

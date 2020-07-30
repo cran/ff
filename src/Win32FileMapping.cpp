@@ -59,7 +59,9 @@ bool isFileReadOnly(const char* path)
   return ( data.dwFileAttributes & FILE_ATTRIBUTE_READONLY ) ? true : false;
 }
 
-Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly, bool autoflush)
+Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly, bool autoflush
+, bool createNew  // Martijn Schuemie for zero row ff
+)
 : _fileHandle(INVALID_HANDLE_VALUE)
 , _viewHandle(INVALID_HANDLE_VALUE)
 , _size(0)
@@ -79,7 +81,7 @@ Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly
   }
  */
 
-  if (size)
+  if (createNew)  // Martijn Schuemie for zero row ff
   {
     int err = utk::file_allocate_fseek(path, size);
     if (err)
@@ -110,7 +112,8 @@ Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly
     _error = E_UNABLE_TO_OPEN;
     return;
   }
-  if (size) {
+  if (createNew)   // Martijn Schuemie for zero row ff
+{
     // check free disk space
     FSInfo info;
     getFSInfo(path,info);
@@ -119,7 +122,8 @@ Win32FileMapping::Win32FileMapping(const char* path, fsize_t size, bool readonly
       return;
     }
   }
-  if (size) {
+  if (createNew)   // Martijn Schuemie for zero row ff
+{
 
     // allocate file blocks that match array size and zero fill
 /*

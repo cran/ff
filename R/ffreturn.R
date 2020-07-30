@@ -1,5 +1,5 @@
 # Checking ffconform, ffsuitable and creating ffreturn values
-# (c) 2007 Jens Oehlsch‰gel
+# (c) 2007 Jens Oehlsch√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-11-01
@@ -26,7 +26,7 @@
 #! \value{
 #!   logical scalar
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{ffconform}} }
 #! \examples{
 #!   ymismatch(4,0)
@@ -94,7 +94,7 @@ ymismatch <- function(nx,ny){
 #! \value{
 #!   TRUE if compatibility has been detected, FALSE otherwise
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \note{ does not yet gurantee to detect all compatible configurations, but the most important ones }
 #! \seealso{ \code{\link{dimorder}}, \code{\link{ffconform}} }
 #! \keyword{ IO }
@@ -103,7 +103,7 @@ ymismatch <- function(nx,ny){
 
 # TRUE if the dimorder is standard (or NULL)
 dimorderStandard <- function(dimorder)
-  is.null(dimorder) || identical(dimorder, 1:length(dimorder))
+  is.null(dimorder) || identical(dimorder, seq_along(dimorder))
 
 # TRUE if the vector is standard, FALSE otherwise
 vectorStandard <- function(dimorder, bydim=NULL){
@@ -121,9 +121,9 @@ dimorderCompatible <- function(dim, dim2, dimorder=NULL, dimorder2=NULL){
       if (n2){
           if (n==n2){
             if (is.null(dimorder))
-              dimorder <- 1:n
+              dimorder <- seq_len(n)
             if (is.null(dimorder2))
-              dimorder2 <- 1:n
+              dimorder2 <- seq_len(n)
             return(identical(dimorder, dimorder2) && identical(dim[dimorder], dim2[dimorder2]))
           }else{
             return(FALSE)
@@ -155,13 +155,13 @@ vectorCompatible <- function(
     if (n){
       if (n2){
         if (is.null(dimorder))
-          dimorder <- 1:n
+          dimorder <- seq_len(n)
         if (is.null(dimorder2))
-          dimorder2 <- 1:n
+          dimorder2 <- seq_len(n)
         if (is.null(bydim))
-          bydim <- 1:n
+          bydim <- seq_len(n)
         if (is.null(bydim2))
-          bydim2 <- 1:n
+          bydim2 <- seq_len(n)
         return(identical(bydim[dimorder], bydim2[dimorder2]) && identical(dim[dimorder], dim2[dimorder2]))
       }else{
         return(vectorStandard(dimorder=dimorder, bydim=bydim))
@@ -192,7 +192,7 @@ vectorCompatible <- function(
 #!   \item{fail}{ the name of a function to call if not-conforming, default \code{\link{stop}} }
 #! }
 #! \details{
-#!   A reference argument is defined to be the first argument with a \code{\link[ff:dim.ff]{dim}} attribute or the longest vector.
+#!   A reference argument is defined to be the first argument with a \code{\link[=dim.ff]{dim}} attribute or the longest vector.
 #!   The other arguements are then compared to the reference to check for conformity,
 #!   which is violated if vmodes are not conforming
 #!   or if the reference has not a multiple length of each other
@@ -202,7 +202,7 @@ vectorCompatible <- function(
 #! \value{
 #!   the position of the most conforming argument or 0 (zero) if not conforming.
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \note{ xx Work in progress for package \pkg{R.ff} }
 #! \seealso{ \code{\link{ffsuitable}}, \code{\link{maxffmode}}, \code{\link{ymismatch}}, \code{\link{stop}}, \code{\link{warning}}, \code{\link{dimorderStandard}} }
 #! \examples{
@@ -277,7 +277,7 @@ ffconform <- function(
     sym <- symmetric(ff)
     dia <- fixdiag(ff)
     # check conformity with reference
-    for (i in (1:nl)[-a]){
+    for (i in (seq_len(nl))[-a]){
       ff2 <- l[[i]]
       n2 <- length(ff2)
       d2 <- dim(ff2)
@@ -339,7 +339,7 @@ ffconform <- function(
 #! \value{
 #!   TRUE if \code{FF_RETURN} object is suitable, FALSE otherwise
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \note{ xx Work in progress for package \pkg{R.ff} }
 #! \seealso{ \code{\link{ffconform}}, \code{\link{ffreturn}} }
 #! \keyword{ IO }
@@ -460,7 +460,7 @@ ffsuitable <- function(
 #! \value{
 #!   a suitable \code{\link{ffsuitable}} object
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \note{ xx Work in progress for package \pkg{R.ff} }
 #! \seealso{ \code{\link{ffconform}}, \code{\link{ffsuitable}} }
 #! \keyword{ IO }

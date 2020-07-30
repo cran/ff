@@ -16,9 +16,9 @@ symmIndex2vectorIndex(x, dim, fixdiag = NULL)
   With \option{fixdiag = NULL}
 }
 \value{
-  a vector of indices in \code{1:prod(dim(x))}
+  a vector of indices in \code{seq_len(prod(dim(x)))}
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{  \code{\link{arrayIndex2vectorIndex}} }
 \examples{
   symmIndex2vectorIndex(rbind(

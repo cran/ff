@@ -30,7 +30,7 @@
 \value{
   \code{invisible()}
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{ \code{\link{ff}}, \code{\link{print}}, \code{\link{str}} }
 \examples{
   x <- ff(1:10000)

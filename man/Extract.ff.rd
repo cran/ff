@@ -55,7 +55,7 @@
   }
 }
 \section{Dimorder and bydim}{
-  Arrays in R have always standard \code{\link{dimorder} 1:length(dim(x))} while ff allows to store an array in a different dimorder.
+  Arrays in R have always standard \code{\link{dimorder} seq_along(dim(x))} while ff allows to store an array in a different dimorder.
   Using nonstandard dimorder (see \code{\link{dimorderStandard}}) can speed up certain access operations: while matrix \code{dimorder=c(1,2)} -- column-major order --
   allows fast extraction of columns, \code{dimorder=c(2,1)} allows fast extraction of rows.
   \cr
@@ -90,12 +90,12 @@
 }
 \value{
   The read operators \command{[} and \command{[[} return data from the ff object,
-  possibly decorated with \code{\link[ff:names.ff]{names}}, \code{\link[ff:dim.ff]{dim}},
-  \code{\link[ff:dimnames.ff]{dimnames}} and further attributes and classes (see \code{\link{ramclass}}, \code{\link{ramattribs}})
+  possibly decorated with \code{\link[=names.ff]{names}}, \code{\link[=dim.ff]{dim}},
+  \code{\link[=dimnames.ff]{dimnames}} and further attributes and classes (see \code{\link{ramclass}}, \code{\link{ramattribs}})
   \cr
   The write operators \command{[<-} and \command{[[<-} return the 'modified' ff object (like all assignment operators do).
 }
-\author{ Jens Oehlschlägel }
+\author{ Jens OehlschlÃ¤gel }
 \seealso{ \code{\link{ff}}, \code{\link{swap}}, \code{\link{add}}, \code{\link{readwrite.ff}}, \code{\link{LimWarn}} }
 \examples{
    message("look at different dimorders")

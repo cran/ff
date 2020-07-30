@@ -1,5 +1,5 @@
 # Array utilities for ff
-# (c) 2007 Jens Oehlsch‰gel
+# (c) 2007 Jens Oehlsch√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-09-03
@@ -14,7 +14,7 @@
 # NOTE that therefor you MUST NEVER access the dim-attribute install("Dim") from C !!
 # if we submit ff_array[]<-vector, vector is interpreted in dimorder 1,2,3 (by layer, by column, by row, i.e. row rotates fastest) whatever the ff dimorder
 # we can change the intepretation of the vector by ff_array[,dimorder=c(2,3,1)]<-vector, now the vector elements are put fastest col then layer then row
-# if we submit ff_array[1:length(vector)]<-vector it is simply copied and ff dimorder DOES matter
+# if we submit ff_array[seq_along(vector)]<-vector it is simply copied and ff dimorder DOES matter
 
 
 
@@ -61,7 +61,7 @@ legalizeFactor <- function(x){
 #! \value{
 #!   a suitable \code{\link{array}}
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{  \code{\link{array2vector}}, \code{\link{vectorIndex2arrayIndex}} }
 #! \examples{
 #!   vector2array(1:12, dim=c(3, 4))               # matrix(1:12, 3, 4)
@@ -71,10 +71,10 @@ legalizeFactor <- function(x){
 #! \keyword{ data }
 
 vector2array <- function(x, dim, dimorder=NULL){
-  if (is.null(dimorder) || identical(dimorder, 1:length(dim))){
+  if (is.null(dimorder) || identical(dimorder, seq_along(dim))){
     array(x, dim=dim)
   }else{
-    aperm(array(x, dim=dim[dimorder]), match(1:length(dim), dimorder))
+    aperm(array(x, dim=dim[dimorder]), match(seq_along(dim), dimorder))
   }
 }
 
@@ -100,7 +100,7 @@ vector2array <- function(x, dim, dimorder=NULL){
 #! \value{
 #!   a vector
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{  \code{\link{vector2array}}, \code{\link{arrayIndex2vectorIndex}} }
 #! \examples{
 #!   array2vector(matrix(1:12, 3, 4))
@@ -121,7 +121,7 @@ array2vector <- function(x, dim=NULL, dimorder=NULL){
   }
   if (is.null(dimorder))
     dimorder <- dimorder(x)
-  if (is.null(dimorder)|| identical(dimorder, 1:length(dim)))
+  if (is.null(dimorder)|| identical(dimorder, seq_along(dim)))
     as.vector(x)
   else{
     if (is.array(x))
@@ -164,9 +164,9 @@ if (FALSE){
 #!   The parameters 'x' and 'dim' may refer to a subarray of a larger array, in this case, the array indices 'x' are interpreted as 'vw[1,] + x' within the larger array 'as.integer(colSums(vw))'.
 #! }
 #! \value{
-#!   a vector of indices in \code{1:prod(dim)} (or  \code{1:prod(colSums(vw))})
+#!   a vector of indices in \code{seq_len(prod(dim))} (or  \code{seq_len(prod(colSums(vw)))})
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{  \code{\link{array2vector}}, \code{\link{vectorIndex2arrayIndex}} }
 #! \examples{
 #!   x <- matrix(1:12, 3, 4)
@@ -197,7 +197,7 @@ arrayIndex2vectorIndex <- function(x, dim = NULL, dimorder=NULL, vw=NULL){
   if(!is.matrix(x) || ncol(x)!=n)
     stop("array indexing requires a matrix with ncol(matrix)=length(dim(array))")
   if (is.null(dimorder))
-    dimorder <- 1:n
+    dimorder <- seq_len(n)
   if (is.null(vw)){
     cdim <- cumprod(c(1, dim[dimorder][-n]))
     as.integer(colSums(t(x[,dimorder,drop=FALSE]-1) * cdim) + 1L)
@@ -217,7 +217,7 @@ arrayIndex2vectorIndex <- function(x, dim = NULL, dimorder=NULL, vw=NULL){
 #! vectorIndex2arrayIndex(x, dim = NULL, dimorder = NULL, vw = NULL)
 #! }
 #! \arguments{
-#!   \item{x}{ a vector of indices in \code{1:prod(dim)} }
+#!   \item{x}{ a vector of indices in \code{seq_len(prod(dim))} }
 #!   \item{dim}{ NULL or \code{\link{dim}} }
 #!   \item{dimorder}{ NULL or \code{\link{dimorder}} }
 #!   \item{vw}{ NULL or integer matrix[2,m], see details }
@@ -229,7 +229,7 @@ arrayIndex2vectorIndex <- function(x, dim = NULL, dimorder=NULL, vw=NULL){
 #! \value{
 #!   an n by m matrix with n m-dimensional array indices
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{  \code{\link{vector2array}}, \code{\link{arrayIndex2vectorIndex}} , \code{\link{symmIndex2vectorIndex}} }
 #! \examples{
 #!   matrix(1:12, 3, 4)
@@ -267,7 +267,7 @@ vectorIndex2arrayIndex <- function(x, dim=NULL, dimorder=NULL, vw=NULL){
       stop("need 'dim' or 'vw'")
     n <- length(dim)
     if (is.null(dimorder))
-      dimorder <- 1:n
+      dimorder <- seq_len(n)
     cdim <- as.integer(cumprod(dim[dimorder]))
     vw <- matrix(0L, 3L, n)
   }else{
@@ -275,7 +275,7 @@ vectorIndex2arrayIndex <- function(x, dim=NULL, dimorder=NULL, vw=NULL){
     if (!identical(dim(vw), c(3L, n)))
       stop("dim(vw) must be c(3L, length(dim))")
     if (is.null(dimorder))
-      dimorder <- 1:n
+      dimorder <- seq_len(n)
     cdim <- as.integer(cumprod(colSums(vw)[dimorder]))
   }
 
@@ -300,7 +300,7 @@ vectorIndex2arrayIndex <- function(x, dim=NULL, dimorder=NULL, vw=NULL){
   }
   ret <- rbind(x, ret)
   setattr(ret, "dimnames", NULL) #dimnames(ret) <- NULL
-  t(ret[match(1:n, dimorder),,drop=FALSE] - vw[1,] + 1L)
+  t(ret[match(seq_len(n), dimorder),,drop=FALSE] - vw[1,] + 1L)
 }
 
 
@@ -323,9 +323,9 @@ vectorIndex2arrayIndex <- function(x, dim=NULL, dimorder=NULL, vw=NULL){
 #!   With \option{fixdiag = NULL}
 #! }
 #! \value{
-#!   a vector of indices in \code{1:prod(dim(x))}
+#!   a vector of indices in \code{seq_len(prod(dim(x)))}
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{  \code{\link{arrayIndex2vectorIndex}} }
 #! \examples{
 #!   symmIndex2vectorIndex(rbind(
@@ -387,7 +387,7 @@ symmIndex2vectorIndex <- function(x, dim, fixdiag=NULL # setting to anything but
 #! \value{
 #!   a list with character vectors suitable to be assigned as dimnames to x
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{  \code{\link{dimnames}} }
 #! \examples{
 #!   dummy.dimnames(matrix(1:12, 3, 4))
@@ -399,7 +399,7 @@ dummy.dimnames <- function(x){
   d <- dim(x)
   if (is.null(d))
     return(NULL)
-  lapply(1:length(d), function(n)paste(c(letters,LETTERS)[n], 1:d[n], sep=""))
+  lapply(seq_along(d), function(n)paste(c(letters,LETTERS)[n], seq_len(d[n]), sep=""))
 }
 
 
@@ -422,7 +422,7 @@ dummy.dimnames <- function(x){
 #! \value{
 #!   a k by 2 matrix of matrix indices where \code{ k = length(r) * length(c) }
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{  \code{\link{row}}, \code{\link{col}} , \code{\link{expand.grid}} }
 #! \examples{
 #!   matcomb(1:3, 1:4)
@@ -467,7 +467,7 @@ matcomb <- function(r,c){
 #!   \item{ rsep }{ logical scalar indicating whether row seperator is included }
 #!   \item{ csep }{ logical scalar indicating whether column seperator is included }
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{  \code{\link{vecprint}} }
 #! \examples{
 #!   matprint(matrix(1:(300*400), 300, 400))
@@ -558,7 +558,7 @@ print.matprint <- function(x, quote=FALSE, right=TRUE, ...){
 #!   \item{ example }{ the extracted example vector as.character including seperator }
 #!   \item{ sep }{ the row seperator ":" }
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{  \code{\link{matprint}} }
 #! \examples{
 #!   vecprint(10000:1)
@@ -567,29 +567,39 @@ print.matprint <- function(x, quote=FALSE, right=TRUE, ...){
 
 
 vecprint <- function(x, maxlength=16, digits=getOption("digits")){
-
   d <- length(x)
-  maxlength <- min(maxlength, d)
-  d2 <- maxlength%/%2
-  d1 <- maxlength - d2
-  d2 <- ifelse(d1<maxlength, d - d2 + 1, 0L)
-
-  sep <- maxlength[1]<d[1]
-
-  i <- list(1:d1, if (d2) d2:d)
-  m <- format(legalizeFactor(x[ unlist(i) ]), digits=digits)
-  if (is.null(names(m)))
-    names(m) <- paste("[", unlist(i),"]", sep="")
-
-  if (sep){
-    m <- c(m[1:d1], if (d2) c(":", m[(d1+1):maxlength]))
+  if (d == 0){
+    i <- integer()
+    m <- character()
+    sep <- FALSE
+  } else {
+    maxlength <- min(maxlength, d)
+    d2 <- maxlength%/%2
+    d1 <- maxlength - d2
+    if (d1<maxlength){
+      i <- list(1:d1, (d - d2 + 1L):d)
+      sep <- TRUE
+    }else{
+      i <- list(1:d1)
+      sep <- FALSE
+    }
+    m <- format(legalizeFactor(x[ unlist(i) ]), digits=digits)
+    if (is.null(names(m)))
+      names(m) <- paste("[", unlist(i),"]", sep="")
+    if (sep){
+      m <- c(m[1:d1], if (d2) c(":", m[(d1+1):maxlength]))
+    }
   }
   ret <- list(subscript=i, example=m, sep=sep)
   class(ret) <- "vecprint"
   ret
 }
+
 print.vecprint <- function(x, quote=FALSE, ...){
-  print(x$example, quote=quote, ...)
+  if (length(x))
+    print(x$example, quote=quote, ...)
+  else
+    invisible()
 }
 
 

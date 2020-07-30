@@ -51,7 +51,7 @@ to minimize RAM requirements and sacrifice speed
   cat some info about chosen method
 }
   \item{stabilize}{
-  Set to \code{TRUE} for stabilizíng the result of shellorder (for equal keys the order values will be sorted, this only works if \code{i=1:n})
+  Set to \code{TRUE} for stabilizing the result of shellorder (for equal keys the order values will be sorted, this only works if \code{i=1:n})
 to minimize RAM requirements and sacrifice speed
 }
   \item{\dots}{
@@ -85,7 +85,7 @@ integer scalar with the number of NAs. This is always 0 with has.na=FALSE
 Robert Sedgewick (1997). Algorithms in C, Third edition. Addison-Wesley.
 }
 \author{
-Jens Oehlschlägel
+Jens OehlschlÃ¤gel
 }
 \note{
 This function is called for its side-effects and breaks the functional programming paradigm. Use with care.

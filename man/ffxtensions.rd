@@ -15,7 +15,7 @@
 \details{
   ff extensions are needed for certain bitcompressed vmodes and ff symm extensions for symmetric matrices.
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{  \code{\link{vmode}}%, \code{\link{symm}}
 }
 \examples{

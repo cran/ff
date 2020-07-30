@@ -51,14 +51,14 @@ a list with further arguments passed to \code{\link{ff}} in case that new ff obj
 }
 \details{
 By default, creating an 'ffdf' object will NOT create new ff files, instead existing files are referenced.
-This differs from \code{\link[base]{data.frame}}, which always creates copies of the input objects,
+This differs from \code{\link{data.frame}}, which always creates copies of the input objects,
 most notably in \code{data.frame(matrix())}, where an input matrix is converted to single columns.
 ffdf by contrast, will store an input matrix physically as the same matrix and virtually map it to columns.
 Physically copying a large ff matrix to single ff vectors can be expensive.
 More generally, ffdf objects have a \code{\link[=physical.ffdf]{physical}} and a \code{\link[=virtual.ffdf]{virtual}} component,
 which allows very flexible dataframe designs: a physically stored matrix can be virtually mapped to single columns,
 a couple of physically stored vectors can be virtually mapped to a single matrix.
-The means to configure these are \code{\link[base]{I}} for the virtual representation and the 'ff_split' and 'ff_join'
+The means to configure these are \code{\link{I}} for the virtual representation and the 'ff_split' and 'ff_join'
 arguments for the physical representation. An ff matrix wrapped into 'I()' will return the input matrix as a single object,
 using 'ff_split' will store this matrix as single vectors - and thus create new ff files.
 'ff_join' will copy a couple of input vectors into a unified new ff matrix with \code{dimorder=c(2,1)},
@@ -117,14 +117,14 @@ A list with components
 and class 'ffdf' (NOTE that ffdf dows not inherit from ff)
 }
 \author{
-Jens Oehlschl‰gel
+Jens Oehlschl√§gel
 }
 \note{
 Note that in theory, accessing a chunk of rows from a matrix with \code{dimorder=c(2,1)} should be faster than accessing across a bunch of vectors.
 However, at least under windows, the OS has difficulties filecaching parts from very large files, therefore - until we have partitioning - the recommended physical storage is in single vectors.
 }
 \seealso{
-  \code{\link[base]{data.frame}}, \code{\link{ff}}, for more example see \code{\link[=physical.ffdf]{physical}}
+  \code{\link{data.frame}}, \code{\link{ff}}, for more example see \code{\link[=physical.ffdf]{physical}}
 }
 \examples{
  m <- matrix(1:12, 3, 4, dimnames=list(c("r1","r2","r3"), c("m1","m2","m3","m4")))
@@ -132,25 +132,25 @@ However, at least under windows, the OS has difficulties filecaching parts from 
  ffm <- as.ff(m)
  ffv <- as.ff(v)
 
- d <- data.frame(m, v, stringsAsFactors = TRUE)
+ d <- data.frame(m, v)
  ffd <- ffdf(ffm, v=ffv, row.names=row.names(ffm))
  all.equal(d, ffd[,])
  ffd
  physical(ffd)
 
- d <- data.frame(m, v, stringsAsFactors = TRUE)
+ d <- data.frame(m, v)
  ffd <- ffdf(ffm, v=ffv, row.names=row.names(ffm), ff_split=1)
  all.equal(d, ffd[,])
  ffd
  physical(ffd)
 
- d <- data.frame(m, v, stringsAsFactors = TRUE)
+ d <- data.frame(m, v)
  ffd <- ffdf(ffm, v=ffv, row.names=row.names(ffm), ff_join=list(newff=c(1,2)))
  all.equal(d, ffd[,])
  ffd
  physical(ffd)
 
- d <- data.frame(I(m), I(v), stringsAsFactors = TRUE)
+ d <- data.frame(I(m), I(v))
  ffd <- ffdf(m=I(ffm), v=I(ffv), row.names=row.names(ffm))
  all.equal(d, ffd[,])
  ffd

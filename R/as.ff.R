@@ -1,5 +1,5 @@
 # ff coercing of data objects
-# (c) 2007 Jens Oehlsch‰gel
+# (c) 2007 Jens Oehlsch√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-10-09
@@ -43,7 +43,7 @@
 #! \value{
 #!   A ram or ff object.
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{  \code{\link{as.ff.bit}}, \code{\link{ff}}, \code{\link{clone}} %, \code{\link{as.symm}}
 #!          , \code{\link{as.vmode}}, \code{\link{vmode}}, \code{\link{as.hi}} }
 #! \examples{
@@ -155,10 +155,10 @@ if (FALSE){
   a2 <- ff(1:12, dim=c(3,4), dimorder=1:2, dimnames=dimnames(a), bydim=2:1)
   b2 <- ff(1:12, dim=c(3,4), dimorder=2:1, dimnames=dimnames(a), bydim=2:1)
 
-  names(a) <- 1:length(a)
-  names(b) <- 1:length(b)
-  names(a2) <- 1:length(a2)
-  names(b2) <- 1:length(b2)
+  names(a) <- seq_along(a)
+  names(b) <- seq_along(b)
+  names(a2) <- seq_along(a2)
+  names(b2) <- seq_along(b2)
 
   helper <- function(x){
     if (identical(x, a))

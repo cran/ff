@@ -1,5 +1,5 @@
 # Batch utilities for operations on ff objects
-# (c) 2007 Jens Oehlsch‰gel
+# (c) 2007 Jens Oehlsch√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-09-03
@@ -18,7 +18,7 @@
 #! \description{
 #!   The \code{ffapply} functions support convenient batched processing of ff objects
 #!   such that each single batch or chunk will not exhaust RAM
-#!   and such that batchs have sizes as similar as possible, see \code{\link[bit]{bbatch}}.
+#!   and such that batchs have sizes as similar as possible, see \code{\link{bbatch}}.
 #!   Differing from R's standard \code{\link{apply}} which applies a \code{FUNction},
 #!   the \code{ffapply} functions do apply an \code{EXPRession} and provide two indices \code{FROM="i1"} and \code{TO="i2"},
 #!   which mark beginning and end of the batch and can be used in the applied expression.
@@ -106,9 +106,9 @@
 #! \value{
 #!   see details
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \note{ xx The complete generation of the return value is preliminary and the arguments related to defining the return value might still change, especially ffapply is work in progress }
-#! \seealso{ \code{\link{apply}}, \code{\link{expression}}, \code{\link[bit]{bbatch}}, \code{\link[bit]{repfromto}}, \code{\link{ffsuitable}} }
+#! \seealso{ \code{\link{apply}}, \code{\link{expression}}, \code{\link{bbatch}}, \code{\link{repfromto}}, \code{\link{ffsuitable}} }
 #! \examples{
 #!    message("ffvecapply examples")
 #!    x <- ff(vmode="integer", length=1000)
@@ -235,7 +235,7 @@ ffvecapply <- function(
   e2 <- substitute(i2 <- i2 + b, list(i2=as.name(TO), b=bb$b))
   #slower: two in one, why?? e12 <- substitute({i1 <- i2 + 1L; i2 <- i2 + b}, list(i1=as.name(FROM), i2=as.name(TO), b=b))
   e <- substitute(EXPR)
-  for (ib in 1:bb$nb){
+  for (ib in seq_len(bb$nb)){
     if (VERBOSE){
       cat("ffvecapply", paste(get(FROM,p),":",get(TO,p),"{", N, "}", sep="", collapse=", "), "..")
       temp.time <- proc.time()[3]
@@ -384,7 +384,7 @@ ffrowapply <- function(
   e2 <- substitute(i2 <- i2 + b, list(i2=as.name(TO), b=bb$b))
   #slower: two in one, why?? e12 <- substitute({i1 <- i2 + 1L; i2 <- i2 + b}, list(i1=as.name(FROM), i2=as.name(TO), b=b))
   e <- substitute(EXPR)
-  for (ib in 1:bb$nb){
+  for (ib in seq_len(bb$nb)){
     if (VERBOSE){
       cat("ffrowapply", paste(get(FROM,p),":",get(TO,p),"{", N, "}", sep="", collapse=", "), "..")
       temp.time <- proc.time()[3]
@@ -536,7 +536,7 @@ ffcolapply <- function(
   e2 <- substitute(i2 <- i2 + b, list(i2=as.name(TO), b=bb$b))
   #slower: two in one, why?? e12 <- substitute({i1 <- i2 + 1L; i2 <- i2 + b}, list(i1=as.name(FROM), i2=as.name(TO), b=b))
   e <- substitute(EXPR)
-  for (ib in 1:bb$nb){
+  for (ib in seq_len(bb$nb)){
     if (VERBOSE){
       cat("ffcolapply", paste(get(FROM,p),":",get(TO,p),"{", N, "}", sep="", collapse=", "), "..")
       temp.time <- proc.time()[3]
@@ -682,7 +682,7 @@ ffapply <- function(
       applycall[[2]]<- indexcall
       e <- as.call(applycall)
     }
-    for (ib in 1:bb$nb){
+    for (ib in seq_len(bb$nb)){
       if (VERBOSE){
         cat("ffapply", paste(get(FROM,p),":",get(TO,p),"{", N, "}", sep="", collapse=", "), "..")
         temp.time <- proc.time()[3]
@@ -743,7 +743,7 @@ ffapply <- function(
     ndim <- length(DIM)
     mdim <- DIM[MARGIN]
     nmarg <- length(MARGIN)
-    MARGIN.rem <- (1:ndim)[-MARGIN]
+    MARGIN.rem <- (seq_len(ndim))[-MARGIN]
     dims <- c(rev(MARGIN), rev(MARGIN.rem)) # slowest rotating first
     chunksize <- rev(cumprod(c(1, rev(DIM[dims])))) # cumprod from last to first
     N <- chunksize[1]
@@ -769,7 +769,7 @@ ffapply <- function(
       }else{
         FF_RET <- array(list(), nbr)
         if (USE.NAMES){
-          i12 <- lapply(1:nmarg, function(i){
+          i12 <- lapply(seq_len(nmarg), function(i){
               i1 <- cumsum(c(1L, rep(b[i], length.out=nbr[i]-1L)))
               i2 <- cumsum(rep(b[i], length.out=nbr[i]))
               if (rb[i]) i2[nbr[i]] <- mdim[i]
@@ -786,7 +786,7 @@ ffapply <- function(
       aarg <- alist(x=)
       names(aarg) <- NULL
       indexargs <- rep(aarg,ndim)
-      for (i in 1:nmarg)
+      for (i in seq_len(nmarg))
         indexargs[[MARGIN[i]]] <- substitute(i1[i]:i2[i], list(i=i, i1=as.symbol(FROM), i2=as.symbol(TO)))
       indexargs <- c(indexargs, alist(drop=FALSE))
       indexcall <- as.list(call("[", 1))
@@ -849,7 +849,7 @@ ffapply <- function(
             if (is.null(CFUN)){
               i1 <- get(FROM, p)
               i2 <- get(TO, p)
-              FF_RET <- do.call( "[<-", c( list(FF_RET), lapply(1:nmarg, function(i)substitute(e1:e2, list(e1=i1[i], e2=i2[i]))), list(value=temp) ) )
+              FF_RET <- do.call( "[<-", c( list(FF_RET), lapply(seq_len(nmarg), function(i)substitute(e1:e2, list(e1=i1[i], e2=i2[i]))), list(value=temp) ) )
             }else
               FF_RET[[ib]] <- temp
             ib <- ib + 1L
@@ -865,7 +865,7 @@ ffapply <- function(
             if (is.null(CFUN)){
               i1 <- get(FROM, p)
               i2 <- get(TO, p)
-              FF_RET <- do.call( "[<-", c( list(FF_RET), lapply(1:nmarg, function(i)substitute(e1:e2, list(e1=i1[i], e2=i2[i]))), list(value=temp) ) )
+              FF_RET <- do.call( "[<-", c( list(FF_RET), lapply(seq_len(nmarg), function(i)substitute(e1:e2, list(e1=i1[i], e2=i2[i]))), list(value=temp) ) )
             }else
               FF_RET[[ib]] <- temp
             ib <- ib + 1L
@@ -898,8 +898,8 @@ if (FALSE){
   library(ff)
 
   d <- c(4,4,4,4)
-  a <- array(1:(cumprod(d)[length(d)]), d)
-  dimnames(a) <- lapply(1:length(dim(a)), function(i)paste(letters[i], 1:(dim(a)[i]), sep=""))
+  a <- array(seq_len(cumprod(d)[length(d)]), d)
+  dimnames(a) <- lapply(seq_along(dim(a)), function(i)paste(letters[i], seq_len(dim(a)[i]), sep=""))
   apply(a, 1:2, paste, collapse="|")
   apply(a, 1:2, sum)
   ffapply(a, apply(a[i1[1]:i2[1],i1[2]:i2[2],,,drop=FALSE], 3:4, sum), 1:2, BATCHSIZE=16, VERBOSE=T, RETURN="list")

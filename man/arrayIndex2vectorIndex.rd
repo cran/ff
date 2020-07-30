@@ -18,9 +18,9 @@ arrayIndex2vectorIndex(x, dim = NULL, dimorder = NULL, vw = NULL)
   The parameters 'x' and 'dim' may refer to a subarray of a larger array, in this case, the array indices 'x' are interpreted as 'vw[1,] + x' within the larger array 'as.integer(colSums(vw))'.
 }
 \value{
-  a vector of indices in \code{1:prod(dim)} (or  \code{1:prod(colSums(vw))})
+  a vector of indices in \code{seq_len(prod(dim))} (or  \code{seq_len(prod(colSums(vw)))})
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{  \code{\link{array2vector}}, \code{\link{vectorIndex2arrayIndex}} }
 \examples{
   x <- matrix(1:12, 3, 4)

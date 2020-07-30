@@ -38,7 +38,7 @@
   \command{as.character.hi} returns a character vector, see \code{\link{as.hi.character}}.
   \command{as.matrix.hi} returns a matrix index, see \code{\link{as.hi.matrix}}.
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{ \code{\link{hi}}, \code{\link{as.hi}} }
 \examples{
   x <- 1:6

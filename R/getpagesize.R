@@ -28,7 +28,7 @@
 #! \value{
 #!   An integer giving the page size in Bytes.
 #! }
-#! \author{ Daniel Adler, Jens Oehlschl‰gel }
+#! \author{ Daniel Adler, Jens Oehlschl√§gel }
 #! \examples{
 #!   getpagesize()
 #!   getdefaultpagesize()
@@ -37,7 +37,7 @@
 #! \keyword{IO}
 
 getpagesize <- function()
-  .Call("getpagesize", PACKAGE="ff")
+  .Call(C_getpagesize, PACKAGE="ff")
 
 getdefaultpagesize <- function()
   #if (.Platform$OS=="windows")

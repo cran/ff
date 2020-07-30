@@ -27,7 +27,7 @@ vectorCompatible(dim, dim2, dimorder=NULL, dimorder2=NULL, bydim = NULL, bydim2 
 \value{
   TRUE if compatibility has been detected, FALSE otherwise
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \note{ does not yet gurantee to detect all compatible configurations, but the most important ones }
 \seealso{ \code{\link{dimorder}}, \code{\link{ffconform}} }
 \keyword{ IO }

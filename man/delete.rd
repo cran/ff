@@ -37,7 +37,7 @@ deleteIfOpen(x, \dots)
   \command{delete} returns TRUE if the/all ff files could be removed and FALSE otherwise. \cr
   \command{deleteIfOpen} returns TRUE if the/all ff files could be removed, FALSE if not and NA if the ff object was open.
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \note{
   Deletion of ff files can be triggerd automatically via three routes:
   \enumerate{
@@ -52,7 +52,7 @@ deleteIfOpen(x, \dots)
     \item name the file AND use \code{fffinalizer="delete"} AND use \code{fffinonexit=FALSE}
   }
 }
-\seealso{ \code{\link{ff}}, \code{\link{close.ff}}, \code{\link{open.ff}}, \code{\link[base]{reg.finalizer}} }
+\seealso{ \code{\link{ff}}, \code{\link{close.ff}}, \code{\link{open.ff}}, \code{\link{reg.finalizer}} }
 \examples{
   message('create the ff file outside getOption("fftempir"), 
     it will have default finalizer "close", so you need to delete it explicitely')

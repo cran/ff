@@ -1,6 +1,6 @@
 /*
 # ff macros for looping over vmodes: addgetset, addgetset_vec, addgetset_vector, addgetset_array
-# (c) 2007 Jens Oehlsch‰gel
+# (c) 2007 Jens Oehlsch√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-10-25

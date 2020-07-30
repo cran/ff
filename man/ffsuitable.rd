@@ -21,7 +21,7 @@ ffsuitable_attribs(x)
 \value{
   TRUE if \code{FF_RETURN} object is suitable, FALSE otherwise
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \note{ xx Work in progress for package \pkg{R.ff} }
 \seealso{ \code{\link{ffconform}}, \code{\link{ffreturn}} }
 \keyword{ IO }

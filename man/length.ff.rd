@@ -32,8 +32,8 @@
 \value{
   Integer scalar
 }
-\author{ Jens Oehlschl‰gel }
-\seealso{ \code{\link[base]{length}}, \code{\link{maxlength}}, \code{\link{file.resize}}, \code{\link[ff:dim.ff]{dim}}, \code{\link[=physical.ff]{virtual}} }
+\author{ Jens Oehlschl√§gel }
+\seealso{ \code{\link{length}}, \code{\link{maxlength}}, \code{\link{file.resize}}, \code{\link[=dim.ff]{dim}}, \code{\link[=physical.ff]{virtual}} }
 \examples{
   x <- ff(1:12)
   maxlength(x)

@@ -21,7 +21,7 @@ is.readonly(x, \dots)
 \value{
   logical scalar
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{ \code{\link{open.ff}}, \code{\link[=physical.ff]{physical}} }
 \examples{
   x <- ff(1:12)

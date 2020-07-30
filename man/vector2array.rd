@@ -23,7 +23,7 @@ In \command{ff}, \command{update} and \command{clone} we have 'bydim' to contras
 \value{
   a suitable \code{\link{array}}
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{  \code{\link{array2vector}}, \code{\link{vectorIndex2arrayIndex}} }
 \examples{
   vector2array(1:12, dim=c(3, 4))               # matrix(1:12, 3, 4)

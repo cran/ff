@@ -85,7 +85,7 @@ vmode(x) <- value
 }
 \note{ \command{regtest.vmode} checks correctness of some vmode features
 }
-\author{ Jens Oehlschlägel }
+\author{ Jens OehlschlÃ¤gel }
 \seealso{  \code{\link{ff}}, \code{\link{storage.mode}}, \code{\link{mode}} }
 \examples{
  data.frame(.vmode=.vmode, .vimplemented=.vimplemented, .rammode=.rammode, .ffmode=.ffmode

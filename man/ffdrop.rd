@@ -20,7 +20,7 @@ ffdrop(file)
   \item{ffData}{Description of 'comp2'}
 }
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 \note{
   This deletes file on disk without warning

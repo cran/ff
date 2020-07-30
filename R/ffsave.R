@@ -1,5 +1,5 @@
 # save and save.image for ff
-# (c) 2009 Jens Oehlsch‰gel
+# (c) 2009 Jens Oehlsch√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2009-10-25
@@ -157,11 +157,11 @@ if (FALSE){
 #!   a character vector with messages returned from the \code{zip} utility (one for each ff file zipped)
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #! \note{
 #!   The ff files are not platform-independent with regard to byte order.
-#!   For large files and the zip64 format use \code{zip 3.0} and \code{unzip 6.0} from \url{https://sourceforge.net/projects/infozip/}.
+#!   For large files and the zip64 format use \code{zip 3.0} and \code{unzip 6.0} from \url{http://infozip.sourceforge.net/}.
 #! }
 #! \seealso{
 #!   \code{\link{ffinfo}} for inspecting the content of the \code{ffarchive} \cr
@@ -431,10 +431,10 @@ function (
 #!   \item{rootpath}{ the root path relative to which the files are stored in the .ffData zip }
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #! \note{
-#!   For large files and the zip64 format use \code{zip 3.0} and \code{unzip 6.0} from \url{https://sourceforge.net/projects/infozip/}.
+#!   For large files and the zip64 format use \code{zip 3.0} and \code{unzip 6.0} from \url{http://infozip.sourceforge.net/}.
 #! }
 #! \seealso{
 #!   \code{\link{ffsave}}, \code{\link{ffload}}, \code{\link{ffdrop}}
@@ -521,10 +521,10 @@ function (file)
 #! }
 #! \note{
 #!   The ff files are not platform-independent with regard to byte order.
-#!   For large files and the zip64 format use \code{zip 3.0} and \code{unzip 6.0} from \url{https://sourceforge.net/projects/infozip/}.
+#!   For large files and the zip64 format use \code{zip 3.0} and \code{unzip 6.0} from \url{http://infozip.sourceforge.net/}.
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #! \seealso{
 #!   \code{\link{load}}, \code{\link{ffsave}}, \code{\link{ffinfo}}, \code{\link{ffdrop}}
@@ -655,7 +655,7 @@ function (
           NA
         }
       }))
-      j <- match(1:length(list), i)
+      j <- match(seq_along(list), i)
       if (any(is.na(j)))
         stop("could not match list in zip: ", paste('"', list[is.na(j)]), '"', collapse=",", sep="")
 
@@ -723,7 +723,7 @@ function (
 #!   \item{ffData}{Description of 'comp2'}
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #! \note{
 #!   This deletes file on disk without warning

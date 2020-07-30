@@ -1,12 +1,11 @@
 # ff dataframe objects
-# (c) 2009 Jens Oehlsch‰gel
+# (c) 2009 Jens Oehlsch√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2008-12-31
 # Last changed: 2008-12-31
 
 # source("d:/mwp/eanalysis/ff/R/ffdf.R")
-
 
 if (FALSE){
   library(ff)
@@ -15,10 +14,10 @@ if (FALSE){
   y <- ff(1:(n*4), dim=c(n,4), dimorder=2:1)
   colnames(y) <- letters[1:4]
   z <- ff(as.factor(letters[1:16]), length=n)
-  z2 <- ff(1:n)
+  z2 <- ff(seq_len(n))
   dim(z2) <- c(n,1)
   dimorder <- 2:1
-  z3 <- ff(1:n, dim=c(n,1), dimorder=2:1)
+  z3 <- ff(seq_len(n), dim=c(n,1), dimorder=2:1)
   colnames(z3) <- "z3col"
   #rnam <- fffc("", maxwidth=nchar(as.character.hexmode(n)), length=n)
   rnam <- character(n)
@@ -358,14 +357,14 @@ get_nvw <- function(x){
 #! }
 #! \details{
 #! By default, creating an 'ffdf' object will NOT create new ff files, instead existing files are referenced.
-#! This differs from \code{\link[base]{data.frame}}, which always creates copies of the input objects,
+#! This differs from \code{\link{data.frame}}, which always creates copies of the input objects,
 #! most notably in \code{data.frame(matrix())}, where an input matrix is converted to single columns.
 #! ffdf by contrast, will store an input matrix physically as the same matrix and virtually map it to columns.
 #! Physically copying a large ff matrix to single ff vectors can be expensive.
 #! More generally, ffdf objects have a \code{\link[=physical.ffdf]{physical}} and a \code{\link[=virtual.ffdf]{virtual}} component,
 #! which allows very flexible dataframe designs: a physically stored matrix can be virtually mapped to single columns,
 #! a couple of physically stored vectors can be virtually mapped to a single matrix.
-#! The means to configure these are \code{\link[base]{I}} for the virtual representation and the 'ff_split' and 'ff_join'
+#! The means to configure these are \code{\link{I}} for the virtual representation and the 'ff_split' and 'ff_join'
 #! arguments for the physical representation. An ff matrix wrapped into 'I()' will return the input matrix as a single object,
 #! using 'ff_split' will store this matrix as single vectors - and thus create new ff files.
 #! 'ff_join' will copy a couple of input vectors into a unified new ff matrix with \code{dimorder=c(2,1)},
@@ -425,14 +424,14 @@ get_nvw <- function(x){
 #! and class 'ffdf' (NOTE that ffdf dows not inherit from ff)
 #! }
 #! \author{
-#! Jens Oehlschl‰gel
+#! Jens Oehlschl√§gel
 #! }
 #! \note{
 #! Note that in theory, accessing a chunk of rows from a matrix with \code{dimorder=c(2,1)} should be faster than accessing across a bunch of vectors.
 #! However, at least under windows, the OS has difficulties filecaching parts from very large files, therefore - until we have partitioning - the recommended physical storage is in single vectors.
 #! }
 #! \seealso{
-#!   \code{\link[base]{data.frame}}, \code{\link{ff}}, for more example see \code{\link[=physical.ffdf]{physical}}
+#!   \code{\link{data.frame}}, \code{\link{ff}}, for more example see \code{\link[=physical.ffdf]{physical}}
 #! }
 #! \examples{
 #!  m <- matrix(1:12, 3, 4, dimnames=list(c("r1","r2","r3"), c("m1","m2","m3","m4")))
@@ -440,25 +439,25 @@ get_nvw <- function(x){
 #!  ffm <- as.ff(m)
 #!  ffv <- as.ff(v)
 #!
-#!  d <- data.frame(m, v, stringsAsFactors = TRUE)
+#!  d <- data.frame(m, v)
 #!  ffd <- ffdf(ffm, v=ffv, row.names=row.names(ffm))
 #!  all.equal(d, ffd[,])
 #!  ffd
 #!  physical(ffd)
 #!
-#!  d <- data.frame(m, v, stringsAsFactors = TRUE)
+#!  d <- data.frame(m, v)
 #!  ffd <- ffdf(ffm, v=ffv, row.names=row.names(ffm), ff_split=1)
 #!  all.equal(d, ffd[,])
 #!  ffd
 #!  physical(ffd)
 #!
-#!  d <- data.frame(m, v, stringsAsFactors = TRUE)
+#!  d <- data.frame(m, v)
 #!  ffd <- ffdf(ffm, v=ffv, row.names=row.names(ffm), ff_join=list(newff=c(1,2)))
 #!  all.equal(d, ffd[,])
 #!  ffd
 #!  physical(ffd)
 #!
-#!  d <- data.frame(I(m), I(v), stringsAsFactors = TRUE)
+#!  d <- data.frame(I(m), I(v))
 #!  ffd <- ffdf(m=I(ffm), v=I(ffv), row.names=row.names(ffm))
 #!  all.equal(d, ffd[,])
 #!  ffd
@@ -860,7 +859,7 @@ ffdf <- function(
 #!    physical selection \tab    \tab \code{x$i} \tab    \tab the selected \code{\link{ff}}            \cr
 #!   }
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{ffdf}}, \code{\link[=[.data.frame]{Extract.data.frame}}, \code{\link{Extract.ff}}  }
 #! \examples{
 #!    d <- data.frame(a=letters, b=rev(letters), c=1:26, stringsAsFactors = TRUE)
@@ -1133,9 +1132,12 @@ ffdf <- function(
             # note that the hi index stores positions AFTER translating relative index positions (relative to vw) to absolute index positions
             # and thus index may differ for different physical components of the dataframe (if their vw differ)
             # if you pass-in a hi object, this must be suitable for all physical components
-            if (missing(i))
-              i2 <- hi(from=1, to=nvw$n, maxindex=nvw$n, vw=nvw$vw, pack=FALSE)
-            else{
+            if (missing(i)){
+              if (nvw$n > 0)
+                i2 <- hi(from=1, to=nvw$n, maxindex=nvw$n, vw=nvw$vw, pack=FALSE)
+              else
+                i2 <- as.hi(NULL)
+            }else{
               i2 <- as.hi(i, maxindex=nvw$n, vw=nvw$vw, pack=FALSE, envir=parent.frame(), names=rownam)
             }
           }
@@ -1201,9 +1203,12 @@ ffdf <- function(
           if (is.ff(rownam)){
             nvw <- get_nvw(rownam)
             if (!identical(last_nvw, nvw)){
-              if (missing(i))
-                i2 <- hi(from=1, to=nvw$n, maxindex=nvw$n, vw=nvw$vw, pack=FALSE)
-              else{
+              if (missing(i)){
+                if (nvw$n > 0)
+                  i2 <- hi(from=1, to=nvw$n, maxindex=nvw$n, vw=nvw$vw, pack=FALSE)
+                else
+                  i2 <- as.hi(NULL)
+              }else{
                 i2 <- as.hi(i, maxindex=nvw$n, vw=nvw$vw, pack=FALSE, envir=parent.frame(), names=rownam)
               }
             }
@@ -1237,7 +1242,7 @@ ffdf <- function(
     Narg <- nargs()
     if (Narg < 4) {
       if (missing(i))
-          i <- 1:d[[2]]
+          i <- seq_len(d[[2]])
       else if (is.matrix(i)){
         value <- split(rep(value, length.out=nrow(i)), i[,2])
         ii <- split(i[,1], i[,2])
@@ -1349,9 +1354,12 @@ ffdf <- function(
             # note that the hi index stores positions AFTER translating relative index positions (relative to vw) to absolute index positions
             # and thus index may differ for different physical components of the dataframe (if their vw differ)
             # if you pass-in a hi object, this must bu suitable for all physical components
-            if (missing(i))
-              i2 <- hi(from=1, to=nvw$n, maxindex=nvw$n, vw=nvw$vw, pack=FALSE)
-            else{
+            if (missing(i)){
+              if (nvw$n > 0)
+                i2 <- hi(from=1, to=nvw$n, maxindex=nvw$n, vw=nvw$vw, pack=FALSE)
+              else
+                i2 <- as.hi(NULL)
+            }else{
               i2 <- as.hi(i, maxindex=nvw$n, vw=nvw$vw, pack=FALSE, envir=parent.frame(), names=rownam)
             }
           }
@@ -1362,7 +1370,7 @@ ffdf <- function(
               if (nrows==1){
                 if (ncols %% valuelen)
                   stop("ncol(index) not a multiple of length(value)")
-                rft <- repfromto(1:valuelen, 1, ncols)
+                rft <- repfromto(seq_len(valuelen), 1, ncols)
                 f <- function(val, ind)val[rft[ind]]
               }else{
                 if (nrows %% valuelen)
@@ -1375,7 +1383,7 @@ ffdf <- function(
               if (ncols %% valuedim[[2]]){
                 stop("ncol(index) not a multiple of ncol(value)")
               }
-              rft <- repfromto(1:valuedim[[2]], 1, ncols)
+              rft <- repfromto(seq_len(valuedim[[2]]), 1, ncols)
               if (is.matrix(value))
                 f <- function(val, ind)val[,rft[ind]]
               else
@@ -1427,7 +1435,7 @@ ffdf <- function(
 #!   An object of type \code{\link{ffdf}}
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #! \seealso{
 #!   \code{\link{clone}}, \code{\link{ffdf}}
@@ -1520,7 +1528,7 @@ update.ffdf <- function(object, from, ...){
 #! \value{
 #!   logical scalar
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{  \code{\link{inherits}}, \code{\link{as.ffdf}}, \code{\link{is.ff}} }
 #! \examples{
 #!   is.ffdf(integer())
@@ -1565,7 +1573,7 @@ is.ffdf <- function(x)
 #!   'as.ffdf' returns an object of class \code{\link{ffdf}}, 'as.data.frame' returns an object of class \code{\link{data.frame}}
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #! \seealso{
 #!   \code{\link{is.ffdf}}, \code{\link{ffdf}}, \code{\link{data.frame}}
@@ -1668,7 +1676,7 @@ as.data.frame.ffdf <- function(x, ...)
 #! }
 #! \value{ integer number of columns}
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #! \seealso{
 #!   \code{\link{dim.ffdf}}, \code{\link{length.ff}}, \code{\link{ffdf}}
@@ -1710,7 +1718,7 @@ length.ffdf <- function(x){
 #!   a character vector with one element for each column
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #! \seealso{ \code{\link{vmode}}, \code{\link{ffdf}} }
 #! \examples{
@@ -1756,18 +1764,17 @@ vmode.ffdf <- function(x, ...){
 #!   \item{x}{\code{\link{ff}} or \code{\link{ffdf}}}
 #!   \item{RECORDBYTES}{ optional integer scalar representing the bytes needed to process an element of the \code{ff_vector} a single row of the \code{ffdf} }
 #!   \item{BATCHBYTES}{ integer scalar limiting the number of bytes to be processed in one chunk, default from \code{getOption("ffbatchbytes")}, see also \code{\link{.rambytes}} }
-#!   \item{\dots}{further arguments passed to \code{\link[bit]{chunk}}}
+#!   \item{\dots}{further arguments passed to \code{\link{chunk}}}
 #! }
 #! \value{
-#!   A list with \code{\link[bit]{ri}} indexes each representing one chunk
+#!   A list with \code{\link{ri}} indexes each representing one chunk
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
-#! \seealso{ \code{\link[bit]{chunk}}, \code{\link{ffdf}} }
+#! \seealso{ \code{\link{chunk}}, \code{\link{ffdf}} }
 #! \examples{
-#!   x <- data.frame(x=as.double(1:26), y=factor(letters), z=ordered(LETTERS)
-#!   , stringsAsFactors = TRUE)
+#!   x <- data.frame(x=as.double(1:26), y=factor(letters), z=ordered(LETTERS), stringsAsFactors = TRUE)
 #!   a <- as.ffdf(x)
 #!   ceiling(26 / (300 \%/\% sum(.rambytes[vmode(a)])))
 #!   chunk(a, BATCHBYTES=300)
@@ -1812,7 +1819,7 @@ chunk.ff_vector <- function(x, RECORDBYTES = .rambytes[vmode(x)], BATCHBYTES = g
     if (is.null(l$to))
       l$to <- n
     if (is.null(l$by) && is.null(l$len)){
-      b <- BATCHBYTES %/% RECORDBYTES
+      b <- as.integer(pmin(BATCHBYTES %/% RECORDBYTES, .Machine$integer.max))
       if (b==0L){
         b <- 1L
         warning("single record does not fit into BATCHBYTES")
@@ -1820,7 +1827,7 @@ chunk.ff_vector <- function(x, RECORDBYTES = .rambytes[vmode(x)], BATCHBYTES = g
       l$by <- b
     }
     l$maxindex <- n
-    ret <- do.call("chunk.default", l)
+    ret <- do.call("chunks", l)
 
   }else{
     ret <- list()
@@ -1838,7 +1845,7 @@ chunk.ffdf <- function(x, RECORDBYTES = sum(.rambytes[vmode(x)]), BATCHBYTES = g
     if (is.null(l$to))
       l$to <- n
     if (is.null(l$by) && is.null(l$len)){
-      b <- BATCHBYTES %/% RECORDBYTES
+      b <- as.integer(pmin(BATCHBYTES %/% RECORDBYTES, .Machine$integer.max))
       if (b==0L){
         b <- 1L
         warning("single record does not fit into BATCHBYTES")
@@ -1846,7 +1853,7 @@ chunk.ffdf <- function(x, RECORDBYTES = sum(.rambytes[vmode(x)]), BATCHBYTES = g
       l$by <- b
     }
     l$maxindex <- n
-    ret <- do.call("chunk.default", l)
+    ret <- do.call("chunks", l)
 
   }else{
     ret <- list()
@@ -1969,7 +1976,7 @@ dimorder.ffdf <- function(x, ...){
 #!   The assignment function return the changed ffdf object. The other functions return the expected.
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #! \seealso{
 #!   \code{\link{ffdf}}, \code{\link{dimnames.ff}}, \code{\link{rownames}}, \code{\link{colnames}}
@@ -2058,7 +2065,7 @@ dimnames.ffdf <- function(x){
 #!   \item{PhysicalLastCol}{integer identifying the last column of the corresponding physical element (1 if it is not a matrix)}
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #! \seealso{
 #!   \code{\link{ffdf}}, \code{\link[=physical.ff]{physical}}, \code{\link[=virtual.ff]{virtual}}, \code{\link[=vmode.ffdf]{vmode}}
@@ -2070,7 +2077,7 @@ dimnames.ffdf <- function(x){
 #!
 #!   message("Here the y matrix is first converted to single columns by data.frame, 
 #! then those columns become ff")
-#!   d <- as.ffdf(data.frame(x=x, y=y, z=I(z), stringsAsFactors = TRUE))
+#!   d <- as.ffdf(data.frame(x=x, y=y, z=I(z)))
 #!   physical(d)
 #!   virtual(d)
 #!

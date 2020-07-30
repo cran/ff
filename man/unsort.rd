@@ -19,8 +19,8 @@ unsort.ahi(x, index, ixre = any(sapply(index, function(i) {
 })), ix = lapply(index, function(i) {
     if (is.null(i$ix)) {
         if (i$re)
-            orig <- rev(1:poslength(i))
-        else orig <- 1:poslength(i)
+            orig <- rev(seq_len(poslength(i)))
+        else orig <- seq_len(poslength(i))
     }
     else {
         orig <- i$ix
@@ -47,7 +47,7 @@ subscript2integer(x, maxindex = NULL, names = NULL)
 \value{
  undefined
 }
-\author{ Jens Oehlschlägel }
+\author{ Jens OehlschlÃ¤gel }
 \seealso{ \code{\link{hi}}, \code{\link{as.hi}} }
 \keyword{ IO }
 \keyword{ data }

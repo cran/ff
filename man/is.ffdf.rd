@@ -13,7 +13,7 @@ is.ffdf(x)
 \value{
   logical scalar
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{  \code{\link{inherits}}, \code{\link{as.ffdf}}, \code{\link{is.ff}} }
 \examples{
   is.ffdf(integer())

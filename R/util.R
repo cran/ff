@@ -1,5 +1,5 @@
 # Utilities for ff
-# (c) 2007 Jens Oehlschl‰gel
+# (c) 2007 Jens Oehlschl√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-08-24
@@ -24,7 +24,7 @@
 #! \value{
 #!   the modified object
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{unclass}}, \code{\link{undim}} }
 #! \examples{
 #!   x <- factor(letters)
@@ -59,7 +59,7 @@
 #! \value{
 #!   x without dim attribute
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{unclass<-}}, \code{\link{unclass}}, \code{\link{unname}}, \code{\link{dim}} }
 #! \examples{
 #!   x <- matrix(1:12, 3)
@@ -104,13 +104,13 @@ undim <- function(x){
 #! }
 #! \value{ an object like argument or default having length len }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #! \note{
 #!   This is for internal use, e.g. to handle argument \code{colClasses} in \code{\link{read.table.ffdf}}
 #! }
 #! \seealso{
-#!   \code{\link{rep}}, \code{\link{vector}}, \code{\link[bit]{repfromto}}
+#!   \code{\link{rep}}, \code{\link{vector}}, \code{\link{repfromto}}
 #! }
 #! \examples{
 #!  message("a list example")

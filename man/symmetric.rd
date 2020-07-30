@@ -23,7 +23,7 @@ symmetric(x, \dots)
 \value{
   TRUE or FALSE
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{ \code{\link{symmetric}}, \code{\link{ff}} %, \code{\link{symm}}
         , \code{\link{dist}}, \code{\link{isSymmetric}} }
 \examples{

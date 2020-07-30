@@ -21,7 +21,7 @@ finalize(x, ...)
   \item{\dots}{ currently ignored }
 }
 \details{
-  The \code{finalize.ff_pointer} method is called from R after it had been passed to \code{\link[base]{reg.finalizer}}. It will set the finalizer name to \code{NULL} and call the finalizer.
+  The \code{finalize.ff_pointer} method is called from R after it had been passed to \code{\link{reg.finalizer}}. It will set the finalizer name to \code{NULL} and call the finalizer.
   \cr
   The \code{finalize} generic can be called manually on \code{\link{ff}} or \code{\link{ffdf}} objects. It will call the finalizer but not touch the finalizer name.
   \cr
@@ -34,7 +34,7 @@ finalize(x, ...)
   returns whatever the called finalizer returns, for ffdf a list with the finalization returns of each physical component is returned.
 }
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 \seealso{
   \code{\link{finalizer}}

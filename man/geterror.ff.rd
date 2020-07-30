@@ -15,7 +15,7 @@ geterrstr.ff(x)
 \value{
   \command{geterror.ff} returns an error integer code (no error = 0) and \command{geterrstr.ff} returns the error message (no error = "no error").
 }
-\author{ Jens Oehlschl‰gel, Daniel Adler (C++ back-end) }
+\author{ Jens Oehlschl√§gel, Daniel Adler (C++ back-end) }
 \seealso{  \code{\link{ff}} }
 \examples{
   x <- ff(1:12)

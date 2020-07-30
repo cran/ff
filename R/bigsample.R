@@ -1,5 +1,5 @@
 # Sampling from big pools for ff
-# (c) 2007 Daniel Adler & Jens Oehlschl‰gel
+# (c) 2007 Daniel Adler & Jens Oehlschl√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-08-24
@@ -37,7 +37,7 @@
 #! \value{
 #!   a vector of elements sampled from the pool (argument 'x')
 #! }
-#! \author{ Daniel Adler, Jens Oehlschl‰gel, Walter Zucchini}
+#! \author{ Daniel Adler, Jens Oehlschl√§gel, Walter Zucchini}
 #! \seealso{ \code{\link{sample}}, \code{\link{ff}} }
 #! \examples{
 #! message("Specify pool size")

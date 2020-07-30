@@ -36,20 +36,20 @@
 \details{
    \command{dim} and \command{dimorder} are \code{\link[=physical.ff]{virtual}} attributes. Thus two copies of an R ff object can point to the same file but interpret it differently.
    \command{dim} has the usual meaning, \command{dimorder} defines the dimension order of storage, i.e. \code{c(1,2)} corresponds to R's standard column-major order,
-   \code{c(1,2)} corresponds to row-major order, and for higher dimensional arrays dimorder can also be used. Standard dimorder is \code{1:length(dim(x))}. \cr
+   \code{c(1,2)} corresponds to row-major order, and for higher dimensional arrays dimorder can also be used. Standard dimorder is \code{seq_along(dim(x))}. \cr
    For \code{\link{ffdf}} \code{dim} returns the number of rows and virtual columns. With \code{dim<-.ffdf} only the number of rows can be changed. For convenience you can assign \code{NA} to the number of columns. \cr
    For \code{\link{ffdf}} the dimorder returns non-standard dimorder if any of its columns contains a ff object with non-standard dimorder (see \code{\link{dimorderStandard}})
    An even higher level of virtualization is available using virtual windows, see \code{\link{vw}}.
 }
 \note{
   \code{x[]} returns a matrix like \code{x[,]} and thus respects dimorder, while \code{x[i:j]} returns a vector and simply returns elements in the stored order.
-  Check the corresponding example twice, in order to make sure you understand that for non-standard dimorder \code{x[1:length(x)]} is \emph{not the same} as \code{as.vector(x[])}.
+  Check the corresponding example twice, in order to make sure you understand that for non-standard dimorder \code{x[seq_along(x)]} is \emph{not the same} as \code{as.vector(x[])}.
 }
 \value{
   \command{names} returns a character vector (or NULL)
 }
-\author{ Jens Oehlschlägel }
-\seealso{ \code{\link[base]{dim}}, \code{\link{dimnames.ff_array}}, \code{\link{dimorderStandard}}, \code{\link{vw}}, \code{\link[=physical.ff]{virtual}} }
+\author{ Jens OehlschlÃ¤gel }
+\seealso{ \code{\link{dim}}, \code{\link[=dimnames.ff]{dimnames.ff_array}}, \code{\link{dimorderStandard}}, \code{\link{vw}}, \code{\link[=physical.ff]{virtual}} }
 \examples{
   x <- ff(1:12, dim=c(3,4), dimorder=c(2:1))
   y <- x

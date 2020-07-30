@@ -1,5 +1,5 @@
 # Array utilities for ff
-# (c) 2007 Jens Oehlsch‰gel
+# (c) 2007 Jens Oehlsch√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-08-24
@@ -8,13 +8,23 @@
 # source("d:/mwp/eanalysis/ff/R/zzz.R")
 
 .onLoad <- function(lib, pkg) {
-  ##library.dynam("ff", pkg, lib) use useDynLib(ff) in NAMESPACE instead
+  ##library.dynam("ff", pkg, lib) use useDynLib(ff, .registration = TRUE, .fixes = "C_") in NAMESPACE instead
   ##packageStartupMessage("Loading package ff", packageDescription("ff", lib, fields="Version"), "")
+  
   # allow fftempdir to be set before package is loaded
-  if (is.null(getOption("fftempdir"))){
-    # create tempdir and make tempdir name independent of platform (otherwise dirname(tempfile)!=getOption("fftempdir"))
-    options(fftempdir=standardPathFile(tempdir()))
+  # and make tempdir name independent of platform (otherwise dirname(tempfile)!=getOption("fftempdir"))
+  fftempdir <- getOption("fftempdir")
+  if (is.null(fftempdir) || !dir.exists(dirname(fftempdir))){
+    fftempdir <- standardPathFile(file.path(tempdir(), "ff"))
+  }else{
+    fftempdir <- standardPathFile(fftempdir)
   }
+  fftempexists <- dir.exists(fftempdir)
+  if (!fftempexists){
+    dir.create(fftempdir)
+  }
+  options(fftempdir=fftempdir, fftempkeep=fftempexists)
+  
   if (is.null(getOption("ffextension")))
     options(ffextension="ff")
   if (is.null(getOption("fffinonexit")))
@@ -56,20 +66,20 @@
 
   # assign(".vimplemented"
   # , c(
-      # boolean   = .Call("ffmode_implemented", .ffmode["boolean"]  , PACKAGE="ff")
-    # , logical   = .Call("ffmode_implemented", .ffmode["logical"]  , PACKAGE="ff")
-    # , quad      = .Call("ffmode_implemented", .ffmode["quad"]     , PACKAGE="ff")
-    # , nibble    = .Call("ffmode_implemented", .ffmode["nibble"]   , PACKAGE="ff")
-    # , byte      = .Call("ffmode_implemented", .ffmode["byte"]     , PACKAGE="ff")
-    # , ubyte     = .Call("ffmode_implemented", .ffmode["ubyte"]    , PACKAGE="ff")
-    # , short     = .Call("ffmode_implemented", .ffmode["short"]    , PACKAGE="ff")
-    # , ushort    = .Call("ffmode_implemented", .ffmode["ushort"]   , PACKAGE="ff")
-    # , integer   = .Call("ffmode_implemented", .ffmode["integer"]  , PACKAGE="ff")
-    # , single    = .Call("ffmode_implemented", .ffmode["single"]   , PACKAGE="ff")
-    # , double    = .Call("ffmode_implemented", .ffmode["double"]   , PACKAGE="ff")
-    # , complex   = .Call("ffmode_implemented", .ffmode["complex"]  , PACKAGE="ff")
-    # , raw       = .Call("ffmode_implemented", .ffmode["raw"]      , PACKAGE="ff")
-    # , character = .Call("ffmode_implemented", .ffmode["character"], PACKAGE="ff")
+      # boolean   = .Call(C_ffmode_implemented, .ffmode["boolean"]  , PACKAGE="ff")
+    # , logical   = .Call(C_ffmode_implemented, .ffmode["logical"]  , PACKAGE="ff")
+    # , quad      = .Call(C_ffmode_implemented, .ffmode["quad"]     , PACKAGE="ff")
+    # , nibble    = .Call(C_ffmode_implemented, .ffmode["nibble"]   , PACKAGE="ff")
+    # , byte      = .Call(C_ffmode_implemented, .ffmode["byte"]     , PACKAGE="ff")
+    # , ubyte     = .Call(C_ffmode_implemented, .ffmode["ubyte"]    , PACKAGE="ff")
+    # , short     = .Call(C_ffmode_implemented, .ffmode["short"]    , PACKAGE="ff")
+    # , ushort    = .Call(C_ffmode_implemented, .ffmode["ushort"]   , PACKAGE="ff")
+    # , integer   = .Call(C_ffmode_implemented, .ffmode["integer"]  , PACKAGE="ff")
+    # , single    = .Call(C_ffmode_implemented, .ffmode["single"]   , PACKAGE="ff")
+    # , double    = .Call(C_ffmode_implemented, .ffmode["double"]   , PACKAGE="ff")
+    # , complex   = .Call(C_ffmode_implemented, .ffmode["complex"]  , PACKAGE="ff")
+    # , raw       = .Call(C_ffmode_implemented, .ffmode["raw"]      , PACKAGE="ff")
+    # , character = .Call(C_ffmode_implemented, .ffmode["character"], PACKAGE="ff")
     # ), envir=globalenv()
   # )
 
@@ -98,20 +108,20 @@
   # )
 	
   .vimplemented <<- c(
-		boolean   = .Call("ffmode_implemented", .ffmode["boolean"]  , PACKAGE="ff")
-	, logical   = .Call("ffmode_implemented", .ffmode["logical"]  , PACKAGE="ff")
-	, quad      = .Call("ffmode_implemented", .ffmode["quad"]     , PACKAGE="ff")
-	, nibble    = .Call("ffmode_implemented", .ffmode["nibble"]   , PACKAGE="ff")
-	, byte      = .Call("ffmode_implemented", .ffmode["byte"]     , PACKAGE="ff")
-	, ubyte     = .Call("ffmode_implemented", .ffmode["ubyte"]    , PACKAGE="ff")
-	, short     = .Call("ffmode_implemented", .ffmode["short"]    , PACKAGE="ff")
-	, ushort    = .Call("ffmode_implemented", .ffmode["ushort"]   , PACKAGE="ff")
-	, integer   = .Call("ffmode_implemented", .ffmode["integer"]  , PACKAGE="ff")
-	, single    = .Call("ffmode_implemented", .ffmode["single"]   , PACKAGE="ff")
-	, double    = .Call("ffmode_implemented", .ffmode["double"]   , PACKAGE="ff")
-	, complex   = .Call("ffmode_implemented", .ffmode["complex"]  , PACKAGE="ff")
-	, raw       = .Call("ffmode_implemented", .ffmode["raw"]      , PACKAGE="ff")
-	, character = .Call("ffmode_implemented", .ffmode["character"], PACKAGE="ff")
+		boolean   = .Call(C_ffmode_implemented, .ffmode["boolean"]  , PACKAGE="ff")
+	, logical   = .Call(C_ffmode_implemented, .ffmode["logical"]  , PACKAGE="ff")
+	, quad      = .Call(C_ffmode_implemented, .ffmode["quad"]     , PACKAGE="ff")
+	, nibble    = .Call(C_ffmode_implemented, .ffmode["nibble"]   , PACKAGE="ff")
+	, byte      = .Call(C_ffmode_implemented, .ffmode["byte"]     , PACKAGE="ff")
+	, ubyte     = .Call(C_ffmode_implemented, .ffmode["ubyte"]    , PACKAGE="ff")
+	, short     = .Call(C_ffmode_implemented, .ffmode["short"]    , PACKAGE="ff")
+	, ushort    = .Call(C_ffmode_implemented, .ffmode["ushort"]   , PACKAGE="ff")
+	, integer   = .Call(C_ffmode_implemented, .ffmode["integer"]  , PACKAGE="ff")
+	, single    = .Call(C_ffmode_implemented, .ffmode["single"]   , PACKAGE="ff")
+	, double    = .Call(C_ffmode_implemented, .ffmode["double"]   , PACKAGE="ff")
+	, complex   = .Call(C_ffmode_implemented, .ffmode["complex"]  , PACKAGE="ff")
+	, raw       = .Call(C_ffmode_implemented, .ffmode["raw"]      , PACKAGE="ff")
+	, character = .Call(C_ffmode_implemented, .ffmode["character"], PACKAGE="ff")
 	)
 	
   # list of possible coercions without information loss
@@ -186,9 +196,24 @@
    packageStartupMessage("Unloading package ff")
    #remove(list=".fftemp", envir=globalenv())
    #gc()
+   fftempdir <- getOption("fftempdir")
+   fftempkeep <- getOption("fftempkeep", default = FALSE)
    library.dynam.unload("ff", libpath)
-   if (unlink(getOption("fftempdir"), recursive = TRUE))
+   if (!fftempkeep && unlink(fftempdir, recursive = TRUE)){
      packageStartupMessage("Error in unlinking fftempdir")
-   else
-     options(fftempdir=NULL, ffextension=NULL, fffinonexit=NULL, ffpagesize=NULL, ffcaching=NULL, ffdrop=NULL, ffbatchbytes=NULL, ffmaxbytes=NULL)
+   }else{
+     if (fftempdir == standardPathFile(file.path(tempdir(), "ff")))
+       fftempdir <- NULL
+     options(
+       fftempdir=fftempdir
+     , fftempkeep=NULL
+     , ffextension=NULL
+     , fffinonexit=NULL
+     , ffpagesize=NULL
+     , ffcaching=NULL
+     , ffdrop=NULL
+     , ffbatchbytes=NULL
+     , ffmaxbytes=NULL
+     )
+   }
 }

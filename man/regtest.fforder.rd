@@ -21,7 +21,7 @@ regtest.fforder(n = 100)
  Invisible()
 }
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 \seealso{
   \code{\link{ramsort}}

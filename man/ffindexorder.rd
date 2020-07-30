@@ -48,7 +48,7 @@ ffindexorder(index, BATCHSIZE, FF_RETURN = NULL, VERBOSE = FALSE)
   Function \code{ffindexordersize} returns a balanced batchsize as returned from \code{\link{bbatch}}.
 }
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 \seealso{
    \code{\link{ffindexget}},  \code{\link{as.hi}},  \code{\link{bbatch}}

@@ -1,33 +1,30 @@
-# Namespace for ff (currently exporting (almost) everything in order to facilitate debugging)
-# (c) 2007 Jens Oehlsch‰gel
+# Namespace for ff
+# (c) 2007 Jens Oehlsch√§gel
 # Licence: GPL2
 # Created: 2007-08-24
-# Last changed: 2007-11-30
+# Last changed: 2017-11-19
 
-useDynLib(ff)
+useDynLib(ff, .registration = TRUE, .fixes = "C_")
 
 importFrom(utils, memory.limit, packageDescription, read.fwf, read.table, str, write.table)
 importFrom(stats, median, quantile, runif)
 import(bit)
 
 export(
-
-# == this is a complete list of R functions and metadata of this package sorted by filenames, non-exported functions are commented away ==
-
+  
 # wish of CRAN maintainers: export another time here (now maintained and exported in bit)
-  "clone"
-, "clone.default"
-, "clone.list"
+# without this R CMD CHECK complains
+# clone
+#,clone.default
+ clone.ff  
+,clone.ffdf
 
 # -- generics.R - all new generics --
-, as.hi
+,as.hi
 #,physical
 #,"physical<-"
 #,virtual
 #,"virtual<-"
-,maxindex
-,poslength
-,maxlength
 #,maxwidth
 ,pattern
 ,"pattern<-"
@@ -51,9 +48,7 @@ export(
 ,vw
 ,"vw<-"
 ,is.factor
-,is.factor.default
 ,is.ordered
-,is.ordered.default
 ,ramclass
 ,ramattribs
 ,recodeLevels
@@ -77,20 +72,7 @@ export(
 ,dummy.dimnames
 ,matcomb
 ,matprint
-,print.matprint
 ,vecprint
-,print.vecprint
-
-# -- as.ff.R - coercion from ram to ff and vice versa (cache-in/cache-out of complete ff objects) --
-,as.ram.default
-,as.ram.ff
-,as.ff.default
-,as.ff.ff
-
-# -- bigsample.R - sampling from big objects --
-,bigsample.default
-,bigsample.ff
-
 
 
 # -- CFUN.R - some collapse functions useful with ffapply and friends - xx TODO yet incomplete --
@@ -112,111 +94,16 @@ export(
 ,geterror.ff
 ,geterrstr.ff
 ,is.ff
-,vmode.ff
-,as.vmode.ff	# just catch invalid use
-,"vmode<-.ff" 	# just catch invalid use
-,is.open.ff_pointer
-,is.open.ff
-,pagesize.ff
 #,ffdir
-,pattern.ff
-,"pattern<-.ff"
-,"pattern<-.ffdf"
-,filename.ff_pointer
-,filename.ffdf
-,filename.default
-,"filename<-.ff"
-,is.readonly.ff
-,maxlength.ff
-,maxlength.default
-,symmetric.ff
-,symmetric.dist
-,symmetric.default
-,fixdiag.ff
-,fixdiag.dist
-,fixdiag.default
-,is.sorted.default
-,"is.sorted<-.default"
-,na.count.ff
-,"na.count<-.ff"
-,na.count.default
-,"na.count<-.default"
-#,physical.default
-#,"physical<-.default"
-,physical.ff
-,"physical<-.ff"
-#,print.physical
-#,virtual.default
-#,"virtual<-.default"
-,virtual.ff
-,"virtual<-.ff"
-#,print.virtual
-,ramclass.ff
-,ramclass.default
-,ramattribs.ff
-,ramattribs.default
-,length.ff
-,"length<-.ff"
-,levels.ff
-,"levels<-.ff"
-,is.factor.ff
-,is.ordered.ff
-,names.ff
-,"names<-.ff"
-,names.ff_array
-,"names<-.ff_array"
-,dim.ff
-,"dim<-.ff"
-,dimorder.ff_array
-,"dimorder<-.ff_array"
-,dimorder.default
-,vw.ff
-,"vw<-.ff_vector"
-,"vw<-.ff_array"
-,vw.default
-,dimnames.ff_array
-,"dimnames<-.ff_array"
-,print.ff  
-,print.ff_vector
-,print.ff_matrix
-,str.ff  
+,maxlength
 # xx todo print.ff_array via arrprint and print.arrprint
 ,ff
-,update.ff
-,clone.ff
-,finalizer.ff
-,"finalizer<-.ff"
-,finalize.ff_pointer
-,finalize.ff
-,finalize.ffdf
-,open.ff
-,close.ff_pointer
-,close.ff
-,deleteIfOpen.ff_pointer
-,deleteIfOpen.ff
-#,deleteIfOpen.default
-,delete.ff_pointer
-,delete.ff
-,delete.default
 ,getset.ff	# ,add=TRUE
 ,get.ff
 ,set.ff		# ,add=TRUE
-,"[[.ff"
-,"[[<-.ff"	# ,add=TRUE
 ,readwrite.ff	# ,add=TRUE
 ,read.ff
 ,write.ff	# ,add=TRUE
-,swap.ff	# ,add=TRUE
-,"[.ff"
-,"[<-.ff"	# ,add=TRUE
-,swap.ff_array	# ,add=TRUE
-,"[.ff_array"
-,"[<-.ff_array"	# ,add=TRUE
-,add.ff
-,add.default
-,swap.default
-,chunk.ff_vector
-
 
 # -- ffapply.R - applying expressions (not functions) to large ff (or ram) objects (R.ff foundation) --
 ,ffvecapply
@@ -247,47 +134,9 @@ export(
 
 # -- hi.R - class for Hybrid Index Preprocessing (HIP) --
 ,hi
-,print.hi
-,str.hi
 ,hiparse  #must not be exported
-,as.hi.hi
-,as.hi.ri
-,as.hi.name
-,as.hi.call #must not be exported
-,as.hi.integer
-,as.hi.which
-,as.hi.matrix
-,as.hi.logical
-,as.hi.character
-,as.hi.double
 ,subscript2integer
-,as.which.hi
-,as.integer.hi
-,as.matrix.hi
-,as.logical.hi
-,as.character.hi
-,maxindex.hi
-,maxindex.default
-,poslength.hi
-,poslength.default
 ,unsort
-,unsort.hi
-,unsort.ahi
-
-
-# -- ffbit.R - functions related to package bit --
-,maxindex.bitwhich
-,maxindex.bit
-,poslength.bitwhich
-,poslength.bit
-,as.hi.ri
-,as.hi.bit
-,as.bit.hi
-,as.bitwhich.hi
-,as.hi.bitwhich
-,as.ff.bit
-,as.bit.ff
-,chunk.bit
 
 # -- fileutil.R - filename utitlities --
 ,standardPathFile
@@ -318,94 +167,32 @@ export(
 ,".vcoerceable"
 ,boolean
 ,as.boolean
-,as.boolean.default
 ,quad
 ,as.quad
-,as.quad.default
 ,nibble
 ,as.nibble
-,as.nibble.default
 ,byte
 ,as.byte
-,as.byte.default
 ,ubyte
 ,as.ubyte
-,as.ubyte.default
 ,short
 ,as.short
-,as.short.default
 ,ushort
 ,as.ushort
-,as.ushort.default
 ,vector.vmode
-,vmode.default
-,"vmode<-.default"
-,as.vmode.default
 ,ram2ramcode
 ,ram2ffcode
 ,maxffmode
 #,charmode   # experimental, not used
 ,regtest.vmode
 
-# -- vt.R - virtual and cloned matrix transpose --
-,vt.default
-,vt.ff
-,t.ff
-
-
 # --- fffactor.R - utilities for factors ---
 ,appendLevels
-,recodeLevels.factor
-,recodeLevels.ff
-,sortLevels.factor
-,sortLevels.ff
-,sortLevels.ffdf
-
 
 # -- ffdf.R - dataframe class on top of ff --
 ,ffdf
-,chunk.ffdf
-,clone.ffdf
-,update.ffdf
-,"$.ffdf"
-,"$<-.ffdf"
-,"[[.ffdf"
-,"[[<-.ffdf"
-,"[.ffdf"
-,"[<-.ffdf"
 ,is.ffdf
 ,as.ffdf
-,as.ffdf.ff_matrix
-,as.ffdf.ff_vector
-,as.ffdf.data.frame
-,as.data.frame.ffdf
-,length.ffdf
-,"length<-.ffdf"
-,vmode.ffdf
-,"vmode<-.ffdf"
-,vw.ffdf
-,"vw<-.ffdf"
-,dim.ffdf
-,"dim<-.ffdf"
-,dimorder.ffdf
-,"dimorder<-.ffdf"
-,names.ffdf
-,"names<-.ffdf"
-,row.names.ffdf
-,"row.names<-.ffdf"
-,dimnames.ffdf
-,"dimnames<-.ffdf"
-,physical.ffdf
-,"physical<-.ffdf"
-,virtual.ffdf
-,"virtual<-.ffdf"
-,is.open.ffdf
-,open.ffdf
-,close.ffdf
-,delete.ffdf	
-,print.ffdf
-,str.ffdf
-
 
 # -- ffcsv.R - reading/writing csv into/from ff --
 ,read.table.ffdf
@@ -482,16 +269,6 @@ export(
 
 
 # -- ordermerge.R  --
-, mergeorder.default
-, mergesort.default
-, shellorder.default
-, shellsort.default
-, keyorder.default
-, keysort.default
-, radixorder.default
-, radixsort.default
-, ramorder.default
-, ramsort.default
 , regtest.fforder
 , ffsort
 , fforder
@@ -628,6 +405,7 @@ S3method(chunk, ff_vector)
 # -- hi.R - class for Hybrid Index Preprocessing (HIP) --
 S3method(print, hi)
 S3method(str, hi)
+S3method(as.hi, NULL)
 S3method(as.hi, hi)
 S3method(as.hi, ri)
 S3method(as.hi, name)
@@ -645,15 +423,9 @@ S3method(as.logical, hi)
 S3method(as.character, hi)
 S3method(length, hi)
 S3method(maxindex, hi)
-S3method(maxindex, default)
 S3method(poslength, hi)
-S3method(poslength, default)
 
 # -- ffbit.R - functions related to package bit --
-S3method(maxindex,bitwhich)
-S3method(maxindex,bit)
-S3method(poslength,bitwhich)
-S3method(poslength,bit)
 S3method(as.hi,ri)
 S3method(as.hi,bit)
 S3method(as.bit,hi)
@@ -661,7 +433,6 @@ S3method(as.bitwhich,hi)
 S3method(as.hi,bitwhich)
 S3method(as.ff,bit)
 S3method(as.bit,ff)
-S3method(chunk, bit)
 
 # -- util.R - some utitlities --
 
@@ -785,7 +556,5 @@ S3method("radixorder", default)
 S3method("radixsort", default)
 S3method("ramorder", default)
 S3method("ramsort", default)
-
 # wish of CRAN maintainers: export another time here (now maintained and exported in bit)
-S3method(clone, default)
-S3method(clone, list)
+#S3method(clone, default)

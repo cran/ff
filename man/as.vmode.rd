@@ -67,7 +67,7 @@ as.ushort(x, ...)
 \value{
   a vector of the desired vmode containing the input data
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{  \code{\link{vmode}}, \code{\link{vector.vmode}} }
 \examples{
   as.vmode(1:3,"double")

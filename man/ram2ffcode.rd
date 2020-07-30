@@ -20,8 +20,8 @@ ram2ramcode(value, levels)
 \value{
   A vector of integer values representing the correspnding factor levels.
 }
-\author{ Jens Oehlschl‰gel }
-\seealso{ \code{\link[base]{factor}}, \code{\link{levels.ff}}, \code{\link{vmode}} }
+\author{ Jens Oehlschl√§gel }
+\seealso{ \code{\link{factor}}, \code{\link{levels.ff}}, \code{\link{vmode}} }
 \examples{
  ram2ffcode(letters, letters, vmode="byte")
  ram2ffcode(letters, letters, vmode="ubyte")

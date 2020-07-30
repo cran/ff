@@ -43,7 +43,7 @@
    physical selection \tab    \tab \code{x$i} \tab    \tab the selected \code{\link{ff}}            \cr
   }
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{ \code{\link{ffdf}}, \code{\link[=[.data.frame]{Extract.data.frame}}, \code{\link{Extract.ff}}  }
 \examples{
    d <- data.frame(a=letters, b=rev(letters), c=1:26, stringsAsFactors = TRUE)

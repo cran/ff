@@ -50,7 +50,7 @@ ushort(length = 0)
 \value{
  a vector of the desired vmode initialized with 0
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{  \code{\link{as.vmode}}, \code{\link{vector}} }
 \examples{
   vector.vmode("byte",12)

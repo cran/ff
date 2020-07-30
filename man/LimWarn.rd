@@ -14,7 +14,7 @@
   \bold{Otherwise you might experience 'unexpected' losses of files and data.}
 }
 \section{Size of objects}{
-  Currently ff objects cannot have length zero and are limited to \code{.Machine$integer.max} elements. We have not yet ported the R code to support 64bit double indices (in essence 52 bits integer) although the C++ back-end has been prepared for this.
+  ff objects can have length zero and are limited to \code{.Machine$integer.max} elements. We have not yet ported the R code to support 64bit double indices (in essence 52 bits integer) although the C++ back-end has been prepared for this.
   Furthermore filesize limitations of the OS apply, see \code{\link{ff}}.
 }
 \section{Side effects}{
@@ -22,7 +22,7 @@
   This is also true for ram compatibility functions \code{\link{swap.default}}, and \code{\link{add.default}}.
 }
 \section{Hybrid copying semantics}{
-  If you modify a copy of an ff object, changes of data (\code{\link[ff:[<-.ff]{[<-}}) and of \code{\link[=physical.ff]{physical}} attributes
+  If you modify a copy of an ff object, changes of data (\code{\link[=Extract.ff]{[<-}}) and of \code{\link[=physical.ff]{physical}} attributes
   will be shared, but changes in \code{\link[=physical.ff]{virtual}} and class attributes will not.
 }
 \section{Limits of compatibility between ff and ram objects}{
@@ -50,14 +50,19 @@
   and \code{\link{add}} will behave differently, see \code{\link{swap}}.
 }
 \section{Definition of [[ and [[<-}{
-  You should consider the behaviour of \code{\link{[[.ff}} and \code{\link{[[<-.ff}} as undefined and not use them in programming.
-  Currently they are shortcuts to \code{\link{get.ff}} and \code{\link{set.ff}}, which unlike \code{\link{[.ff}} and \code{\link{[<-.ff}}
-  do not support \code{\link{factor}} and \code{\link{POSIXct}}, nor \code{\link{dimorder}} or virtual windows \code{\link{vw}}.
-  In contrast to the standard methods, \code{\link{[[.ff}} and \code{\link{[[<-.ff}} only accepts positive integer index positions.
-  The definition of \code{\link{[[.ff}} and \code{\link{[[<-.ff}} may be changed in the future.
+  You should consider the behaviour of \code{\link{[[.ff}} and 
+  \code{\link{[[<-.ff}} as undefined and not use them in programming.
+  Currently they are shortcuts to \code{\link{get.ff}} and \code{\link{set.ff}}, 
+  which unlike \code{\link[=Extract.ff]{[.ff}} and \code{\link[=Extract.ff]{[<-.ff}}
+  do not support \code{\link{factor}} and \code{\link{POSIXct}}, 
+  nor \code{\link{dimorder}} or virtual windows \code{\link{vw}}.
+  In contrast to the standard methods, \code{\link{[[.ff}} and 
+  \code{\link{[[<-.ff}} only accepts positive integer index positions.
+  The definition of \code{\link{[[.ff}} and \code{\link{[[<-.ff}} may be 
+  changed in the future.
 }
 \section{Multiple vector interpretation in arrays }{
-  R objects have always standard \code{\link{dimorder} 1:length(dim)}.
+  R objects have always standard \code{\link{dimorder} seq_along(dim)}.
   In case of non-standard dimorder (see \code{\link{dimorderStandard}})
   the vector sequence of array elements in R and in the ff file differs.
   To access array elements in file order, you can use \code{\link{getset.ff}}, \code{\link{readwrite.ff}}

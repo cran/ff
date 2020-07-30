@@ -42,14 +42,17 @@ namespace utk
 
     // seek to one-byte before end of file
 
-    err = fseeko(f, size-1, SEEK_SET);
-
-    // write last byte
-    if (!err)
-    {
-      unsigned char value = 0;
-      unsigned int nwritten = fwrite(&value,1,1,f);
-      if (nwritten != 1) err = 1;
+    if (size == 0) {   // Martijn Schuemie for zero row ff
+      err = fseeko(f, 0, SEEK_SET);   // Martijn Schuemie for zero row ff
+    } else {
+      err = fseeko(f, size-1, SEEK_SET);
+      // write last byte
+      if (!err)
+      {
+        unsigned char value = 0;
+        unsigned int nwritten = fwrite(&value,1,1,f);
+        if (nwritten != 1) err = 1;
+      }
     }
 
     // close

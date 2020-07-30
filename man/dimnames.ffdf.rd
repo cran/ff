@@ -31,7 +31,7 @@
   The assignment function return the changed ffdf object. The other functions return the expected.
 }
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 \seealso{
   \code{\link{ffdf}}, \code{\link{dimnames.ff}}, \code{\link{rownames}}, \code{\link{colnames}}

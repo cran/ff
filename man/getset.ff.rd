@@ -25,7 +25,7 @@ getset.ff(x, i, value, add = FALSE)
   \command{get.ff} returns a vector, \command{set.ff} returns the 'changed' ff object (like all assignment functions do) and \command{getset.ff} returns the value at the subscript positions.
   More precisely \code{getset.ff(x, i, value, add=FALSE)} returns the old values at the subscript positions \code{i} while \code{getset.ff(x, i, value, add=TRUE)} returns the incremented values at the subscript positions.
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \note{ \command{get.ff}, \command{set.ff} and \command{getset.ff} are low level functions that do not support \code{ramclass} and \code{ramattribs} and thus will not give the expected result with \code{factor} and \code{POSIXct} }
 \seealso{ \code{\link{readwrite.ff}} for low-level access to contiguous chunks and \code{\link{[.ff}} for high-level access }
 \examples{

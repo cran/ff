@@ -36,7 +36,7 @@
 \value{
   An ff object like the input 'object' updated with the content of the 'from' object.
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{ \code{\link{ff}}, \code{\link{clone}}, \code{\link{ffvecapply}}, \code{\link{vectorCompatible}}, \code{\link{filename}} }
 \examples{
   x <- ff(1:100)

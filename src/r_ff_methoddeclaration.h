@@ -1,6 +1,6 @@
 /*
 # R-C layer: forward declarations
-# (c) 2007 Jens Oehlsch‰gel
+# (c) 2007 Jens Oehlsch√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-08-24

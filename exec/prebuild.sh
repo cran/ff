@@ -11,7 +11,7 @@ echo "#### starting prebuild.sh"
 cd ..
 mkdir -p man
 cd man
-find ../R -name '*.[rR]' -exec cat \{\} \; | perl ../exec/make_rd.pl 
+find ../R -name '*.[rR]' -exec cat \{\} ; | perl ../exec/make_rd.pl 
 cd ../exec
 
 echo "#### prebuild.sh completed!"

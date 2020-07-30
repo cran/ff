@@ -26,7 +26,7 @@ fixdiag(x, \dots) <- value
 \value{
   NULL or the scalar representing the fixed diagonal
 }
-\author{ Jens Oehlschlägel }
+\author{ Jens OehlschlÃ¤gel }
 \seealso{ \code{\link{fixdiag}}, \code{\link{ff}} %, \code{\link{symm}}
         , \code{\link{dist}} }
 \examples{

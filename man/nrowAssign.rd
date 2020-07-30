@@ -6,15 +6,15 @@
   Assigning the number of rows or columns
 }
 \description{
-  Function \code{nrow<-} assigns \code{\link[base]{dim}} with a new number of rows. \cr
-  Function \code{ncol<-} assigns \code{\link[base]{dim}} with a new number of columns.
+  Function \code{nrow<-} assigns \code{\link{dim}} with a new number of rows. \cr
+  Function \code{ncol<-} assigns \code{\link{dim}} with a new number of columns.
 }
 \usage{
 nrow(x) <- value
 ncol(x) <- value
 }
 \arguments{
-  \item{x}{ a object that has \code{\link[base]{dim}} AND can be assigned ONE new dimension }
+  \item{x}{ a object that has \code{\link{dim}} AND can be assigned ONE new dimension }
   \item{value}{ the new size of the assigned dimension }
 }
 \details{
@@ -26,7 +26,7 @@ ncol(x) <- value
   The object with a modified dimension
 }
 \author{
-  Jens Oehlschlägel
+  Jens OehlschlÃ¤gel
 }
 \seealso{
   \code{\link{ffdf}}, \code{\link{dim.ffdf}}

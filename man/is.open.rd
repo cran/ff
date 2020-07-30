@@ -24,7 +24,7 @@ is.open(x, \dots)
 \value{
   TRUE or FALSE (or NA if not all components of an ffdf object are opened or closed)
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{ \code{\link{is.readonly}}, \code{\link{open.ff}}, \code{\link{close.ff}} }
 \examples{
   x <- ff(1:12)

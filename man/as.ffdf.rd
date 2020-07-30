@@ -29,7 +29,7 @@ as.ffdf(x, ...)
   'as.ffdf' returns an object of class \code{\link{ffdf}}, 'as.data.frame' returns an object of class \code{\link{data.frame}}
 }
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 \seealso{
   \code{\link{is.ffdf}}, \code{\link{ffdf}}, \code{\link{data.frame}}

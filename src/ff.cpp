@@ -110,12 +110,24 @@ void addset(ImplT* impl, IndexT i, T op2)
   impl->template set<T,IndexT>(i, add<ImplT,T>( impl->template get<T,IndexT>(i) , op2 ) );
 }
 
+/* Daniels original Code: add may overrun e.g. quad 
 template<typename T, class ImplT, typename IndexT>
 T addgetset(ImplT* impl, IndexT i, T op2)
 {
-  T newval = add<ImplT,T>( impl->template get<T,IndexT>(i) , op2 );
+  T newval = add<ImplT,T>( impl->template get<T,IndexT>(i) , op2 ); 
   impl->template set<T,IndexT>(i, newval);
-  return newval;
+return newval;
+}
+*/
+
+/* this also returns newval, however AFTER making sure the addition is wrapped around 
+   may it could be faster if not reading twice but putting cappaing in add, however, I don't know how to do this
+ */
+template<typename T, class ImplT, typename IndexT>
+T addgetset(ImplT* impl, IndexT i, T op2)
+{
+  impl->template set<T,IndexT>(i, add<ImplT,T>( impl->template get<T,IndexT>(i) , op2 ));
+  return impl->template get<T,IndexT>(i); 
 }
 
 // ----------------------------------------------------------------------------
@@ -150,17 +162,33 @@ void addsetV(ImplT* impl, IndexT i, SizeT s, T* value)
   }
 }
 
+
+/* Daniels original Code: add may overrun e.g. quad
 template<typename T, class ImplT, typename IndexT, typename SizeT>
 void addgetsetV(ImplT* impl, IndexT i, SizeT s, T* ret, T* value)
 {
-  for (IndexT end = i+s; i < end ; ++i) {
-    T buf = add<ImplT,T>( impl->template get<T,IndexT>(i) , *value++ );
-    impl->template set<T,IndexT>(i, buf);
-    *ret++ = buf;
-  }
+ for (IndexT end = i+s; i < end ; ++i) {
+   T buf = add<ImplT,T>( impl->template get<T,IndexT>(i) , *value++ );
+   impl->template set<T,IndexT>(i, buf);
+   *ret++ = buf;
+ }
 }
+*/
 
-
+/* this also returns newval, however AFTER making sure the addition is wrapped around 
+ may it could be faster if not reading twice but putting cappaing in add, however, I don't know how to do this
+ and it is not much slower than before
+*/
+template<typename T, class ImplT, typename IndexT, typename SizeT>
+void addgetsetV(ImplT* impl, IndexT i, SizeT s, T* ret, T* value)
+{
+ for (IndexT end = i+s; i < end ; ++i) {
+   impl->template set<T,IndexT>(i, add<ImplT,T>( impl->template get<T,IndexT>(i) , *value++ ));
+   *ret++ = impl->template get<T,IndexT>(i);
+ }
+}
+ 
+ 
 
 // ----------------------------------------------------------------------------
 // filters
@@ -276,7 +304,9 @@ template<> inline int add<IntegerImpl,int>(int a, int b)
 // R-FF C type interface definition macro
 
 #define FF_DEF_TYPE2(NAME,TYPE,IMPL,INDEX,SIZE) \
-FF   ff_##NAME##_new(const char* filepath, TYPE initval, INDEX size, int pagesize, int readonly, int autoflush) \
+FF   ff_##NAME##_new(const char* filepath, TYPE initval, INDEX size, int pagesize, int readonly, int autoflush \
+, int createNew /* Martijn Schuemie for zero row ff */ \
+) \
 { IMPL* p = new IMPL(); \
   InitParameters pars; \
   pars.path = filepath; \
@@ -284,6 +314,7 @@ FF   ff_##NAME##_new(const char* filepath, TYPE initval, INDEX size, int pagesiz
   pars.pagesize = static_cast<ff::msize_t>(pagesize); \
   pars.readonly = (readonly == 0 ) ? false : true; \
   pars.autoflush = (autoflush == 0) ? false : true; \
+  pars.createNew = createNew; /* Martijn Schuemie for zero row ff */ \
   p->init(pars); \
   return reinterpret_cast<FF>(p); \
 }\

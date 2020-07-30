@@ -24,7 +24,7 @@ matprint(x, maxdim = c(16, 16), digits = getOption("digits"))
   \item{ rsep }{ logical scalar indicating whether row seperator is included }
   \item{ csep }{ logical scalar indicating whether column seperator is included }
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{  \code{\link{vecprint}} }
 \examples{
   matprint(matrix(1:(300*400), 300, 400))

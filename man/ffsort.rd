@@ -67,7 +67,7 @@ and \code{\link{na.count}} attributes.
   An ff vector -- optionally decorated with \code{\link{is.sorted}} and \code{\link{na.count}}, see argument 'decorate'
 }
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 
 \seealso{

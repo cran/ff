@@ -22,13 +22,13 @@
   \command{names.ff\_array}
   returns NULL and setting names for
   \code{ff_array}s is not allowed,
-  but setting \code{\link[ff:dimnames.ff_array]{dimnames}} is.
+  but setting \code{\link[=dimnames.ff]{dimnames}} is.
 }
 \value{
   \command{names} returns a character vector (or NULL)
 }
-\author{ Jens Oehlschl‰gel }
-\seealso{ \code{\link[base]{names}}, \code{\link{dimnames.ff_array}}, \code{\link{vw}}, \code{\link[=physical.ff]{virtual}} }
+\author{ Jens Oehlschl√§gel }
+\seealso{ \code{\link{names}}, \code{\link[=dimnames.ff]{dimnames.ff_array}}, \code{\link{vw}}, \code{\link[=physical.ff]{virtual}} }
 \examples{
   x <- ff(1:26, names=letters)
   names(x)

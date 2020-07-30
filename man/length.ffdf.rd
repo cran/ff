@@ -15,7 +15,7 @@ Getting "length" (number of columns) of a ffdf dataframe
 }
 \value{ integer number of columns}
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 \seealso{
   \code{\link{dim.ffdf}}, \code{\link{length.ff}}, \code{\link{ffdf}}

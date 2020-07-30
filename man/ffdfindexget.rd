@@ -57,7 +57,7 @@
   Function \code{ffdfindexset} returns \code{x} with those rows replaced that had been requested by \code{index} and \code{value}.
 }
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 \seealso{
   \code{\link{Extract.ff}}, \code{\link{ffindexget}}, \code{\link{ffindexorder}}

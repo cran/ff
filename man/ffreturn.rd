@@ -15,7 +15,7 @@ ffreturn(FF_RETURN = NULL, FF_PROTO = NULL, FF_ATTR = NULL)
 \value{
   a suitable \code{\link{ffsuitable}} object
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \note{ xx Work in progress for package \pkg{R.ff} }
 \seealso{ \code{\link{ffconform}}, \code{\link{ffsuitable}} }
 \keyword{ IO }

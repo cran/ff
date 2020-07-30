@@ -13,7 +13,7 @@ ffconform(\dots, vmode = NULL, fail = "stop")
   \item{fail}{ the name of a function to call if not-conforming, default \code{\link{stop}} }
 }
 \details{
-  A reference argument is defined to be the first argument with a \code{\link[ff:dim.ff]{dim}} attribute or the longest vector.
+  A reference argument is defined to be the first argument with a \code{\link[=dim.ff]{dim}} attribute or the longest vector.
   The other arguements are then compared to the reference to check for conformity,
   which is violated if vmodes are not conforming
   or if the reference has not a multiple length of each other
@@ -23,7 +23,7 @@ ffconform(\dots, vmode = NULL, fail = "stop")
 \value{
   the position of the most conforming argument or 0 (zero) if not conforming.
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \note{ xx Work in progress for package \pkg{R.ff} }
 \seealso{ \code{\link{ffsuitable}}, \code{\link{maxffmode}}, \code{\link{ymismatch}}, \code{\link{stop}}, \code{\link{warning}}, \code{\link{dimorderStandard}} }
 \examples{

@@ -1,29 +1,11 @@
 # bit <=> ff interface
-# (c) 2009 Jens Oehlsch‰gel
+# (c) 2009 Jens Oehlsch√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2009-04-05
 # Last changed: 2009-04-05
 
 # source("d:/mwp/eanalysis/ff/R/ffbit.R")
-
-maxindex.bitwhich <- function(x, ...)
-  length(x, ...)
-
-maxindex.bit <- function(x, ...)
-  length(x, ...)
-
-maxindex.ri <- function(x, ...)
-  length(x, ...)
-
-poslength.bitwhich <- function(x, ...)
-  sum(x, ...)
-
-poslength.bit <- function(x, ...)
-  sum(x, ...)
-
-poslength.ri <- function(x, ...)
-  sum(x, ...)
 
 as.hi.ri <- function(x
 , maxindex  = length(x)
@@ -39,21 +21,21 @@ as.bitwhich.hi <- function(x, ...){
   poslength <- poslength(x)
   maxindex <- maxindex(x)
   if (poslength==0){
-    bitwhich(maxindex, poslength, FALSE)
+    bitwhich(maxindex, FALSE, poslength=poslength)
   }else if (poslength==maxindex){
-    bitwhich(maxindex, poslength, TRUE)
+    bitwhich(maxindex, TRUE, poslength=poslength)
   }else{
     x <- as.integer(x, ...)
     if (poslength > (maxindex%/%2L)){
       if (x[[1]]<0)
-        bitwhich(maxindex, poslength, x)
+        bitwhich(maxindex, x, poslength=poslength)
       else
-        bitwhich(maxindex, poslength, -as.integer(seq_len( maxindex))[-x])
+        bitwhich(maxindex, -as.integer(seq_len( maxindex))[-x], poslength=poslength)
     }else{
       if (x[[1]]<0)
-        bitwhich(maxindex, poslength, as.integer(seq_len( maxindex))[x])
+        bitwhich(maxindex, as.integer(seq_len( maxindex))[x], poslength=poslength)
       else
-        bitwhich(maxindex, poslength, x)
+        bitwhich(maxindex, x, poslength=poslength)
     }
   }
 }
@@ -129,7 +111,7 @@ regtest.as.hi.bit <- function(){
       message("n ", n, " to ", to1, "")
       for (from1 in seq.int(from=1L, to=to1, by=1L)){
       x <- bit(n)
-      if (!identical(max(x, from=from1, to=to1), as.integer(NA)))
+      if (!identical(max(x, from=from1, to=to1), NA_integer_))
         stop("wrong")
       for (i in seq_len(n)){
         x[i] <- TRUE
@@ -147,7 +129,7 @@ regtest.as.hi.bit <- function(){
       message("n ", n, " to ", to1, "")
       for (from1 in seq.int(from=1L, to=to1, by=1L)){
       x <- bit(n)
-      if (!identical(min(x, from=from1, to=to1), as.integer(NA)))
+      if (!identical(min(x, from=from1, to=to1), NA_integer_))
         stop("wrong")
       for (i in rev(seq_len(n))){
         x[i] <- TRUE
@@ -165,11 +147,11 @@ regtest.as.hi.bit <- function(){
       message("n ", n, " to ", to1, "")
       for (from1 in seq.int(from=1L, to=to1, by=1L)){
       x <- bit(n)
-      if (!identical(min(x, from=from1, to=to1), as.integer(NA)))
+      if (!identical(min(x, from=from1, to=to1), NA_integer_))
         stop("wrong")
       for (i in seq_len(n)){
         x[i] <- TRUE
-        if (!identical(as.vector(as.which(x)), (1:n)[as.vector(as.integer(as.hi.bit(x)))]))
+        if (!identical(as.vector(as.which(x)), seq_len(n)[as.vector(as.integer(as.hi.bit(x)))]))
           stop("wrong")
       }
       }
@@ -189,7 +171,7 @@ regtest.as.hi.bit <- function(){
 #!   Conversion between bit and ff boolean
 #! }
 #! \description{
-#!   Function \code{as.ff.bit} converts a \code{\link[bit]{bit}} vector to a boolean \code{\link{ff}} vector.
+#!   Function \code{as.ff.bit} converts a \code{\link{bit}} vector to a boolean \code{\link{ff}} vector.
 #!   Function \code{as.bit.ff} converts a boolean \code{\link{ff}} vector to a \code{\link{ff}} vector.
 #! }
 #! \usage{
@@ -213,10 +195,10 @@ regtest.as.hi.bit <- function(){
 #!   A vector of the converted type
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #! \seealso{
-#!   \code{\link[bit]{bit}}, \code{\link{ff}}, \code{\link{as.ff}}, \code{\link{as.hi.bit}}
+#!   \code{\link{bit}}, \code{\link{ff}}, \code{\link{as.ff}}, \code{\link{as.hi.bit}}
 #! }
 #! \examples{
 #!   l <- as.boolean(sample(c(FALSE,TRUE), 1000, TRUE))
@@ -255,8 +237,6 @@ as.ff.bit <- function(
   pattr$maxlength <- NULL
   pattr$readonly <- NULL
 
-  class(x) <- NULL
-  ni <- length(x)
 
   l <- list(...)
   if (length(l))
@@ -266,108 +246,48 @@ as.ff.bit <- function(
     pattr$filename <- filename
   pattr$overwrite <- overwrite
   pattr$length <- nb
-
-  pattr1 <- pattr
-  pattr1$finalizer <- "close"
-  pattr1$vmode <- "integer"
-  pattr1$length <- ni
-  y <- do.call("ff", pattr1)
-  i1 <- i2 <- 0L; ffvecapply( y[i1:i2] <- x[i1:i2], X=y )
+  ret <- do.call("ff", pattr)
+  
+  if (nb){
+    # we treat the bit vector as an ordinary vector of integer
+    # i.e. we transfer the data 32bits at once
+    class(x) <- NULL 
+    ni <- length(x)
+    
+    y <- ff(vmode="integer", filename=filename(ret), finalizer="close")
+    for (i in chunk(x)){
+      y[i] <- x[i[[1]]:i[[2]]]
+    }
   close(y)
-
-  pattr$filename <- filename(y)
-  do.call("ff", pattr)
 }
 
+  ret
+}
 
 
 as.bit.ff <- function(x, ...){
   if (vmode(x)=="boolean"){
     nb <- length(x)
-    iso <- is.open(x)
-    if (iso)
-      close(x)
+    if (nb){
+      # we treat the bit vector as an ordinary vector of integer
+      # i.e. we transfer the data 32bits at once
     y <- ff(vmode="integer", filename=filename(x), finalizer="close")
     b <- integer(length(y))
-    i1 <- i2 <- 0L; ffvecapply( b[i1:i2] <- y[i1:i2], X=y )
+      for (i in chunk(y)){
+        b[i[[1]]:i[[2]]] <- y[i]
+      }
     close(y)
-    if (iso)
-      open(x)
+    }else{
+      b <- bit()
+    }
     pattr <- physical(x)
     physical(b) <- pattr[!is.na(match(names(pattr), c("vmode", ramphysical_includes)))]
     vattr <- virtual(x)
     virtual(b)  <- vattr[!is.na(match(names(vattr), c("Length", ramvirtual_includes )))]
-    class(b) <- "bit"
+    class(b) <- c("booltype","bit")
     b
   }else{
-    stop("not implemented")
+    stop('only vmode(x)=="boolean" implemented')
   }
 }
 
-
-
-
-#! \name{chunk.bit}
-#! \Rdversion{1.1}
-#! \alias{chunk.bit}
-#! \title{
-#!    Chunk bit vectors
-#! }
-#! \description{
-#!    chunking method for ffdf objects automatically considering RAM requirements from recordsize as calculated from \code{\link{sum}(\link{.rambytes}[\link[=vmode.ffdf]{vmode}])}
-#! }
-#! \usage{
-#! \method{chunk}{bit}(x, RECORDBYTES = .rambytes["logical"], BATCHBYTES = getOption("ffbatchbytes"), \dots)
-#! }
-#! \arguments{
-#!   \item{x}{\code{\link{bit}}}
-#!   \item{RECORDBYTES}{ optional integer scalar representing the bytes needed to process a single element of the bit vector }
-#!   \item{BATCHBYTES}{ integer scalar limiting the number of bytes to be processed in one chunk, default from \code{getOption("ffbatchbytes")}, see also \code{\link{.rambytes}} }
-#!   \item{\dots}{further arguments passed to \code{\link[bit]{chunk}}}
-#! }
-#! \value{
-#!   A list with \code{\link[bit]{ri}} indexes each representing one chunk
-#! }
-#! \author{
-#!   Jens Oehlschl‰gel
-#! }
-#! \seealso{ \code{\link[bit]{chunk}}, \code{\link{bit}} }
-#! \examples{
-#!   n <- 1000
-#!   x <- bit(n)
-#!   ceiling(n / (300 \%/\% sum(.rambytes["logical"])))
-#!   chunk(x, BATCHBYTES=300)
-#!   ceiling((n/2) / (100 \%/\% sum(.rambytes["logical"])))
-#!   chunk(x, from=1, to = n/2, BATCHBYTES=100)
-#!   rm(x, n)
-#!
-#! }
-#! \keyword{ IO }
-#! \keyword{ data }
-
-
-chunk.bit <- function(x, RECORDBYTES = .rambytes["logical"], BATCHBYTES = getOption("ffbatchbytes"), ...){
-  n <- length(x)
-  if (n){
-    l <- list(...)
-    if (is.null(l$from))
-      l$from <- 1L
-    if (is.null(l$to))
-      l$to <- n
-    if (is.null(l$by) && is.null(l$len)){
-      recordsize <- sum(RECORDBYTES)
-      b <- BATCHBYTES %/% recordsize
-      if (b==0L){
-        b <- 1L
-        warning("single record does not fit into BATCHBYTES")
-      }
-      l$by <- b
-    }
-    l$maxindex <- n
-    ret <- do.call("chunk.default", l)
-
-  }else{
-    ret <- list()
-  }
-  ret
-}

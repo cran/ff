@@ -1,14 +1,10 @@
-\name{clone}
-\alias{clone}
+\name{clone.ff}
 \alias{clone.ff}
-\alias{clone.list}
-\alias{clone.default}
 \title{ Cloning ff and ram objects }
 \description{
   \command{clone} physically duplicates ff (and ram) objects and can additionally change some features, e.g. length.
 }
 \usage{
-clone(x, \dots)
 \method{clone}{ff}(x
 , initdata = x
 , length = NULL
@@ -37,8 +33,6 @@ clone(x, \dots)
 , BATCHBYTES = getOption("ffbatchbytes")
 , VERBOSE = FALSE
 , \dots)
-\method{clone}{list}(x, \dots)
-\method{clone}{default}(x, \dots)
 }
 \arguments{
   \item{x}{ \code{x} }
@@ -47,7 +41,7 @@ clone(x, \dots)
   \item{levels}{ optional character vector of levels if (in this case initdata must be composed of these) (default: derive from initdata) }
   \item{ordered}{ indicate whether the levels are ordered (TRUE) or non-ordered factor (FALSE, default) }
   \item{dim}{ optional array \code{\link{dim}}, see \code{\link{dim.ff}} and \code{\link{array}} }
-  \item{dimorder}{ physical layout (default 1:length(dim)), see \code{\link{dimorder}} and \code{\link{aperm}} }
+  \item{dimorder}{ physical layout (default seq_along(dim)), see \code{\link{dimorder}} and \code{\link{aperm}} }
   \item{bydim}{ dimorder by which to interpret the 'initdata', generalization of the 'byrow' paramter in \code{\link{matrix}} }
   \item{symmetric}{ extended feature: TRUE creates symmetric matrix (default FALSE) %, see \code{\link{symm}}, \code{\link{ff_symm}}, \code{\link{ff_dist}}
        }
@@ -63,7 +57,7 @@ clone(x, \dots)
   \item{overwrite}{ set to TRUE to allow overwriting existing files (default FALSE) }
   \item{pagesize}{ pagesize in bytes for the memory mapping (default from getOptions("ffpagesize") initialized by \code{\link{getdefaultpagesize}}), see also \code{\link[=physical.ff]{physical}} }
   \item{caching}{ caching scheme for the backend, currently 'mmnoflush' or 'mmeachflush' (flush mmpages at each swap, default from getOptions("ffcaching") initialized with 'memorymap'), see also \code{\link[=physical.ff]{physical}} }
-  \item{finalizer}{ name of finalizer function called when ff object is \code{\link{remove}d}, (default "deleteIfOpen" from getOptions("fffinalizer"))), standard finalizers are \code{\link{close.ff}}, \code{\link{delete.ff}} and \code{\link{deleteIfOpen.ff}}, see also \code{\link[base]{reg.finalizer}} }
+  \item{finalizer}{ name of finalizer function called when ff object is \code{\link{remove}d}, (default "deleteIfOpen" from getOptions("fffinalizer"))), standard finalizers are \code{\link{close.ff}}, \code{\link{delete.ff}} and \code{\link{deleteIfOpen.ff}}, see also \code{\link{reg.finalizer}} }
   \item{finonexit}{ logical scalar determining whether finalizer is also called when R is closed via \code{\link{q}}, (default TRUE from getOptions("fffinonexit")) }
   \item{FF_RETURN}{ logical scalar or ff object to be used. The default NULL creates a ff or ram clone, TRUE returns a ff clone, FALSE returns a ram clone. Handing over an ff object here uses this or stops if not \code{\link{ffsuitable}} }
   \item{BATCHSIZE}{ integer scalar limiting the number of elements to be processed in \code{\link{update.ff}} when length(initdata)>1, default from getOption("ffbatchsize") }
@@ -78,7 +72,7 @@ clone(x, \dots)
 \value{
   an ff or ram object
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{ \code{\link{ff}}, \code{\link{update}}, \code{\link{as.ram}}, \code{\link{as.ff}} }
 \examples{
   x <- ff(letters, levels=letters)

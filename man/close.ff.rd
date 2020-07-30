@@ -22,7 +22,7 @@
 \value{
   TRUE if the file could be closed, FALSE if it was closed already (or NA if not all components of an ffdf returned FALSE or TRUE on closing)
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{ \code{\link{ff}}, \code{\link{open.ff}}, \code{\link{delete}}, \code{\link{deleteIfOpen}} }
 \examples{
   x <- ff(1:12)

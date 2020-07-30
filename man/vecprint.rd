@@ -22,7 +22,7 @@ vecprint(x, maxlength = 16, digits = getOption("digits"))
   \item{ example }{ the extracted example vector as.character including seperator }
   \item{ sep }{ the row seperator ":" }
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{  \code{\link{matprint}} }
 \examples{
   vecprint(10000:1)

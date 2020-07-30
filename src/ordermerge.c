@@ -1,6 +1,6 @@
 /*
 # sorting module for ff
-# (c) 2010 Jens Oehlsch‰gel
+# (c) 2010 Jens Oehlsch√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2010-01-01

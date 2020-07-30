@@ -44,7 +44,7 @@
 #!  see  \code{\link{file.copy}} and \code{\link{file.remove}}.
 #! }
 #! \author{ Daniel Adler }
-#! \seealso{ \code{\link[base]{file.create}}, \code{\link[base]{file.rename}}, \code{\link[base]{file.info}}, \code{\link{file.copy}}, \code{\link{file.remove}} }
+#! \seealso{ \code{\link{file.create}}, \code{\link{file.rename}}, \code{\link{file.info}}, \code{\link{file.copy}}, \code{\link{file.remove}} }
 #! \examples{
 #!  x <- tempfile()
 #!  newsize <- 23       # resize and size to 23 bytes.
@@ -63,7 +63,7 @@
 #! \keyword{ data }
 
 file.resize <- function(path, size)
-  .Call("r_file_resize", as.character(path), as.double(size), PACKAGE="ff" )
+  .Call(C_r_file_resize, as.character(path), as.double(size), PACKAGE="ff" )
 
 file.move <- function(from, to){
 	oldopt <- options("warn")

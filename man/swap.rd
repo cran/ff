@@ -47,7 +47,7 @@ swap(x, value, \dots)
   Values at the target positions.
   More precisely \code{swap(x, value, i, add=FALSE)} returns the old values at the position \code{i} while \code{swap(x, value, i, add=TRUE)} returns the incremented values of \code{x}.
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \note{
   Note that \code{swap.default} changes the object in its parent frame and thus violates R's usual functional programming logic.
   When using \code{add=TRUE}, duplicated index positions should be avoided, because ff and ram objects behave differently:

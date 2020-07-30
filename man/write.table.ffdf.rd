@@ -79,11 +79,11 @@ write.csv2(...)
   \code{\link{invisible}}
 }
 \note{
-  \code{\link[utils]{write.csv}} and \code{\link[utils]{write.csv2}} have been fixed in order to suppress \code{col.names} if \code{append=TRUE} is passed.
+  \code{\link{write.csv}} and \code{\link{write.csv2}} have been fixed in order to suppress \code{col.names} if \code{append=TRUE} is passed.
   Note also that \code{write.table.ffdf} passes \code{col.names=FALSE} for all chunks following the first chunk - but not so for \code{FUN="write.csv"} and \code{FUN="write.csv2"} .
 }
 \author{
-  Jens Oehlschl‰gel, Christophe Dutang
+  Jens Oehlschl√§gel, Christophe Dutang
 }
 \seealso{
   \code{\link{read.table.ffdf}}, \code{\link{write.table}}, \code{\link{ffdf}}

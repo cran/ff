@@ -36,14 +36,14 @@ sortLevels(x)
 \details{
   When reading a long file with categorical columns the final set of factor levels is only known once the complete file has been read.
   When a file is so large that we read it in chunks, the new levels need to be added incrementally.
-  \code{\link[base]{rbind.data.frame}} sorts combined levels, which requires recoding. For \code{\link{ff}} factors this would require recoding of all previous chunks at the next chunk - potentially on disk, which is too expensive.
+  \code{\link{rbind.data.frame}} sorts combined levels, which requires recoding. For \code{\link{ff}} factors this would require recoding of all previous chunks at the next chunk - potentially on disk, which is too expensive.
   Therefore \code{\link{read.table.ffdf}} will simply \code{appendLevels} without sorting, and the \code{recodeLevels} and \code{sortLevels} generics provide a convenient means for sorting and recoding levels after all chunks have been read.
 }
 \value{
   \code{appendLevels} returns a vector of combined levels, \code{recodeLevels} and \code{sortLevels} return the input object with changed levels. Do read the note!
 }
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 \note{
   You need to re-assign the return value not only for ram- but also for ff-objects. Remember ff's hybrid copying semantics: \code{\link{LimWarn}}.

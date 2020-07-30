@@ -1,5 +1,5 @@
 # hybrid index packing with run length encoding
-# (c) 2007 Jens Oehlsch‰gel
+# (c) 2007 Jens Oehlsch√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-08-24
@@ -44,7 +44,7 @@
 #! }
 #! \value{
 #!   A list of class 'hi' with components
-#!   \item{ x      }{ directly accessed by the C-code: the sorted index of class 'rlepack' as returned by \code{\link[bit]{rlepack}} }
+#!   \item{ x      }{ directly accessed by the C-code: the sorted index of class 'rlepack' as returned by \code{\link{rlepack}} }
 #!   \item{ ix     }{ NULL or positions to restore original order }
 #!   \item{ re     }{ logical scalar indicating if sequence was reversed from descending to ascending (in this case \code{is.null(ix)}) }
 #!   \item{ minindex  }{ directly accessed by the C-code: represents the lowest positive subscript to be enumerated in case of negative subscripts }
@@ -55,11 +55,11 @@
 #!   \item{ symmetric }{ logical scalar indicating whether we have a symmetric matrix }
 #!   \item{ fixdiag   }{ logical scalar indicating whether we have a fixed diagonal (can only be true for symmetric matrices) }
 #!   \item{ vw     }{ virtual window information \code{\link{vw}} }
-#!   \item{ NAs      }{ NULL or NA positions as returned by \code{\link[bit]{rlepack}} }
+#!   \item{ NAs      }{ NULL or NA positions as returned by \code{\link{rlepack}} }
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \note{ \command{hi} defines the class structure, however usually \code{\link{as.hi}} is used to acturally Hybrid Index Preprocessing for \code{\link{ff}} }
-#! \seealso{ \code{\link{as.hi}} for coercion, \code{\link[bit]{rlepack}}, \code{\link[bit]{intrle}}, \code{\link{maxindex}}, \code{\link{poslength}} }
+#! \seealso{ \code{\link{as.hi}} for coercion, \code{\link{rlepack}}, \code{\link{intrle}}, \code{\link{maxindex}}, \code{\link{poslength}} }
 #! \examples{
 #!   hi(c(1, 11, 29), c(9, 19, 21), c(1,1,-2))
 #!   as.integer(hi(c(1, 11, 29), c(9, 19, 21), c(1,1,-2)))
@@ -122,7 +122,7 @@ hi <- function (from, to, by = 1L, maxindex = NA, vw=NULL, pack = TRUE, NAs = NU
             x <- sort.int(x, index.return = TRUE, method = "quick")
             ix <- x$ix
             x <- rlepack(x$x, pack = pack)
-            #ix <- 1:n
+            #ix <- seq_len(n)
             #radixorder(x, ix)
             #x <- rlepack(x[ix], pack = pack)
         }
@@ -178,7 +178,7 @@ hi <- function (from, to, by = 1L, maxindex = NA, vw=NULL, pack = TRUE, NAs = NU
             stop("0s and mixed positive/negative subscripts not allowed")
         }
     }else{
-        x <- list(first = as.integer(NA), dat = integer(), last = as.integer(NA))
+        x <- list(first = NA_integer_, dat = integer(), last = NA_integer_)
         re <- FALSE
         ix <- NULL
         n <- 0L
@@ -245,7 +245,7 @@ str.hi <- function(object, nest.lev=0, ...){
 #!   \emph{Not to be called directly}
 #! }
 #! \usage{
-#! hiparse(x, envir, first = as.integer(NA), last = as.integer(NA))
+#! hiparse(x, envir, first = NA_integer_, last = NA_integer_)
 #! }
 #! \arguments{
 #!   \item{x}{ an index expression, precisely: \code{\link{call}} }
@@ -263,13 +263,13 @@ str.hi <- function(object, nest.lev=0, ...){
 #! \value{
 #!   undefined (and redefined as needed by \code{\link{as.hi.call}})
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{hi}}, \code{\link{as.hi.call}} }
 #! \keyword{ IO }
 #! \keyword{ data }
 
 
-hiparse <- function(x, envir, first=as.integer(NA), last=as.integer(NA)){
+hiparse <- function(x, envir, first=NA_integer_, last=NA_integer_){
   if (length(x)>1){
     if (x[[1]]=='c'){
       values <- integer()
@@ -349,6 +349,7 @@ hiparse <- function(x, envir, first=as.integer(NA), last=as.integer(NA)){
 
 #! \name{as.hi}
 #! \alias{as.hi}
+#! \alias{as.hi.NULL}
 #! \alias{as.hi.hi}
 #! \alias{as.hi.ri}
 #! \alias{as.hi.bit}
@@ -370,6 +371,7 @@ hiparse <- function(x, envir, first=as.integer(NA), last=as.integer(NA)){
 #! }
 #! \usage{
 #! as.hi(x, \dots)
+#! \method{as.hi}{NULL}(x, \dots)
 #! \method{as.hi}{hi}(x, \dots)
 #! \method{as.hi}{ri}(x, maxindex = length(x), \dots)
 #! \method{as.hi}{bit}(x, range = NULL, maxindex = length(x), vw = NULL
@@ -393,16 +395,16 @@ hiparse <- function(x, envir, first=as.integer(NA), last=as.integer(NA)){
 #!   \item{x}{ an appropriate object of the class for which we dispatched }
 #!   \item{envir}{ the environment in which to evaluate components of the index expression }
 #!   \item{maxindex}{ maximum positive indexposition \code{maxindex}, is needed with negative indices, if vw or dim is given, maxindex is calculated automatically }
-#!   \item{names}{ the \code{\link[ff:names.ff]{names}} of the indexed vector for character indexing }
-#!   \item{dim}{ the \code{\link[ff:dim.ff]{dim}} of the indexed matrix to be stored within the \code{\link{hi}} object }
+#!   \item{names}{ the \code{\link[=names.ff]{names}} of the indexed vector for character indexing }
+#!   \item{dim}{ the \code{\link[=dim.ff]{dim}} of the indexed matrix to be stored within the \code{\link{hi}} object }
 #!   \item{dimorder}{ the \code{\link{dimorder}} of the indexed matrix to be stored within the \code{\link{hi}} object, may convert interpretation of \code{x} }
 #!   \item{symmetric}{ the \code{\link{symmetric}} of the indexed matrix to be stored within the \code{\link{hi}} object }
 #!   \item{fixdiag}{ the \code{\link{fixdiag}} of the indexed matrix to be stored within the \code{\link{hi}} object }
 #!   \item{vw}{ the virtual window \code{\link{vw}} of the indexed vector or matrix to be stored within the \code{\link{hi}} object, see details }
 #!   \item{vw.convert}{ FALSE to prevent doubly virtual window conversion, this is needed for some internal calls that have done the virtual window conversion already, see details }
 #!   \item{dimorder.convert}{ FALSE to prevent doubly dimorder conversion, this is needed for some internal calls that have done the dimorder conversion already, see details }
-#!   \item{NAs}{ a vector of NA positions to be stored \code{\link[bit]{rlepack}ed}, not fully supported yet }
-#!   \item{pack}{ FALSE to prevent \code{\link[bit]{rlepack}ing}, note that this is a hint rather than a guarantee, \code{as.hi.bit} might ignore this }
+#!   \item{NAs}{ a vector of NA positions to be stored \code{\link{rlepack}ed}, not fully supported yet }
+#!   \item{pack}{ FALSE to prevent \code{\link{rlepack}ing}, note that this is a hint rather than a guarantee, \code{as.hi.bit} might ignore this }
 #!   \item{range}{ NULL or a vector with two elements indicating first and last position to be converted from 'bit' to 'hi' }
 #!   \item{\dots}{ further argument passed from generic to method or from wrapper method to \code{as.hi.integer} }
 #! }
@@ -424,16 +426,16 @@ hiparse <- function(x, envir, first=as.integer(NA), last=as.integer(NA)){
 #!   If the \code{vw} parameter is used, the index information in \code{x} is interpreted relative to the virtual window but stored relative to the abolute origin.
 #!   Back-coercion via \code{\link{as.integer.hi}} and friends will again return the index information relative to the virtual window, thus retaining symmetry and transparency of the viurtual window to the user.
 #!   \cr
-#!   You can use \code{\link[ff:length.hi]{length}} to query the index length (possibly length of negative subscripts),
-#!   \code{\link[ff:poslength.hi]{poslength}} to query the number of selected elements (even with negative subscripts),
-#!   and \code{\link[ff:maxindex.hi]{maxindex}} to query the largest possible index position (within virtual window, if present)
+#!   You can use \code{\link[=length.hi]{length}} to query the index length (possibly length of negative subscripts),
+#!   \code{\link[=length.hi]{poslength}} to query the number of selected elements (even with negative subscripts),
+#!   and \code{\link[=length.hi]{maxindex}} to query the largest possible index position (within virtual window, if present)
 #!   \cr
 #!   Duplicated negative indices are removed and will not be recovered by \code{\link{as.integer.hi}}.
 #! }
 #! \value{
 #!   an object of class \code{\link{hi}}
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \note{ Avoid changing the Hybrid Index representation, this might crash the \code{\link{[.ff}} subscripting. }
 #! \seealso{ \code{\link{hi}} for the Hybrid Index class, \code{\link{hiparse}} for parsing details, \code{\link{as.integer.hi}} for back-coercion, \code{\link{[.ff}} for ff subscripting }
 #! \examples{
@@ -484,6 +486,15 @@ hiparse <- function(x, envir, first=as.integer(NA), last=as.integer(NA)){
 #! \keyword{ IO }
 #! \keyword{ data }
 
+as.hi.NULL <- function(x, ...){
+  structure(list(x = structure(list(first = NA_integer_, dat = integer(0), 
+                                    last = NA_integer_), .Names = c("first", "dat", "last"), class = "rlepack"), 
+                 ix = NULL, re = FALSE, minindex = 1L, maxindex = 0L, 
+                 length = 0L, dim = NULL, dimorder = NULL, symmetric = FALSE, 
+                 fixdiag = NULL, vw = NULL, NAs = NULL), .Names = c("x", "ix", 
+                                                                    "re", "minindex", "maxindex", "length", "dim", "dimorder", "symmetric", 
+                                                                    "fixdiag", "vw", "NAs"), class = "hi")
+}
 
 # xx temporary compatibility function setting the rlepack class
 as.hi.hi <- function(x, ...){
@@ -503,7 +514,7 @@ as.hi.name <- function(x, envir=parent.frame(), ...){
 
 as.hi.call <- function(
   x
-, maxindex    = NA
+, maxindex    = NA_integer_
 , dim         = NULL
 , dimorder    = NULL
 , vw          = NULL
@@ -556,7 +567,7 @@ as.hi.call <- function(
       x <- sort.int(x, index.return=TRUE, method="quick")
       ix <- x$ix
       x <- rlepack(x$x, pack=pack)
-      #ix <- 1:n
+      #ix <- seq_len(n)
       #radixorder(x, ix)
       #x <- rlepack(x[ix], pack = pack)
 
@@ -660,10 +671,9 @@ as.hi.call <- function(
   return(ret)
 }
 
-
 as.hi.integer <- function(
   x
-, maxindex    = NA
+, maxindex    = NA_integer_
 , dim         = NULL
 , dimorder    = NULL
 , symmetric   = FALSE
@@ -675,7 +685,6 @@ as.hi.integer <- function(
 , NAs         = NULL
 , ... # dummy to keep R CMD check quiet
 ){
-
   n <- length(x)
 
   if (is.null(vw))
@@ -708,7 +717,7 @@ as.hi.integer <- function(
       if (all(x<0, na.rm=TRUE)){
         if (any(x < -maxindex, na.rm=TRUE))
           stop("negative subscripts out of range")
-        x <- (1:maxindex)[x]  # convert to positive indexes because we cannot enumerate
+        x <- seq_len(maxindex)[x]  # convert to positive indexes because we cannot enumerate
       }else if (all(x>0, na.rm=TRUE)){
         if (any(x > maxindex, na.rm=TRUE))
           stop("positive subscripts out of range")
@@ -738,7 +747,7 @@ as.hi.integer <- function(
         x <- sort.int(x, index.return=TRUE, method="quick")
         ix <- x$ix
         x <- x$x
-        #ix <- 1:n
+        #ix <- seq_len(n)
         #radixorder(x, ix)
         #x <- x[ix]
         re <- FALSE
@@ -767,7 +776,7 @@ as.hi.integer <- function(
           x <- x - vw[1]
         }else{
           # (vw && dim)-context: convert negative indices to positive ones
-          x <- (1:maxindex)[x]
+          x <- seq_len(maxindex)[x]
           n <- length(x)
           if (n)
             x <- arrayIndex2vectorIndex(vectorIndex2arrayIndex(x, dim=dim, dimorder=dimorder), dimorder=dimorder, vw=vw)
@@ -829,15 +838,20 @@ as.hi.integer <- function(
 }
 
 
-as.hi.which <-  function(x, ...)
-  as.hi.integer(unclass(x), ...)
+# xx TODO as.hi.which should be leading, not as.hi.integer
+# and as.hi.integer is too complicated, remove the vw stuff
+as.hi.which <-  function(x, ...){
+  ret <- as.hi.integer(unclass(x), ...)
+  ret$maxindex <- maxindex(x)
+  ret
+}
 
 
 if (FALSE){
   dim <- 3:4
   dimorder <- 1:2
   vw <- rbind(c(1,1), dim, c(1,1))
-  i <- 1:prod(dim)
+  i <- seq_len(prod(dim))
   m <- vectorIndex2arrayIndex(i, dim=dim)
   p <- arrayIndex2vectorIndex(m, dim=dim, dimorder=dimorder, vw=vw)
 
@@ -872,7 +886,7 @@ as.hi.matrix <- function(x, dim, dimorder=NULL, symmetric=FALSE, fixdiag=NULL, v
         ret <- as.hi.integer(i, maxindex=maxindex, dim=dim, symmetric=symmetric, fixdiag=fixdiag, vw=vw, pack=pack)
       }else{
         isna <- is.na(i)
-        NAs <- (1:length(i))[isna]
+        NAs <- (seq_along(i))[isna]
         if (length(NAs))
           ret <- as.hi.integer(i[!isna], maxindex=maxindex, dim=dim, symmetric=symmetric, fixdiag=fixdiag, vw=vw, pack=pack, NAs=rlepack(NAs))
         else
@@ -917,7 +931,7 @@ as.hi.logical <- function(
   if (length(x)>maxindex)
     stop("as.hi.logical longer than maxindex")
   if (maxindex>0){
-    x <- (1:maxindex)[rep(x, length=maxindex)]
+    x <- seq_len(maxindex)[rep(x, length=maxindex)]
   }else{
     x <- integer()
   }
@@ -995,7 +1009,7 @@ as.hi.character <- function(x
 #!   \command{as.character.hi} returns a character vector, see \code{\link{as.hi.character}}.
 #!   \command{as.matrix.hi} returns a matrix index, see \code{\link{as.hi.matrix}}.
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{hi}}, \code{\link{as.hi}} }
 #! \examples{
 #!   x <- 1:6
@@ -1043,9 +1057,12 @@ as.integer.hi <- function(
 
 as.which.hi <- function(x, ...){
   i <- as.integer(x, ...)
-  if (length(i) && i[[1]]<0)
-    i <- (1:maxindex(x))[i]
-  class(i) <- "which"
+  if (length(i) && i[[1]]<0){
+    i <- seq_len(maxindex(x))[i]
+    setattributes(i, list(maxindex = maxindex(x), class = c("booltype", "which")))
+  }else{
+    attributes(i) <- list(maxindex = maxindex(x), class = c("booltype", "which"))
+  }
   i
 }
 
@@ -1092,7 +1109,7 @@ as.logical.hi <- function(
   if (is.na(maxindex))
     stop("can't make logical without knowing vector length")
   ret <- rep(FALSE, maxindex)
-  ret[(1:maxindex)[as.integer.hi(x)]] <- TRUE
+  ret[seq_len(maxindex)[as.integer.hi(x)]] <- TRUE
   ret
 }
 
@@ -1111,40 +1128,16 @@ as.character.hi <- function(
 
 #! \name{length.hi}
 #! \alias{length.hi}
-#! \alias{poslength}
 #! \alias{poslength.hi}
-#! \alias{poslength.ri}
-#! \alias{poslength.bit}
-#! \alias{poslength.bitwhich}
-#! \alias{poslength.logical}
-#! \alias{poslength.default}
-#! \alias{maxindex}
 #! \alias{maxindex.hi}
-#! \alias{maxindex.ri}
-#! \alias{maxindex.bit}
-#! \alias{maxindex.bitwhich}
-#! \alias{maxindex.logical}
-#! \alias{maxindex.default}
 #! \title{ Hybrid Index, querying }
 #! \description{
 #!   Functions to query some index attributes
 #! }
 #! \usage{
 #! \method{length}{hi}(x)
-#! maxindex(x, \dots)
-#! poslength(x, \dots)
 #! \method{maxindex}{hi}(x, \dots)
-#! \method{maxindex}{ri}(x, \dots)
-#! \method{maxindex}{bit}(x, \dots)
-#! \method{maxindex}{bitwhich}(x, \dots)
-#! \method{maxindex}{logical}(x, \dots)
-#! \method{maxindex}{default}(x, \dots)
 #! \method{poslength}{hi}(x, \dots)
-#! \method{poslength}{ri}(x, \dots)
-#! \method{poslength}{bit}(x, \dots)
-#! \method{poslength}{bitwhich}(x, \dots)
-#! \method{poslength}{logical}(x, \dots)
-#! \method{poslength}{default}(x, \dots)
 #! }
 #! \arguments{
 #!   \item{x}{ an object of class \code{\link{hi}} }
@@ -1152,15 +1145,15 @@ as.character.hi <- function(
 #! }
 #! \details{
 #!   \command{length.hi} returns the number of the subsript elements in the index (even if they are negative).
-#!   By contrast the generic \command{poslength} returns the number of selected elements (which for negative indices is \code{maxindex(x) - length(unique(x))}).
-#!   The generic \command{maxindex} returns the highest possible index position.
+#!   By contrast \code{\link{poslength}} returns the number of selected elements (which for negative indices is \code{maxindex(x) - length(unique(x))}).
+#!   \code{\link{maxindex}} returns the highest possible index position.
 #! }
 #! \value{
 #!   an integer scalar
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \note{ duplicated negative indices are removed }
-#! \seealso{ \code{\link{hi}}, \code{\link{as.hi}}, \code{\link{length.ff}}, \code{\link{length}} }
+#! \seealso{ \code{\link{hi}}, \code{\link{as.hi}}, \code{\link{length.ff}}, \code{\link{length}}, \code{\link{poslength}}, \code{\link{maxindex}} }
 #! \examples{
 #!   length(as.hi(-1, maxindex=12))
 #!   poslength(as.hi(-1, maxindex=12))
@@ -1208,41 +1201,6 @@ poslength.hi <- function(
     x$length
 }
 
-if (!exists("maxindex.default"))
-  maxindex.default <- function(x
-  , ... # dummy to keep R CMD check quiet
-  ){
-    mi <- attr(x, "maxindex")
-    if (is.null(mi))
-      as.integer(NA)
-    else
-      mi
-  }
-if (!exists("poslength.default"))
-  poslength.default <- function(x
-  , ... # dummy to keep R CMD check quiet
-  ){
-    mi <- maxindex(x)
-    if (is.null(mi))
-      as.integer(NA)
-    else
-      mi - length(x)
-  }
-
-if (!exists("maxindex.logical"))
-  maxindex.logical <- function(x
-  , ... # dummy to keep R CMD check quiet
-  )
-  length(x)
-if (!exists("poslength.logical"))
-  poslength.logical <- function(x
-  , ... # dummy to keep R CMD check quiet
-  ){
-    sum(x, na.rm=TRUE)
-  }
-
-
-
 
 #! \name{unsort}
 #! \alias{unsort}
@@ -1265,8 +1223,8 @@ if (!exists("poslength.logical"))
 #! })), ix = lapply(index, function(i) {
 #!     if (is.null(i$ix)) {
 #!         if (i$re)
-#!             orig <- rev(1:poslength(i))
-#!         else orig <- 1:poslength(i)
+#!             orig <- rev(seq_len(poslength(i)))
+#!         else orig <- seq_len(poslength(i))
 #!     }
 #!     else {
 #!         orig <- i$ix
@@ -1293,7 +1251,7 @@ if (!exists("poslength.logical"))
 #! \value{
 #!  undefined
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{hi}}, \code{\link{as.hi}} }
 #! \keyword{ IO }
 #! \keyword{ data }
@@ -1342,9 +1300,9 @@ unsort.ahi <- function(
 , ix = lapply(index, function(i){
       if (is.null(i$ix)){
         if (i$re)
-          orig <- rev(1:poslength(i))
+          orig <- rev(seq_len(poslength(i)))
         else
-          orig <- 1:poslength(i)
+          orig <- seq_len(poslength(i))
       }else{
         orig <- i$ix
       }
@@ -1373,7 +1331,7 @@ subscript2integer <- function(
   }else if(is.logical(x)){
     if (is.null(maxindex))
       stop("need maxindex with logical subscripts")
-    (1:maxindex)[x]
+    seq_len(maxindex)[x]
   }else{
     if (is.double(x))
       x <- as.integer(x)
@@ -1385,7 +1343,7 @@ subscript2integer <- function(
     if (tab[[1]]){
     if (is.null(maxindex))
       stop("need maxindex with negative subscripts")
-      (1:maxindex)[x]
+      seq_len(maxindex)[x]
     }else{
       x
     }

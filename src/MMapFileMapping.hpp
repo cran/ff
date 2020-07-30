@@ -36,7 +36,9 @@ namespace ff {
   public:
 
     /** open file mapping on file given by native platform path */
-    MMapFileMapping(const char* path, fsize_t size, bool readonly,bool autoflush);
+    MMapFileMapping(const char* path, fsize_t size, bool readonly,bool autoflush
+, bool createNew)  // Martijn Schuemie for zero row ff
+;
 
     /** destructor */
     ~MMapFileMapping();
@@ -62,6 +64,7 @@ namespace ff {
     Error   _error;
     bool    _readonly;
     bool    _autoflush;
+    bool    _createNew;  // Martijn Schuemie for zero row ff
   };
 
   /** file that supports mapping of sections */
@@ -69,7 +72,9 @@ namespace ff {
   {
   public:
 
-    MMapFileSection(int fd, foff_t offset, msize_t size, void* addr, bool readonly, bool autoflush);
+    MMapFileSection(int fd, foff_t offset, msize_t size, void* addr, bool readonly, bool autoflush
+, bool createNew  // Martijn Schuemie for zero row ff
+);
     ~MMapFileSection();
 
     /** reset file section to offset offs and size s */
@@ -102,6 +107,7 @@ namespace ff {
     int        _fd;
     bool       _readonly;
     bool       _autoflush;
+    bool       _createNew;  // Martijn Schuemie for zero row ff
     foff_t     _offset;
     foff_t     _end;
     msize_t    _size;

@@ -8,7 +8,7 @@
 vectorIndex2arrayIndex(x, dim = NULL, dimorder = NULL, vw = NULL)
 }
 \arguments{
-  \item{x}{ a vector of indices in \code{1:prod(dim)} }
+  \item{x}{ a vector of indices in \code{seq_len(prod(dim))} }
   \item{dim}{ NULL or \code{\link{dim}} }
   \item{dimorder}{ NULL or \code{\link{dimorder}} }
   \item{vw}{ NULL or integer matrix[2,m], see details }
@@ -20,7 +20,7 @@ vectorIndex2arrayIndex(x, dim = NULL, dimorder = NULL, vw = NULL)
 \value{
   an n by m matrix with n m-dimensional array indices
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{  \code{\link{vector2array}}, \code{\link{arrayIndex2vectorIndex}} , \code{\link{symmIndex2vectorIndex}} }
 \examples{
   matrix(1:12, 3, 4)

@@ -28,7 +28,7 @@ bigsample(x, ...)
 \value{
   a vector of elements sampled from the pool (argument 'x')
 }
-\author{ Daniel Adler, Jens Oehlschl‰gel, Walter Zucchini}
+\author{ Daniel Adler, Jens Oehlschl√§gel, Walter Zucchini}
 \seealso{ \code{\link{sample}}, \code{\link{ff}} }
 \examples{
 message("Specify pool size")

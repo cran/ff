@@ -1,5 +1,5 @@
 # vmode = virtual mode = attribute that both, ff and R RAM objects have
-# (c) 2007 Jens Oehlsch‰gel
+# (c) 2007 Jens Oehlsch√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-10-15
@@ -94,7 +94,7 @@
 #! }
 #! \note{ \command{regtest.vmode} checks correctness of some vmode features
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{  \code{\link{ff}}, \code{\link{storage.mode}}, \code{\link{mode}} }
 #! \examples{
 #!  data.frame(.vmode=.vmode, .vimplemented=.vimplemented, .rammode=.rammode, .ffmode=.ffmode
@@ -161,7 +161,7 @@
 #! \value{
 #!  a vector of the desired vmode initialized with 0
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{  \code{\link{as.vmode}}, \code{\link{vector}} }
 #! \examples{
 #!   vector.vmode("byte",12)
@@ -243,7 +243,7 @@
 #! \value{
 #!   a vector of the desired vmode containing the input data
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{  \code{\link{vmode}}, \code{\link{vector.vmode}} }
 #! \examples{
 #!   as.vmode(1:3,"double")
@@ -528,8 +528,6 @@ function (x, value)
   if (is.null(value) || value=="NULL")
     stop("you can't create a vector with vmode value='NULL'")
   vm <- vmode(x)
-  if (vm=="NULL")
-    stop("you can't coerce NULL to a different vmode")
   if (vm==value){
     x
   }else{
@@ -570,8 +568,6 @@ as.vmode.default <- function(x, vmode
   if (is.null(vmode) || vmode=="NULL")
     stop("you can't create a vector with vmode='NULL'")
   vm <- vmode(x)
-  if (vm=="NULL")
-    stop("you can't coerce NULL to a different vmode")
   if (vm==vmode){
     x
   }else{
@@ -793,8 +789,8 @@ function (x, ...)
 #! \value{
 #!   A vector of integer values representing the correspnding factor levels.
 #! }
-#! \author{ Jens Oehlschl‰gel }
-#! \seealso{ \code{\link[base]{factor}}, \code{\link{levels.ff}}, \code{\link{vmode}} }
+#! \author{ Jens Oehlschl√§gel }
+#! \seealso{ \code{\link{factor}}, \code{\link{levels.ff}}, \code{\link{vmode}} }
 #! \examples{
 #!  ram2ffcode(letters, letters, vmode="byte")
 #!  ram2ffcode(letters, letters, vmode="ubyte")
@@ -866,7 +862,7 @@ ram2ramcode <- function(value, levels){
 #! \note{
 #!   The output can be larger than any of the inputs (if the highest input vmode is an integer type without NA and any other input requires NA).
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{  \code{\link{.vcoerceable}}, \code{\link{.ffmode}}, \code{\link{ffconform}} }
 #! \examples{
 #!    maxffmode(c("quad","logical"), "ushort")
@@ -939,7 +935,7 @@ regtest.vmode <- function(){
     if (v!="raw")
       x[1] <- .vNA[v]
     a[,add=TRUE] <- 0L
-    if (!identical(as.integer(x[1:length(a)]), as.integer(a[1:length(a)]))){
+    if (!identical(as.integer(x[seq_along(a)]), as.integer(a[seq_along(a)]))){
       warning('+=0 does not give the expected result in vmode "',v,'"')
       OK <- FALSE
     }
@@ -958,22 +954,22 @@ regtest.vmode <- function(){
       else
         x2[-1][x2[-1]>.vmax[v]] <- .vmin[v]   # unsigned integer types wrap-around
     }
-    if (!identical(as.vector(x2), as.integer(a[1:length(a)]))){
+    if (!identical(as.vector(x2), as.integer(a[seq_along(a)]))){
       warning('+=1 does not give the expected result in vmode "',v,'"')
       OK <- FALSE
     }
     a[] <- x
     if (v=="raw")
       oldopt <- options(warn=-1)
-    a[,add=TRUE] <- as.integer(NA)
+    a[,add=TRUE] <- NA_integer_
     if (v=="raw")
       options(oldopt)
     if (v %in% c("boolean","quad","nibble","ubyte","ushort","raw")){
-      x2 <- as.integer(x[1:length(a)])
+      x2 <- as.integer(x[seq_along(a)])
     }else{
       x2 <- as.integer(rep(NA, length(a)))
     }
-    if (!identical(as.vector(x2), as.integer(a[1:length(a)]))){
+    if (!identical(as.vector(x2), as.integer(a[seq_along(a)]))){
       warning('+=NA does not give the expected result in vmode "',v,'"')
       OK <- FALSE
     }

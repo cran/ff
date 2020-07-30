@@ -6,7 +6,7 @@
   \emph{Not to be called directly}
 }
 \usage{
-hiparse(x, envir, first = as.integer(NA), last = as.integer(NA))
+hiparse(x, envir, first = NA_integer_, last = NA_integer_)
 }
 \arguments{
   \item{x}{ an index expression, precisely: \code{\link{call}} }
@@ -24,7 +24,7 @@ hiparse(x, envir, first = as.integer(NA), last = as.integer(NA))
 \value{
   undefined (and redefined as needed by \code{\link{as.hi.call}})
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{ \code{\link{hi}}, \code{\link{as.hi.call}} }
 \keyword{ IO }
 \keyword{ data }

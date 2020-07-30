@@ -16,7 +16,7 @@ maxffmode(...)
 \note{
   The output can be larger than any of the inputs (if the highest input vmode is an integer type without NA and any other input requires NA).
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{  \code{\link{.vcoerceable}}, \code{\link{.ffmode}}, \code{\link{ffconform}} }
 \examples{
    maxffmode(c("quad","logical"), "ushort")

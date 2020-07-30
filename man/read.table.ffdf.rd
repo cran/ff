@@ -34,8 +34,6 @@ read.delim2.ffdf(...)
 NULL or an optional \code{\link{ffdf}} object to which the read records are appended.
 If this is provided, it defines crucial features that are otherwise determnined during the 'first' chunk of reading:
 \code{\link[=vmode.ffdf]{vmode}s}, \code{\link[=dimnames.ffdf]{colnames}}, \code{colClasses}, sequence of predefined \code{\link[=levels.ff]{levels}}.
-In order to also read the first chunk into such predefined ffdf, an \code{x} with 1 row is treated special: instead of appending the first row will be overwritten.
-This is necessary because we cannot provide \code{x} with zero rows (we cannot create ff vectors with zero elements).
 }
   \item{file}{
     the name of the file which the data are to be read from.
@@ -133,128 +131,213 @@ This is necessary because we cannot provide \code{x} with zero rows (we cannot c
   An \code{\link{ffdf}} object. If created during the 'first' chunk pass, it will have one \code{\link[=physical.ffdf]{physical}} component per \code{\link[=virtual.ffdf]{virtual}} column.
 }
 \author{
-  Jens Oehlschl‰gel, Christophe Dutang
+  Jens Oehlschl√§gel, Christophe Dutang
 }
 \seealso{
   \code{\link{write.table.ffdf}}, \code{\link{read.table}}, \code{\link{ffdf}}
 }
 \examples{
-    x <- data.frame(log=rep(c(FALSE, TRUE), length.out=26), int=1:26, dbl=1:26 + 0.1
-, fac=factor(letters), ord=ordered(LETTERS)
-, dct=Sys.time()+1:26, dat=seq(as.Date("1910/1/1"), length.out=26, by=1)
-, stringsAsFactors = TRUE)
-    x <- x[c(13:1, 13:1),]
-    csvfile <- tempPathFile(path=getOption("fftempdir"), extension="csv")
-    write.csv(x, file=csvfile, row.names=FALSE)
+ message("create some csv data on disk")
+ x <- data.frame(
+   log=rep(c(FALSE, TRUE), length.out=26)
+ , int=1:26
+ , dbl=1:26 + 0.1
+ , fac=factor(letters)
+ , ord=ordered(LETTERS)
+ , dct=Sys.time()+1:26
+ , dat=seq(as.Date("1910/1/1"), length.out=26, by=1)
+ , stringsAsFactors = TRUE
+ )
+ x <- x[c(13:1, 13:1),]
+ csvfile <- tempPathFile(path=getOption("fftempdir"), extension="csv")
+ write.csv(x, file=csvfile, row.names=FALSE)
+ 
+ cat("Simply read csv with header\n")
+ y <- read.csv(file=csvfile, header=TRUE)
+ y
+ cat("Read csv with header\n")
+ ffy <- read.csv.ffdf(file=csvfile, header=TRUE)
+ ffy
+ sapply(ffy[,], class)
+ 
+ message("reading with colClasses (an ordered factor wont'work in read.csv)")
+ try(read.csv(file=csvfile, header=TRUE, colClasses=c(ord="ordered")
+ , stringsAsFactors = TRUE))
+ # TODO could fix this with the following two commands (Gabor Grothendieck) 
+ # but does not know what bad side-effects this could have
+ #setOldClass("ordered")
+ #setAs("character", "ordered", function(from) ordered(from))
+ y <- read.csv(file=csvfile, header=TRUE, colClasses=c(dct="POSIXct", dat="Date")
+ , stringsAsFactors = TRUE)
+ ffy <- read.csv.ffdf(
+   file=csvfile
+ , header=TRUE
+ , colClasses=c(ord="ordered", dct="POSIXct", dat="Date")
+ )
+ rbind(
+   ram_class = sapply(y, function(x)paste(class(x), collapse = ","))
+ , ff_class = sapply(ffy[,], function(x)paste(class(x), collapse = ","))
+ , ff_vmode = vmode(ffy)
+ )
+ 
+ message("NOTE that reading in chunks can change the sequence of levels and thus the coding")
+ message("(Sorting levels during chunked reading can be too expensive)")
+ levels(ffy$fac[])
+ ffy <- read.csv.ffdf(
+   file=csvfile
+ , header=TRUE
+ , colClasses=c(ord="ordered", dct="POSIXct", dat="Date")
+ , first.rows=6
+ , next.rows=10
+ , VERBOSE=TRUE
+ )
+ levels(ffy$fac[])
+ 
+ 
+ message("If we don't know the levels we can sort then after reading")
+ message("(Will rewrite all factor codes)")
+ message("NOTE that you MUST assign the return value of sortLevels()")
+ ffy <- sortLevels(ffy)
+ levels(ffy$fac[])
+ 
+ message("If we KNOW the levels we can fix levels upfront")
+ ffy <- read.csv.ffdf(
+   file=csvfile
+ , header=TRUE
+ , colClasses=c(ord="ordered", dct="POSIXct", dat="Date")
+ , first.rows=6
+ , next.rows=10
+ , levels=list(fac=letters, ord=LETTERS)
+ )
+ levels(ffy$fac[])
+ 
+ message("Or we inspect a sufficiently large chunk of data and use those")
+ table(ffy$fac[], exclude=NULL)
+ ffy <- read.csv.ffdf(
+   file=csvfile
+ , header=TRUE
+ , colClasses=c(ord="ordered", dct="POSIXct", dat="Date")
+ , nrows=13
+ , VERBOSE=TRUE
+ )
+ message("append the rest to ffy")
+ ffy <- read.csv.ffdf(
+   x=ffy
+ , file=csvfile
+ , header=FALSE
+ , skip=1 + nrow(ffy)
+ , VERBOSE=TRUE
+ )
+ table(ffy$fac[], exclude=NULL)
+ 
+ message("We can turn unexpected factor levels to NA, say we only allowed a:l")
+ ffy <- read.csv.ffdf(
+   file=csvfile
+ , header=TRUE
+ , colClasses=c(ord="ordered", dct="POSIXct", dat="Date")
+ , levels=list(fac=letters[1:12], ord=LETTERS[1:12])
+ , appendLevels=FALSE
+ )
+ sapply(colnames(ffy), function(i)sum(is.na(ffy[[i]][])))
 
-    y <- read.csv(file=csvfile, header=TRUE, stringsAsFactors = TRUE)
-    y
-    cat("Read csv with header\n")
-    ffx <- read.csv.ffdf(file=csvfile, header=TRUE)
-    ffx
-    sapply(ffx[,], class)
+ message("let's store some columns more efficient")
+ sum(.ffbytes[vmode(ffy)])
+ ffy$log <- clone(ffy$log, vmode="boolean")
+ ffy$fac <- clone(ffy$fac, vmode="byte")
+ ffy$ord <- clone(ffy$ord, vmode="byte")
+ sum(.ffbytes[vmode(ffy)])
+ 
+ message("let's make a template with zero rows")
+ ffx <- clone(ffy)  
+ nrow(ffx) <- 0
+   
+ message("reading with template and colClasses")
+ ffy <- read.csv.ffdf(
+   x=ffx
+ , file=csvfile
+ , header=TRUE
+ , colClasses=c(ord="ordered", dct="POSIXct", dat="Date")
+ , next.rows = 12
+ , VERBOSE = TRUE
+ )
+ rbind(
+   ff_class = sapply(ffy[,], function(x)paste(class(x), collapse = ","))
+ , ff_vmode = vmode(ffy)
+ )
+ levels(ffx$fac[])
+ levels(ffy$fac[])
+ 
+ message("reading with template without colClasses")
+ ffy <- read.csv.ffdf(
+   x=ffx
+   , file=csvfile
+   , header=TRUE
+   , next.rows = 12
+   , VERBOSE = TRUE
+ )
+ rbind(
+   ff_class = sapply(ffy[,], function(x)paste(class(x), collapse = ","))
+ , ff_vmode = vmode(ffy)
+ )
+ levels(ffx$fac[])
+ levels(ffy$fac[])
+ 
 
-    message("NOTE that read.table fails for ordered factors, this is fixed in read.table.ffdf")
-    try(read.csv(file=csvfile, header=TRUE, colClasses=c(ord="ordered"), stringsAsFactors = TRUE))
-    # TODO could fix this with the following two commands (Gabor Grothendieck) 
-    # but does not know what bad side-effects this could have
-     #setOldClass("ordered")
-     #setAs("character", "ordered", function(from) ordered(from))
-    y <- read.csv(file=csvfile, header=TRUE
-    , colClasses=c(dct="POSIXct", dat="Date")
-    , stringsAsFactors = TRUE
-    )
-    y
+ message("We can fine-tune the creation of the ffdf")
+ message("- let's create the ff files outside of fftempdir")
+ message("- let's reduce required disk space and thus file.system cache RAM")
+ message("By default we had record size 36.25")
+ ffy <- read.csv.ffdf(
+   file=csvfile
+   , header=TRUE
+   , colClasses=c(ord="ordered", dct="POSIXct", dat="Date")
+   , asffdf_args=list(
+     vmode = c(
+         log="boolean"
+       , int="byte"
+       , dbl="single"
+       , fac="nibble"  # no NAs
+       , ord="nibble"  # no NAs
+       , dct="single"
+       , dat="single"
+     )
+     , col_args=list(pattern = "./csv")  # create in getwd() with prefix csv
+   )
+ )
+ vmode(ffy)
+ message("This recordsize is more than 50\% reduced")
+ sum(.ffbytes[vmode(ffy)]) / 36.25
+ 
+ message("Don't forget to wrap-up files that are not in fftempdir")
+ delete(ffy); rm(ffy)
+ message("It's a good habit to also wrap-up temporary stuff (or at least know how this is done)")
+ rm(ffx); gc()
 
-    ffx <- read.csv.ffdf(file=csvfile, header=TRUE
-, colClasses=c(ord="ordered", dct="POSIXct", dat="Date"))
-    ffx
-    sapply(ffx[,], class)
-
-    message("NOTE that reading in chunks can change the sequence of levels and thus the coding")
-    message("(Sorting levels during chunked reading can be too expensive)")
-    ffx <- read.csv.ffdf(file=csvfile, header=TRUE
-, colClasses=c(ord="ordered", dct="POSIXct", dat="Date"), first.rows=6, next.rows=10
-, VERBOSE=TRUE)
-    y <- ffx$fac[]
-    print(levels(y))
-    data.frame(values=as.character(y), codes=as.integer(y), stringsAsFactors = TRUE)
-
-    message("If we don't know the levels we can sort then after reading")
-    message("(Will rewrite all factor codes)")
-    message("NOTE that you MUST assign the return value of sortLevels()")
-    ffx <- sortLevels(ffx)
-    y <- ffx$fac[]
-    print(levels(y))
-    data.frame(values=as.character(y), codes=as.integer(y), stringsAsFactors = TRUE)
-
-    message("If we KNOW the levels we can fix levels upfront")
-    ffx <- read.csv.ffdf(file=csvfile, header=TRUE
-, colClasses=c(ord="ordered", dct="POSIXct", dat="Date")
-, first.rows=6, next.rows=10, levels=list(fac=letters, ord=LETTERS))
-    y <- ffx$fac[]
-    print(levels(y))
-    data.frame(values=as.character(y), codes=as.integer(y), stringsAsFactors = TRUE)
-
-    message("Or we inspect a sufficiently large chunk of data and use those")
-    ffx1 <- read.csv.ffdf(file=csvfile, header=TRUE
-, colClasses=c(ord="ordered", dct="POSIXct", dat="Date"), nrows=13)
-    ffx <- read.csv.ffdf(x=ffx1, file=csvfile, header=FALSE, skip=1+nrow(ffx1), VERBOSE=TRUE)
-
-    message("We can check for unexpected factor levels, say we only allowed a:l")
-    ffx <- read.csv.ffdf(file=csvfile, header=TRUE
-, colClasses=c(ord="ordered", dct="POSIXct", dat="Date")
-, levels=list(fac=letters[1:12], ord=LETTERS[1:12]), appendLevels=FALSE)
-    sapply(colnames(ffx), function(i)sum(is.na(ffx[[i]][])))
-
-    message("We can fine-tune the creation of the ffdf:")
-    message("- let's create the ff files outside of fftempdir")
-    message("- let's reduce required disk space and thus file.system cache RAM")
-    vmode(ffx)
-    message("By default we had record size")
-    sum(.ffbytes[vmode(ffx)])
-
-    ffy <- read.csv.ffdf(file=csvfile, header=TRUE
-    , colClasses=c(ord="ordered", dct="POSIXct", dat="Date")
-    , asffdf_args=list(
-        vmode = c(log="boolean", int="byte", dbl="single", fac="nibble"
-                , ord="nibble", dct="single", dat="single")
-      , col_args=list(pattern = "./csv")  # create in getwd() with prefix csv
-      )
-    )
-    vmode(ffy)
-    message("This recordsize is more than 50\% reduced")
-    sum(.ffbytes[vmode(ffy)])
-
-    message("Don't forget to wrap-up files that are not in fftempdir")
-    delete(ffy); rm(ffy)
-    message("It's a good habit to also wrap-up temporary stuff (or at least know how this is done)")
-    rm(ffx); gc()
-
-    fwffile <- tempfile()
-
-    cat(file=fwffile, "123456", "987654", sep="\n")
-    x <- read.fwf(fwffile, widths=c(1,2,3), stringsAsFactors = TRUE)    #> 1 23 456 \ 9 87 654
-    y <- read.table.ffdf(file=fwffile, FUN="read.fwf", widths=c(1,2,3))
-    stopifnot(identical(x, y[,]))
-    x <- read.fwf(fwffile, widths=c(1,-2,3), stringsAsFactors = TRUE)   #> 1 456 \ 9 654
-    y <- read.table.ffdf(file=fwffile, FUN="read.fwf", widths=c(1,-2,3))
-    stopifnot(identical(x, y[,]))
-    unlink(fwffile)
-
-    cat(file=fwffile, "123", "987654", sep="\n")
-    x <- read.fwf(fwffile, widths=c(1,0, 2,3)
-    , stringsAsFactors = TRUE)    #> 1 NA 23 NA \ 9 NA 87 654
-    y <- read.table.ffdf(file=fwffile, FUN="read.fwf", widths=c(1,0, 2,3))
-    stopifnot(identical(x, y[,]))
-    unlink(fwffile)
-
-    cat(file=fwffile, "123456", "987654", sep="\n")
-    x <- read.fwf(fwffile, widths=list(c(1,0, 2,3), c(2,2,2))
-    , stringsAsFactors = TRUE) #> 1 NA 23 456 98 76 54
-    y <- read.table.ffdf(file=fwffile, FUN="read.fwf", widths=list(c(1,0, 2,3), c(2,2,2)))
-    stopifnot(identical(x, y[,]))
-    unlink(fwffile)
+   
+ fwffile <- tempfile()
+ 
+ cat(file=fwffile, "123456", "987654", sep="\n")
+ x <- read.fwf(fwffile, widths=c(1,2,3), stringsAsFactors = TRUE)    #> 1 23 456 \ 9 87 654
+ y <- read.table.ffdf(file=fwffile, FUN="read.fwf", widths=c(1,2,3))
+ stopifnot(identical(x, y[,]))
+ x <- read.fwf(fwffile, widths=c(1,-2,3), stringsAsFactors = TRUE)   #> 1 456 \ 9 654
+ y <- read.table.ffdf(file=fwffile, FUN="read.fwf", widths=c(1,-2,3))
+ stopifnot(identical(x, y[,]))
+ unlink(fwffile)
+ 
+ cat(file=fwffile, "123", "987654", sep="\n")
+ x <- read.fwf(fwffile, widths=c(1,0, 2,3), stringsAsFactors = TRUE)    #> 1 NA 23 NA \ 9 NA 87 654
+ y <- read.table.ffdf(file=fwffile, FUN="read.fwf", widths=c(1,0, 2,3))
+ stopifnot(identical(x, y[,]))
+ unlink(fwffile)
+ 
+ cat(file=fwffile, "123456", "987654", sep="\n")
+ x <- read.fwf(fwffile, widths=list(c(1,0, 2,3), c(2,2,2))
+ , stringsAsFactors = TRUE) #> 1 NA 23 456 98 76 54
+ y <- read.table.ffdf(file=fwffile, FUN="read.fwf", widths=list(c(1,0, 2,3), c(2,2,2)))
+ stopifnot(identical(x, y[,]))
+ 
+ unlink(fwffile)
 
     \dontshow{
        x <- read.csv(file=csvfile, header=TRUE, stringsAsFactors = TRUE)

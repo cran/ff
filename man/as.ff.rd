@@ -34,7 +34,7 @@
 \value{
   A ram or ff object.
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{  \code{\link{as.ff.bit}}, \code{\link{ff}}, \code{\link{clone}} %, \code{\link{as.symm}}
          , \code{\link{as.vmode}}, \code{\link{vmode}}, \code{\link{as.hi}} }
 \examples{

@@ -47,7 +47,7 @@ pattern(x, \dots) <- value
   \code{filename<-} exhibits R's standard behaviour of considering "filename" and "./filename" both to be located in \code{\link{getwd}}.
   By constrast \code{pattern<-} will create "filename" without path in \code{getOption("fftempdir")} and only "./filename" in \code{\link{getwd}}.
 }
-\author{ Jens Oehlschlägel }
+\author{ Jens OehlschlÃ¤gel }
 \seealso{  \code{\link{fftempfile}}, \code{\link{finalizer}}, \code{\link{ff}}, \code{\link{as.ff}}, \code{\link{as.ram}}, \code{\link{update.ff}},  \code{\link{file.move}}}
 \examples{
   \dontrun{

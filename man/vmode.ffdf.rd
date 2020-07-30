@@ -18,7 +18,7 @@ Function vmode returns the virtual storage mode of each ffdf column
   a character vector with one element for each column
 }
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 \seealso{ \code{\link{vmode}}, \code{\link{ffdf}} }
 \examples{

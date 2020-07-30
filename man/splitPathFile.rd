@@ -52,7 +52,7 @@ A list with components
   \item{file}{ a character vector of file components }
 }
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 \note{
   There is no gurantee that the path and file components contain valid path- or file-names. Like \code{\link{basename}},  \code{splitPathFile} can return ".", ".." or even "", however, all these make sense as a prefix in tempPathFile.

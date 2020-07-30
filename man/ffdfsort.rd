@@ -32,7 +32,7 @@ ffdfsort(x, ...)
  the order functions return an (ff) vector of integer order positions, the sort functions return a sorted clone of the (ffdf) input data.frame
 }
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 
 \seealso{

@@ -36,7 +36,7 @@
 \value{
   \command{levels} returns a character vector of levels (possibly including \code{as.cha racter(NA)}).
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \note{ When levels as assigned to an ff object that formerly had not levels, we assign automatically \code{\link{ramclass}} == "factor". If you want to change to an ordered factor, use \code{\link[=virtual.ff]{virtual}$ramclass <- c("ordered", "factor")} }
 \seealso{ \code{\link{ramclass}}, \code{\link{factor}}, \code{\link[=physical.ff]{virtual}} }
 \examples{

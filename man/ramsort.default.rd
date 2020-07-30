@@ -75,7 +75,7 @@ integer scalar with the number of NAs. This is always 0 with has.na=FALSE
 Robert Sedgewick (1997). Algorithms in C, Third edition. Addison-Wesley.
 }
 \author{
-Jens Oehlschl‰gel
+Jens Oehlschl√§gel
 }
 \note{
 This function is called for its side-effects and breaks the functional programming paradigm. Use with care.

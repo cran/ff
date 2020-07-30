@@ -18,7 +18,7 @@ maxlength(x, \dots)
 \value{
   integer scalar
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{ \code{\link{length.ff}}, \code{\link{maxindex}} }
 \examples{
   x <- ff(1:12)

@@ -15,12 +15,12 @@ add(x, \dots)
 \arguments{
   \item{x}{ an ff or ram object }
   \item{value}{ the amount to increment, possibly recylcled }
-  \item{\dots}{ further arguments -- especially index information -- passed to \code{\link{[<-}} or \code{\link{[<-.ff}} }
+  \item{\dots}{ further arguments -- especially index information -- passed to \code{\link{[<-}} or \code{\link[=Extract.ff]{[<-.ff}} }
 }
 \value{
   invisible()
 }
-\author{ Jens Oehlschlägel }
+\author{ Jens OehlschlÃ¤gel }
 \note{
   Note that \code{add.default} changes the object in its parent frame and thus violates R's usual functional programming logic.
   Duplicated index positions should be avoided, because ff and ram objects behave differently:

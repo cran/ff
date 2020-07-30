@@ -1,5 +1,5 @@
 # Matrix transpose and virtual matrix transpose for ff objects
-# (c) 2007 Jens Oehlsch‰gel
+# (c) 2007 Jens Oehlsch√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-11-28
@@ -38,7 +38,7 @@
 #! \value{
 #!   an object that behaves like a transposed matrix
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{dim.ff}}, \code{\link{vw}}, \code{\link[=virtual.ff]{virtual}} }
 #! \examples{
 #!   x <- ff(1:20, dim=c(4,5))

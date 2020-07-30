@@ -58,7 +58,7 @@ cmean(\dots, na.rm = FALSE)
 \value{
   depends on the CFUN used
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{ \code{\link{ffapply}}, \code{\link{do.call}}, \code{\link{na.count}} }
 \examples{
    X <- lapply(split(rnorm(1000), 1:10), summary)

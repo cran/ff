@@ -21,7 +21,7 @@
 \value{
   An integer giving the page size in Bytes.
 }
-\author{ Daniel Adler, Jens Oehlschl‰gel }
+\author{ Daniel Adler, Jens Oehlschl√§gel }
 \examples{
   getpagesize()
   getdefaultpagesize()

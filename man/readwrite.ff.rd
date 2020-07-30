@@ -26,7 +26,7 @@ readwrite.ff(x, i, value, add = FALSE)
   \command{read.ff} returns a vector of values, \command{write.ff} returns the 'changed' ff object (like all assignment functions do) and \command{readwrite.ff} returns the values at the target position.
   More precisely \code{readwrite.ff(x, i, value, add=FALSE)} returns the old values at the position \code{i} while \code{readwrite.ff(x, i, value, add=TRUE)} returns the incremented values of \code{x}.
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \note{ \command{read.ff}, \command{write.ff} and \command{readwrite.ff} are low level functions that do not support \code{ramclass} and \code{ramattribs} and thus will not give the expected result with \code{factor} and \code{POSIXct} }
 \seealso{ \code{\link{getset.ff}} for low-level scalar access and \code{\link{[.ff}} for high-level access }
 \examples{

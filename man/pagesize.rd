@@ -16,7 +16,7 @@ pagesize(x, \dots)
 \value{
   integer number of bytes
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{ \code{\link{getpagesize}} }
 \examples{
   x <- ff(1:12)

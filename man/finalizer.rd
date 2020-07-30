@@ -24,12 +24,12 @@ finalizer(x, ...) <- value
 \details{
   If an \code{\link{ff}}  object is created a finalizer is assigned, it has the task to free ressources no longer needed, for example remove the ff file or free the C++ RAM associated with an open ff file.
   The assigned finalizer depends on the location of the ff file:
-  if the file is created in \code{getOption(fftempdir)} it is considered considered temporary and has default finalizer \code{\link[ff:delete.ff]{delete}},
-  files created in other locations have default finalizer \code{\link[ff:close.ff]{close}}.
+  if the file is created in \code{getOption(fftempdir)} it is considered considered temporary and has default finalizer \code{\link[=delete.ff]{delete}},
+  files created in other locations have default finalizer \code{\link[=close.ff]{close}}.
   The user can override this either by setting \code{options("fffinalizer")} or by using argument \code{finalizer} when creating single \code{ff} objects.
   Available finalizer generics are "close", "delete" and "deleteIfOpen", available methods are \code{\link{close.ff}}, \code{\link{delete.ff}} and \code{\link{deleteIfOpen.ff}}.
   \cr
-  In order to be able to change the finalizer before finalization, the finalizer is NOT directly passed to R's finalization mechanism \code{\link[base]{reg.finalizer}} (an active finalizer can never be changed other than be executed).
+  In order to be able to change the finalizer before finalization, the finalizer is NOT directly passed to R's finalization mechanism \code{\link{reg.finalizer}} (an active finalizer can never be changed other than be executed).
   Instead the NAME of the desired finalizer is stored in the ff object and \code{\link{finalize.ff_pointer}} is passed to \code{reg.finalizer}.
   \code{finalize.ff_pointer} will at finalization-time determine the desired finalizer and call it.
   \cr
@@ -41,7 +41,7 @@ finalizer(x, ...) <- value
   Furthermore there are two possible triggers for calling the finalizer
   \enumerate{
     \item an explicit call to \code{\link{finalize}}
-    \item an explicit call to one of the finalizers \code{\link[ff:close.ff]{close}}, \code{\link{delete}} and \code{\link{deleteIfOpen}}
+    \item an explicit call to one of the finalizers \code{\link[=close.ff]{close}}, \code{\link{delete}} and \code{\link{deleteIfOpen}}
   }
   The user can define custom finalizers by creating a generic function like \code{\link{delete}}, a ff_pointer method like \code{\link{delete.ff_pointer}} and a ff method for manual calls like \code{\link{delete.ff}}. The user then is responsible to take care of two things
   \enumerate{
@@ -64,10 +64,10 @@ finalizer(x, ...) <- value
   You can not assign NULL to an active finalizer using \code{finalizer<-} because this would not stop R's finalization mechanism and would carry the risk of assiging MULTIPLE finalization tasks.
 }
 \author{
-  Jens Oehlschlägel
+  Jens OehlschlÃ¤gel
 }
 \seealso{
-  \code{\link{ff}}, \code{\link{finalize}}, \code{\link[base]{reg.finalizer}}
+  \code{\link{ff}}, \code{\link{finalize}}, \code{\link{reg.finalizer}}
 }
 \examples{
   x <- ff(1:12, pattern="./finalizerdemo")

@@ -1,6 +1,6 @@
 /*
 # R-C layer of ff: defining vmodes and making all vmode methods
-# (c) 2007 Jens Oehlsch‰gel
+# (c) 2007 Jens Oehlsch√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-08-24

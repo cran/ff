@@ -1,16 +1,17 @@
 Package: ff
-Version: 2.2-14.2
-Date: 2020-03-29
+Version: 4.0.2
+Date: 2020-06-28
 Title: Memory-Efficient Storage of Large Data on Disk and Fast Access
         Functions
-Author: Daniel Adler <dadler@uni-goettingen.de>, 
-	Christian Gl‰ser <christian_glaeser@gmx.de>,
-	Oleg Nenadic <onenadi@uni-goettingen.de>, 
-	Jens Oehlschl‰gel <Jens.Oehlschlaegel@truecluster.com>,
-	Walter Zucchini <wzucchi@uni-goettingen.de>
-Maintainer: Jens Oehlschl‰gel <Jens.Oehlschlaegel@truecluster.com>
-Depends: R (>= 2.10.1), bit (>= 1.1-13), utils
-Suggests: biglm
+Author: Daniel Adler [aut],
+	Christian Gl√§ser [aut],
+	Oleg Nenadic  [aut], 
+	Jens Oehlschl√§gel [aut, cre],
+	Martijn Schuemie [aut],
+	Walter Zucchini  [aut]
+Maintainer: Jens Oehlschl√§gel <Jens.Oehlschlaegel@truecluster.com>
+Depends: R (>= 2.10.1), bit (>= 4.0.0), utils
+Suggests: biglm, testthat (>= 0.11.0)
 Description: The ff package provides data structures that are stored on
 	disk but behave (almost) as if they were in RAM by transparently 
 	mapping only a section (pagesize) in main memory - the effective 
@@ -57,12 +58,12 @@ Description: The ff package provides data structures that are stored on
 	to work interactively with selections of large datasets and quickly 
 	modify selection criteria. 
 	Further high-performance enhancements can be made available upon request. 
-License: GPL-2 | file LICENSE
+License: GPL-2 | GPL-3 | file LICENSE
 LazyLoad: yes
 ByteCompile: yes
-Encoding: latin1
-URL: http://ff.r-forge.r-project.org/
-Packaged: 2020-04-01 16:48:35 UTC; jo
+Encoding: UTF-8
+URL: https://github.com/truecluster/ff
 NeedsCompilation: yes
+Packaged: 2020-06-28 13:45:38 UTC; jo
 Repository: CRAN
-Date/Publication: 2020-04-16 12:10:02 UTC
+Date/Publication: 2020-07-30 11:31:05 UTC

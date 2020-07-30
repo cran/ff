@@ -21,15 +21,15 @@
 \details{
   The 'na.count' feature is activated by assigning the current number of NAs to \code{na.count(x) <- currentNA} and deactivated by assigning NULL.
   The 'na.count' feature is maintained by the, \code{\link{getset.ff}}, \code{\link{readwrite.ff}} and \code{\link{swap}},
-  other ff methods for writing -- \code{\link{set.ff}}, \code{\link{[[<-.ff}}, \code{\link{write.ff}}, \code{\link{[<-.ff}} -- will stop if 'na.count' is activated.
+  other ff methods for writing -- \code{\link{set.ff}}, \code{\link{[[<-.ff}}, \code{\link{write.ff}}, \code{\link[=Extract.ff]{[<-.ff}} -- will stop if 'na.count' is activated.
   The functions \command{na.count} and \command{na.count<-} are generic.
   For ram objects, the default method for \command{na.count} calculates the number of NAs on the fly, thus no maintenance restrictions apply.
 }
 \value{
   NA (if set to NULL or NA) or an integer value otherwise
 }
-\author{ Jens Oehlschlägel, Daniel Adler (C++ back-end) }
-\seealso{ \code{\link{getset.ff}}, \code{\link{readwrite.ff}} and \code{\link{swap}} for methods that support maintenance of 'na.count', \code{\link[base]{NA}}, \code{\link{is.sorted}} for yet another \code{\link[=physical.ff]{physical}} attribute }
+\author{ Jens OehlschlÃ¤gel, Daniel Adler (C++ back-end) }
+\seealso{ \code{\link{getset.ff}}, \code{\link{readwrite.ff}} and \code{\link{swap}} for methods that support maintenance of 'na.count', \code{\link{NA}}, \code{\link{is.sorted}} for yet another \code{\link[=physical.ff]{physical}} attribute }
 \examples{
   message("--- ff examples ---")
   x <- ff(1:12)

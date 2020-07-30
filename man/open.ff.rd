@@ -24,7 +24,7 @@
 \value{
   TRUE if object could be opened, FALSE if it was opened already (or NA if not all components of an ffdf returned FALSE or TRUE on opening)
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{ \code{\link{ff}}, \code{\link{close.ff}}, \code{\link{delete}}, \code{\link{deleteIfOpen}}, \code{\link{getalignedpagesize}} }
 \examples{
   x <- ff(1:12)

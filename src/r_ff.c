@@ -1,6 +1,6 @@
 /*
 # R-C layer of ff
-# (c) 2007 Jens Oehlsch‰gel (based on previous work by Daniel Adler)
+# (c) 2007 Jens Oehlsch√§gel (based on previous work by Daniel Adler)
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-08-24
@@ -16,7 +16,7 @@
 
 /* { --- R FUNCTION REGISTRATION -------------------------------------------- */
 
-R_CallMethodDef callMethods[] =
+R_CallMethodDef CallEntries[] =
 {
  {"ffxtensions", (DL_FUNC) &r_ff_xtensions_available, 0},
  {"ffsymmxtensions", (DL_FUNC) &r_ff_symmxtensions_available, 0},
@@ -24,7 +24,7 @@ R_CallMethodDef callMethods[] =
  {"geterror", (DL_FUNC) &r_ff_geterror, 1},
  {"geterrstr", (DL_FUNC) &r_ff_geterrstr, 1},
  {"ffmode_implemented",  (DL_FUNC) &r_ff_ffmode_implemented,   1},
- {"new", (DL_FUNC) &r_ff_new,  7},
+ {"new", (DL_FUNC) &r_ff_new,  8}, // Martijn Schuemie for zero row ff
  {"is_open", (DL_FUNC) &r_ff_is_open,  1},
  {"open", (DL_FUNC) &r_ff_open,  4},
  {"close",(DL_FUNC) &r_ff_close, 1},
@@ -48,13 +48,13 @@ R_CallMethodDef callMethods[] =
  {"getset_vec",   (DL_FUNC) &r_ff__getset_vec, 5},
  {"get_vec",      (DL_FUNC) &r_ff__get_vec,    4},
  {"set_vec",      (DL_FUNC) &r_ff__set_vec,    5},
- {"addgetset_vec",(DL_FUNC) &r_ff__addset_vec, 5},
+ {"addgetset_vec",(DL_FUNC) &r_ff__addgetset_vec, 5},
  {"addset_vec",   (DL_FUNC) &r_ff__addset_vec, 5},
 
  {"getset_vector",   (DL_FUNC) &r_ff__getset_vector, 5},
  {"get_vector",      (DL_FUNC) &r_ff__get_vector,    4},
  {"set_vector",      (DL_FUNC) &r_ff__set_vector,    5},
- {"addgetset_vector",(DL_FUNC) &r_ff__addset_vector, 5},
+ {"addgetset_vector",(DL_FUNC) &r_ff__addgetset_vector, 5},
  {"addset_vector",   (DL_FUNC) &r_ff__addset_vector, 5},
 
  {"getset_array",    (DL_FUNC) &r_ff__getset_array,    10},
@@ -95,10 +95,12 @@ R_CallMethodDef callMethods[] =
  {NULL, NULL, 0}
 };
 
-/* xx why this ?? Is it ever called? */
-void R_init_ff(DllInfo *info)
+
+void R_init_ff(DllInfo *dll)
 {
-  R_registerRoutines(info, NULL, callMethods, NULL, NULL);
+  R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+  R_useDynamicSymbols(dll, FALSE);
+  R_forceSymbols(dll, TRUE);
 }
 
 void R_unload_ff(DllInfo *info)
@@ -391,47 +393,73 @@ SEXP r_ff_ffmode_implemented(SEXP ffmode)
 }
 
 
-SEXP r_ff_new(SEXP name, SEXP ffmode, SEXP initval, SEXP len, SEXP pagesize, SEXP ro, SEXP autoflush)
+SEXP r_ff_new(SEXP name, SEXP ffmode, SEXP initval, SEXP len, SEXP pagesize, SEXP ro, SEXP autoflush
+, SEXP createNew  // Martijn Schuemie for zero row ff
+)
 {
   SEXP ff_ = R_NilValue;
   void* ff = (void*) 0; /* assignment keeps the compiler quiet */
 
   switch (asInteger(ffmode)) { /* for ffmode see vmode.R */
 #if VMODE_COMPILE_BOOLEAN
-  case 1: ff = (void*) ff_boolean_new( CHAR(STRING_ELT(name,0)), asLogical(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush) ); break;
+  case 1: ff = (void*) ff_boolean_new( CHAR(STRING_ELT(name,0)), asLogical(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush)
+, asInteger(createNew)  // Martijn Schuemie for zero row ff
+); break;
 #endif
 #if VMODE_COMPILE_LOGICAL
-  case 2: ff = (void*) ff_logical_new( CHAR(STRING_ELT(name,0)), asLogical(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush) ); break;
+  case 2: ff = (void*) ff_logical_new( CHAR(STRING_ELT(name,0)), asLogical(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush)
+, asInteger(createNew)  // Martijn Schuemie for zero row ff
+); break;
 #endif
 #if VMODE_COMPILE_QUAD
-  case 3: ff = (void*) ff_quad_new( CHAR(STRING_ELT(name,0)), asInteger(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush) ); break;
+  case 3: ff = (void*) ff_quad_new( CHAR(STRING_ELT(name,0)), asInteger(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush)
+, asInteger(createNew)  // Martijn Schuemie for zero row ff
+); break;
 #endif
 #if VMODE_COMPILE_NIBBLE
-  case 4: ff = (void*) ff_nibble_new( CHAR(STRING_ELT(name,0)), asInteger(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush) ); break;
+  case 4: ff = (void*) ff_nibble_new( CHAR(STRING_ELT(name,0)), asInteger(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush)
+, asInteger(createNew)  // Martijn Schuemie for zero row ff
+); break;
 #endif
 #if VMODE_COMPILE_BYTE
-  case 5: ff = (void*) ff_byte_new( CHAR(STRING_ELT(name,0)), asInteger(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush) ); break;
+  case 5: ff = (void*) ff_byte_new( CHAR(STRING_ELT(name,0)), asInteger(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush)
+, asInteger(createNew)  // Martijn Schuemie for zero row ff
+); break;
 #endif
 #if VMODE_COMPILE_UBYTE
-  case 6: ff = (void*) ff_ubyte_new( CHAR(STRING_ELT(name,0)), asInteger(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush) ); break;
+  case 6: ff = (void*) ff_ubyte_new( CHAR(STRING_ELT(name,0)), asInteger(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush)
+, asInteger(createNew)  // Martijn Schuemie for zero row ff
+); break;
 #endif
 #if VMODE_COMPILE_SHORT
-  case 7: ff = (void*) ff_short_new( CHAR(STRING_ELT(name,0)), asInteger(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush) ); break;
+  case 7: ff = (void*) ff_short_new( CHAR(STRING_ELT(name,0)), asInteger(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush)
+, asInteger(createNew)  // Martijn Schuemie for zero row ff
+); break;
 #endif
 #if VMODE_COMPILE_USHORT
-  case 8: ff = (void*) ff_ushort_new( CHAR(STRING_ELT(name,0)), asInteger(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush) ); break;
+  case 8: ff = (void*) ff_ushort_new( CHAR(STRING_ELT(name,0)), asInteger(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush)
+, asInteger(createNew)  // Martijn Schuemie for zero row ff
+); break;
 #endif
 #if VMODE_COMPILE_INTEGER
-  case 9: ff = (void*) ff_integer_new( CHAR(STRING_ELT(name,0)), asInteger(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush) ); break;
+  case 9: ff = (void*) ff_integer_new( CHAR(STRING_ELT(name,0)), asInteger(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush)
+, asInteger(createNew)  // Martijn Schuemie for zero row ff
+); break;
 #endif
 #if VMODE_COMPILE_SINGLE
-  case 10: ff = (void*) ff_single_new( CHAR(STRING_ELT(name,0)), asReal(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush) ); break;
+  case 10: ff = (void*) ff_single_new( CHAR(STRING_ELT(name,0)), asReal(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush)
+, asInteger(createNew)  // Martijn Schuemie for zero row ff
+); break;
 #endif
 #if VMODE_COMPILE_DOUBLE
-  case 11: ff = (void*) ff_double_new( CHAR(STRING_ELT(name,0)), asReal(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush) ); break;
+  case 11: ff = (void*) ff_double_new( CHAR(STRING_ELT(name,0)), asReal(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush)
+, asInteger(createNew)  // Martijn Schuemie for zero row ff
+); break;
 #endif
 #if VMODE_COMPILE_RAW
-  case 13: ff = (void*) ff_raw_new( CHAR(STRING_ELT(name,0)), asRaw(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush) ); break;
+  case 13: ff = (void*) ff_raw_new( CHAR(STRING_ELT(name,0)), asRaw(initval), asInteger(len), asInteger(pagesize), asLogical(ro), asLogical(autoflush)
+, asInteger(createNew)  // Martijn Schuemie for zero row ff
+); break;
 #endif
   default: error("unknown ffmode");
   }
@@ -477,120 +505,132 @@ SEXP r_ff_open(SEXP ff_, SEXP ffmode, SEXP ro, SEXP autoflush)
   case 1: ff = (void*) ff_boolean_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
+  , 0 // Martijn Schuemie for zero row ff
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
+  , 0  // Martijn Schuemie for zero row ff
   ); break;
 #endif
 #if VMODE_COMPILE_LOGICAL
   case 2: ff = (void*) ff_logical_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
+  , 0 // Martijn Schuemie for zero row ff
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
+  , 0  // Martijn Schuemie for zero row ff
   ); break;
 #endif
 #if VMODE_COMPILE_QUAD
   case 3: ff = (void*) ff_quad_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
+  , 0 // Martijn Schuemie for zero row ff
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
+  , 0  // Martijn Schuemie for zero row ff
   ); break;
 #endif
 #if VMODE_COMPILE_NIBBLE
   case 4: ff = (void*) ff_nibble_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
+  , 0 // Martijn Schuemie for zero row ff
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
+  , 0  // Martijn Schuemie for zero row ff
   ); break;
 #endif
 #if VMODE_COMPILE_BYTE
   case 5: ff = (void*) ff_byte_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
+  , 0 // Martijn Schuemie for zero row ff
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
+  , 0  // Martijn Schuemie for zero row ff
   ); break;
 #endif
 #if VMODE_COMPILE_UBYTE
   case 6: ff = (void*) ff_ubyte_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
+  , 0 // Martijn Schuemie for zero row ff
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
+  , 0  // Martijn Schuemie for zero row ff
   ); break;
 #endif
 #if VMODE_COMPILE_SHORT
   case 7: ff = (void*) ff_short_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
+  , 0 // Martijn Schuemie for zero row ff
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
+  , 0  // Martijn Schuemie for zero row ff
   ); break;
 #endif
 #if VMODE_COMPILE_USHORT
   case 8: ff = (void*) ff_ushort_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
+  , 0 // Martijn Schuemie for zero row ff
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
+  , 0  // Martijn Schuemie for zero row ff
   ); break;
 #endif
 #if VMODE_COMPILE_INTEGER
   case 9: ff = (void*) ff_integer_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
+  , 0 // Martijn Schuemie for zero row ff
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
+  , 0  // Martijn Schuemie for zero row ff
   ); break;
 #endif
 #if VMODE_COMPILE_SINGLE
   case 10: ff = (void*) ff_single_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
+  , 0 // Martijn Schuemie for zero row ff
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
+  , 0  // Martijn Schuemie for zero row ff
   ); break;
 #endif
 #if VMODE_COMPILE_DOUBLE
   case 11: ff = (void*) ff_double_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
+  , 0 // Martijn Schuemie for zero row ff
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
+  , 0  // Martijn Schuemie for zero row ff
   ); break;
 #endif
 #if VMODE_COMPILE_RAW
   case 13: ff = (void*) ff_raw_new( /* for ffmode see vmode.R */
     CHAR(asChar(getAttrib(ff_, install("filename"))))
   , 0 /* to be ignored in this call */
-  , FSIZE_RESERVED_FOR_OPENING /* the revised interface of ff_new wants -1 to distinguish re-opening from creating new */
+  , 0 // Martijn Schuemie for zero row ff
   , asInteger(getAttrib(ff_, install("pagesize")))
   , asLogical(ro)
   , asLogical(autoflush)
+  , 0  // Martijn Schuemie for zero row ff
   ); break;
 #endif
   default: error("unknown ffmode");

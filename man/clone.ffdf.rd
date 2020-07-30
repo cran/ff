@@ -22,7 +22,7 @@ clone physically duplicates ffdf objects
   An object of type \code{\link{ffdf}}
 }
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 \seealso{
   \code{\link{clone}}, \code{\link{ffdf}}

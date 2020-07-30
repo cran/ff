@@ -17,7 +17,7 @@ matcomb(r, c)
 \value{
   a k by 2 matrix of matrix indices where \code{ k = length(r) * length(c) }
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{  \code{\link{row}}, \code{\link{col}} , \code{\link{expand.grid}} }
 \examples{
   matcomb(1:3, 1:4)

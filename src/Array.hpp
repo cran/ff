@@ -42,6 +42,7 @@ namespace ff {
     msize_t     pagesize;
     bool        readonly;
     bool        autoflush;
+    bool        createNew;  // Martijn Schuemie for zero row ff
   };
 
   /** ArrayBase class (common interface) */
@@ -131,7 +132,9 @@ namespace ff {
 
       _sectionSize = par.pagesize;
 
-      _fileMapping = new FileMapping(par.path, par.size*sizeof(value_type), par.readonly, par.autoflush );
+      _fileMapping = new FileMapping(par.path, par.size*sizeof(value_type), par.readonly, par.autoflush
+, par.createNew  // Martijn Schuemie for zero row ff
+);   
 
       if ( _fileMapping->getError() == E_NO_ERROR )
       {

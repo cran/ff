@@ -64,7 +64,7 @@ boolean scalar telling fforder whether to order increasing or decreasing
 -- with an attribute \code{\link{na.count}} with as many values as columns in \dots
 }
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 
 \seealso{

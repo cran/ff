@@ -88,11 +88,11 @@ ffsave.image(file = stop("'file' must be specified"), safe = TRUE, ...)
   a character vector with messages returned from the \code{zip} utility (one for each ff file zipped)
 }
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 \note{
   The ff files are not platform-independent with regard to byte order.
-  For large files and the zip64 format use \code{zip 3.0} and \code{unzip 6.0} from \url{https://sourceforge.net/projects/infozip/}.
+  For large files and the zip64 format use \code{zip 3.0} and \code{unzip 6.0} from \url{http://infozip.sourceforge.net/}.
 }
 \seealso{
   \code{\link{ffinfo}} for inspecting the content of the \code{ffarchive} \cr

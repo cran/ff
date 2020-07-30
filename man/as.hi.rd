@@ -1,5 +1,6 @@
 \name{as.hi}
 \alias{as.hi}
+\alias{as.hi.NULL}
 \alias{as.hi.hi}
 \alias{as.hi.ri}
 \alias{as.hi.bit}
@@ -21,6 +22,7 @@
 }
 \usage{
 as.hi(x, \dots)
+\method{as.hi}{NULL}(x, \dots)
 \method{as.hi}{hi}(x, \dots)
 \method{as.hi}{ri}(x, maxindex = length(x), \dots)
 \method{as.hi}{bit}(x, range = NULL, maxindex = length(x), vw = NULL
@@ -44,16 +46,16 @@ as.hi(x, \dots)
   \item{x}{ an appropriate object of the class for which we dispatched }
   \item{envir}{ the environment in which to evaluate components of the index expression }
   \item{maxindex}{ maximum positive indexposition \code{maxindex}, is needed with negative indices, if vw or dim is given, maxindex is calculated automatically }
-  \item{names}{ the \code{\link[ff:names.ff]{names}} of the indexed vector for character indexing }
-  \item{dim}{ the \code{\link[ff:dim.ff]{dim}} of the indexed matrix to be stored within the \code{\link{hi}} object }
+  \item{names}{ the \code{\link[=names.ff]{names}} of the indexed vector for character indexing }
+  \item{dim}{ the \code{\link[=dim.ff]{dim}} of the indexed matrix to be stored within the \code{\link{hi}} object }
   \item{dimorder}{ the \code{\link{dimorder}} of the indexed matrix to be stored within the \code{\link{hi}} object, may convert interpretation of \code{x} }
   \item{symmetric}{ the \code{\link{symmetric}} of the indexed matrix to be stored within the \code{\link{hi}} object }
   \item{fixdiag}{ the \code{\link{fixdiag}} of the indexed matrix to be stored within the \code{\link{hi}} object }
   \item{vw}{ the virtual window \code{\link{vw}} of the indexed vector or matrix to be stored within the \code{\link{hi}} object, see details }
   \item{vw.convert}{ FALSE to prevent doubly virtual window conversion, this is needed for some internal calls that have done the virtual window conversion already, see details }
   \item{dimorder.convert}{ FALSE to prevent doubly dimorder conversion, this is needed for some internal calls that have done the dimorder conversion already, see details }
-  \item{NAs}{ a vector of NA positions to be stored \code{\link[bit]{rlepack}ed}, not fully supported yet }
-  \item{pack}{ FALSE to prevent \code{\link[bit]{rlepack}ing}, note that this is a hint rather than a guarantee, \code{as.hi.bit} might ignore this }
+  \item{NAs}{ a vector of NA positions to be stored \code{\link{rlepack}ed}, not fully supported yet }
+  \item{pack}{ FALSE to prevent \code{\link{rlepack}ing}, note that this is a hint rather than a guarantee, \code{as.hi.bit} might ignore this }
   \item{range}{ NULL or a vector with two elements indicating first and last position to be converted from 'bit' to 'hi' }
   \item{\dots}{ further argument passed from generic to method or from wrapper method to \code{as.hi.integer} }
 }
@@ -75,16 +77,16 @@ as.hi(x, \dots)
   If the \code{vw} parameter is used, the index information in \code{x} is interpreted relative to the virtual window but stored relative to the abolute origin.
   Back-coercion via \code{\link{as.integer.hi}} and friends will again return the index information relative to the virtual window, thus retaining symmetry and transparency of the viurtual window to the user.
   \cr
-  You can use \code{\link[ff:length.hi]{length}} to query the index length (possibly length of negative subscripts),
-  \code{\link[ff:poslength.hi]{poslength}} to query the number of selected elements (even with negative subscripts),
-  and \code{\link[ff:maxindex.hi]{maxindex}} to query the largest possible index position (within virtual window, if present)
+  You can use \code{\link[=length.hi]{length}} to query the index length (possibly length of negative subscripts),
+  \code{\link[=length.hi]{poslength}} to query the number of selected elements (even with negative subscripts),
+  and \code{\link[=length.hi]{maxindex}} to query the largest possible index position (within virtual window, if present)
   \cr
   Duplicated negative indices are removed and will not be recovered by \code{\link{as.integer.hi}}.
 }
 \value{
   an object of class \code{\link{hi}}
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \note{ Avoid changing the Hybrid Index representation, this might crash the \code{\link{[.ff}} subscripting. }
 \seealso{ \code{\link{hi}} for the Hybrid Index class, \code{\link{hiparse}} for parsing details, \code{\link{as.integer.hi}} for back-coercion, \code{\link{[.ff}} for ff subscripting }
 \examples{

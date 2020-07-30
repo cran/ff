@@ -54,7 +54,7 @@ ffindexset(x, index, value, indexorder = NULL
   Function \code{ffindexset} returns the ff vector in which we have updated values.
 }
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 \seealso{
   \code{\link{Extract.ff}}, \code{\link{ffdfindexget}}, \code{\link{ffindexorder}}

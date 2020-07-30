@@ -26,13 +26,13 @@ repnam(argument, names = NULL, len=length(names), default = list(NULL))
 }
 \value{ an object like argument or default having length len }
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 \note{
   This is for internal use, e.g. to handle argument \code{colClasses} in \code{\link{read.table.ffdf}}
 }
 \seealso{
-  \code{\link{rep}}, \code{\link{vector}}, \code{\link[bit]{repfromto}}
+  \code{\link{rep}}, \code{\link{vector}}, \code{\link{repfromto}}
 }
 \examples{
  message("a list example")

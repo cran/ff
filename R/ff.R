@@ -1,5 +1,5 @@
 # R layer of ff
-# (c) 2007 Jens Oehlsch‰gel
+# (c) 2007 Jens Oehlsch√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-09-03
@@ -33,7 +33,7 @@ if(getRversion() < "2.11.0")
 #! \details{
 #!   ff extensions are needed for certain bitcompressed vmodes and ff symm extensions for symmetric matrices.
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{  \code{\link{vmode}}%, \code{\link{symm}}
 #! }
 #! \examples{
@@ -44,10 +44,10 @@ if(getRversion() < "2.11.0")
 #! \keyword{ data }
 
 ffxtensions <- function()
-  .Call("ffxtensions", PACKAGE="ff")
+  .Call(C_ffxtensions, PACKAGE="ff")
 
 ffsymmxtensions <- function()
-  .Call("ffsymmxtensions", PACKAGE="ff")
+  .Call(C_ffsymmxtensions, PACKAGE="ff")
 
 
 #vector of those physical ff attributes that are kept in the ram version
@@ -96,7 +96,7 @@ caching_schemes <- c("mmnoflush","mmeachflush")
 #! \value{
 #!   logical scalar
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{  \code{\link{inherits}}, \code{\link{as.ff}}, \code{\link{is.ffdf}} }
 #! \examples{
 #!   is.ff(integer())
@@ -127,7 +127,7 @@ is.ff <- function(x)
 #! \value{
 #!   \command{geterror.ff} returns an error integer code (no error = 0) and \command{geterrstr.ff} returns the error message (no error = "no error").
 #! }
-#! \author{ Jens Oehlschl‰gel, Daniel Adler (C++ back-end) }
+#! \author{ Jens Oehlschl√§gel, Daniel Adler (C++ back-end) }
 #! \seealso{  \code{\link{ff}} }
 #! \examples{
 #!   x <- ff(1:12)
@@ -140,11 +140,11 @@ is.ff <- function(x)
 
 geterror.ff <- function(x)
 {
-  .Call("geterror", attr(x, "physical"), PACKAGE="ff")
+  .Call(C_geterror, attr(x, "physical"), PACKAGE="ff")
 }
 geterrstr.ff <- function(x)
 {
-  .Call("geterrstr", attr(x, "physical"), PACKAGE="ff")
+  .Call(C_geterrstr, attr(x, "physical"), PACKAGE="ff")
 }
 
 
@@ -197,7 +197,7 @@ geterrstr.ff <- function(x)
 #!   \code{filename<-} exhibits R's standard behaviour of considering "filename" and "./filename" both to be located in \code{\link{getwd}}.
 #!   By constrast \code{pattern<-} will create "filename" without path in \code{getOption("fftempdir")} and only "./filename" in \code{\link{getwd}}.
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{  \code{\link{fftempfile}}, \code{\link{finalizer}}, \code{\link{ff}}, \code{\link{as.ff}}, \code{\link{as.ram}}, \code{\link{update.ff}},  \code{\link{file.move}}}
 #! \examples{
 #!   \dontrun{
@@ -341,7 +341,7 @@ filename.ffdf <- function(x, ...)
 #! \value{
 #!   logical scalar
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{open.ff}}, \code{\link[=physical.ff]{physical}} }
 #! \examples{
 #!   x <- ff(1:12)
@@ -390,7 +390,7 @@ is.readonly.ff <- function(x
 #! \value{
 #!   TRUE or FALSE (or NA if not all components of an ffdf object are opened or closed)
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{is.readonly}}, \code{\link{open.ff}}, \code{\link{close.ff}} }
 #! \examples{
 #!   x <- ff(1:12)
@@ -405,13 +405,13 @@ is.readonly.ff <- function(x
 is.open.ff_pointer <- function(x
 , ... # dummy to keep R CMD check quiet
 ){
-  .Call("is_open", x, PACKAGE="ff")
+  .Call(C_is_open, x, PACKAGE="ff")
 }
 
 is.open.ff <- function(x
 , ... # dummy to keep R CMD check quiet
 ){
-  .Call("is_open", attr(x, "physical"), PACKAGE="ff")
+  .Call(C_is_open, attr(x, "physical"), PACKAGE="ff")
 }
 
 
@@ -433,7 +433,7 @@ is.open.ff <- function(x
 #! \value{
 #!   integer number of bytes
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{getpagesize}} }
 #! \examples{
 #!   x <- ff(1:12)
@@ -469,7 +469,7 @@ pagesize.ff <- function(x, ...){
 #! \value{
 #!   integer scalar
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{length.ff}}, \code{\link{maxindex}} }
 #! \examples{
 #!   x <- ff(1:12)
@@ -490,7 +490,7 @@ maxlength.ff  <- function(x
 , ... # dummy to keep R CMD check quiet
 )
 {
-  #we no longer call .Call("maxlength", x, PACKAGE="ff")
+  #we no longer call .Call(C_maxlength, x, PACKAGE="ff")
   attr(attr(x, "physical"), "maxlength")
 }
 maxlength.default <- function(x
@@ -525,7 +525,7 @@ maxlength.default <- function(x
 #! \value{
 #!   TRUE or FALSE
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{symmetric}}, \code{\link{ff}} %, \code{\link{symm}}
 #!         , \code{\link{dist}}, \code{\link{isSymmetric}} }
 #! \examples{
@@ -578,7 +578,7 @@ symmetric.dist <- function(x
 #! \value{
 #!   NULL or the scalar representing the fixed diagonal
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{fixdiag}}, \code{\link{ff}} %, \code{\link{symm}}
 #!         , \code{\link{dist}} }
 #! \examples{
@@ -621,8 +621,8 @@ fixdiag.dist <- function(x
 #!   \item{value}{ NULL (to remove the 'is.sorted' attribute) or TRUE or FALSE }
 #! }
 #! \details{
-#!   Sorting is slow, see \code{\link[base]{sort}}.
-#!   Checking whether an object is sorted can avoid unnessary sorting -- see \code{\link[base]{is.unsorted}}, \code{\link[bit]{intisasc}} -- but still takes too much time with large objects stored on disk.
+#!   Sorting is slow, see \code{\link{sort}}.
+#!   Checking whether an object is sorted can avoid unnessary sorting -- see \code{\link{is.unsorted}}, \code{\link{intisasc}} -- but still takes too much time with large objects stored on disk.
 #!   Thus it makes sense to maintain an attribute, that tells us whether sorting can be skipped.
 #!   Note that -- though you change it yourself -- \code{is.sorted} is a \code{\link[=physical.ff]{physical}} attribute of an object,
 #!   because it represents an attribute of the \emph{data}, which is shared between different \code{\link[=physical.ff]{virtual}} views of the object.
@@ -633,8 +633,8 @@ fixdiag.dist <- function(x
 #! \note{
 #!   \command{ff} will set \code{is.sorted(x) <- FALSE} if \code{\link{clone}} or \code{\link{length<-.ff}} have increased length.
 #! }
-#! \author{ Jens Oehlschl‰gel }
-#! \seealso{ \code{\link{is.ordered.ff}} for testing factor levels, \code{\link[base]{is.unsorted}} for testing the data, \code{\link[bit]{intisasc}} for a quick version thereof, \code{\link{na.count}} for yet another \code{\link[=physical.ff]{physical}} attribute }
+#! \author{ Jens Oehlschl√§gel }
+#! \seealso{ \code{\link{is.ordered.ff}} for testing factor levels, \code{\link{is.unsorted}} for testing the data, \code{\link{intisasc}} for a quick version thereof, \code{\link{na.count}} for yet another \code{\link[=physical.ff]{physical}} attribute }
 #! \examples{
 #!   x <- 1:12
 #!   is.sorted(x) <- !( is.na(is.unsorted(x)) || is.unsorted(x))
@@ -702,15 +702,15 @@ is.sorted.default <- function(x, ...)
 #! \details{
 #!   The 'na.count' feature is activated by assigning the current number of NAs to \code{na.count(x) <- currentNA} and deactivated by assigning NULL.
 #!   The 'na.count' feature is maintained by the, \code{\link{getset.ff}}, \code{\link{readwrite.ff}} and \code{\link{swap}},
-#!   other ff methods for writing -- \code{\link{set.ff}}, \code{\link{[[<-.ff}}, \code{\link{write.ff}}, \code{\link{[<-.ff}} -- will stop if 'na.count' is activated.
+#!   other ff methods for writing -- \code{\link{set.ff}}, \code{\link{[[<-.ff}}, \code{\link{write.ff}}, \code{\link[=Extract.ff]{[<-.ff}} -- will stop if 'na.count' is activated.
 #!   The functions \command{na.count} and \command{na.count<-} are generic.
 #!   For ram objects, the default method for \command{na.count} calculates the number of NAs on the fly, thus no maintenance restrictions apply.
 #! }
 #! \value{
 #!   NA (if set to NULL or NA) or an integer value otherwise
 #! }
-#! \author{ Jens Oehlschl‰gel, Daniel Adler (C++ back-end) }
-#! \seealso{ \code{\link{getset.ff}}, \code{\link{readwrite.ff}} and \code{\link{swap}} for methods that support maintenance of 'na.count', \code{\link[base]{NA}}, \code{\link{is.sorted}} for yet another \code{\link[=physical.ff]{physical}} attribute }
+#! \author{ Jens Oehlschl√§gel, Daniel Adler (C++ back-end) }
+#! \seealso{ \code{\link{getset.ff}}, \code{\link{readwrite.ff}} and \code{\link{swap}} for methods that support maintenance of 'na.count', \code{\link{NA}}, \code{\link{is.sorted}} for yet another \code{\link[=physical.ff]{physical}} attribute }
 #! \examples{
 #!   message("--- ff examples ---")
 #!   x <- ff(1:12)
@@ -747,10 +747,10 @@ na.count.ff <- function(x
 ){
   physical <- physical(x)
   if (!is.null(physical$VW))
-    return(as.integer(NA))
+    return(NA_integer_)
   nc <- physical$na.count
   if (is.null(nc)){
-    as.integer(NA)
+    NA_integer_
   }else{
     nc
   }
@@ -764,6 +764,7 @@ na.count.ff <- function(x
   if (is.null(value))
     physical(x)$na.count <- NULL
   else{
+    if (length(x)){
     if (is.logical(value)){
       if (value){
         i1 <- i2 <- 0L  # dummy assignment to shut up R CMD CHECK NOTE about no visible binding
@@ -771,6 +772,9 @@ na.count.ff <- function(x
       }else{
         stop("assign value=NULL (not value=FALSE) to deactivate na.count")
       }
+    }
+    }else{
+      value = 0L
     }
     physical(x)$na.count <- as.integer(value)
   }
@@ -781,7 +785,7 @@ na.count.default <- function(x
 , ... # dummy to keep R CMD check quiet
 ){
   if (is.null(physical(x)$na.count))
-    as.integer(NA)
+    NA_integer_
   else
     as.integer(sum(is.na(x[])))
 }
@@ -825,9 +829,9 @@ na.count.default <- function(x
 #! \value{
 #!   \command{physical} and \command{virtual} returns a list with named elements
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{
-#!  \code{\link[bit]{physical}}, \code{\link{physical.ffdf}}, \code{\link{ff}}, \code{\link{as.ram}}; \cr
+#!  \code{\link{physical}}, \code{\link{physical.ffdf}}, \code{\link{ff}}, \code{\link{as.ram}}; \cr
 #!  \code{\link{is.sorted}} and \code{\link{na.count}} for applications of physical attributes; \cr
 #!  \code{\link{levels.ff}} and \code{\link{ramattribs}} for applications of virtual attributes
 #! }
@@ -907,11 +911,11 @@ virtual.ff <- function(x){
 #!   for example \code{\link{factor}} -- see \code{\link{levels.ff}} -- and \code{\link[base:DateTimeClasses]{POSIXct}}, see the example.
 #! }
 #! \value{
-#!   \command{ramclass} returns a character vector with classnames and \command{ramattribs} returns a list with names elemens just like \code{\link[base]{attributes}}.
+#!   \command{ramclass} returns a character vector with classnames and \command{ramattribs} returns a list with names elemens just like \code{\link{attributes}}.
 #!   The vectors \code{ramclass_excludes} and \code{ramattribs_excludes} name those attributes, which are not exported from ff to ram objects when using \code{\link{as.ram}}.
 #! }
-#! \author{ Jens Oehlschl‰gel }
-#! \seealso{ \code{\link{ff}}, \code{\link[=physical.ff]{virtual}}, \code{\link{as.ram}}, \code{\link{levels.ff}}, \code{\link{attributes}}, \code{\link[base]{DateTimeClasses}} }
+#! \author{ Jens Oehlschl√§gel }
+#! \seealso{ \code{\link{ff}}, \code{\link[=physical.ff]{virtual}}, \code{\link{as.ram}}, \code{\link{levels.ff}}, \code{\link{attributes}}, \code{\link{DateTimeClasses}} }
 #! \examples{
 #!   x <- ff(as.POSIXct(as.POSIXlt(Sys.time(), "GMT")), length=12)
 #!   x
@@ -993,8 +997,8 @@ ramattribs.default <- function(x
 #! \value{
 #!   Integer scalar
 #! }
-#! \author{ Jens Oehlschl‰gel }
-#! \seealso{ \code{\link[base]{length}}, \code{\link{maxlength}}, \code{\link{file.resize}}, \code{\link[ff:dim.ff]{dim}}, \code{\link[=physical.ff]{virtual}} }
+#! \author{ Jens Oehlschl√§gel }
+#! \seealso{ \code{\link{length}}, \code{\link{maxlength}}, \code{\link{file.resize}}, \code{\link[=dim.ff]{dim}}, \code{\link[=physical.ff]{virtual}} }
 #! \examples{
 #!   x <- ff(1:12)
 #!   maxlength(x)
@@ -1019,6 +1023,64 @@ length.ff <- function(x)
 }
 
 
+"length1<-.ff" <- function(x, value)
+{
+  virtual <- virtual(x)
+  if (!is.null(virtual$VW))
+    stop("you can't set length during existence of a virtual window, see ?vw")
+  if (!is.null(virtual$Dim))
+    stop("you can't set length of arrays, either remove the dim attribute or use 'dim<-' instead")
+  
+  value <- as.integer(value)
+  oldlen <- virtual$Length
+  
+  if (value==oldlen)
+    return(x)
+  
+  
+  vm <- vmode(x)
+  newbytes <- ceiling((value * .ffbytes[vm])/.rambytes[vm])*.rambytes[vm]
+  #newbytes <- ceiling(value * .ffbytes[vm])
+  
+  io <- is.open(x)
+  if (io)
+    close(x)
+  file.resize( filename(x), newbytes )
+  open(x)
+  
+  physical <- physical(x)
+  physical$maxlength <- as.integer(newbytes / .ffbytes[vm])
+  if (!is.null(physical$na.count)){
+    physical$na.count <- NULL
+    warning("changing length(ff) removed attribute 'na.count'")
+  }
+  if (!is.null(physical$is.sorted) && value>oldlen){
+    physical$is.sorted <- NULL
+    warning("increasing length(ff) removed attribute 'is.sorted'")
+  }
+  physical(x) <- physical
+  
+  virtual$Length <- value
+  virtual(x) <- virtual
+  
+  if (!is.null(virtual$Names)){
+    if (value>oldlen){
+      if (!.vunsigned[vm] && vm!="raw")
+        x[hi(oldlen+1L, value)] <- NA
+      virtual$Names <- c(virtual$Names, (oldlen+1L):value)
+    }else
+      virtual$Names <- virtual$Names[seq_len(value)]
+  }
+  
+  virtual(x) <- virtual
+  
+  if (!io)
+    close(x)
+  
+  x
+}
+
+
 "length<-.ff" <- function(x, value)
 {
   virtual <- virtual(x)
@@ -1035,8 +1097,9 @@ length.ff <- function(x)
 
 
   vm <- vmode(x)
-  newbytes <- ceiling(value * .ffbytes[vm])
-
+  newbytes <- ceiling((value * .ffbytes[vm])/.rambytes[vm])*.rambytes[vm]
+  #newbytes <- ceiling(value * .ffbytes[vm])
+  
   io <- is.open(x)
   if (io)
     close(x)
@@ -1044,7 +1107,7 @@ length.ff <- function(x)
   open(x)
 
   physical <- physical(x)
-  physical$maxlength <- value
+  physical$maxlength <- as.integer(newbytes / .ffbytes[vm])
   if (!is.null(physical$na.count)){
     physical$na.count <- NULL
     warning("changing length(ff) removed attribute 'na.count'")
@@ -1054,20 +1117,34 @@ length.ff <- function(x)
     warning("increasing length(ff) removed attribute 'is.sorted'")
   }
   physical(x) <- physical
-
-  virtual$Length <- value
-
-  if (!is.null(virtual$Names)){
-    if (value>oldlen){
+  
+  if (value>oldlen){
+    virtual$Length <- value
+    virtual(x) <- virtual
+    if (!is.null(virtual$Names)){
       if (!.vunsigned[vm] && vm!="raw")
         x[hi(oldlen+1L, value)] <- NA
       virtual$Names <- c(virtual$Names, (oldlen+1L):value)
-    }else
-      virtual$Names <- virtual$Names[1:value]
+    }
+  }else {  # if value < oldlen
+    npacked <- round(.rambytes[vm]/.ffbytes[vm])
+    if (npacked>1 && (nrest <- value %% npacked)){
+      nrest <- npacked - value %% npacked
+      virtual$Length <- value+nrest
+      virtual(x) <- virtual
+      if (!is.null(virtual$Names))
+        x[hi(value+1L, value+nrest)] <- .vNA[vm]
+      else
+        x[hi(value+1L, value+nrest)] <- 0L
+    }
+    virtual$Length <- value
+    if (!is.null(virtual$Names)){
+      virtual$Names <- virtual$Names[seq_len(value)]
+    }
   }
-
+  
   virtual(x) <- virtual
-
+  
   if (!io)
     close(x)
 
@@ -1113,7 +1190,7 @@ length.ff <- function(x)
 #! \value{
 #!   \command{levels} returns a character vector of levels (possibly including \code{as.cha racter(NA)}).
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \note{ When levels as assigned to an ff object that formerly had not levels, we assign automatically \code{\link{ramclass}} == "factor". If you want to change to an ordered factor, use \code{\link[=virtual.ff]{virtual}$ramclass <- c("ordered", "factor")} }
 #! \seealso{ \code{\link{ramclass}}, \code{\link{factor}}, \code{\link[=physical.ff]{virtual}} }
 #! \examples{
@@ -1221,13 +1298,13 @@ is.ordered.ff <- function(x){
 #!   \command{names.ff\_array}
 #!   returns NULL and setting names for
 #!   \code{ff_array}s is not allowed,
-#!   but setting \code{\link[ff:dimnames.ff_array]{dimnames}} is.
+#!   but setting \code{\link[=dimnames.ff]{dimnames}} is.
 #! }
 #! \value{
 #!   \command{names} returns a character vector (or NULL)
 #! }
-#! \author{ Jens Oehlschl‰gel }
-#! \seealso{ \code{\link[base]{names}}, \code{\link{dimnames.ff_array}}, \code{\link{vw}}, \code{\link[=physical.ff]{virtual}} }
+#! \author{ Jens Oehlschl√§gel }
+#! \seealso{ \code{\link{names}}, \code{\link[=dimnames.ff]{dimnames.ff_array}}, \code{\link{vw}}, \code{\link[=physical.ff]{virtual}} }
 #! \examples{
 #!   x <- ff(1:26, names=letters)
 #!   names(x)
@@ -1289,7 +1366,7 @@ names.ff <- function(x){
 }
 
 
-#! \name{dimnames.ff_array}
+#! \name{dimnames.ff}
 #! \alias{dimnames.ff}
 #! \alias{dimnames.ff_array}
 #! \alias{dimnames<-.ff_array}
@@ -1307,13 +1384,13 @@ names.ff <- function(x){
 #! }
 #! \details{
 #!   if \code{\link{vw}} is set, \command{dimnames.ff\_array} returns the appropriate part of the names, but you can't set \command{dimnames} while \command{vw} is set.
-#!   \command{dimnames} returns NULL for \code{ff_vectors} and setting \code{dimnames} for \code{ff_vector} is not allowed, but setting \code{\link[ff:names.ff]{names}} is.
+#!   \command{dimnames} returns NULL for \code{ff_vectors} and setting \code{dimnames} for \code{ff_vector} is not allowed, but setting \code{\link[=names.ff]{names}} is.
 #! }
 #! \value{
-#!   \command{dimnames} returns a list, see \code{\link[base]{dimnames}}
+#!   \command{dimnames} returns a list, see \code{\link{dimnames}}
 #! }
-#! \author{ Jens Oehlschl‰gel }
-#! \seealso{ \code{\link[base]{dimnames}}, \code{\link{dim.ff}} , \code{\link{names.ff}} , \code{\link{vw}}, \code{\link[=physical.ff]{virtual}} }
+#! \author{ Jens Oehlschl√§gel }
+#! \seealso{ \code{\link{dimnames}}, \code{\link{dim.ff}} , \code{\link{names.ff}} , \code{\link{vw}}, \code{\link[=physical.ff]{virtual}} }
 #! \examples{
 #!   x <- ff(1:12, dim=c(3,4), dimnames=list(letters[1:3], LETTERS[1:4]))
 #!   dimnames(x)
@@ -1333,7 +1410,7 @@ dimnames.ff_array <- function(x){
   else{
     vw <- vw[1,]
     d <- attr(attr(x, "virtual"),"Dim")
-    ii <- 1:length(d)
+    ii <- seq_along(d)
     names(ii) <- names(d)
     dn <- attr(attr(x, "virtual"), "Dimnames")
     lapply(ii, function(i){
@@ -1352,11 +1429,11 @@ dimnames.ff_array <- function(x){
     ndim <- length(ffdim)
     if (length(value)!=ndim)
       stop("length of dimnames does not match length of dim")
-    dimcheck <- sapply(1:ndim, function(i){
+    dimcheck <- sapply(seq_len(ndim), function(i){
       is.null(value[[i]]) || length(value[[i]]) == ffdim[i]
     })
     if (!all(dimcheck))
-      stop("dimnames[[i]] is neither NULL nor matches dim[i]")
+      stop("dimnames(i) is neither NULL nor matches dim(i)")
   }
   attr(attr(x, "virtual"), "Dimnames") <- value
   x
@@ -1402,20 +1479,20 @@ dimnames.ff_array <- function(x){
 #! \details{
 #!    \command{dim} and \command{dimorder} are \code{\link[=physical.ff]{virtual}} attributes. Thus two copies of an R ff object can point to the same file but interpret it differently.
 #!    \command{dim} has the usual meaning, \command{dimorder} defines the dimension order of storage, i.e. \code{c(1,2)} corresponds to R's standard column-major order,
-#!    \code{c(1,2)} corresponds to row-major order, and for higher dimensional arrays dimorder can also be used. Standard dimorder is \code{1:length(dim(x))}. \cr
+#!    \code{c(1,2)} corresponds to row-major order, and for higher dimensional arrays dimorder can also be used. Standard dimorder is \code{seq_along(dim(x))}. \cr
 #!    For \code{\link{ffdf}} \code{dim} returns the number of rows and virtual columns. With \code{dim<-.ffdf} only the number of rows can be changed. For convenience you can assign \code{NA} to the number of columns. \cr
 #!    For \code{\link{ffdf}} the dimorder returns non-standard dimorder if any of its columns contains a ff object with non-standard dimorder (see \code{\link{dimorderStandard}})
 #!    An even higher level of virtualization is available using virtual windows, see \code{\link{vw}}.
 #! }
 #! \note{
 #!   \code{x[]} returns a matrix like \code{x[,]} and thus respects dimorder, while \code{x[i:j]} returns a vector and simply returns elements in the stored order.
-#!   Check the corresponding example twice, in order to make sure you understand that for non-standard dimorder \code{x[1:length(x)]} is \emph{not the same} as \code{as.vector(x[])}.
+#!   Check the corresponding example twice, in order to make sure you understand that for non-standard dimorder \code{x[seq_along(x)]} is \emph{not the same} as \code{as.vector(x[])}.
 #! }
 #! \value{
 #!   \command{names} returns a character vector (or NULL)
 #! }
-#! \author{ Jens Oehlschl‰gel }
-#! \seealso{ \code{\link[base]{dim}}, \code{\link{dimnames.ff_array}}, \code{\link{dimorderStandard}}, \code{\link{vw}}, \code{\link[=physical.ff]{virtual}} }
+#! \author{ Jens Oehlschl√§gel }
+#! \seealso{ \code{\link{dim}}, \code{\link[=dimnames.ff]{dimnames.ff_array}}, \code{\link{dimorderStandard}}, \code{\link{vw}}, \code{\link[=physical.ff]{virtual}} }
 #! \examples{
 #!   x <- ff(1:12, dim=c(3,4), dimorder=c(2:1))
 #!   y <- x
@@ -1495,13 +1572,14 @@ dim.ff <- function(x)
     d <- attr(virtual, "Dim")
     if (identical(d, value))
       return(x)
+    
     n <- attr(virtual, "Length")
     nvalue <- prod(value)
     nvaluedim <- length(value)
     if (nvalue==n){
-      dimorder <- 1:nvaluedim
+      dimorder <- seq_len(nvaluedim)
     }else{
-      # we allow to grow or shrink the fastest rotating dim (given dimorder)
+      # we allow to grow or shrink the slowest rotating dim (given dimorder)
       dimorder <- attr(virtual, "Dimorder")
       nd <- length(d)
       if ( nvaluedim==nd && ( nd==1 || all(d[dimorder][-nd]==value[dimorder][-nd]) ) ){
@@ -1511,7 +1589,7 @@ dim.ff <- function(x)
         dimorder(x) <- dimorder
         return(x)
       }else
-        stop("you can only change the fastest rotating dim")
+        stop("you can only grow or shrink the slowest rotating dim")
     }
     attr(virtual, "Dim") <- value
     attr(virtual, "Dimnames") <- NULL
@@ -1557,7 +1635,7 @@ dimorder.default <- function(x
   if (is.null(d))
     NULL
   else
-    1:length(d)
+    seq_along(d)
 }
 
 
@@ -1592,13 +1670,13 @@ dimorder.default <- function(x
 #! \details{
 #!   Each dimension of an ff array (or vector) is decomposed into three components, an invisible Offset, a visibe Window and an invisible Rest.
 #!   For each dimension the sum of the vw components must match the dimension (or length).
-#!   For an \code{ff_vector}, \code{vw} is simply a vector[1:3], for an array is is a \code{matrix[1:3,1:length(dim(x))]}.
+#!   For an \code{ff_vector}, \code{vw} is simply a vector[1:3], for an array is is a \code{matrix[1:3,seq_along(dim(x))]}.
 #!   \code{vw} is a \code{\link[=physical.ff]{virtual}} attribute. \cr
 #! }
 #! \value{
 #!   NULL or a vw specification, see details
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{length.ff}}, \code{\link{dim.ff}}, \code{\link[=physical.ff]{virtual}} }
 #! \examples{
 #!   x <- ff(1:26, names=letters)
@@ -1739,7 +1817,7 @@ vw.default <- function(x
 #! \value{
 #!   \code{invisible()}
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{ff}}, \code{\link{print}}, \code{\link{str}} }
 #! \examples{
 #!   x <- ff(1:10000)
@@ -1862,11 +1940,11 @@ str.ff <- function(object, nest.lev=0, ...){
 #! }
 #! \arguments{
 #!   \item{initdata}{ scalar or vector of the \code{\link{.vimplemented}} \code{\link{vmode}}s, recycled if needed, default 0, see also \code{\link{as.vmode}} and \code{\link{vector.vmode}} }
-#!   \item{length}{ optional vector \code{\link[base]{length}} of the object (default: derive from 'initdata' or 'dim'), see \code{\link{length.ff}} }
+#!   \item{length}{ optional vector \code{\link{length}} of the object (default: derive from 'initdata' or 'dim'), see \code{\link{length.ff}} }
 #!   \item{levels}{ optional character vector of levels if (in this case initdata must be composed of these) (default: derive from initdata) }
 #!   \item{ordered}{ indicate whether the levels are ordered (TRUE) or non-ordered factor (FALSE, default) }
 #!   \item{dim}{ optional array \code{\link{dim}}, see \code{\link{dim.ff}} and \code{\link{array}} }
-#!   \item{dimorder}{ physical layout (default 1:length(dim)), see \code{\link{dimorder}} and \code{\link{aperm}} }
+#!   \item{dimorder}{ physical layout (default seq_along(dim)), see \code{\link{dimorder}} and \code{\link{aperm}} }
 #!   \item{bydim}{ dimorder by which to interpret the 'initdata', generalization of the 'byrow' paramter in \code{\link{matrix}} }
 #!   \item{symmetric}{ extended feature: TRUE creates symmetric matrix (default FALSE) %, see \code{\link{symm}}, \code{\link{ff_symm}}, \code{\link{ff_dist}}
 #!        }
@@ -1883,7 +1961,7 @@ str.ff <- function(object, nest.lev=0, ...){
 #!   \item{readonly}{ set to TRUE to forbid writing to existing files }
 #!   \item{pagesize}{ pagesize in bytes for the memory mapping (default from \code{getOptions("ffpagesize")} initialized by \code{\link{getdefaultpagesize}}), see also \code{\link[=physical.ff]{physical}} }
 #!   \item{caching}{ caching scheme for the backend, currently 'mmnoflush' or 'mmeachflush' (flush mmpages at each swap, default from \code{getOptions("ffcaching")} initialized with 'mmeachflush'), see also \code{\link[=physical.ff]{physical}} }
-#!   \item{finalizer}{ name of finalizer function called when ff object is \code{\link{remove}d} (default: ff files created in \code{getOptions("fftempdir")} are considered temporary and have default finalizer \code{\link[ff:delete.ff]{delete}}, files created in other locations have default finalizer \code{\link[ff:close.ff]{close}}); available finalizer generics are "close", "delete" and "deleteIfOpen", available methods are \code{\link{close.ff}}, \code{\link{delete.ff}} and \code{\link{deleteIfOpen.ff}}, see also argument 'finonexit' and \code{\link{finalizer}} }
+#!   \item{finalizer}{ name of finalizer function called when ff object is \code{\link{remove}d} (default: ff files created in \code{getOptions("fftempdir")} are considered temporary and have default finalizer \code{\link[=delete.ff]{delete}}, files created in other locations have default finalizer \code{\link[=close.ff]{close}}); available finalizer generics are "close", "delete" and "deleteIfOpen", available methods are \code{\link{close.ff}}, \code{\link{delete.ff}} and \code{\link{deleteIfOpen.ff}}, see also argument 'finonexit' and \code{\link{finalizer}} }
 #!   \item{finonexit}{ logical scalar determining whether  and \code{\link{finalize}} is also called when R is closed via \code{\link{q}}, (default TRUE from \code{getOptions("fffinonexit")}) }
 #!   \item{FF_RETURN}{ logical scalar or ff object to be used. The default TRUE creates a new ff file. FALSE returns a ram object. Handing over an ff object here uses this or stops if not \code{\link{ffsuitable}} }
 #!   \item{BATCHSIZE}{ integer scalar limiting the number of elements to be processed in \code{\link{update.ff}} when length(initdata)>1, default from \code{.Machine$integer.max} }
@@ -1896,13 +1974,13 @@ str.ff <- function(object, nest.lev=0, ...){
 #!  Atomic objects created with \command{ff} are \code{\link{is.open}}, a C++ object is ready to access the file via memory-mapping.
 #!  Currently the C++ backend provides two caching schemes: 'mmnoflush' let the OS decide when to flash memory mapped pages
 #!  and 'mmeachflush' will flush memory mapped pages at each page swap per ff file.
-#!  These minimal memory ressources can be released by \code{\link[ff:close.ff]{close}ing} or \code{\link[ff:delete.ff]{delete}ing} the ff file.
+#!  These minimal memory ressources can be released by \code{\link[=close.ff]{close}ing} or \code{\link[=delete.ff]{delete}ing} the ff file.
 #!  ff objects can be \code{\link{save}d} and \code{\link{load}ed} across R sessions. If the ff file still exists in the same location,
-#!  it will be \code{\link[ff:open.ff]{open}ed} automatically at the first attempt to access its data. If the ff object is \code{\link{remove}d},
+#!  it will be \code{\link[=open.ff]{open}ed} automatically at the first attempt to access its data. If the ff object is \code{\link{remove}d},
 #!  at the next garbage collection (see \code{\link{gc}}) the ff object's \code{\link{finalizer}} is invoked.
 #!  Raw data files can be made accessible as an ff object by explicitly given the filename and vmode but no size information (length or dim).
 #!  The ff object will open the file and handle the data with respect to the given vmode.
-#!  The \code{\link[ff:close.ff]{close}} finalizer will close the ff file, the \code{\link[ff:delete.ff]{delete}} finalizer will delete the ff file.
+#!  The \code{\link[=close.ff]{close}} finalizer will close the ff file, the \code{\link[=delete.ff]{delete}} finalizer will delete the ff file.
 #!  The default finalizer \code{\link{deleteIfOpen}} will delete open files and do nothing for closed files. If the default finalizer is used,
 #!  two actions are needed to protect the ff file against deletion: create the file outside the standard 'fftempdir' and close the ff object before removing it or before quitting R.
 #!  When R is exited through \code{\link{q}}, the finalizer will be invoked depending on the 'fffinonexit' option, furthermore the 'fftempdir' is \code{\link{unlink}ed}. \cr
@@ -1963,15 +2041,15 @@ str.ff <- function(object, nest.lev=0, ...){
 #!   \emph{ Type} \tab  \emph{ Name }  \tab \emph{ Assign }  \tab \emph{Comment}  \cr
 #!   \emph{ } \tab  \emph{ }                                 \tab \emph{ }  \tab \bold{Basic functions}  \cr
 #!   function \tab  \code{\link{ff}}                         \tab \emph{ }  \tab constructor for ff and ram objects \cr
-#!   generic  \tab  \code{\link[ff:update.ff]{update}}       \tab \emph{ }  \tab updates one ff object with the content of another \cr
+#!   generic  \tab  \code{\link[=update.ff]{update}}       \tab \emph{ }  \tab updates one ff object with the content of another \cr
 #!   generic  \tab  \code{\link{clone}}                      \tab \emph{ }  \tab clones an ff object optionally changing some of its features \cr
-#!   method   \tab  \code{\link[ff:print.ff]{print}}         \tab \emph{ }  \tab print ff \cr
-#!   method   \tab  \code{\link[ff:str.ff]{str}}             \tab \emph{ }  \tab ff object structure \cr
+#!   method   \tab  \code{\link[=print.ff]{print}}         \tab \emph{ }  \tab print ff \cr
+#!   method   \tab  \code{\link[=str.ff]{str}}             \tab \emph{ }  \tab ff object structure \cr
 #!   \emph{ } \tab  \emph{ }                                 \tab \emph{ }  \tab \bold{Class test and coercion}  \cr
 #!   function \tab  \code{\link{is.ff}}                      \tab \emph{ }  \tab check if inherits from ff \cr
 #!   generic  \tab  \code{\link{as.ff}}                      \tab \emph{ }  \tab coerce to ff, if not yet \cr
 #!   generic  \tab  \code{\link{as.ram}}                     \tab \emph{ }  \tab coerce to ram retaining some of the ff information \cr
-#!   generic  \tab  \code{\link[=as.bit.ff]{as.bit}}          \tab \emph{ }  \tab coerce to \code{\link[bit]{bit}} \cr
+#!   generic  \tab  \code{\link[=as.bit.ff]{as.bit}}          \tab \emph{ }  \tab coerce to \code{\link{bit}} \cr
 #!   \emph{ } \tab  \emph{ }                                 \tab \emph{ }  \tab \bold{Virtual storage mode} \cr
 #!   generic  \tab  \code{\link{vmode}}                      \tab \code{<-} \tab get and set virtual mode (setting only for ram, not for ff objects) \cr
 #!   generic  \tab  \code{\link{as.vmode}}                   \tab \emph{ }  \tab coerce to vmode (only for ram, not for ff objects) \cr
@@ -1985,14 +2063,14 @@ str.ff <- function(object, nest.lev=0, ...){
 #!   generic  \tab  \code{\link{is.readonly}}                \tab \emph{ }   \tab get if is readonly \cr
 #!   \emph{ } \tab  \emph{ }                                 \tab \emph{ }   \tab \bold{Virtual attributes} \cr
 #!   function \tab  \code{\link[=physical.ff]{virtual}}                    \tab \code{<-} \tab set and get virtual attributes \cr
-#!   method   \tab  \code{\link[ff:length.ff]{length}}       \tab \code{<-} \tab set and get length \cr
-#!   method   \tab  \code{\link[ff:dim.ff]{dim}}             \tab \code{<-} \tab set and get dim \cr
+#!   method   \tab  \code{\link[=length.ff]{length}}       \tab \code{<-} \tab set and get length \cr
+#!   method   \tab  \code{\link[=dim.ff]{dim}}             \tab \code{<-} \tab set and get dim \cr
 #!   generic  \tab  \code{\link{dimorder}}                   \tab \code{<-} \tab set and get the order of dimension interpretation \cr
 #!   generic  \tab  \code{\link{vt}}                         \tab \code{}   \tab virtually transpose ff_array \cr
-#!   method  \tab   \code{\link[ff:t.ff]{t}}                 \tab \code{}   \tab create transposed clone of ff_array \cr
+#!   method  \tab   \code{\link[=t.ff]{t}}                 \tab \code{}   \tab create transposed clone of ff_array \cr
 #!   generic  \tab  \code{\link{vw}}                         \tab \code{<-} \tab set and get virtual windows \cr
-#!   method   \tab  \code{\link[ff:names.ff]{names}}         \tab \code{<-} \tab set and get names \cr
-#!   method   \tab  \code{\link[ff:dimnames.ff]{dimnames}}   \tab \code{<-} \tab set and get dimnames \cr
+#!   method   \tab  \code{\link[=names.ff]{names}}         \tab \code{<-} \tab set and get names \cr
+#!   method   \tab  \code{\link[=dimnames.ff]{dimnames}}   \tab \code{<-} \tab set and get dimnames \cr
 #!   generic  \tab  \code{\link{symmetric}}                  \tab \emph{ }   \tab get if is symmetric \cr
 #!   generic  \tab  \code{\link{fixdiag}}                    \tab \code{<-} \tab set and get fixed diagonal of symmetric matrix \cr
 #!   method   \tab  \code{\link{levels}}                     \tab \code{<-} \tab levels of factor  \cr
@@ -2003,22 +2081,22 @@ str.ff <- function(object, nest.lev=0, ...){
 #!   generic  \tab  \code{\link{ramclass}}                   \tab \code{}   \tab get ramclass \cr
 #!   generic  \tab  \code{\link{ramattribs}}                 \tab \code{}   \tab get ramattribs \cr
 #!   \emph{ } \tab  \emph{ }                                 \tab \emph{ }  \tab \bold{Access functions}  \cr
-#!   function \tab  \code{\link{get.ff}}                     \tab \emph{ }  \tab get single ff element (currently \code{\link[ff:[[.ff]{[[}} is a shortcut) \cr
-#!   function \tab  \code{\link{set.ff}}                     \tab \emph{ }  \tab set single ff element (currently \code{\link[ff:[[<-.ff]{[[<-}} is a shortcut) \cr
+#!   function \tab  \code{\link{get.ff}}                     \tab \emph{ }  \tab get single ff element (currently \code{\link[=Extract.ff]{[[}} is a shortcut) \cr
+#!   function \tab  \code{\link{set.ff}}                     \tab \emph{ }  \tab set single ff element (currently \code{\link[=Extract.ff]{[[<-}} is a shortcut) \cr
 #!   function \tab  \code{\link{getset.ff}}                  \tab \emph{ }  \tab set single ff element and get old value in one access operation \cr
 #!   function \tab  \code{\link{read.ff}}                    \tab \emph{ }  \tab get vector of contiguous elements \cr
 #!   function \tab  \code{\link{write.ff}}                   \tab \emph{ }  \tab set vector of contiguous elements  \cr
 #!   function \tab  \code{\link{readwrite.ff}}               \tab \emph{ }  \tab set vector of contiguous elements and get old values in one access operation \cr
-#!   method   \tab  \code{\link[ff:[.ff]{[}}                 \tab \emph{ }  \tab get vector of indexed elements, uses HIP, see \code{\link{hi}} \cr
-#!   method   \tab  \code{\link[ff:[<-.ff]{[<-}}             \tab \emph{ }  \tab set vector of indexed elements, uses HIP, see \code{\link{hi}} \cr
-#!   generic  \tab  \code{\link[ff:swap.ff]{swap}}           \tab \emph{ }  \tab set vector of indexed elements and get old values in one access operation \cr
-#!   generic  \tab  \code{\link[ff:add.ff]{add}}             \tab \emph{ }  \tab (almost) unifies '+=' operation for ff and ram objects \cr
-#!   generic  \tab  \code{\link[ff:bigsample.ff]{bigsample}} \tab \emph{ }  \tab sample from ff object \cr
+#!   method   \tab  \code{\link[=Extract.ff]{[}}                 \tab \emph{ }  \tab get vector of indexed elements, uses HIP, see \code{\link{hi}} \cr
+#!   method   \tab  \code{\link[=Extract.ff]{[<-}}             \tab \emph{ }  \tab set vector of indexed elements, uses HIP, see \code{\link{hi}} \cr
+#!   generic  \tab  \code{\link[=swap.ff]{swap}}           \tab \emph{ }  \tab set vector of indexed elements and get old values in one access operation \cr
+#!   generic  \tab  \code{\link[=add.ff]{add}}             \tab \emph{ }  \tab (almost) unifies '+=' operation for ff and ram objects \cr
+#!   generic  \tab  \code{\link[=bigsample.ff]{bigsample}} \tab \emph{ }  \tab sample from ff object \cr
 #!   \emph{ } \tab  \emph{ }                                 \tab \emph{ }  \tab \bold{Opening/Closing/Deleting}                                             \cr
 #!   generic  \tab  \code{\link{is.open}}                    \tab \emph{ }  \tab check if ff is open \cr
-#!   method   \tab  \code{\link[ff:open.ff]{open}}           \tab \emph{ }  \tab open ff object (is done automatically on access) \cr
-#!   method   \tab  \code{\link[ff:close.ff]{close}}         \tab \emph{ }  \tab close ff object (releases C++ memory and protects against file deletion if  \code{\link{deleteIfOpen}}) finalizer is used \cr
-#!   generic  \tab  \code{\link[ff:delete.ff]{delete}}       \tab \emph{ }  \tab deletes ff file (unconditionally) \cr
+#!   method   \tab  \code{\link[=open.ff]{open}}           \tab \emph{ }  \tab open ff object (is done automatically on access) \cr
+#!   method   \tab  \code{\link[=close.ff]{close}}         \tab \emph{ }  \tab close ff object (releases C++ memory and protects against file deletion if  \code{\link{deleteIfOpen}}) finalizer is used \cr
+#!   generic  \tab  \code{\link[=delete.ff]{delete}}       \tab \emph{ }  \tab deletes ff file (unconditionally) \cr
 #!   generic  \tab  \code{\link{deleteIfOpen}}               \tab \emph{ }  \tab deletes ff file if ff object is open (finalization method) \cr
 #!   generic  \tab  \code{\link{finalizer}}                  \tab \emph{<-} \tab get and set finalizer \cr
 #!   generic  \tab  \code{\link{finalize}}                   \tab \emph{}   \tab force finalization \cr
@@ -2067,12 +2145,12 @@ str.ff <- function(object, nest.lev=0, ...){
 #!                      \tab Index sequence packing, Documentation \cr
 #!   Walter Zucchini    \tab \email{wzucchi@uni-goettingen.de} \cr
 #!                      \tab Array Indexing, Sampling, Documentation \cr
-#!   Christian Gl‰ser   \tab \email{christian\_glaeser@gmx.de} \cr
+#!   Christian Gl√§ser   \tab \email{christian\_glaeser@gmx.de} \cr
 #!                      \tab Wrapper for biglm package \cr
 #!   }
 #!  Package Version 2.0
 #!  \tabular{ll}{
-#!   Jens Oehlschl‰gel  \tab \email{Jens.Oehlschlaegel@truecluster.com} \cr
+#!   Jens Oehlschl√§gel  \tab \email{Jens.Oehlschlaegel@truecluster.com} \cr
 #!                      \tab R package redesign; Hybrid Index Preprocessing; transparent object creation and finalization; vmode design; virtualization and hybrid copying; arrays with dimorder and bydim; symmetric matrices; factors and POSIXct; virtual windows and transpose; new generics update, clone, swap, add, as.ff and as.ram; ffapply and collapsing functions. R-coding, C-coding and Rd-documentation. \cr
 #!   Daniel Adler       \tab \email{dadler@uni-goettingen.de} \cr
 #!                      \tab C++ generic file vectors, vmode implementation and low-level bit-packing/unpacking, arithmetic operations and NA handling, Memory-Mapping and backend caching. C++ coding and platform ports. R-code extensions for opening existing flat files readonly and shared. \cr
@@ -2139,9 +2217,9 @@ str.ff <- function(object, nest.lev=0, ...){
 #!      ffrowapply({
 #!         if (first){
 #!           first <- FALSE
-#!           fit <- biglm(form, as.data.frame(x[i1:i2,,drop=FALSE]))
+#!           fit <- biglm(form, as.data.frame(x[i1:i2,,drop=FALSE], stringsAsFactors = TRUE))
 #!         }else
-#!           fit <- update(fit, as.data.frame(x[i1:i2,,drop=FALSE]))
+#!           fit <- update(fit, as.data.frame(x[i1:i2,,drop=FALSE], stringsAsFactors = TRUE))
 #!      }, X=x, VERBOSE=TRUE, BATCHSIZE=n)
 #!      )
 #!      memory.size(max = TRUE)
@@ -2189,40 +2267,27 @@ ff <- function(
 , VERBOSE     = FALSE
 )
 {
+  if (!ffsymmxtensions()){
+    symm <- function(...).NotYetImplemented()
+    if (symmetric){
+      message("You are requesting a dual-licence feature that currently is only available to parties who support the development of package ff and friends")
+      .NotYetUsed("symmetric", error = TRUE)
+    }
+    if (!is.null(fixdiag)){
+      message("You are requesting a dual-licence feature that currently is only available to parties who support the development of package ff and friends")
+      .NotYetUsed("fixdiag", error = TRUE)
+    }
+  }
+
   if (!is.logical(FF_RETURN) || length(FF_RETURN)!=1)
       stop("in ff() FF_RETURN must be a logical scalar")
 
   if (is.null(symmetric)||!is.logical(symmetric)||length(symmetric)!=1)
     stop("symmetric must be FALSE or TRUE")
 
-  if (is.null(vmode)){
-    if (is.null(initdata))
-      stop("need vmode or initdata")
-    vmode <- vmode(initdata)
-  } else{
-    if (is.na(match(vmode, c("boolean", "logical", "quad", "nibble", "byte", "ubyte", "short", "ushort", "integer", "single", "double", "raw")))){
-     stop("vmode '", vmode,"' not implemented")
-    }
-  }
-
-  if (!ffxtensions()){
-    if (!ffsymmxtensions()){
-      symm <- function(...).NotYetImplemented()
-      if (symmetric){
-        message("You are requesting a dual-licence feature that currently is only available to parties who support the development of package ff and friends")
-       .NotYetUsed("symmetric", error = TRUE)
-      }
-      if (!is.null(fixdiag)){
-        message("You are requesting a dual-licence feature that currently is only available to parties who support the development of package ff and friends")
-       .NotYetUsed("fixdiag", error = TRUE)
-      }
-    }
-    if (!is.na(match(vmode, c("boolean", "quad", "nibble", "byte", "ubyte", "short", "ushort", "single")))){
-      message("You are requesting a dual-licence feature that currently is only available to parties who support the development of package ff and friends")
-      stop("vmode='", vmode, "' not on CRAN")
-    }
-  }
-
+  if (length(initdata) && !is.atomic(initdata[1]))
+    stop("initdata[1] must be atomic")
+  
   # determine filename and finalizer
   if (is.null(filename)){
     if (is.null(pattern))
@@ -2230,7 +2295,9 @@ ff <- function(
     filename <- fftempfile(pattern)
   }else{
     if (is.null(pattern))
-      pattern <- paste(splitPathFile(filename)$path, "/", sep="")
+      pattern <- file.path(splitPathFile(filename)$path, "ff")
+    # fix problem in file.path
+    pattern <- gsub("/+","/",pattern)
   }
   # gurantee absolute path
   dfile <- dirname(filename)
@@ -2242,7 +2309,7 @@ ff <- function(
   filename <- file.path(dfile, bfile)
   # fix problem in file.path
   filename <- gsub("/+","/",filename)
-
+  
   if (is.null(finalizer)){
     finalizer <- getOption("fffinalizer")
     if (is.null(finalizer)){
@@ -2254,13 +2321,65 @@ ff <- function(
   }else{
     finalizer <- match.arg(finalizer, choices=c("deleteIfOpen", "delete", "close"))
   }
+  
+  if (is.null(pagesize))
+    pagesize <- getOption("ffpagesize")
+  else
+    pagesize <- getalignedpagesize(pagesize)
+  if (is.null(caching))
+    caching <- getOption("ffcaching")
+  else
+    caching <- match.arg(caching, caching_schemes)
+  if (is.null(finonexit))
+    finonexit <- getOption("fffinonexit")
+  
+  
+  if (is.null(vmode)){
+    if (vmode(initdata)=="NULL") {
+      # stop("need vmode or initdata")  # wish of Martijn Schuemie
+      vmode <- "logical"                # wish of Martijn Schuemie
+    } else { 
+      vmode <- vmode(initdata)
+    }
+  }else{
+    if (is.na(match(vmode, c("boolean", "logical", "quad", "nibble", "byte", "ubyte", "short", "ushort", "integer", "single", "double", "raw")))){
+     stop("vmode '", vmode,"' not implemented")
+    }
+  }
+  
+  # handle levels
+  if (is.null(levels))
+    levels <- levels(initdata)
+  if (!is.null(levels)){
+    if (vmode=="character")
+      vmode <- "integer"
+    if (.rammode[vmode] != "integer")
+      stop("factors must be .rammode integer")
+    if (length(levels)>.vmax[vmode]+.vunsigned[vmode])
+      stop("vmode '", vmode, "' can carry max ", .vmax[vmode]+.vunsigned[vmode], " levels")
+    if (is.null(ramclass)){
+      if (is.null(ordered))
+        ordered <- is.ordered(initdata)
+      if (ordered)
+        ramclass <- c("ordered","factor")
+      else
+        ramclass <- "factor"
+    }
+  }
+  
+  # handle initdata
+  if (!is.null(initdata)){
+    if (is.null(ramclass))
+      ramclass <- ramclass(initdata)
+    if (is.null(ramattribs)){
+      ramattribs <- ramattribs(initdata)
+    }
+  }
 
-  # handle file reuse and set maxlength (0=ram object or reuse of ff, otherwise = size of new ff file in bytes)
+  # handle file reuse and set maxlength and createNew (FALSE=ram object or reuse of ff)
   if (FF_RETURN){
-    if ( file.exists(filename) ){
-      if (overwrite){
-        maxlength <- 0L
-      }else{
+    if ( file.exists(filename) && !overwrite){
+        createNew <- FALSE
         if (file.access(filename,4) == -1){ # no read access
           stop("read permission denied for file")
         }
@@ -2276,64 +2395,33 @@ ff <- function(
         if (!is.null(initdata)) {
           stop("bad argument initdata for existing file; initializing existing file is invalid")
         }
-        fillength <- filesize/.ffbytes[vmode]
+        fillength <- as.integer( floor( filesize / .rambytes[vmode] ) * .rambytes[vmode] / .ffbytes[vmode] )
         if (fillength>.Machine$integer.max){
-          warning("file contains more than .Machine$integer.max elements of this vmode")
-          maxlength <- as.integer(floor(.Machine$integer.max * .ffbytes[vmode] / .rambytes[vmode]) * .rambytes[vmode])
+          warning("limiting file to .Machine$integer.max elements at this vmode")
+          maxlength <- as.integer( floor(.Machine$integer.max * .ffbytes[vmode] / .rambytes[vmode]) * .rambytes[vmode] /.ffbytes[vmode] )
         }else
-          maxlength <- as.integer(fillength)
-      }
+          maxlength <- fillength
     }else{
+      createNew <- TRUE
       if (readonly)
         stop("allocation of a new 'readonly' flat file vector not supported")
-      maxlength <- 0L
+      # maxlength is set later when we know length
     }
   }else{
-    maxlength <- 0L
+    createNew <- FALSE
   }
-
-  # handle levels
-  if (is.null(levels))
-    levels <- levels(initdata)
-  if (!is.null(levels)){
-    if (vmode=="character")
-      vmode <- "integer"
-    if (.rammode[vmode] != "integer")
-        stop("factors must be .rammode integer")
-    if (length(levels)>.vmax[vmode]+.vunsigned[vmode])
-      stop("vmode '", vmode, "' can carry max ", .vmax[vmode]+.vunsigned[vmode], " levels")
-    if (is.null(ramclass)){
-      if (is.null(ordered))
-        ordered <- is.ordered(initdata)
-      if (ordered)
-        ramclass <- c("ordered","factor")
-      else
-        ramclass <- "factor"
-    }
-  }
-  # handle initdata
-  if (!is.null(initdata)){
-    if (is.null(ramclass))
-      ramclass <- ramclass(initdata)
-    if (is.null(ramattribs)){
-      ramattribs <- ramattribs(initdata)
-    }
-  }
-  if (!is.atomic(initdata[1]))
-    stop("initdata[1] must be atomic")
 
   # handle or derive length from dim or initdata
   if (is.null(dim)){ # ff_vector
     if (is.null(length)){
-      if (maxlength){
+      if (!createNew){
         length <- maxlength
       }else{
-        if (is.null(initdata))
-          stop("need length or initdata")
-        else{
-          length <- length(initdata)
-        }
+        # wish of Martijn Schuemie:   stop("need length or initdata")
+        length <- length(initdata)  # wish of Martijn Schuemie:
       }
+    }else{
+      length <- as.integer(length)
     }
     if(!is.null(dimorder))
       stop("dimorder must be null with vectors")
@@ -2341,16 +2429,17 @@ ff <- function(
       stop("symmetric only allowed with matrices")
     if (!is.null(fixdiag))
       stop("fixed-diagonal only allowed with symmetric matrices")
-    length <- as.integer(length)
     ffclass <- c("ff_vector","ff")
   }else{ # ff_array || ff_symm
+    if (!length(dim))
+      stop("'dims' cannot be of length 0")
     dim <- as.integer(dim)
     ndim <- length(dim)
     if (is.null(dimorder))
       dimorder <- seq(length.out=ndim)
     else{
       dimorder <- as.integer(dimorder)
-      if (!identical(sort(dimorder), 1:ndim))
+      if (!identical(sort(dimorder), seq_len(ndim)))
         stop("dimorder does not match dimension")
     }
     if (symmetric){ # ff_symm
@@ -2370,7 +2459,7 @@ ff <- function(
         stop("fixed-diagonal only allowed with symmetric matrices")
       if (!is.null(bydim)){
         bydim <- as.integer(bydim)
-        if (!identical(sort(bydim), 1:ndim))
+        if (!identical(sort(bydim), seq_len(ndim)))
           stop("bydim does not match dimension")
       }
       n <- as.integer(prod(dim))
@@ -2385,25 +2474,18 @@ ff <- function(
     }
   }
   if (length<0 || length>.Machine$integer.max)
-    stop("length must be between 1 and .Machine$integer.max")
-
-  if (is.null(pagesize))
-    pagesize <- getOption("ffpagesize")
-  else
-    pagesize <- getalignedpagesize(pagesize)
-  if (is.null(caching))
-    caching <- getOption("ffcaching")
-  else
-    caching <- match.arg(caching, caching_schemes)
-  if (is.null(finonexit))
-    finonexit <- getOption("fffinonexit")
-
-	# rr <- logical(1)
-	# rr[1] <- readonly[1]
-		
+    stop("length must be between 0 and .Machine$integer.max")  # Martijn Schuemie for zero row ff
+  
+  if (createNew){
+    if (.ffbytes[vmode] < 1)
+      maxlength <- as.integer( ceiling( length * .ffbytes[vmode] / .rambytes[vmode] ) * .rambytes[vmode] / .ffbytes[vmode] )
+    else
+      maxlength <- as.integer(length)
+  }
+  
   pattr <- list(  # physical attributes
     vmode     = vmode
-  , maxlength = if (maxlength){if (length > maxlength) stop("length exceeds file length") else maxlength} else length # the physical file size
+  , maxlength = maxlength
   , pattern   = pattern
   , filename  = filename
   , pagesize  = pagesize
@@ -2425,38 +2507,34 @@ ff <- function(
   , ramattribs  = ramattribs
   )
 
-  if (is.logical(FF_RETURN) && length(FF_RETURN)==1){
-    if (!FF_RETURN){
-      if (length*.rambytes[vmode] > getOption("ffbatchbytes"))
-        warning("creating large ram object with ", length*.rambytes[vmode], " > ", getOption("ffbatchbytes"))
-      if (is.null(initdata)){
-        initdata <- vector.vmode(vmode,1)
-      }else{
-        if (is.null(levels))
-          initdata <- as.vmode(initdata[], vmode) # NOTE that [] takes care of dimorder, [i1:i2] would not
-        else
-          initdata <- as.vmode(ram2ramcode(initdata[], levels), vmode) # NOTE that [] takes care of dimorder, [i1:i2] would not
-      }
-      ret <- switch(ffclass[1]
-      , ff_symm   = { if (!is.null(levels)) stop("symm currently not defined for factors"); symm(initdata, dim=dim, dimnames = dimnames, fixdiag = fixdiag)}
-      , ff_vector = {temp <- rep(initdata, length.out=length); names(temp)<-names; temp}
-      , ff_matrix = {temp <- vector2array(initdata, dim=dim, dimorder=bydim); dimnames(temp)<- dimnames;temp}
-      , ff_array  = {temp <- vector2array(initdata, dim=dim, dimorder=bydim); dimnames(temp)<- dimnames;temp}
-      )
-      if (!is.null(levels)){
-        attr(ret, "levels") <- levels
-      }
-      if (!is.null(ramattribs))
-        attributes(ret) <- c(attributes(ret), ramattribs)
-      physical(ret) <- pattr[!is.na(match(names(pattr), ramphysical_includes))]
-       virtual(ret) <- vattr[!is.na(match(names(vattr), ramvirtual_includes ))]
-      attr(ret, "vmode") <- vmode
-      if (!is.null(ramclass))
-        class(ret) <- ramclass
-      return(ret)
+  if (!FF_RETURN){
+    if (length*.rambytes[vmode] > getOption("ffbatchbytes"))
+      warning("creating large ram object with ", length*.rambytes[vmode], " > ", getOption("ffbatchbytes"))
+    if (is.null(initdata)){
+      initdata <- vector.vmode(vmode,0)  # Martijn Schuemie for zero row ff
+    }else{
+      if (is.null(levels))
+        initdata <- as.vmode(initdata[], vmode) # NOTE that [] takes care of dimorder, [i1:i2] would not
+      else
+        initdata <- as.vmode(ram2ramcode(initdata[], levels), vmode) # NOTE that [] takes care of dimorder, [i1:i2] would not
     }
-  }else{
-    stop("in ff() FF_RETURN must be a logical scalar")
+    ret <- switch(ffclass[1]
+    , ff_symm   = { if (!is.null(levels)) stop("symm currently not defined for factors"); symm(initdata, dim=dim, dimnames = dimnames, fixdiag = fixdiag)}
+    , ff_vector = {temp <- rep(initdata, length.out=length); names(temp)<-names; temp}
+    , ff_matrix = {temp <- vector2array(initdata, dim=dim, dimorder=bydim); dimnames(temp)<- dimnames;temp}
+    , ff_array  = {temp <- vector2array(initdata, dim=dim, dimorder=bydim); dimnames(temp)<- dimnames;temp}
+    )
+    if (!is.null(levels)){
+      attr(ret, "levels") <- levels
+    }
+    if (!is.null(ramattribs))
+      attributes(ret) <- c(attributes(ret), ramattribs)
+    physical(ret) <- pattr[!is.na(match(names(pattr), ramphysical_includes))]
+     virtual(ret) <- vattr[!is.na(match(names(vattr), ramvirtual_includes ))]
+    attr(ret, "vmode") <- vmode
+    if (!is.null(ramclass))
+      class(ret) <- ramclass
+    return(ret)
   }
 
   # stopifnot( file.access(filename,0) || (!file.access(filename,2) && overwrite ) )  # file must not exist OR be writable and overwrite
@@ -2465,7 +2543,7 @@ ff <- function(
     if (length(initdata))
       as.vmode(initdata[1], vmode)
     else
-      vector.vmode(vmode, 1)
+      vector.vmode(vmode, 0)  # Martijn Schuemie for zero row ff
   } else {
     if (length(initdata)){
       if (.vunsigned[vmode])
@@ -2479,15 +2557,17 @@ ff <- function(
         1L
     }
   }
-  ffpointer <- .Call("new"
+  ffpointer <- .Call(C_new
   , as.character(filename)
   , .ffmode[vmode]
   , initval
-  , if (maxlength) 0L else length # already integer
+  , maxlength
   , pagesize    # already integer
   , readonly
   , caching == "mmeachflush"
-  , PACKAGE="ff")
+  , createNew  # Martijn Schuemie for zero row f: as.integer(maxlength == 0)
+  , PACKAGE="ff"
+  )
 
   #if (hideclass){
   #  a[[".class"]] <- a[["class"]]
@@ -2502,7 +2582,7 @@ ff <- function(
   # now this is a legal ff object
 
   # complete initialization
-  if ( length(initdata) && (is.null(update) || update) ){
+  if ( length(ret) && length(initdata) && (is.null(update) || update) ){
     if ( (!identical(as.vector(initdata[1]), as.vector(ret[1])) || length(initdata)>1) )
       ret <- update.ff(ret
       , from    = initdata
@@ -2569,7 +2649,7 @@ ff <- function(
 #! \value{
 #!   An ff object like the input 'object' updated with the content of the 'from' object.
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{ff}}, \code{\link{clone}}, \code{\link{ffvecapply}}, \code{\link{vectorCompatible}}, \code{\link{filename}} }
 #! \examples{
 #!   x <- ff(1:100)
@@ -2622,6 +2702,8 @@ update.ff <- function(
 , ...
 )
 {
+  if (!length(object))
+    return(object)
   dto <- dim(object)
   dfrom <- dim(from)
   ndto <- length(dto)
@@ -2698,25 +2780,29 @@ update.ff <- function(
         open(from)
       }
       if (ndto && ndto==ndfrom && all(dto==dfrom)){
+        if (prod(dto)){
         ndim <- ndto
         args <- rep(alist(a = ), ndim)
         argsfrom <- c(args, alist(bydim=fromdim))
         argsto <- c(args, alist(bydim=bydim))
         ret <- ffapply(
-          , EXPR = {
-            argsfrom[1:ndim] <- argsto[1:ndim] <- lapply(1:ndim, function(i)substitute(b1:b2, list(b1=i1[i], b2=i2[i])))  # substitute avoids unpacking the sequences !!
+          #, 
+          EXPR = {
+              argsfrom[seq_len(ndim)] <- argsto[seq_len(ndim)] <- lapply(seq_len(ndim), function(i)substitute(b1:b2, list(b1=i1[i], b2=i2[i])))  # substitute avoids unpacking the sequences !!
             temp <- do.call("[", c(list(from), argsfrom, list(drop = FALSE)))
             object <- do.call("[<-", c(list(object), argsto, list(value=temp)))
           }
         , X = object
-        , MARGIN  = 1:ndim
+            , MARGIN  = seq_len(ndim)
         , BATCHSIZE   = BATCHSIZE
         , BATCHBYTES  = BATCHBYTES
         , VERBOSE     = VERBOSE
         )
+        }
       }else{
         nto <- length(object)
         nfrom <- length(from)
+        if (nto && nfrom){
         if (nto%%nfrom)
           warning("length(object) not a multiple of length(from) in update.ff(object, from, ...)")
 
@@ -2740,6 +2826,7 @@ update.ff <- function(
         }
       }
 
+      }
       if (reclosefrom)
         close(from)
       if (recloseto)
@@ -2778,17 +2865,13 @@ update.ff <- function(
 }
 
 
-#! \name{clone}
-#! \alias{clone}
+#! \name{clone.ff}
 #! \alias{clone.ff}
-#! \alias{clone.list}
-#! \alias{clone.default}
 #! \title{ Cloning ff and ram objects }
 #! \description{
 #!   \command{clone} physically duplicates ff (and ram) objects and can additionally change some features, e.g. length.
 #! }
 #! \usage{
-#! clone(x, \dots)
 #! \method{clone}{ff}(x
 #! , initdata = x
 #! , length = NULL
@@ -2817,8 +2900,6 @@ update.ff <- function(
 #! , BATCHBYTES = getOption("ffbatchbytes")
 #! , VERBOSE = FALSE
 #! , \dots)
-#! \method{clone}{list}(x, \dots)
-#! \method{clone}{default}(x, \dots)
 #! }
 #! \arguments{
 #!   \item{x}{ \code{x} }
@@ -2827,7 +2908,7 @@ update.ff <- function(
 #!   \item{levels}{ optional character vector of levels if (in this case initdata must be composed of these) (default: derive from initdata) }
 #!   \item{ordered}{ indicate whether the levels are ordered (TRUE) or non-ordered factor (FALSE, default) }
 #!   \item{dim}{ optional array \code{\link{dim}}, see \code{\link{dim.ff}} and \code{\link{array}} }
-#!   \item{dimorder}{ physical layout (default 1:length(dim)), see \code{\link{dimorder}} and \code{\link{aperm}} }
+#!   \item{dimorder}{ physical layout (default seq_along(dim)), see \code{\link{dimorder}} and \code{\link{aperm}} }
 #!   \item{bydim}{ dimorder by which to interpret the 'initdata', generalization of the 'byrow' paramter in \code{\link{matrix}} }
 #!   \item{symmetric}{ extended feature: TRUE creates symmetric matrix (default FALSE) %, see \code{\link{symm}}, \code{\link{ff_symm}}, \code{\link{ff_dist}}
 #!        }
@@ -2843,7 +2924,7 @@ update.ff <- function(
 #!   \item{overwrite}{ set to TRUE to allow overwriting existing files (default FALSE) }
 #!   \item{pagesize}{ pagesize in bytes for the memory mapping (default from getOptions("ffpagesize") initialized by \code{\link{getdefaultpagesize}}), see also \code{\link[=physical.ff]{physical}} }
 #!   \item{caching}{ caching scheme for the backend, currently 'mmnoflush' or 'mmeachflush' (flush mmpages at each swap, default from getOptions("ffcaching") initialized with 'memorymap'), see also \code{\link[=physical.ff]{physical}} }
-#!   \item{finalizer}{ name of finalizer function called when ff object is \code{\link{remove}d}, (default "deleteIfOpen" from getOptions("fffinalizer"))), standard finalizers are \code{\link{close.ff}}, \code{\link{delete.ff}} and \code{\link{deleteIfOpen.ff}}, see also \code{\link[base]{reg.finalizer}} }
+#!   \item{finalizer}{ name of finalizer function called when ff object is \code{\link{remove}d}, (default "deleteIfOpen" from getOptions("fffinalizer"))), standard finalizers are \code{\link{close.ff}}, \code{\link{delete.ff}} and \code{\link{deleteIfOpen.ff}}, see also \code{\link{reg.finalizer}} }
 #!   \item{finonexit}{ logical scalar determining whether finalizer is also called when R is closed via \code{\link{q}}, (default TRUE from getOptions("fffinonexit")) }
 #!   \item{FF_RETURN}{ logical scalar or ff object to be used. The default NULL creates a ff or ram clone, TRUE returns a ff clone, FALSE returns a ram clone. Handing over an ff object here uses this or stops if not \code{\link{ffsuitable}} }
 #!   \item{BATCHSIZE}{ integer scalar limiting the number of elements to be processed in \code{\link{update.ff}} when length(initdata)>1, default from getOption("ffbatchsize") }
@@ -2858,7 +2939,7 @@ update.ff <- function(
 #! \value{
 #!   an ff or ram object
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{ff}}, \code{\link{update}}, \code{\link{as.ram}}, \code{\link{as.ff}} }
 #! \examples{
 #!   x <- ff(letters, levels=letters)
@@ -3006,7 +3087,7 @@ clone.ff <- function(
     else if (newlen>oldlen)
       names(ret) <- c(names(x), (oldlen+1L):newlen)
     else
-      names(ret) <- names(x)[1:newlen]
+      names(ret) <- names(x)[seq_len(newlen)]
   }
   if (!is.null(physical$na.count)){
     if (newlen==oldlen)
@@ -3025,24 +3106,6 @@ clone.ff <- function(
     }
   }
   ret
-}
-
-clone.default <- function(x
-, ... # passed to clone
-){
-  if (is.atomic(x)){
-    if (length(x))
-      x[1] <- x[1]  # force a copy around COPY ON MODIFY
-    x
-  }else{
-    stop("clone not defined for type")
-  }
-}
-
-clone.list <- function(x
-, ... # passed to clone
-){
-  lapply(x, clone, ...)
 }
 
 
@@ -3072,12 +3135,12 @@ clone.list <- function(x
 #! \details{
 #!   If an \code{\link{ff}}  object is created a finalizer is assigned, it has the task to free ressources no longer needed, for example remove the ff file or free the C++ RAM associated with an open ff file.
 #!   The assigned finalizer depends on the location of the ff file:
-#!   if the file is created in \code{getOption(fftempdir)} it is considered considered temporary and has default finalizer \code{\link[ff:delete.ff]{delete}},
-#!   files created in other locations have default finalizer \code{\link[ff:close.ff]{close}}.
+#!   if the file is created in \code{getOption(fftempdir)} it is considered considered temporary and has default finalizer \code{\link[=delete.ff]{delete}},
+#!   files created in other locations have default finalizer \code{\link[=close.ff]{close}}.
 #!   The user can override this either by setting \code{options("fffinalizer")} or by using argument \code{finalizer} when creating single \code{ff} objects.
 #!   Available finalizer generics are "close", "delete" and "deleteIfOpen", available methods are \code{\link{close.ff}}, \code{\link{delete.ff}} and \code{\link{deleteIfOpen.ff}}.
 #!   \cr
-#!   In order to be able to change the finalizer before finalization, the finalizer is NOT directly passed to R's finalization mechanism \code{\link[base]{reg.finalizer}} (an active finalizer can never be changed other than be executed).
+#!   In order to be able to change the finalizer before finalization, the finalizer is NOT directly passed to R's finalization mechanism \code{\link{reg.finalizer}} (an active finalizer can never be changed other than be executed).
 #!   Instead the NAME of the desired finalizer is stored in the ff object and \code{\link{finalize.ff_pointer}} is passed to \code{reg.finalizer}.
 #!   \code{finalize.ff_pointer} will at finalization-time determine the desired finalizer and call it.
 #!   \cr
@@ -3089,7 +3152,7 @@ clone.list <- function(x
 #!   Furthermore there are two possible triggers for calling the finalizer
 #!   \enumerate{
 #!     \item an explicit call to \code{\link{finalize}}
-#!     \item an explicit call to one of the finalizers \code{\link[ff:close.ff]{close}}, \code{\link{delete}} and \code{\link{deleteIfOpen}}
+#!     \item an explicit call to one of the finalizers \code{\link[=close.ff]{close}}, \code{\link{delete}} and \code{\link{deleteIfOpen}}
 #!   }
 #!   The user can define custom finalizers by creating a generic function like \code{\link{delete}}, a ff_pointer method like \code{\link{delete.ff_pointer}} and a ff method for manual calls like \code{\link{delete.ff}}. The user then is responsible to take care of two things
 #!   \enumerate{
@@ -3112,10 +3175,10 @@ clone.list <- function(x
 #!   You can not assign NULL to an active finalizer using \code{finalizer<-} because this would not stop R's finalization mechanism and would carry the risk of assiging MULTIPLE finalization tasks.
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #! \seealso{
-#!   \code{\link{ff}}, \code{\link{finalize}}, \code{\link[base]{reg.finalizer}}
+#!   \code{\link{ff}}, \code{\link{finalize}}, \code{\link{reg.finalizer}}
 #! }
 #! \examples{
 #!   x <- ff(1:12, pattern="./finalizerdemo")
@@ -3172,7 +3235,7 @@ finalizer.ff <- function(x, ...){
 #!   \item{\dots}{ currently ignored }
 #! }
 #! \details{
-#!   The \code{finalize.ff_pointer} method is called from R after it had been passed to \code{\link[base]{reg.finalizer}}. It will set the finalizer name to \code{NULL} and call the finalizer.
+#!   The \code{finalize.ff_pointer} method is called from R after it had been passed to \code{\link{reg.finalizer}}. It will set the finalizer name to \code{NULL} and call the finalizer.
 #!   \cr
 #!   The \code{finalize} generic can be called manually on \code{\link{ff}} or \code{\link{ffdf}} objects. It will call the finalizer but not touch the finalizer name.
 #!   \cr
@@ -3185,7 +3248,7 @@ finalizer.ff <- function(x, ...){
 #!   returns whatever the called finalizer returns, for ffdf a list with the finalization returns of each physical component is returned.
 #! }
 #! \author{
-#!   Jens Oehlschl‰gel
+#!   Jens Oehlschl√§gel
 #! }
 #! \seealso{
 #!   \code{\link{finalizer}}
@@ -3279,7 +3342,7 @@ x       # ff object
 #! \value{
 #!   TRUE if object could be opened, FALSE if it was opened already (or NA if not all components of an ffdf returned FALSE or TRUE on opening)
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{ff}}, \code{\link{close.ff}}, \code{\link{delete}}, \code{\link{deleteIfOpen}}, \code{\link{getalignedpagesize}} }
 #! \examples{
 #!   x <- ff(1:12)
@@ -3329,7 +3392,7 @@ open.ff <- function(con
     caching <- attr(physical, "caching")
   else
     caching <- match.arg(caching, caching_schemes)
-  if (.Call("open", physical, .ffmode[attr(physical, "vmode")], readonly, caching=="mmeachflush", PACKAGE="ff")){
+  if (.Call(C_open, physical, .ffmode[attr(physical, "vmode")], readonly, caching=="mmeachflush", PACKAGE="ff")){
     attr(attr(con, "physical"), "caching") <- caching
     if (is.null(attr(physical, "finalizer"))){
       attr(attr(con, "physical"), "finalizer") <- "close"
@@ -3368,7 +3431,7 @@ open.ff <- function(con
 #! \value{
 #!   TRUE if the file could be closed, FALSE if it was closed already (or NA if not all components of an ffdf returned FALSE or TRUE on closing)
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{ff}}, \code{\link{open.ff}}, \code{\link{delete}}, \code{\link{deleteIfOpen}} }
 #! \examples{
 #!   x <- ff(1:12)
@@ -3386,7 +3449,7 @@ close.ff_pointer <- function(con
 , ... # dummy to keep R CMD check quiet
 )
 {
-  .Call("delete", con, PACKAGE="ff")  # this is intentionally 'delete' which releases (almost) all ressources (residual C++ RAM ist released when rm(ff) removes the external pointer (said Daniel Adler, 15.11.2007)
+  .Call(C_delete, con, PACKAGE="ff")  # this is intentionally 'delete' which releases (almost) all ressources (residual C++ RAM ist released when rm(ff) removes the external pointer (said Daniel Adler, 15.11.2007)
 }
 # version for manual use
 close.ff <- function(con
@@ -3394,7 +3457,7 @@ close.ff <- function(con
 )
 {
   # we do NOT touch the finalizer name if called manually (could be a temporary ff file with a 'delete' finalizer) !!
-  .Call("delete", attr(con, "physical"), PACKAGE="ff")  # this is intentionally 'delete' which releases (almost) all ressources (residual C++ RAM ist released when rm(ff) removes the external pointer (said Daniel Adler, 15.11.2007)
+  .Call(C_delete, attr(con, "physical"), PACKAGE="ff")  # this is intentionally 'delete' which releases (almost) all ressources (residual C++ RAM ist released when rm(ff) removes the external pointer (said Daniel Adler, 15.11.2007)
 }
 
 
@@ -3437,7 +3500,7 @@ close.ff <- function(con
 #!   \command{delete} returns TRUE if the/all ff files could be removed and FALSE otherwise. \cr
 #!   \command{deleteIfOpen} returns TRUE if the/all ff files could be removed, FALSE if not and NA if the ff object was open.
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \note{
 #!   Deletion of ff files can be triggerd automatically via three routes:
 #!   \enumerate{
@@ -3452,7 +3515,7 @@ close.ff <- function(con
 #!     \item name the file AND use \code{fffinalizer="delete"} AND use \code{fffinonexit=FALSE}
 #!   }
 #! }
-#! \seealso{ \code{\link{ff}}, \code{\link{close.ff}}, \code{\link{open.ff}}, \code{\link[base]{reg.finalizer}} }
+#! \seealso{ \code{\link{ff}}, \code{\link{close.ff}}, \code{\link{open.ff}}, \code{\link{reg.finalizer}} }
 #! \examples{
 #!   message('create the ff file outside getOption("fftempir"), 
 #!     it will have default finalizer "close", so you need to delete it explicitely')
@@ -3468,7 +3531,7 @@ delete.ff_pointer <- function(x
 , ... # dummy to keep R CMD check quiet
 )
 {
-  .Call("delete", x, PACKAGE="ff")
+  .Call(C_delete, x, PACKAGE="ff")
   all(file.remove(filename(x)))        # filename() might be a vector of files in the future
 }
 # version for manual use
@@ -3480,7 +3543,7 @@ delete.ff <- function(x
   # make sure 'delete' is not called a second time by assigning a harmless dummy finalizer name which signals that there is still a call to finalize.ff_pointer lurking around
   if (!is.null(attr(physical, "finalizer")))
     attr(physical, "finalizer") <- "close"
-  .Call("delete", physical, PACKAGE="ff")
+  .Call(C_delete, physical, PACKAGE="ff")
   all(file.remove(attr(physical, "filename"))) # filename() might be a vector of files in the future
 }
 delete.default <- function(x
@@ -3496,7 +3559,7 @@ deleteIfOpen.ff_pointer <- function(x
 )
 {
   if (is.open(x)){
-    .Call("delete", x, PACKAGE="ff")
+    .Call(C_delete, x, PACKAGE="ff")
     all(file.remove(filename(x)))   # filename() might be a vector of files in the future
   }else{
     NA
@@ -3567,7 +3630,7 @@ if (FALSE){
 #!   \command{get.ff} returns a vector, \command{set.ff} returns the 'changed' ff object (like all assignment functions do) and \command{getset.ff} returns the value at the subscript positions.
 #!   More precisely \code{getset.ff(x, i, value, add=FALSE)} returns the old values at the subscript positions \code{i} while \code{getset.ff(x, i, value, add=TRUE)} returns the incremented values at the subscript positions.
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \note{ \command{get.ff}, \command{set.ff} and \command{getset.ff} are low level functions that do not support \code{ramclass} and \code{ramattribs} and thus will not give the expected result with \code{factor} and \code{POSIXct} }
 #! \seealso{ \code{\link{readwrite.ff}} for low-level access to contiguous chunks and \code{\link{[.ff}} for high-level access }
 #! \examples{
@@ -3598,11 +3661,11 @@ getset.ff <- function(x, i, value, add=FALSE)
   nc <- na.count(x)
   if (!is.na(nc))
     new.nc <- is.na(value)
-  vmode <- vmode(x)
+  vm <- vmode(x)
   if (add)
-    ret <- .Call("addgetset_vec", .ffmode[vmode], attr(x, "physical"), i, length(i), as.vmode(value, vmode), PACKAGE="ff")
+    ret <- as.vmode(.Call(C_addgetset_vec, .ffmode[vm], attr(x, "physical"), i, length(i), as.vmode(value, vm), PACKAGE="ff"), vm)
   else
-    ret <- .Call("getset_vec", .ffmode[vmode], attr(x, "physical"), i, length(i), as.vmode(value, vmode), PACKAGE="ff")
+    ret <- as.vmode(.Call(C_getset_vec, .ffmode[vm], attr(x, "physical"), i, length(i), as.vmode(value, vm), PACKAGE="ff"), vm)
   if (!is.na(nc)){
     old.nc <- is.na(ret)
     na.count(x) <- nc - old.nc + new.nc
@@ -3613,36 +3676,44 @@ getset.ff <- function(x, i, value, add=FALSE)
 get.ff   <- function(x, i)
 {
 	open(x, assert=TRUE)
-  if (is.double(i))
-    i <- as.integer(i)
-  if (!is.integer(i) || i<1 || i>length(x)) stop("illegal index")
-  if(!is.null(vw(x))) stop("please use '[' to access ff with vw")
-
-  .Call("get_vec", .ffmode[vmode(x)], attr(x, "physical"), i, length(i), PACKAGE="ff")
+  if (length(i)){
+    if (is.double(i))
+      i <- as.integer(i)
+    if (!is.integer(i) || i<1 || i>length(x)) stop("illegal index")
+    if(!is.null(vw(x))) stop("please use '[' to access ff with vw")
+    vm <- vmode(x)
+    as.vmode(.Call(C_get_vec, .ffmode[vm], attr(x, "physical"), i, length(i), PACKAGE="ff"), vm)
+  }else{
+    vm <- vmode(x)
+    vector.vmode(vm)
+  }
 }
 
-set.ff   <- function(x, i, value, add=FALSE)
+set.ff <- function(x, i, value, add=FALSE)
 {
 	open(x, assert=TRUE)
-  if( is.readonly(x) ) stop("ff is readonly")
-  if (is.double(i))
-    i <- as.integer(i)
-  if (!is.integer(i) || i<1 || i>length(x)) stop("illegal index")
-  if(!is.null(vw(x))) stop("please use '[' to access ff with vw")
-
-  if(!is.null(physical(x)$na.count)) stop("use readwrite.ff instead to maintain na.count (or deactivate na.count(x)<-NULL)")
-  vmode <- vmode(x)
-  if (add)
-    attr(x, "physical") <- .Call("addset_vec", .ffmode[vmode], attr(x, "physical"), i, length(i), as.vmode(value, vmode), PACKAGE="ff")
-  else
-    attr(x, "physical") <- .Call("set_vec", .ffmode[vmode], attr(x, "physical"), i, length(i), as.vmode(value, vmode), PACKAGE="ff")
+  if( is.readonly(x) ) 
+      stop("ff is readonly")
+  if (length(i)){
+    if (is.double(i))
+      i <- as.integer(i)
+    if (!is.integer(i) || i<1 || i>length(x)) stop("illegal index")
+    if(!is.null(vw(x))) stop("please use '[' to access ff with vw")
+    
+    if(!is.null(physical(x)$na.count)) stop("use readwrite.ff instead to maintain na.count (or deactivate na.count(x)<-NULL)")
+    vm <- vmode(x)
+    if (add)
+      attr(x, "physical") <- .Call(C_addset_vec, .ffmode[vm], attr(x, "physical"), i, length(i), as.vmode(value, vm), PACKAGE="ff")
+    else
+      attr(x, "physical") <- .Call(C_set_vec, .ffmode[vm], attr(x, "physical"), i, length(i), as.vmode(value, vm), PACKAGE="ff")
+  }
   x
 }
 
 "[[.ff" <- function(x, i){
   if (length(i)!=1L)
     stop("i must have length 1")
-  set.ff(x=x, i=i)
+  get.ff(x=x, i=i)
 }
 
 "[[<-.ff" <- function(x, i, add=FALSE, value){
@@ -3682,7 +3753,7 @@ set.ff   <- function(x, i, value, add=FALSE)
 #!   \command{read.ff} returns a vector of values, \command{write.ff} returns the 'changed' ff object (like all assignment functions do) and \command{readwrite.ff} returns the values at the target position.
 #!   More precisely \code{readwrite.ff(x, i, value, add=FALSE)} returns the old values at the position \code{i} while \code{readwrite.ff(x, i, value, add=TRUE)} returns the incremented values of \code{x}.
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \note{ \command{read.ff}, \command{write.ff} and \command{readwrite.ff} are low level functions that do not support \code{ramclass} and \code{ramattribs} and thus will not give the expected result with \code{factor} and \code{POSIXct} }
 #! \seealso{ \code{\link{getset.ff}} for low-level scalar access and \code{\link{[.ff}} for high-level access }
 #! \examples{
@@ -3709,21 +3780,21 @@ readwrite.ff <- function(x, i, value, add=FALSE)
 
   n <- length(value)
   stopifnot( 0 < i && i+n-1 <= length(x) )
-
+  
   nc <- na.count(x)
   if (!is.na(nc))
     new.nc <- sum(is.na(value))
-  vmode <- vmode(x)
+  vm <- vmode(x)
   if (add){
-    ret <- .Call("addgetset_contiguous", .ffmode[vmode], attr(x, "physical"), as.integer(i), n, as.vmode(value, vmode), PACKAGE="ff")
+    ret <- .Call(C_addgetset_contiguous, .ffmode[vm], attr(x, "physical"), as.integer(i), n, as.vmode(value, vm), PACKAGE="ff")
   }else{
-    ret <- .Call("getset_contiguous", .ffmode[vmode], attr(x, "physical"), as.integer(i), n, as.vmode(value, vmode), PACKAGE="ff")
+    ret <- .Call(C_getset_contiguous, .ffmode[vm], attr(x, "physical"), as.integer(i), n, as.vmode(value, vm), PACKAGE="ff")
   }
   if (!is.na(nc)){
     old.nc <- sum(is.na(ret))
     na.count(x) <- nc - old.nc + new.nc
   }
-  ret
+  as.vmode(ret, vm)
 }
 
 read.ff <- function(x, i, n)
@@ -3732,7 +3803,8 @@ read.ff <- function(x, i, n)
   if(!is.null(vw(x))) stop("please use '[' to access ff with vw")
 
   stopifnot( 0 < i && i+n-1 <= length(x) )
-  .Call("get_contiguous", .ffmode[vmode(x)], attr(x, "physical"), as.integer(i), as.integer(n), PACKAGE="ff")
+  vm <- vmode(x)
+  as.vmode(.Call(C_get_contiguous, .ffmode[vmode(x)], attr(x, "physical"), as.integer(i), as.integer(n), PACKAGE="ff"), vm)
 }
 
 write.ff <- function(x, i, value, add=FALSE)
@@ -3746,11 +3818,11 @@ write.ff <- function(x, i, value, add=FALSE)
   n <- length(value)
   stopifnot( 0 < i && i+n-1 <= length(x) )
 
-  vmode <- vmode(x)
+  vm <- vmode(x)
   if (add)
-    attr(x, "physical") <- .Call("addset_contiguous", .ffmode[vmode], attr(x, "physical"), as.integer(i), n, as.vmode(value, vmode), PACKAGE="ff")
+    attr(x, "physical") <- .Call(C_addset_contiguous, .ffmode[vm], attr(x, "physical"), as.integer(i), n, as.vmode(value, vm), PACKAGE="ff")
   else
-    attr(x, "physical") <- .Call("set_contiguous", .ffmode[vmode], attr(x, "physical"), as.integer(i), n, as.vmode(value, vmode), PACKAGE="ff")
+    attr(x, "physical") <- .Call(C_set_contiguous, .ffmode[vm], attr(x, "physical"), as.integer(i), n, as.vmode(value, vm), PACKAGE="ff")
   x
 }
 
@@ -3806,7 +3878,7 @@ write.ff <- function(x, i, value, add=FALSE)
 #!   Values at the target positions.
 #!   More precisely \code{swap(x, value, i, add=FALSE)} returns the old values at the position \code{i} while \code{swap(x, value, i, add=TRUE)} returns the incremented values of \code{x}.
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \note{
 #!   Note that \code{swap.default} changes the object in its parent frame and thus violates R's usual functional programming logic.
 #!   When using \code{add=TRUE}, duplicated index positions should be avoided, because ff and ram objects behave differently:
@@ -3887,7 +3959,7 @@ write.ff <- function(x, i, value, add=FALSE)
 #!   }
 #! }
 #! \section{Dimorder and bydim}{
-#!   Arrays in R have always standard \code{\link{dimorder} 1:length(dim(x))} while ff allows to store an array in a different dimorder.
+#!   Arrays in R have always standard \code{\link{dimorder} seq_along(dim(x))} while ff allows to store an array in a different dimorder.
 #!   Using nonstandard dimorder (see \code{\link{dimorderStandard}}) can speed up certain access operations: while matrix \code{dimorder=c(1,2)} -- column-major order --
 #!   allows fast extraction of columns, \code{dimorder=c(2,1)} allows fast extraction of rows.
 #!   \cr
@@ -3922,12 +3994,12 @@ write.ff <- function(x, i, value, add=FALSE)
 #! }
 #! \value{
 #!   The read operators \command{[} and \command{[[} return data from the ff object,
-#!   possibly decorated with \code{\link[ff:names.ff]{names}}, \code{\link[ff:dim.ff]{dim}},
-#!   \code{\link[ff:dimnames.ff]{dimnames}} and further attributes and classes (see \code{\link{ramclass}}, \code{\link{ramattribs}})
+#!   possibly decorated with \code{\link[=names.ff]{names}}, \code{\link[=dim.ff]{dim}},
+#!   \code{\link[=dimnames.ff]{dimnames}} and further attributes and classes (see \code{\link{ramclass}}, \code{\link{ramattribs}})
 #!   \cr
 #!   The write operators \command{[<-} and \command{[[<-} return the 'modified' ff object (like all assignment operators do).
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{ff}}, \code{\link{swap}}, \code{\link{add}}, \code{\link{readwrite.ff}}, \code{\link{LimWarn}} }
 #! \examples{
 #!    message("look at different dimorders")
@@ -4013,19 +4085,21 @@ swap.ff <- function(
   fflen <- length(x)
   fflev <- levels(x)
   ffnam <- names(x)
-  if (fflen){
-    if (missing(i)){
+
+  if (missing(i)){
+    if (fflen){
       index <- hi(from=1, to=fflen, maxindex=fflen, vw=vw, pack=pack)
-      nreturn <- fflen
-    }else if(is.ff(i)){
-      stop("ff subscripts not implemented for swap.ff")
-    }else{
-      index <- as.hi(substitute(i), maxindex=fflen, vw=vw, pack=pack, names=ffnam, envir=parent.frame())
-      nreturn <- poslength(index)
+    #}else{
+      #not needed: index <- as.hi(NULL)
     }
+    nreturn <- fflen
+  }else if(is.ff(i)){
+    stop("ff subscripts not implemented for swap.ff")
   }else{
-    nreturn <- 0:0
+    index <- as.hi(substitute(i), maxindex=fflen, vw=vw, pack=pack, names=ffnam, envir=parent.frame())
+    nreturn <- poslength(index)
   }
+  
   if (nreturn){
     nc <- na.count(x)
     ixre <- !is.null(index$ix) || index$re
@@ -4038,7 +4112,7 @@ swap.ff <- function(
       if (nreturn!=nvalue){
         rb <- nreturn%%nvalue
         if (!is.na(nc))
-          new.nc <- nreturn%/%nvalue * sum(is.na(value)) + if (rb) sum(is.na(value[1:rb])) else 0L
+          new.nc <- nreturn%/%nvalue * sum(is.na(value)) + if (rb) sum(is.na(value[seq_len(rb)])) else 0L
         if (rb)
           warning("number of elements to replace is not multiple of values for replacement")
         if (ixre){
@@ -4061,9 +4135,9 @@ swap.ff <- function(
         new.nc <- nreturn * is.na(value)
     }
     if (add)
-      ret <- .Call("addgetset_vector", .ffmode[vmode], attr(x, "physical"), index, nreturn, value, PACKAGE="ff")
+      ret <- .Call(C_addgetset_vector, .ffmode[vmode], attr(x, "physical"), index, nreturn, value, PACKAGE="ff")
     else
-      ret <- .Call("getset_vector", .ffmode[vmode], attr(x, "physical"), index, nreturn, value, PACKAGE="ff")
+      ret <- .Call(C_getset_vector, .ffmode[vmode], attr(x, "physical"), index, nreturn, value, PACKAGE="ff")
     ret <- unsort.hi(ret, index)
     if (!is.na(nc)){
       old.nc <- sum(is.na(ret))
@@ -4073,6 +4147,8 @@ swap.ff <- function(
       setattr(ret, "names", ffnam[as.integer(index)])  #names(ret) <- ffnam[as.integer(index)]
   }else{
     ret <- vector(mode=.rammode[vmode], length=0)
+    if (!is.null(ffnam))
+      setattr(ret, "names", character())  #names(ret) <- character()
   }
   if (!is.null(fflev)){
     if (.vunsigned[vmode])
@@ -4101,7 +4177,7 @@ swap.ff <- function(
   fflen <- length(x)
   fflev <- levels(x)
   ffnam <- names(x)
-  if (fflen){
+  #if (fflen){
     if (missing(i)){
       simple <- TRUE
       nreturn <- fflen
@@ -4115,23 +4191,25 @@ swap.ff <- function(
       index <- as.hi(substitute(i), maxindex=fflen, vw=vw, pack=pack, names=ffnam, envir=parent.frame())
       nreturn <- poslength(index)
     }
-  }else{
-    nreturn <- 0:0
-  }
+  #}else{
+  #  nreturn <- 0:0
+  #}
   if (nreturn){
 		open(x, assert=TRUE)
     if (simple){
-      ret <- .Call("get_contiguous", .ffmode[vmode], attr(x, "physical"), if (is.null(vw)) 1L else vw[1]+1L, nreturn, PACKAGE="ff")
+      ret <- .Call(C_get_contiguous, .ffmode[vmode], attr(x, "physical"), if (is.null(vw)) 1L else vw[1]+1L, nreturn, PACKAGE="ff")
       if (!is.null(ffnam))
         setattr(ret, "names", ffnam)  #names(ret) <- ffnam
     }else{
-      ret <- .Call("get_vector", .ffmode[vmode], attr(x, "physical"), index, nreturn, PACKAGE="ff")
+      ret <- .Call(C_get_vector, .ffmode[vmode], attr(x, "physical"), index, nreturn, PACKAGE="ff")
       ret <- unsort.hi(ret,index)
       if (!is.null(ffnam))
         setattr(ret, "names", ffnam[as.integer(index)])  #names(ret) <- ffnam[as.integer(index)]
     }
   }else{
     ret <- vector(mode=.rammode[vmode], length=0)
+    if (!is.null(ffnam))
+      setattr(ret, "names", character())  #names(ret) <- character()
   }
   if (!is.null(fflev)){
     if (.vunsigned[vmode])
@@ -4169,9 +4247,15 @@ swap.ff <- function(
   fflen <- length(x)
   fflev <- levels(x)
   ffnam <- names(x)
-  if (fflen){
     if (missing(i)){
-      index <- hi(from=1, to=fflen, maxindex=fflen, vw=vw, pack=pack)
+      if (fflen){
+        index <- hi(from=1, to=fflen, maxindex=fflen, vw=vw, pack=pack)
+      }else{
+        # we don't warn here since R does not either
+        #if (length(value))
+        #  warning("number of elements to replace is not multiple of values for replacement")
+        #index <- as.hi(NULL)
+      }
       nreturn <- fflen
     }else if(is.ff(i)){
       return(ffindexset(x, i, value))
@@ -4179,9 +4263,6 @@ swap.ff <- function(
       index <- as.hi(substitute(i), maxindex=fflen, vw=vw, pack=pack, names=ffnam, envir=parent.frame())
       nreturn <- poslength(index)
     }
-  }else{
-    nreturn <- 0:0
-  }
   if (nreturn){
     ixre <- !is.null(index$ix) || index$re
     vmode <- vmode(x)
@@ -4208,9 +4289,9 @@ swap.ff <- function(
       stop("no value for replacement")
     }
     if (add)
-      attr(x, "physical") <- .Call("addset_vector", .ffmode[vmode], attr(x, "physical"), index, nreturn, value, PACKAGE="ff")
+      attr(x, "physical") <- .Call(C_addset_vector, .ffmode[vmode], attr(x, "physical"), index, nreturn, value, PACKAGE="ff")
     else
-      attr(x, "physical") <- .Call("set_vector", .ffmode[vmode], attr(x, "physical"), index, nreturn, value, PACKAGE="ff")
+      attr(x, "physical") <- .Call(C_set_vector, .ffmode[vmode], attr(x, "physical"), index, nreturn, value, PACKAGE="ff")
   }
   return(x)
 }
@@ -4242,8 +4323,11 @@ swap.ff_array <- function(
   narguments <- length(arguments)
 
   if (narguments==0 || (narguments==1 && is.language(arguments[[1]]) && arguments[[1]]=="")){  # ad[]
-    index <- lapply(1:ndim, function(d){
-      hi(from=1, to=ffdim[[d]], maxindex=ffdim[[d]], vw=vw[,d], pack=pack)
+    index <- lapply(seq_len(ndim), function(d){
+      if (ffdim[[d]])
+        hi(from=1, to=ffdim[[d]], maxindex=ffdim[[d]], vw=vw[,d], pack=pack)
+      else
+        as.hi(NULL, maxindex=ffdim[[d]], vw=vw[,d], pack=pack)
     })
     indexdim <- ffdim
     nreturn <- fflen
@@ -4263,14 +4347,15 @@ swap.ff_array <- function(
       simple <- FALSE
     }
   }else if (narguments==ndim){
-    noselect <- TRUE
     ixre <- FALSE
     envir <- parent.frame()
-    index <- lapply(1:ndim, function(d){
+    index <- lapply(seq_len(ndim), function(d){
       if (is.language(arguments[[d]]) && arguments[[d]]==""){
-        hi(from=1, to=ffdim[[d]], maxindex=ffdim[[d]], vw=vw[,d], pack=pack)
+        if (ffdim[[d]])
+          hi(from=1, to=ffdim[[d]], maxindex=ffdim[[d]], vw=vw[,d], pack=pack)
+        else
+          as.hi(NULL, maxindex=ffdim[[d]], vw=vw[,d], pack=pack)
       }else{
-        noselect <<- FALSE
         lret <- as.hi(arguments[[d]], maxindex=ffdim[[d]], vw=vw[,d], pack=pack, names=ffdimnam[[d]], envir=envir)
         if (!is.null(lret$ix) || lret$re)
           ixre <<- TRUE
@@ -4280,126 +4365,134 @@ swap.ff_array <- function(
     indexdim <- sapply(index,poslength)
     nreturn <- as.integer(prod(indexdim))
     simple <- FALSE
-    if (noselect)
+    if (all(indexdim != 1))
       drop <- FALSE
-    rm(noselect)
   }else{
     stop("wrong number of dimensions")
   }
 
-
-  if (fflen && nreturn){
-    nc <- na.count(x)
-    if (is.null(fflev))
-      value <- as.vmode(value, vmode)
-    else
-      value <- ram2ffcode(value, fflev, vmode)
-    nvalue <- length(value)
-    if (nvalue>1){
-      if (!dimorderStandard(bydim)){
-        value <- vector2array(value, dim=indexdim, dimorder=bydim)
-      }
-      if (nreturn!=nvalue){
-        rb <- nreturn%%nvalue
-        if (!is.na(nc))
-          new.nc <- nreturn%/%nvalue * sum(is.na(value)) + if (rb) sum(is.na(value[1:rb])) else 0L
-        if (rb)
-          warning("number of elements to replace is not multiple of values for replacement")
-        if (ixre){
-          # if possible we try to recycle on the C-side, but in case of ix or re we need to recycle already here
-          value <- rep(value, length.out=nreturn)
-          nvalue <- nreturn
-        }
-      }else{
-        if (!is.na(nc))
-          new.nc <- sum(is.na(value))
-      }
-      if (simple){
-        if (!is.null(index$ix))
-          value <- value[index$ix]
-        else if (index$re)
-          value <- rev(value)
-      }else{
-        if (ixre){
-          value <- array(value, dim=indexdim)
-          ix <- lapply(index, function(i){
-                  if (is.null(i$ix)){
-                    if (i$re)
-                      rev(1:length(i))
-                    else
-                      1:length(i)
-                  }else{
-                    i$ix
-                  }
-                })
-          value <- do.call("[", c(list(value), ix))
-        }else{
-          ix <- NULL
-        }
-      }
-    }else{
-      if(nvalue<1)
-        stop("no value for replacement")
+  nc <- na.count(x)
+  if (is.null(fflev))
+    value <- as.vmode(value, vmode)
+  else
+    value <- ram2ffcode(value, fflev, vmode)
+  nvalue <- length(value)
+  if (nvalue>1){
+    if (!dimorderStandard(bydim)){
+      value <- vector2array(value, dim=indexdim, dimorder=bydim)
+    }
+    if (nreturn!=nvalue){
+      rb <- nreturn%%nvalue
       if (!is.na(nc))
-        new.nc <- nreturn * is.na(value)
-    }
-
-    if (simple){
-      if (add)
-        ret <- .Call("addgetset_vector", .ffmode[vmode], attr(x, "physical"), index, nreturn, value, PACKAGE="ff")
-      else
-        ret <- .Call("getset_vector", .ffmode[vmode], attr(x, "physical"), index, nreturn, value, PACKAGE="ff")
-      ret <- unsort.hi(ret, index)
+        new.nc <- nreturn%/%nvalue * sum(is.na(value)) + if (rb) sum(is.na(value[seq_len(rb)])) else 0L
+      if (rb)
+        warning("number of elements to replace is not multiple of values for replacement")
+      if (ixre){
+        # if possible we try to recycle on the C-side, but in case of ix or re we need to recycle already here
+        value <- rep(value, length.out=nreturn)
+        nvalue <- nreturn
+      }
     }else{
-      if (!is.null(vw))
-        ffdim <- as.integer(colSums(vw))
-      cumffdim <- c(1L,cumprod(ffdim[ffdimord])[-ndim])
-      cumindexdim <- cumprod(indexdim)
-      nreturn <- cumindexdim[ndim]
-      cumindexdim <- c(1,cumindexdim[-ndim])[ffdimord]
-
-      if (add)
-        ret <- .Call("addgetset_array", .ffmode[vmode], attr(x, "physical"), index[ffdimord], as.integer(indexdim[ffdimord]), as.integer(ffdim[ffdimord]), as.integer(ndim), as.integer(nreturn), as.integer(cumindexdim), as.integer(cumffdim), value, PACKAGE="ff")
-      else
-        ret <- .Call("getset_array", .ffmode[vmode], attr(x, "physical"), index[ffdimord], as.integer(indexdim[ffdimord]), as.integer(ffdim[ffdimord]), as.integer(ndim), as.integer(nreturn), as.integer(cumindexdim), as.integer(cumffdim), value, PACKAGE="ff")
-      #ret <- array(ret, dim=indexdim)
-      setattr(ret, "dim", indexdim)   #dim(ret) <- indexdim
-      if (nvalue==1)
-        ret <- unsort.ahi(ret, index, ixre)
-      else
-        ret <- unsort.ahi(ret, index, ixre, ix)
-      do.bydim <- !dimorderStandard(bydim)
-      if (do.bydim){
-        ret <- array2vector(ret, dim=indexdim, dimorder=bydim)
-        setattr(ret, "dim", indexdim[bydim])   #dim(ret) <- indexdim[bydim]
-      }
-      if (!is.null(ffdimnam)){
-        dimnam <- 1:ndim
-        setattr(dimnam, "names", names(ffdimnam))  #names(dimnam) <- names(ffdimnam)
-        dimnam <- lapply(dimnam, function(d){ffdimnam[[d]][as.integer(index[[d]])]})
-        if (do.bydim)
-          setattr(ret, "dimnames",  dimnam[bydim]) #dimnames(ret) <- dimnam[bydim]
-        else
-          setattr(ret, "dimnames",  dimnam) #dimnames(ret) <- dimnam
-      }
-      if (drop){
-        ret <- drop(ret)
-        if (length(dim(ret))==1)
-          ret <- as.vector(ret)
-      }
+      if (!is.na(nc))
+        new.nc <- sum(is.na(value))
     }
-    if (!is.na(nc)){
-      old.nc <- sum(is.na(ret))
-      na.count(x) <- nc - old.nc + new.nc
+    if (simple){
+      if (!is.null(index$ix))
+        value <- value[index$ix]
+      else if (index$re)
+        value <- rev(value)
+    }else{
+      if (ixre){
+        value <- array(value, dim=indexdim)
+        ix <- lapply(index, function(i){
+                if (is.null(i$ix)){
+                  if (i$re)
+                    rev(seq_along(i))
+                  else
+                    seq_along(i)
+                }else{
+                  i$ix
+                }
+              })
+        value <- do.call("[", c(list(value), ix))
+      }else{
+        ix <- NULL
+      }
     }
   }else{
-    if (drop)
-      ret <- vector(mode=.rammode[vmode], length=0)
-    else{
-      ret <- vector(mode=.rammode[vmode], length=0)
-      setattr(ret, "dim", indexdim) #dim(ret) <- indexdim
+    if(nvalue<1)
+      stop("no value for replacement")
+    if (!is.na(nc))
+      new.nc <- nreturn * is.na(value)
+  }
+
+  if (simple){
+    if (add){
+      if (fflen && nreturn){
+        ret <- .Call(C_addgetset_vector, .ffmode[vmode], attr(x, "physical"), index, nreturn, value, PACKAGE="ff")
+      }else{
+        ret <- vector(mode=.rammode[vmode], length=0)
+      }
+    }else{
+      if (fflen && nreturn){
+        ret <- .Call(C_getset_vector, .ffmode[vmode], attr(x, "physical"), index, nreturn, value, PACKAGE="ff")
+      }else{
+        ret <- vector(mode=.rammode[vmode], length=0)
+      }
+    }
+    ret <- unsort.hi(ret, index)
+  }else{
+    if (!is.null(vw))
+      ffdim <- as.integer(colSums(vw))
+    cumffdim <- c(1L,cumprod(ffdim[ffdimord])[-ndim])
+    cumindexdim <- cumprod(indexdim)
+    nreturn <- cumindexdim[ndim]
+    cumindexdim <- c(1,cumindexdim[-ndim])[ffdimord]
+
+    if (add){
+      if (fflen && nreturn){
+        ret <- .Call(C_addgetset_array, .ffmode[vmode], attr(x, "physical"), index[ffdimord], as.integer(indexdim[ffdimord]), as.integer(ffdim[ffdimord]), as.integer(ndim), as.integer(nreturn), as.integer(cumindexdim), as.integer(cumffdim), value, PACKAGE="ff")
+      }else{
+        ret <- vector(mode=.rammode[vmode], length=0)
+      }
+    }else{
+      if (fflen && nreturn){
+        ret <- .Call(C_getset_array, .ffmode[vmode], attr(x, "physical"), index[ffdimord], as.integer(indexdim[ffdimord]), as.integer(ffdim[ffdimord]), as.integer(ndim), as.integer(nreturn), as.integer(cumindexdim), as.integer(cumffdim), value, PACKAGE="ff")
+      }else{
+        ret <- vector(mode=.rammode[vmode], length=0)
+      }
+    }
+    #ret <- array(ret, dim=indexdim)
+    setattr(ret, "dim", indexdim)   #dim(ret) <- indexdim
+    if (nvalue==1)
+      ret <- unsort.ahi(ret, index, ixre)
+    else
+      ret <- unsort.ahi(ret, index, ixre, ix)
+    do.bydim <- !dimorderStandard(bydim)
+    if (do.bydim){
+      ret <- array2vector(ret, dim=indexdim, dimorder=bydim)
+      setattr(ret, "dim", indexdim[bydim])   #dim(ret) <- indexdim[bydim]
+    }
+    if (!is.null(ffdimnam)){
+      dimnam <- seq_len(ndim)
+      setattr(dimnam, "names", names(ffdimnam))  #names(dimnam) <- names(ffdimnam)
+      dimnam <- lapply(dimnam, function(d){ffdimnam[[d]][as.integer(index[[d]])]})
+      if (do.bydim)
+        setattr(ret, "dimnames",  dimnam[bydim]) #dimnames(ret) <- dimnam[bydim]
+      else
+        setattr(ret, "dimnames",  dimnam) #dimnames(ret) <- dimnam
+    }
+    if (drop){
+      ret <- drop(ret)
+      if (length(dim(ret))==1)
+        ret <- as.vector(ret)
     }
   }
+  if (!is.na(nc)){
+    old.nc <- sum(is.na(ret))
+    na.count(x) <- nc - old.nc + new.nc
+  }
+    
   if (!is.null(fflev)){
     if (.vunsigned[vmode])
       ret <- ret + 1L
@@ -4435,8 +4528,11 @@ swap.ff_array <- function(
   arguments <- match.call(expand.dots=FALSE)[["..."]]
   narguments <- length(arguments)
   if (narguments==0 || (narguments==1 && is.language(arguments[[1]]) && arguments[[1]]=="")){  # ad[]
-    index <- lapply(1:ndim, function(d){
-      hi(from=1, to=ffdim[[d]], maxindex=ffdim[[d]], vw=vw[,d], pack=pack)
+    index <- lapply(seq_len(ndim), function(d){
+      if (ffdim[[d]])
+        hi(from=1, to=ffdim[[d]], maxindex=ffdim[[d]], vw=vw[,d], pack=pack)
+      else
+        as.hi(NULL, maxindex=ffdim[[d]], vw=vw[,d], pack=pack)
     })
     indexdim <- ffdim
     nreturn <- fflen
@@ -4456,14 +4552,15 @@ swap.ff_array <- function(
       simple <- FALSE
     }
   }else if (narguments==ndim){
-    noselect <- TRUE
     ixre <- FALSE
     envir <- parent.frame()
-    index <- lapply(1:ndim, function(d){
+    index <- lapply(seq_len(ndim), function(d){
       if (is.language(arguments[[d]]) && arguments[[d]]==""){
-        hi(from=1, to=ffdim[[d]], maxindex=ffdim[[d]], vw=vw[,d], pack=pack)
+        if (ffdim[[d]])
+          hi(from=1, to=ffdim[[d]], maxindex=ffdim[[d]], vw=vw[,d], pack=pack)
+        else
+          as.hi(NULL, maxindex=ffdim[[d]], vw=vw[,d], pack=pack)
       }else{
-        noselect <<- FALSE
         lret <- as.hi(arguments[[d]], maxindex=ffdim[[d]], vw=vw[,d], pack=pack, names=ffdimnam[[d]], envir=envir)
         if (!is.null(lret$ix) || lret$re)
           ixre <<- TRUE
@@ -4473,57 +4570,55 @@ swap.ff_array <- function(
     indexdim <- sapply(index,poslength)
     nreturn <- as.integer(prod(indexdim))
     simple <- FALSE
-    if (noselect)
+    if (all(indexdim != 1))
       drop <- FALSE
-    rm(noselect)
   }else{
     stop("wrong number of dimensions")
   }
-  if (fflen && nreturn){
-    if (simple){
-      ret <- .Call("get_vector", .ffmode[vmode], attr(x, "physical"), index, nreturn, PACKAGE="ff")
+  if (simple){
+    if (fflen && nreturn){
+      ret <- .Call(C_get_vector, .ffmode[vmode], attr(x, "physical"), index, nreturn, PACKAGE="ff")
       ret <- unsort.hi(ret, index)
     }else{
-      if (!is.null(vw))
-        ffdim <- as.integer(colSums(vw))
-      cumffdim <- c(1,cumprod(ffdim[ffdimord])[-ndim])
-      cumindexdim <- cumprod(indexdim)
-      nreturn <- cumindexdim[ndim]
-      cumindexdim <- c(1,cumindexdim[-ndim])[ffdimord]
-
-      ret <- .Call("get_array", .ffmode[vmode], attr(x, "physical"), index[ffdimord], as.integer(indexdim[ffdimord]), as.integer(ffdim[ffdimord]), as.integer(ndim), as.integer(nreturn), as.integer(cumindexdim), as.integer(cumffdim), PACKAGE="ff")
-      #ret <- array(ret, dim=indexdim)
-      setattr(ret, "dim", indexdim) #dim(ret) <- indexdim
-      ret <- unsort.ahi(ret, index, ixre)
-      do.bydim <- !dimorderStandard(bydim)
-      if (do.bydim){
-        ret <- array2vector(ret, dim=indexdim, dimorder=bydim)
-        setattr(ret, "dim", indexdim[bydim]) #dim(ret) <- indexdim[bydim]
-      }
-      if (!is.null(ffdimnam)){
-        dimnam <- 1:ndim
-        #names(dimnam) <- names(ffdimnam)
-        setattr(dimnam, "names", names(ffdimnam))
-        dimnam <- lapply(dimnam, function(d){ffdimnam[[d]][as.integer(index[[d]])]})
-        if (do.bydim)
-          setattr(ret, "dimnames", dimnam[bydim]) #dimnames(ret) <- dimnam[bydim]
-        else
-          setattr(ret, "dimnames", dimnam) #dimnames(ret) <- dimnam
-      }
-      if (drop){
-        ret <- drop(ret)
-        if (length(dim(ret))==1)
-          ret <- as.vector(ret)
-      }
-
+      ret <- vector(mode=.rammode[vmode], length=0)
     }
   }else{
-    if (drop)
+    if (!is.null(vw))
+      ffdim <- as.integer(colSums(vw))
+    cumffdim <- c(1,cumprod(ffdim[ffdimord])[-ndim])
+    cumindexdim <- cumprod(indexdim)
+    nreturn <- cumindexdim[ndim]
+    cumindexdim <- c(1,cumindexdim[-ndim])[ffdimord]
+
+    if (fflen && nreturn){
+      ret <- .Call(C_get_array, .ffmode[vmode], attr(x, "physical"), index[ffdimord], as.integer(indexdim[ffdimord]), as.integer(ffdim[ffdimord]), as.integer(ndim), as.integer(nreturn), as.integer(cumindexdim), as.integer(cumffdim), PACKAGE="ff")
+    }else{
       ret <- vector(mode=.rammode[vmode], length=0)
-    else{
-      ret <- vector(mode=.rammode[vmode], length=0)
-      setattr(ret, "dim", indexdim) #dim(ret) <- indexdim
     }
+    #ret <- array(ret, dim=indexdim)
+    setattr(ret, "dim", indexdim) #dim(ret) <- indexdim
+    ret <- unsort.ahi(ret, index, ixre)
+    do.bydim <- !dimorderStandard(bydim)
+    if (do.bydim){
+      ret <- array2vector(ret, dim=indexdim, dimorder=bydim)
+      setattr(ret, "dim", indexdim[bydim]) #dim(ret) <- indexdim[bydim]
+    }
+    if (!is.null(ffdimnam)){
+      dimnam <- seq_len(ndim)
+      #names(dimnam) <- names(ffdimnam)
+      setattr(dimnam, "names", names(ffdimnam))
+      dimnam <- lapply(dimnam, function(d){ffdimnam[[d]][as.integer(index[[d]])]})
+      if (do.bydim)
+        setattr(ret, "dimnames", dimnam[bydim]) #dimnames(ret) <- dimnam[bydim]
+      else
+        setattr(ret, "dimnames", dimnam) #dimnames(ret) <- dimnam
+    }
+    if (drop){
+      ret <- drop(ret)
+      if (length(dim(ret))==1)
+        ret <- as.vector(ret)
+    }
+
   }
   if (!is.null(fflev)){
     if (.vunsigned[vmode])
@@ -4567,8 +4662,11 @@ swap.ff_array <- function(
   arguments <- match.call(expand.dots=FALSE)[["..."]]
   narguments <- length(arguments)
   if (narguments==0 || (narguments==1 && is.language(arguments[[1]]) && arguments[[1]]=="")){  # ad[]
-    index <- lapply(1:ndim, function(d){
-      hi(from=1, to=ffdim[[d]], maxindex=ffdim[[d]], vw=vw[,d], pack=pack)
+    index <- lapply(seq_len(ndim), function(d){
+      if (ffdim[[d]])
+        hi(from=1, to=ffdim[[d]], maxindex=ffdim[[d]], vw=vw[,d], pack=pack)
+      else
+        as.hi(NULL, maxindex=ffdim[[d]], vw=vw[,d], pack=pack)
     })
     indexdim <- ffdim
     nreturn <- fflen
@@ -4589,9 +4687,12 @@ swap.ff_array <- function(
   }else if (narguments==ndim){
     ixre <- FALSE
     envir <- parent.frame()
-    index <- lapply(1:ndim, function(d){
+    index <- lapply(seq_len(ndim), function(d){
       if (is.language(arguments[[d]]) && arguments[[d]]==""){
-        hi(from=1, to=ffdim[[d]], maxindex=ffdim[[d]], vw=vw[,d], pack=pack)
+        if (ffdim[[d]])
+          hi(from=1, to=ffdim[[d]], maxindex=ffdim[[d]], vw=vw[,d], pack=pack)
+        else
+          as.hi(NULL, maxindex=ffdim[[d]], vw=vw[,d], pack=pack)
       }else{
         lret <- as.hi(arguments[[d]], maxindex=ffdim[[d]], vw=vw[,d], pack=pack, names=ffdimnam[[d]], envir=envir)
         if (!is.null(lret$ix) || lret$re)
@@ -4636,9 +4737,9 @@ swap.ff_array <- function(
           ix <- lapply(index, function(i){
                   if (is.null(i$ix)){
                     if (i$re)
-                      rev(1:length(i))
+                      rev(seq_along(i))
                     else
-                      1:length(i)
+                      seq_along(i)
                   }else{
                     i$ix
                   }
@@ -4654,9 +4755,9 @@ swap.ff_array <- function(
 
     if (simple){
       if (add)
-        attr(x, "physical") <- .Call("addset_vector", .ffmode[vmode], attr(x, "physical"), index, nreturn, value, PACKAGE="ff")
+        attr(x, "physical") <- .Call(C_addset_vector, .ffmode[vmode], attr(x, "physical"), index, nreturn, value, PACKAGE="ff")
       else
-        attr(x, "physical") <- .Call("set_vector", .ffmode[vmode], attr(x, "physical"), index, nreturn, value, PACKAGE="ff")
+        attr(x, "physical") <- .Call(C_set_vector, .ffmode[vmode], attr(x, "physical"), index, nreturn, value, PACKAGE="ff")
     }else{
       if (!is.null(vw))
         ffdim <- as.integer(colSums(vw))
@@ -4666,9 +4767,9 @@ swap.ff_array <- function(
       cumindexdim <- c(1,cumindexdim[-ndim])[ffdimord]
 
       if (add)
-        attr(x, "physical") <- .Call("addset_array", .ffmode[vmode], attr(x, "physical"), index[ffdimord], as.integer(indexdim[ffdimord]), as.integer(ffdim[ffdimord]), as.integer(ndim), as.integer(nreturn), as.integer(cumindexdim), as.integer(cumffdim), value, PACKAGE="ff")
+        attr(x, "physical") <- .Call(C_addset_array, .ffmode[vmode], attr(x, "physical"), index[ffdimord], as.integer(indexdim[ffdimord]), as.integer(ffdim[ffdimord]), as.integer(ndim), as.integer(nreturn), as.integer(cumindexdim), as.integer(cumffdim), value, PACKAGE="ff")
       else
-        attr(x, "physical") <- .Call("set_array", .ffmode[vmode], attr(x, "physical"), index[ffdimord], as.integer(indexdim[ffdimord]), as.integer(ffdim[ffdimord]), as.integer(ndim), as.integer(nreturn), as.integer(cumindexdim), as.integer(cumffdim), value, PACKAGE="ff")
+        attr(x, "physical") <- .Call(C_set_array, .ffmode[vmode], attr(x, "physical"), index[ffdimord], as.integer(indexdim[ffdimord]), as.integer(ffdim[ffdimord]), as.integer(ndim), as.integer(nreturn), as.integer(cumindexdim), as.integer(cumffdim), value, PACKAGE="ff")
     }
   }
 
@@ -4692,12 +4793,12 @@ swap.ff_array <- function(
 #! \arguments{
 #!   \item{x}{ an ff or ram object }
 #!   \item{value}{ the amount to increment, possibly recylcled }
-#!   \item{\dots}{ further arguments -- especially index information -- passed to \code{\link{[<-}} or \code{\link{[<-.ff}} }
+#!   \item{\dots}{ further arguments -- especially index information -- passed to \code{\link{[<-}} or \code{\link[=Extract.ff]{[<-.ff}} }
 #! }
 #! \value{
 #!   invisible()
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \note{
 #!   Note that \code{add.default} changes the object in its parent frame and thus violates R's usual functional programming logic.
 #!   Duplicated index positions should be avoided, because ff and ram objects behave differently:
@@ -4794,6 +4895,9 @@ swap.default <- function(
     ret <- eval.parent(cl)
     eval.parent(assigncall)
   }
+  #since we do not enforce the semantics of vmodes (overflow in quads etc.)
+  #we do not restore the vmode:
+  #setattr(ret, 'vmode', vmode(x))
   ret
 }
 
@@ -4814,7 +4918,7 @@ swap.default <- function(
 #!   \bold{Otherwise you might experience 'unexpected' losses of files and data.}
 #! }
 #! \section{Size of objects}{
-#!   Currently ff objects cannot have length zero and are limited to \code{.Machine$integer.max} elements. We have not yet ported the R code to support 64bit double indices (in essence 52 bits integer) although the C++ back-end has been prepared for this.
+#!   ff objects can have length zero and are limited to \code{.Machine$integer.max} elements. We have not yet ported the R code to support 64bit double indices (in essence 52 bits integer) although the C++ back-end has been prepared for this.
 #!   Furthermore filesize limitations of the OS apply, see \code{\link{ff}}.
 #! }
 #! \section{Side effects}{
@@ -4822,7 +4926,7 @@ swap.default <- function(
 #!   This is also true for ram compatibility functions \code{\link{swap.default}}, and \code{\link{add.default}}.
 #! }
 #! \section{Hybrid copying semantics}{
-#!   If you modify a copy of an ff object, changes of data (\code{\link[ff:[<-.ff]{[<-}}) and of \code{\link[=physical.ff]{physical}} attributes
+#!   If you modify a copy of an ff object, changes of data (\code{\link[=Extract.ff]{[<-}}) and of \code{\link[=physical.ff]{physical}} attributes
 #!   will be shared, but changes in \code{\link[=physical.ff]{virtual}} and class attributes will not.
 #! }
 #! \section{Limits of compatibility between ff and ram objects}{
@@ -4850,14 +4954,19 @@ swap.default <- function(
 #!   and \code{\link{add}} will behave differently, see \code{\link{swap}}.
 #! }
 #! \section{Definition of [[ and [[<-}{
-#!   You should consider the behaviour of \code{\link{[[.ff}} and \code{\link{[[<-.ff}} as undefined and not use them in programming.
-#!   Currently they are shortcuts to \code{\link{get.ff}} and \code{\link{set.ff}}, which unlike \code{\link{[.ff}} and \code{\link{[<-.ff}}
-#!   do not support \code{\link{factor}} and \code{\link{POSIXct}}, nor \code{\link{dimorder}} or virtual windows \code{\link{vw}}.
-#!   In contrast to the standard methods, \code{\link{[[.ff}} and \code{\link{[[<-.ff}} only accepts positive integer index positions.
-#!   The definition of \code{\link{[[.ff}} and \code{\link{[[<-.ff}} may be changed in the future.
+#!   You should consider the behaviour of \code{\link{[[.ff}} and 
+#!   \code{\link{[[<-.ff}} as undefined and not use them in programming.
+#!   Currently they are shortcuts to \code{\link{get.ff}} and \code{\link{set.ff}}, 
+#!   which unlike \code{\link[=Extract.ff]{[.ff}} and \code{\link[=Extract.ff]{[<-.ff}}
+#!   do not support \code{\link{factor}} and \code{\link{POSIXct}}, 
+#!   nor \code{\link{dimorder}} or virtual windows \code{\link{vw}}.
+#!   In contrast to the standard methods, \code{\link{[[.ff}} and 
+#!   \code{\link{[[<-.ff}} only accepts positive integer index positions.
+#!   The definition of \code{\link{[[.ff}} and \code{\link{[[<-.ff}} may be 
+#!   changed in the future.
 #! }
 #! \section{Multiple vector interpretation in arrays }{
-#!   R objects have always standard \code{\link{dimorder} 1:length(dim)}.
+#!   R objects have always standard \code{\link{dimorder} seq_along(dim)}.
 #!   In case of non-standard dimorder (see \code{\link{dimorderStandard}})
 #!   the vector sequence of array elements in R and in the ff file differs.
 #!   To access array elements in file order, you can use \code{\link{getset.ff}}, \code{\link{readwrite.ff}}

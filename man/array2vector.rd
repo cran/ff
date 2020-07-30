@@ -19,7 +19,7 @@ array2vector(x, dim = NULL, dimorder = NULL)
 \value{
   a vector
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{  \code{\link{vector2array}}, \code{\link{arrayIndex2vectorIndex}} }
 \examples{
   array2vector(matrix(1:12, 3, 4))

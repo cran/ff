@@ -14,7 +14,7 @@ unclass(x) <- value
 \value{
   the modified object
 }
-\author{ Jens Oehlschlägel }
+\author{ Jens OehlschlÃ¤gel }
 \seealso{ \code{\link{unclass}}, \code{\link{undim}} }
 \examples{
   x <- factor(letters)

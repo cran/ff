@@ -28,7 +28,7 @@ vt(x, \dots)
 \value{
   an object that behaves like a transposed matrix
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{ \code{\link{dim.ff}}, \code{\link{vw}}, \code{\link[=virtual.ff]{virtual}} }
 \examples{
   x <- ff(1:20, dim=c(4,5))

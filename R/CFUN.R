@@ -1,5 +1,5 @@
 # some collapsing functions for ff
-# (c) 2007 Jens Oehlsch‰gel
+# (c) 2007 Jens Oehlsch√§gel
 # Licence: GPL2
 # Provided 'as is', use at your own risk
 # Created: 2007-10-09
@@ -69,7 +69,7 @@
 #! \value{
 #!   depends on the CFUN used
 #! }
-#! \author{ Jens Oehlschl‰gel }
+#! \author{ Jens Oehlschl√§gel }
 #! \seealso{ \code{\link{ffapply}}, \code{\link{do.call}}, \code{\link{na.count}} }
 #! \examples{
 #!    X <- lapply(split(rnorm(1000), 1:10), summary)

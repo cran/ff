@@ -32,7 +32,7 @@ The virtual component is itself a dataframe, each row of which defines a column 
   \item{PhysicalLastCol}{integer identifying the last column of the corresponding physical element (1 if it is not a matrix)}
 }
 \author{
-  Jens Oehlschl‰gel
+  Jens Oehlschl√§gel
 }
 \seealso{
   \code{\link{ffdf}}, \code{\link[=physical.ff]{physical}}, \code{\link[=virtual.ff]{virtual}}, \code{\link[=vmode.ffdf]{vmode}}
@@ -44,7 +44,7 @@ The virtual component is itself a dataframe, each row of which defines a column 
 
   message("Here the y matrix is first converted to single columns by data.frame, 
 then those columns become ff")
-  d <- as.ffdf(data.frame(x=x, y=y, z=I(z), stringsAsFactors = TRUE))
+  d <- as.ffdf(data.frame(x=x, y=y, z=I(z)))
   physical(d)
   virtual(d)
 

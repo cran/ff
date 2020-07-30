@@ -40,7 +40,7 @@
  see  \code{\link{file.copy}} and \code{\link{file.remove}}.
 }
 \author{ Daniel Adler }
-\seealso{ \code{\link[base]{file.create}}, \code{\link[base]{file.rename}}, \code{\link[base]{file.info}}, \code{\link{file.copy}}, \code{\link{file.remove}} }
+\seealso{ \code{\link{file.create}}, \code{\link{file.rename}}, \code{\link{file.info}}, \code{\link{file.copy}}, \code{\link{file.remove}} }
 \examples{
  x <- tempfile()
  newsize <- 23       # resize and size to 23 bytes.

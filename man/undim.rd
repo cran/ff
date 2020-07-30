@@ -13,7 +13,7 @@ undim(x)
 \value{
   x without dim attribute
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{ \code{\link{unclass<-}}, \code{\link{unclass}}, \code{\link{unname}}, \code{\link{dim}} }
 \examples{
   x <- matrix(1:12, 3)

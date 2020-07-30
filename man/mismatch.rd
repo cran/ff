@@ -17,7 +17,7 @@ ymismatch(nx, ny)
 \value{
   logical scalar
 }
-\author{ Jens Oehlschl‰gel }
+\author{ Jens Oehlschl√§gel }
 \seealso{ \code{\link{ffconform}} }
 \examples{
   ymismatch(4,0)
