@@ -1,12 +1,12 @@
-c0809991ae916535c4a1343b0b4eaa60 *DESCRIPTION
+282510e164f6f3df4d36aa04692750ac *DESCRIPTION
 0d84d11c40499ccf6cb6beb8094e58cd *LICENSE
-cc9f574a7f8617f8be9549da50ecc285 *NAMESPACE
-f7e5ded1cde622d8c30ac1bd413cfb34 *NEWS
-e6562da461d641803258c590be39e5b6 *R/CFUN.R
+5e20f4c300474115e45b3a01471c1a2f *NAMESPACE
+93b1db70f7dd19653121b48c3cf91410 *NEWS
+72c8f3f6cc2c83410397923f78677da4 *R/CFUN.R
 3ac7b5da083200fe3de65f064e34d686 *R/array.R
 e845419e5782c07b247663c6688e8e45 *R/as.ff.R
 77d1bb9b1bfe54e343d97968d3219b4a *R/bigsample.R
-aca633d8f5a83fb9072bce56134769cb *R/ff.R
+4c08891074d685bc6d721f817cd09f19 *R/ff.R
 dd88f4b4f2fbaf52df8be346bc94a280 *R/ffapply.R
 5d415a09cf338330e233314275cf9273 *R/ffbit.R
 d51add5b83c773c71f94f5872e52d970 *R/ffcsv.R
@@ -23,7 +23,7 @@ b348770a8209420a4c33c94b37f23142 *R/hi.R
 c6c7e8579312be93e7a2d37b8f778d77 *R/util.R
 1af4e21194753c1f56033004f172ff8a *R/vmode.R
 de4feadf4261488137c479e24abc0370 *R/vt.R
-e303cbcab6d6d29785a503e6bc608770 *R/zzz.R
+af0b752e3649784967366a16bc57067c *R/zzz.R
 7df50a85b7dbb40d83e1de8d462c93f4 *configure
 7037db0cfa0cf32537728c8a25f33f13 *configure.ac
 f4a44e82447e3ecac68ac6d49cb18d34 *exec/make_rd.pl
@@ -33,7 +33,7 @@ e0f982a1e0dec4ec0bacba027da60723 *inst/doc/ANNOUNCEMENT-2.1.2.txt
 6059b2f62b7c1dfdf89ee6d21177cb5f *inst/doc/ANNOUNCEMENT-2.1.txt
 fd8d5af24820ed9e5b4619977f894bac *inst/doc/ANNOUNCEMENT-2.2.txt
 d451e1e637cb6f1a4a6d7070b08078e6 *inst/doc/README_devel.txt
-1c1ba74b7eba855b2b7562785ac8ab41 *man/CFUN.rd
+b28c57d4d17a13469f989fac6546bc26 *man/CFUN.rd
 40a13529168d71764fc042ee59e26624 *man/Extract.ff.rd
 7e99a428c3698fa1d0e8f0bf8bbb5475 *man/Extract.ffdf.rd
 b713900398ccda77262955b08a286080 *man/Forbidden_ffdf.rd
@@ -59,7 +59,7 @@ f473f89926f14cb856d7805f96f0200d *man/dimnames.ff.rd
 dd733fcf5370a7ea251135409cb43f8c *man/dimnames.ffdf.rd
 0135c9aaf0459cef65f8b7d2d78a487f *man/dimorderCompatible.rd
 bd1ec44b3c84842eb8881ef213f9d8d0 *man/dummy.dimnames.rd
-afc87e85e517705f0d5a08b12fd1f39d *man/ff.rd
+d2226bc97eb015c9fea324d948151bd5 *man/ff.rd
 887bb2f3640cc48d04ca6e56a7e712ab *man/ffapply.rd
 3ac6a59e1582c03991490154ed2c3c6b *man/ffconform.rd
 a1865038c400f42c051c734d6d6ce9dd *man/ffdf.rd
@@ -143,6 +143,7 @@ d444873ed9b1a9386e66364ac055c0c7 *src/FSInfo.hpp
 08cd7b6909d383f54c1e78ce678bfc2a *src/FileMapping.hpp
 5b42d113824fc3f28fb1728369380dba *src/MMapFileMapping.cpp
 a3cd949962b37b86d003ad9feecdc533 *src/MMapFileMapping.hpp
+969e5f0a63d34fc25df802410ca40138 *src/Makevars
 8f6232266121d4df1de4bd1f7b15277f *src/Win32FileMapping.cpp
 69ba909dfb2a097773010b7db1233c30 *src/Win32FileMapping.hpp
 a4084586df40096677b818d3df64103f *src/ac_config.h
@@ -167,7 +168,7 @@ b292fc21789395d7860d8f70c6c77bd9 *src/r_file_resize.cpp
 feb757c12b495d5a7f084c39ec3ba856 *src/utk_file_resize.hpp
 a3e7a3a37b28814c53cbdb9f7e173bc2 *src/utk_file_resize_ftruncate.hpp
 27694e355373c8013427c1e435ad7105 *src/utk_file_resize_win32.hpp
-fb5551b78174c0d761cbc33293cdb3fa *src/utk_platform_macros.hpp
+44a184469d0b9864e45d1bf8d622ed68 *src/utk_platform_macros.hpp
 b82fb7586f3ae2de0e69293c206d436f *tests/testthat.R
 0bf42e1f8d736bb4fe0dff4c8e29cf1c *tests/testthat/test-zeroRows.R
-fb969a829f43551cd0f8b0a79d85c9fb *tests/testthat/test-zero_lengths.R
+428dcae88ace836dd1d89630eecf3c4d *tests/testthat/test-zero_lengths.R
