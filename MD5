@@ -1,13 +1,13 @@
-d3dc86359f34f0cad9e20df3322b460a *DESCRIPTION
+c7300f7c0490adb6273f808abaf9c58b *DESCRIPTION
 0d84d11c40499ccf6cb6beb8094e58cd *LICENSE
 4c7c39172d07002e1105da984c44072f *NAMESPACE
-de5b9496f243dcb9f2d7483403c55039 *NEWS
+2fd5649ad676fc4a47a2d32f2b73bbc3 *NEWS
 72c8f3f6cc2c83410397923f78677da4 *R/CFUN.R
 3ac7b5da083200fe3de65f064e34d686 *R/array.R
 e845419e5782c07b247663c6688e8e45 *R/as.ff.R
 77d1bb9b1bfe54e343d97968d3219b4a *R/bigsample.R
-6a53ca4684bb0949944dee23bc0499f1 *R/ff.R
-dd88f4b4f2fbaf52df8be346bc94a280 *R/ffapply.R
+08ec99e659d8f1f5c43a6f6ef2df1096 *R/ff.R
+89a5ece7a3dcfa72bef0cfaa99e6843b *R/ffapply.R
 5d415a09cf338330e233314275cf9273 *R/ffbit.R
 d51add5b83c773c71f94f5872e52d970 *R/ffcsv.R
 16fe8e331352e00cdabeceac02d39f96 *R/ffdf.R
@@ -18,7 +18,7 @@ be79cec41bd0947c3371ff0f0a83e95b *R/ffsave.R
 0a9a9295f87ef98be0282ba12eb0cf4d *R/fileutil.R
 9f78bd54552e84f553744415e319c8f6 *R/generics.R
 221c86400948f522da141ef58af91f83 *R/getpagesize.R
-b348770a8209420a4c33c94b37f23142 *R/hi.R
+419618f1685f00d1d33800fa35633e8b *R/hi.R
 8d24a1cb5243f21d16171f5aa7095305 *R/ordermerge.R
 c6c7e8579312be93e7a2d37b8f778d77 *R/util.R
 1af4e21194753c1f56033004f172ff8a *R/vmode.R
@@ -59,8 +59,8 @@ f473f89926f14cb856d7805f96f0200d *man/dimnames.ff.rd
 dd733fcf5370a7ea251135409cb43f8c *man/dimnames.ffdf.rd
 0135c9aaf0459cef65f8b7d2d78a487f *man/dimorderCompatible.rd
 bd1ec44b3c84842eb8881ef213f9d8d0 *man/dummy.dimnames.rd
-7517bd86294a674ef1979a926557a896 *man/ff.rd
-887bb2f3640cc48d04ca6e56a7e712ab *man/ffapply.rd
+e87b79f36770f0ec01798e6c5358d981 *man/ff.rd
+86ebda78d4fe7ce019f8275df45f1bd1 *man/ffapply.rd
 3ac6a59e1582c03991490154ed2c3c6b *man/ffconform.rd
 a1865038c400f42c051c734d6d6ce9dd *man/ffdf.rd
 d13b13d486028deaa99e070193a612f4 *man/ffdfindexget.rd
