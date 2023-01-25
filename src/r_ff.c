@@ -286,7 +286,7 @@ Rboolean next_positive_neg(
 /* { --- UTILITIES ---------------------------------------------------------- */
 
 
-SEXP r_ff_xtensions_available()
+SEXP r_ff_xtensions_available(void)
 {
   SEXP ret_;
   PROTECT( ret_ = allocVector(LGLSXP,1) );
@@ -295,7 +295,7 @@ SEXP r_ff_xtensions_available()
   return ret_;
 }
 
-SEXP r_ff_symmxtensions_available()
+SEXP r_ff_symmxtensions_available(void)
 {
   SEXP ret_;
   PROTECT( ret_ = allocVector(LGLSXP,1) );
@@ -306,7 +306,7 @@ SEXP r_ff_symmxtensions_available()
 
 
 
-SEXP r_ff_getpagesize()
+SEXP r_ff_getpagesize(void)
 {
   SEXP ret_;
   PROTECT( ret_ = allocVector(INTSXP, 1) );
