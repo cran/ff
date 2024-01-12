@@ -465,11 +465,11 @@ SEXP r_ff_new(SEXP name, SEXP ffmode, SEXP initval, SEXP len, SEXP pagesize, SEX
   }
 
   if ( !ff ) {
-    error("nil pointer creating ff");
+    error("r_ff_new nil pointer creating ff");
     return R_NilValue;
   }
   if (ff_geterror( ff )) {
-    error(ff_geterrstr( ff ));
+    error("r_ff_new %s", ff_geterrstr( ff ));
     ff_close(ff);
     return R_NilValue;
   }
@@ -637,9 +637,9 @@ SEXP r_ff_open(SEXP ff_, SEXP ffmode, SEXP ro, SEXP autoflush)
   }
 
   if ( !ff )
-    error("nil pointer reopening ff");
+    error("r_ff_open nil pointer reopening ff");
   if (ff_geterror( ff ))
-    error(ff_geterrstr( ff ));
+    error("r_ff_open %s", ff_geterrstr( ff ));
 
   R_SetExternalPtrAddr(ff_, ff);
 

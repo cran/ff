@@ -1,7 +1,7 @@
-6c08ad195aa6e8b6ad297c969bac5383 *DESCRIPTION
+7e214693f71b95c5f2bd52a1d4dbc2e7 *DESCRIPTION
 0d84d11c40499ccf6cb6beb8094e58cd *LICENSE
-4c7c39172d07002e1105da984c44072f *NAMESPACE
-89bb257bcdc06556cd1c3475aba55419 *NEWS
+f039c7ec6c53dfb97ff96e4863df4d47 *NAMESPACE
+299b91a930511928970c6be4630ac114 *NEWS
 72c8f3f6cc2c83410397923f78677da4 *R/CFUN.R
 3ac7b5da083200fe3de65f064e34d686 *R/array.R
 e845419e5782c07b247663c6688e8e45 *R/as.ff.R
@@ -23,7 +23,7 @@ f04ee7704c95e4c04cde9f6b91f5d0b9 *R/ffreturn.R
 c6c7e8579312be93e7a2d37b8f778d77 *R/util.R
 1af4e21194753c1f56033004f172ff8a *R/vmode.R
 de4feadf4261488137c479e24abc0370 *R/vt.R
-fafa1a2865661ab39b7b0ae9cfa16fd2 *R/zzz.R
+b16c96efbff96071f61ede9355bca8ae *R/zzz.R
 a8da749ff4e8b3ec9ecf271d7f21a4b1 *configure
 8fd899fbb50ec1248d8d349c551d3131 *configure.ac
 f4a44e82447e3ecac68ac6d49cb18d34 *exec/make_rd.pl
@@ -147,7 +147,7 @@ ce141f51616027ece22888e12d2218e5 *src/config.h
 bba36482e8a1017b7aaeaf18e700bd41 *src/ff.cpp
 4e3609e9548bc611ae9afdece54a171d *src/ff.h
 249d29c3833423cc601080bd6bfd3f19 *src/ordermerge.c
-f85a6b073317f827016a869b1d94ead6 *src/r_ff.c
+4c812124da4be8b827e263dc09387be6 *src/r_ff.c
 4da54b20f6e91bf13fb1d6f0a376d52d *src/r_ff.h
 8b9a66ee884a1ea044404ddeca51fe66 *src/r_ff_addgetset.h
 d802094808a7788c8720d9059896932a *src/r_ff_makevmodes.h
