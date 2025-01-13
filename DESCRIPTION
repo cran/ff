@@ -1,6 +1,6 @@
 Package: ff
-Version: 4.5.0
-Date: 2024-09-17
+Version: 4.5.2
+Date: 2025-01-12
 Title: Memory-Efficient Storage of Large Data on Disk and Fast Access
         Functions
 Authors@R: c(person(given = "Daniel",
@@ -80,9 +80,9 @@ Description: The ff package provides data structures that are stored on
 License: GPL-2 | GPL-3 | file LICENSE
 LazyLoad: yes
 ByteCompile: yes
+NeedsCompilation: yes
 Encoding: UTF-8
 URL: https://github.com/truecluster/ff
-NeedsCompilation: yes
-Packaged: 2024-09-18 22:37:01 UTC; jo
+Packaged: 2025-01-12 22:08:49 UTC; jo
 Repository: CRAN
-Date/Publication: 2024-09-20 15:20:03 UTC
+Date/Publication: 2025-01-13 00:40:02 UTC
