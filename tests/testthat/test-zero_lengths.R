@@ -629,7 +629,7 @@ test_that("swap are correct when accessing zero and four file length", {
   expect_identical(f0[], r0)
   
   expect_true(is.na(swap(ram, 4L, 1)))  # assigns to new position
-  expect_identical(ram, structure(4L, .Names = "", vmode = "quad"))  # now ram is longer than before
+  expect_identical(ram, structure(4L, names = "", vmode = "quad"))  # now ram is longer than before
   ram <- f0[]
   expect_error(swap(f0, 4L, 1), "positive subscripts out of range")
   expect_identical(f0[], r0)
@@ -1071,7 +1071,7 @@ test_that("lots of stuff related to dims work", {
     FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE, TRUE, TRUE, TRUE, 
     FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, 
     FALSE, FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, 
-    FALSE, FALSE, FALSE, FALSE, FALSE, TRUE), .Dim = c(9L, 9L), .Dimnames = list(
+    FALSE, FALSE, FALSE, FALSE, FALSE, TRUE), dim = c(9L, 9L), dimnames = list(
       obj = c("00", "01", "10", "11", "09", "19", "90", "91", "99"
       ), dim = c("00", "01", "10", "11", "09", "19", "90", "91", 
                  "99"))))
@@ -1085,9 +1085,9 @@ test_that("lots of stuff related to dims work", {
     TRUE, FALSE, TRUE, FALSE, TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, 
     TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, 
     TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
-    TRUE, TRUE, TRUE), .Dim = c(9L, 9L), .Dimnames = list(obj = c("00", 
-    "01", "10", "11", "09", "19", "90", "91", "99"), dim = c("00", 
-    "01", "10", "11", "09", "19", "90", "91", "99"))))
+    TRUE, TRUE, TRUE), dim = c(9L, 9L), dimnames = list(obj = c("00", 
+                                                                  "01", "10", "11", "09", "19", "90", "91", "99"), dim = c("00", 
+                                                                                                                           "01", "10", "11", "09", "19", "90", "91", "99"))))
   
   rm(rtmp, ftmp, dtmp, etmp, dnam, fnam, dims, nams, dres, fres, dok, fok); gc()
   rm(i,j,k,vm,ret)

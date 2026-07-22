@@ -147,7 +147,9 @@
       )
       , function(i)i[.vimplemented[i]]
     )
-	
+  
+    .bit_R_bit_as_hi <<- get("R_bit_as_hi", asNamespace("bit"), inherits = FALSE)
+
 }
 
 .onAttach <- function(libname, pkgname){
@@ -219,4 +221,6 @@
      , ffmaxbytes=NULL
      )
    }
+   
+   .bit_R_bit_as_hi <<- NULL
 }

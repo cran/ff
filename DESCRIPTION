@@ -1,6 +1,6 @@
 Package: ff
-Version: 4.5.2
-Date: 2025-01-12
+Version: 4.5.3
+Date: 2026-07-21
 Title: Memory-Efficient Storage of Large Data on Disk and Fast Access
         Functions
 Authors@R: c(person(given = "Daniel",
@@ -83,6 +83,6 @@ ByteCompile: yes
 NeedsCompilation: yes
 Encoding: UTF-8
 URL: https://github.com/truecluster/ff
-Packaged: 2025-01-12 22:08:49 UTC; jo
+Packaged: 2026-07-21 17:31:24 UTC; jo
 Repository: CRAN
-Date/Publication: 2025-01-13 00:40:02 UTC
+Date/Publication: 2026-07-22 17:50:10 UTC

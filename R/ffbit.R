@@ -79,7 +79,9 @@ as.hi.bit <- function(x
     ret <- as.hi(1L, pack=FALSE, ...)
 
     if (is.null(vw)){
-      dat <- bit:::R_bit_as_hi(x, range, 0L)
+      ##dat <- bit:::R_bit_as_hi(x, range, 0L)
+      dat <- .bit_R_bit_as_hi(x, range, 0L)
+      
       ret$length <- sum(x, range=range)
       dat$len <- NULL
       ret$maxindex <- maxindex
@@ -88,7 +90,9 @@ as.hi.bit <- function(x
       if (length(vw)!=3)
         stop("length(vw) != 3")
 
-      dat <- bit:::R_bit_as_hi(x, range, vw[1])
+      #dat <- bit:::R_bit_as_hi(x, range, vw[1])
+      dat <- .bit_R_bit_as_hi(x, range, vw[1])
+
       ret$length <- sum(x, range=range)
       dat$len <- NULL
       ret$minindex <- vw[[1]]

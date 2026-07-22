@@ -136,7 +136,7 @@ if (FALSE){
   # regression tests
   stopifnot(identical( vector2array(1:12, 3:4), matrix(1:12, 3, 4) ))
   stopifnot(identical( vector2array(1:12, 3:4, 2:1), matrix(1:12, 3, 4, byrow=TRUE) ))
-  stopifnot(identical( vector2array(1:24, 4:2, c(2,1,3)), structure(c(1L, 4L, 7L, 10L, 2L, 5L, 8L, 11L, 3L, 6L, 9L, 12L, 13L, 16L, 19L, 22L, 14L, 17L, 20L, 23L, 15L, 18L, 21L, 24L), .Dim = c(4L, 3L, 2L)) ))
+  stopifnot(identical( vector2array(1:24, 4:2, c(2,1,3)), structure(c(1L, 4L, 7L, 10L, 2L, 5L, 8L, 11L, 3L, 6L, 9L, 12L, 13L, 16L, 19L, 22L, 14L, 17L, 20L, 23L, 15L, 18L, 21L, 24L), dim = c(4L, 3L, 2L)) ))
 
   stopifnot(identical( array2vector(vector2array(1:12, 3:4)), 1:12 ))
   stopifnot(identical( array2vector(vector2array(1:12, 3:4, 2:1), dimorder=2:1), 1:12 ))

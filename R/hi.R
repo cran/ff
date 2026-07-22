@@ -496,10 +496,10 @@ hiparse <- function(x, envir, first=NA_integer_, last=NA_integer_){
 
 as.hi.NULL <- function(x, ...){
   structure(list(x = structure(list(first = NA_integer_, dat = integer(0), 
-                                    last = NA_integer_), .Names = c("first", "dat", "last"), class = "rlepack"), 
+                                    last = NA_integer_), names = c("first", "dat", "last"), class = "rlepack"), 
                  ix = NULL, re = FALSE, minindex = 1L, maxindex = 0L, 
                  length = 0L, dim = NULL, dimorder = NULL, symmetric = FALSE, 
-                 fixdiag = NULL, vw = NULL, NAs = NULL), .Names = c("x", "ix", 
+                 fixdiag = NULL, vw = NULL, NAs = NULL), names = c("x", "ix", 
                                                                     "re", "minindex", "maxindex", "length", "dim", "dimorder", "symmetric", 
                                                                     "fixdiag", "vw", "NAs"), class = "hi")
 }
